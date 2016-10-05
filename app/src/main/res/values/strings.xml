@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">Project</string>
+    <!-- Activity name strings-->
+    <string name="app_name">TaskIt</string>
+    <string name="new_task">Create a new task</string>
+
+    <!-- Menu strings-->
+    <string name="options_menu">Options</string>
+    <string name="logout_menu">Log Out</string>
+
+    <!-- Hint strings-->
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
+
+    <!-- Button strings-->
+    <string name="submit_task_button">Submit</string>
 </resources>
