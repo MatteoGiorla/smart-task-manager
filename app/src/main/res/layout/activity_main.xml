@@ -22,34 +22,31 @@
         <!--Temporary Buttons to show what final design should look like-->
         <!--Don't forget to delete buttonshape.xml when removing theses buttons-->
         <Button
-            android:text="L"
+            android:text="@string/Location_square"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/buttonshape"
-            android:backgroundTint="@color/green" />
+            android:background="@drawable/buttonshape"/>
 
         <Button
-            android:text="D"
+            android:text="@string/Energie_square"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/buttonshape"
-            android:backgroundTint="@color/green"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
         <Button
-            android:text="E"
+            android:text="@string/time_disposal_square"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/buttonshape"
-            android:backgroundTint="@color/green"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 

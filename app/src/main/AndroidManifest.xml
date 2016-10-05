@@ -19,6 +19,6 @@
         </activity>
         <activity
             android:label="@string/new_task"
-            android:name=".NewTaskActivity"></activity>
+            android:name=".NewTaskActivity"/>
     </application>
 </manifest>
