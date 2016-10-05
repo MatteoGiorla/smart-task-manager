@@ -1,17 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ch.epfl.sweng.project.MainActivity">
+    tools:context="ch.epfl.sweng.project.MainActivity"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/mainToolsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:orientation="horizontal">
+        <!--Temporary Buttons to show what final design should look like-->
+        <!--Don't forget to delete buttonshape.xml when removing theses buttons-->
+        <Button
+            android:text="L"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/buttonshape"
+            android:backgroundTint="@color/green" />
+
+        <Button
+            android:text="D"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/buttonshape"
+            android:backgroundTint="@color/green"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:text="E"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/buttonshape"
+            android:backgroundTint="@color/green"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tasks_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white_48dp"
+            app:backgroundTint="@color/red"
+            android:layout_gravity="bottom|end"
+            app:fabSize="normal"
+            android:onClick="openNewTaskActivity"/>
+
+    </FrameLayout>
+
+</LinearLayout>
