@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public final class ExampleAndroidTest {
-    // TODO replace this with your own tests.
 
     @Test
     public void packageNameIsCorrect() {
