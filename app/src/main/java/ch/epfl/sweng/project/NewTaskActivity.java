@@ -7,10 +7,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-
-public class NewTaskActivity extends AppCompatActivity{
+/**
+ * Class that represents the inflated activity_new_task
+ */
+public class NewTaskActivity extends AppCompatActivity {
     public static final String returnedTask = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
 
+    /**
+     * Override the onCreate method
+     * Create a new Task and puts in the intent
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it
+     *                           most recently supplied in onSaveInstanceState(Bundle)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
