@@ -6,7 +6,7 @@
     tools:context="ch.epfl.sweng.project.MainActivity">
 
     <ListView
-        android:id="@+id/listview_tasks"
+        android:id="@+id/list_view_tasks"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

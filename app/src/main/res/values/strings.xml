@@ -15,7 +15,7 @@
     <string name="submit_task_button">Submit</string>
 
     <!-- Temporary values -->
-    <string name="Location_square">L</string>
-    <string name="Energie_square">E</string>
+    <string name="location_square">L</string>
+    <string name="energy_square">E</string>
     <string name="time_disposal_square">T</string>
 </resources>

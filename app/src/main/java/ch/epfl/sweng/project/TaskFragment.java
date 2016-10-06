@@ -1,59 +1,42 @@
 package ch.epfl.sweng.project;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class TaskFragment extends Fragment {
-    private ArrayAdapter<String> mTaskAdapter;
+    private TaskListAdapter mTaskAdapter;
+    private ArrayList<Task> list_tasks;
+
+    public void addTask(Task task) {
+        list_tasks.add(task);
+        mTaskAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        list_tasks = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        String[] data = {
-                "Task 1 Title",
-                "Task 2 Title",
-                "Task 3 Title",
-                "Task 4 Title",
-                "Task 5 Title",
-                "Task 6 Title",
-                "Task 7 Title",
-                "Task 8 Title",
-                "Task 9 Title",
-                "Task 10 Title",
-                "Task 11 Title",
-                "Task 12 Title",
-                "Task 13 Title",
-                "Task 14 Title",
-                "Task 15 Title",
-        };
-
-        List<String> taskList = new ArrayList<String>(Arrays.asList(data));
-
-        mTaskAdapter = new ArrayAdapter<String>(
+        mTaskAdapter = new TaskListAdapter(
                 getActivity(),
                 R.layout.list_item_task,
-                R.id.list_item_forecast_textview,
-                taskList
+                list_tasks
         );
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_tasks);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
         listView.setAdapter(mTaskAdapter);
 
         return rootView;

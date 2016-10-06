@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="task_textview_size">22sp</dimen>
+    <dimen name="task_title_size">30sp</dimen>
+    <dimen name="task_description_size">20sp</dimen>
     <dimen name="padding_between_tasks">5dp</dimen>
 </resources>

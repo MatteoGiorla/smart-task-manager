@@ -32,7 +32,7 @@
             android:id="@+id/input_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences|textMultiLine"
+            android:inputType="textMultiLine|textAutoCorrect"
             android:maxLines="4"
             android:hint="@string/hint_description" />
     </android.support.design.widget.TextInputLayout>

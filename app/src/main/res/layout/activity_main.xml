@@ -20,22 +20,22 @@
         android:layout_weight="1.5"
         android:orientation="horizontal">
         <!--Temporary Buttons to show what final design should look like-->
-        <!--Don't forget to delete buttonshape.xml when removing theses buttons-->
+        <!--Don't forget to delete button_shape.xml when removing theses buttons-->
         <Button
-            android:text="@string/Location_square"
+            android:text="@string/location_square"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/buttonshape"/>
+            android:background="@drawable/button_shape"/>
 
         <Button
-            android:text="@string/Energie_square"
+            android:text="@string/energy_square"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
@@ -46,7 +46,7 @@
             android:textSize="40sp"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:background="@drawable/buttonshape"
+            android:background="@drawable/button_shape"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
@@ -59,7 +59,7 @@
         android:layout_weight="8">
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addTask"
+            android:id="@+id/add_task_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_white_48dp"
