@@ -27,11 +27,11 @@ android {
         }
     }
 
-	lintOptions {
-	    // Disable lint warnings about app indexing, and about non-latest tools versions
-		// TODO consider re-enabling app indexing before publishing your application.
-	    disable 'GoogleAppIndexingWarning', 'GradleDependency'
-	}
+    lintOptions {
+        // Disable lint warnings about app indexing, and about non-latest tools versions
+        // TODO consider re-enabling app indexing before publishing your application.
+        disable 'GoogleAppIndexingWarning', 'GradleDependency'
+    }
 
     // Workaround for an Android Studio bug in the "Missing Return Statement" warning
     return void
@@ -60,12 +60,12 @@ task jacocoReport(type: JacocoReport, dependsOn: "connectedAndroidTest") {
     classDirectories = fileTree(
             dir: '**/classes',
             excludes: [
-                '**/R.class',
-                '**/R$*.class',
-                '**/BuildConfig.*',
-                '**/Manifest*.*',
-                '**/*Test*.*',
-                '**/android/**/*.*'
+                    '**/R.class',
+                    '**/R$*.class',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    '**/android/**/*.*'
             ]
     )
 

@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -18,6 +19,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -29,17 +31,24 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public final class NewTaskTest {
 
-    private String mTitleToBeTyped;
-    private String mDescriptionToBeTyped;
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
+    @Rule
+    public ExpectedException thrownException = ExpectedException.none();
+    private String mTitleToBeTyped;
+    private String mDescriptionToBeTyped;
+    private String name;
+    private String description;
+    private Task task;
 
     @Before
     public void initValidString() {
         mTitleToBeTyped = "test title name number ";
         mDescriptionToBeTyped = "test description input number ";
+        name = "task";
+        description = "This is the first task";
+        task = new Task(name, description);
     }
 
     @Test
@@ -71,6 +80,60 @@ public final class NewTaskTest {
                     .atPosition(i)
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
+    }
+
+    /**
+     * Test that the getters return the good value
+     */
+    @Test
+    public void testTaskGetters() {
+        assertEquals(name, task.getName());
+        assertEquals(description, task.getDescription());
+    }
+
+    /**
+     * Test that the setters modify correctly the Task
+     */
+    @Test
+    public void testTaskSetters() {
+        String newName = "another name";
+        String newDescription = "This is a new description";
+
+        task.setName(newName);
+        task.setDescription(newDescription);
+
+        assertEquals(newName, task.getName());
+        assertEquals(newDescription, task.getDescription());
+    }
+
+    /**
+     * Test that the setName setter throws an IllegalArgumentException
+     * when its argument is null
+     */
+    @Test
+    public void testTaskSetNameException() {
+        thrownException.expect(IllegalArgumentException.class);
+        task.setName(null);
+    }
+
+    /**
+     * Test that the setDescription setter throws an IllegalArgumentException
+     * when its argument is null
+     */
+    @Test
+    public void testTaskSetDescriptionException() {
+        thrownException.expect(IllegalArgumentException.class);
+        task.setDescription(null);
+    }
+
+    /**
+     * Test that the public constructor throws an IllegalArgumentException
+     * when its arguments are null
+     */
+    @Test
+    public void testConstructorException() {
+        thrownException.expect(IllegalArgumentException.class);
+        new Task(null, null);
     }
 }
 
