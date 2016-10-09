@@ -9,9 +9,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_item_logout"
+        android:id="@+id/menu_item_connection"
         android:icon="@android:drawable/ic_menu_share"
-        android:title="@string/logout_menu"
+        android:title="@string/connection_menu"
         app:showAsAction="never" />
 
 </menu>
