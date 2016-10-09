@@ -5,11 +5,15 @@
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
-    <string name="logout_menu">Log Out</string>
+    <string name="logout_menu">Log In</string>
 
     <!-- Hint strings-->
     <string name="hint_title">Title</string>
     <string name="hint_description">Description</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_sign_in">Sign In</string>
+
 
     <!-- Button strings-->
     <string name="submit_task_button">Submit</string>
