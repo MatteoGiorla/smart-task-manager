@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Task is the class representing a task
  */
-class Task implements Parcelable {
+public class Task implements Parcelable {
     /**
      * Used to regenerate a Task, all parcelables must have a creator
      */
