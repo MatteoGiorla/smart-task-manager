@@ -25,6 +25,7 @@
             android:contentDescription="@string/button_location_description"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:tint="@color/green"
             android:background="@null"/>
 
         <ImageButton
@@ -35,6 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:tint="@color/blue"
             android:background="@null"/>
 
         <ImageButton
@@ -44,6 +46,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:tint="@color/yellow"
             android:background="@null"/>
 
     </RelativeLayout>
