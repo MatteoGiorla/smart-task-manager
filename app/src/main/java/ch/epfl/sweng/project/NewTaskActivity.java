@@ -30,8 +30,10 @@ public class NewTaskActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.newTask_toolbar);
         setSupportActionBar(mToolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
             @Override

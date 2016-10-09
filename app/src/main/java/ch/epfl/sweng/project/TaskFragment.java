@@ -37,7 +37,7 @@ public class TaskFragment extends Fragment {
         }
         boolean newTaskCorrectlyInserted = mDatabase.addData(task);
         if (!newTaskCorrectlyInserted) {
-            throw new SQLiteException("An error occured while inserting " +
+            throw new SQLiteException("An error occurred while inserting " +
                     "the new task in the database");
         }
         taskList.add(task);
@@ -91,11 +91,11 @@ public class TaskFragment extends Fragment {
     /**
      * Fetch the tasks from the database without using the UI thread.
      */
-    public class FetchTask extends AsyncTask<Void,Void,Cursor> {
+    private class FetchTask extends AsyncTask<Void,Void,Cursor> {
 
         /**
          * Fetch the content from the database on a background thread.
-         * @param params
+         * @param params Void parameters
          * @return Cursor The tasks recovered from the database
          */
         @Override

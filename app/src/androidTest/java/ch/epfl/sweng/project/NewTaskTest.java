@@ -35,7 +35,7 @@ public final class NewTaskTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
     @Rule
-    public ExpectedException thrownException = ExpectedException.none();
+    private final ExpectedException thrownException = ExpectedException.none();
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
     private String name;

@@ -19,38 +19,39 @@
         android:layout_height="0dp"
         android:layout_weight="1.5"
         android:orientation="horizontal">
-        <!--Temporary Buttons to show what final design should look like-->
-        <!--Don't forget to delete button_shape.xml when removing theses buttons-->
-        <Button
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/button_shape"
-            android:text="@string/location_square"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
 
-        <Button
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <ImageButton
+            android:src="@drawable/location"
+            android:contentDescription="@string/button_location_description"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"/>
+
+        <ImageButton
+            android:src="@drawable/time"
+            android:contentDescription="@string/button_time_description"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/button_shape"
-            android:text="@string/energy_square"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:background="@null"/>
 
-        <Button
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+        <ImageButton
+            android:src="@drawable/vitality"
+            android:contentDescription="@string/button_vitality_description"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_shape"
-            android:text="@string/time_disposal_square"
-            android:textColor="@color/white"
-            android:textSize="40sp" />
+            android:background="@null"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
 
     <FrameLayout
         android:id="@+id/tasks_container"

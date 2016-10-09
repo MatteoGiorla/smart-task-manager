@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Overrid the method onCreate to generate the
+     * Override the method onCreate to generate the
      * SQL table that will contain the tasks.
      * @param db an SQLiteDatabase
      */
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @param db an SQLiteDatabase
      * @param oldVersion old version of the database
-     * @param newVersion new version of the dabase
+     * @param newVersion new version of the database
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
