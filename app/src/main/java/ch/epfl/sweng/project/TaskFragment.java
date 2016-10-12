@@ -78,6 +78,15 @@ public class TaskFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Override the onCreateContextMenu method.
+     * This method creates a floating context menu.
+     *
+     * @param menu The context menu that is being built.
+     * @param v The view for which the context menu is being built.
+     * @param menuInfo Extra information about the item
+     *                 for which the context menu should be shown
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -85,6 +94,15 @@ public class TaskFragment extends Fragment {
         menuInflater.inflate(R.menu.floating_context_menu, menu);
     }
 
+    /**
+     * Override the onContextItemSelected.
+     * This method decides what to do depending of the context menu's item
+     * selected by the user.
+     *
+     * @param item The context menu item that was selected
+     * @return Return false to allow normal context menu processing to proceed,
+     *         true to consume it here
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();

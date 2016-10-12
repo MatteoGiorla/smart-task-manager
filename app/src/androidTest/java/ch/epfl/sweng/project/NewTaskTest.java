@@ -31,18 +31,16 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public final class NewTaskTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
     private String name;
     private String description;
     private Task task;
-
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
-    @Rule
-    public ExpectedException thrownException = ExpectedException.none();
 
     @Before
     public void initValidString() {
@@ -138,6 +136,9 @@ public final class NewTaskTest {
         new Task(null, null);
     }
 
+    /**
+     * Test that an added Task has been correctly deleted when clicking on Delete.
+     */
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
@@ -149,18 +150,20 @@ public final class NewTaskTest {
         }
 
         //We delete the tasks
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
-            if(i != 9) {
+
+            //Test if the tasks are correctly deleted
+            if (i != 9) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
+                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i+1)))));
+                        .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
             }
         }
     }

@@ -64,14 +64,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_add_white_48dp"
-            app:backgroundTint="@color/colorPrimary"
-            app:elevation="3dp"
             android:layout_marginBottom="6dp"
             android:layout_marginEnd="3dp"
             android:layout_marginRight="3dp"
-            app:fabSize="normal"
-            android:onClick="openNewTaskActivity"/>
+            android:onClick="openNewTaskActivity"
+            android:src="@drawable/ic_add_white_48dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:elevation="3dp"
+            app:fabSize="normal" />
     </FrameLayout>
 
 </LinearLayout>

@@ -3,6 +3,6 @@
 
     <item
         android:id="@+id/op_on_list_item"
-        android:title="@string/flt_ctx_menu_delete"/>
+        android:title="@string/flt_ctx_menu_delete" />
 
 </menu>
