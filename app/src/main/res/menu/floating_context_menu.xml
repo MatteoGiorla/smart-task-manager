@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/op_on_list_item"
+        android:title="@string/flt_ctx_menu_delete"/>
+
+</menu>
