@@ -11,7 +11,17 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -53,7 +63,7 @@ public final class NewTaskTest {
      * Test that a Task has been correctly created and added
      * in the ListView.
      */
-    /*@Test
+    @Test
     public void testCanAddTask() {
 
         for (int i = 0; i < 10; i++) {
@@ -72,7 +82,7 @@ public final class NewTaskTest {
                     .atPosition(i)
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
-    }*/
+    }
 
     /**
      * Test that the getters return the good value
@@ -126,6 +136,33 @@ public final class NewTaskTest {
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
         new Task(null, null);
+    }
+
+    @Test
+    public void testCanDeleteTasks() {
+        //We create and add tasks
+        for (int i = 0; i < 10; i++) {
+            onView(withId(R.id.add_task_button)).perform(click());
+            onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped + i));
+            onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped + i));
+            onView(withId(R.id.button_submit_task)).perform(click());
+        }
+
+        //We delete the tasks
+        for(int i = 0; i < 10; i++) {
+            onData(anything())
+                    .inAdapterView(withId(R.id.list_view_tasks))
+                    .atPosition(0).perform(longClick());
+            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+            if(i != 9) {
+                onData(anything())
+                        .inAdapterView(withId(R.id.list_view_tasks))
+                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
+                onData(anything())
+                        .inAdapterView(withId(R.id.list_view_tasks))
+                        .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i+1)))));
+            }
+        }
     }
 }
 
