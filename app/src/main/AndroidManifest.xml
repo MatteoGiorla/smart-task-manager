@@ -21,7 +21,7 @@
         <activity
             android:name=".NewTaskActivity"
             android:label="@string/new_task" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".authentication.LoginActivity"></activity>
     </application>
 
 </manifest>

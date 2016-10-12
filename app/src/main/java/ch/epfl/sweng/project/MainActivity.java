@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import ch.epfl.sweng.project.authentication.LoginActivity;
+
 /**
  * MainActivity
  */
