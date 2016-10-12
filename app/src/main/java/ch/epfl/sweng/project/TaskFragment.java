@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -89,8 +91,13 @@ public class TaskFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.op_on_list_item:
                 int position = itemInfo.position;
+                String taskName = taskList.get(position).getName();
                 mTaskAdapter.remove(taskList.get(position));
                 mTaskAdapter.notifyDataSetChanged();
+                Context context = getActivity().getApplicationContext();
+                String TOAST_MESSAGE = taskName + " deleted";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, TOAST_MESSAGE, duration).show();
                 return true;
             default:
                 return super.onContextItemSelected(item);

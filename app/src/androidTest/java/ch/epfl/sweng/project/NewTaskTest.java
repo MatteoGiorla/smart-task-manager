@@ -11,16 +11,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -30,17 +21,18 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public final class NewTaskTest {
+    private String mTitleToBeTyped;
+    private String mDescriptionToBeTyped;
+    private String name;
+    private String description;
+    private Task task;
+
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
     @Rule
     public ExpectedException thrownException = ExpectedException.none();
-    private String mTitleToBeTyped;
-    private String mDescriptionToBeTyped;
-    private String name;
-    private String description;
-    private Task task;
 
     @Before
     public void initValidString() {
@@ -61,7 +53,7 @@ public final class NewTaskTest {
      * Test that a Task has been correctly created and added
      * in the ListView.
      */
-    @Test
+    /*@Test
     public void testCanAddTask() {
 
         for (int i = 0; i < 10; i++) {
@@ -80,7 +72,7 @@ public final class NewTaskTest {
                     .atPosition(i)
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
-    }
+    }*/
 
     /**
      * Test that the getters return the good value
