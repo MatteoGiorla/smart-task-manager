@@ -55,7 +55,7 @@ public class TaskFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskList = new ArrayList<>();
-        mDatabase = new DatabaseHelper(getActivity());
+        mDatabase = new DatabaseHelper(getActivity(), DatabaseContract.DATABASE_NAME);
 
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),

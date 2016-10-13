@@ -1,16 +1,20 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.project.data.DatabaseContract;
+
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -20,8 +24,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
-import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertThat;
 
 
@@ -37,10 +41,11 @@ public final class NewTaskTest {
     private Task task;
 
     @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
+
+    @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
 
     @Before
     public void initValidString() {
@@ -51,9 +56,17 @@ public final class NewTaskTest {
         task = new Task(name, description);
     }
 
+    //Empty the database once the tests are finished.
+    @After
+    public void tearDown() {
+        SQLiteDatabase myDb = getTargetContext()
+                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
+    }
+
     @Test
     public void packageNameIsCorrect() {
-        final Context context = InstrumentationRegistry.getTargetContext();
+        final Context context = getTargetContext();
         assertThat(context.getPackageName(), is("ch.epfl.sweng.project"));
     }
 
@@ -63,8 +76,7 @@ public final class NewTaskTest {
      */
     @Test
     public void testCanAddTask() {
-
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             onView(withId(R.id.add_task_button)).perform(click());
             onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped + i));
             onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped + i));
@@ -134,6 +146,14 @@ public final class NewTaskTest {
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
         new Task(null, null);
+    }
+
+    /**
+     * Test the describeContents method
+     */
+    @Test
+    public void testdescribeContents() {
+        assertEquals(0, task.describeContents());
     }
 }
 

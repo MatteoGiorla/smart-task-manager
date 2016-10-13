@@ -16,9 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // If the database schema change, you MUST increment the database version.
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "task.db";
-
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context, String DATABASE_NAME) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

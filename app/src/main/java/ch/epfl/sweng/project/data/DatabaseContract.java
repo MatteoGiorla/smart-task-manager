@@ -7,6 +7,9 @@ import android.provider.BaseColumns;
  */
 public class DatabaseContract {
 
+    // The name of the database file
+    public static final String DATABASE_NAME = "task.db";
+
     /**
      * Define the table containing the tasks in the database.
      */
