@@ -107,7 +107,7 @@ public class TaskFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.op_on_list_item:
+            case R.id.floating_delete:
                 int position = itemInfo.position;
                 String taskName = taskList.get(position).getName();
                 mTaskAdapter.remove(taskList.get(position));

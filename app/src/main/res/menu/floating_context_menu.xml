@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/op_on_list_item"
+        android:id="@+id/floating_delete"
         android:title="@string/flt_ctx_menu_delete" />
 
 </menu>
