@@ -31,16 +31,17 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public final class NewTaskTest {
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
     private String name;
     private String description;
     private Task task;
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
 
     @Before
     public void initValidString() {

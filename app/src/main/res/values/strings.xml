@@ -14,6 +14,7 @@
     <!-- Button strings-->
     <string name="submit_task_button">Submit</string>
 
+<<<<<<< HEAD
     <!-- Temporary values -->
     <string name="location_square">L</string>
     <string name="energy_square">E</string>
@@ -21,4 +22,10 @@
 
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
+=======
+    <!-- Buttons description-->
+    <string name="button_location_description">Select your Location</string>
+    <string name="button_vitality_description">Select your vitality</string>
+    <string name="button_time_description">Select the time at your disposal</string>
+>>>>>>> local_database
 </resources>
