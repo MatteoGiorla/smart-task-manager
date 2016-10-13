@@ -8,10 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.project.data.DatabaseContract;
 import ch.epfl.sweng.project.data.DatabaseHelper;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 /**
@@ -47,33 +49,6 @@ public class DatabaseTest {
         testDbHelper.close();
     }
 
-    /**
-     * Test that the task introduced is indeed in the database
-     */
-    /*public void checkingTaskisInDatabase(){
-        //adding task
-        addTask();
-
-        Context context = getInstrumentation().getContext();
-
-        //trying retrieve directly the database
-        File databasePath = context.getDatabasePath(DATABASE_NAME);
-        SQLiteDatabase mDatabase = SQLiteDatabase.openDatabase(databasePath.getPath(), null, 0);
-        Cursor dbContent = mDatabase.rawQuery("SELECT * FROM " + DatabaseContract.TaskEntry.TABLE_NAME, null);
-
-        //fetching data from it
-        String taskTitle = "";
-        String taskDescription = "";
-        if (dbContent.moveToFirst()){
-            taskTitle = dbContent.getString(dbContent.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
-            taskDescription = dbContent.getString(dbContent.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
-        }
-        dbContent.close();
-        assertEquals(taskTitle.equals(mTitleToBeTyped), true);
-        assertEquals(taskDescription.equals(mDescriptionToBeTyped), true);
-    }*/
-
-
 
     /**
      * Test if after adding a task, the database contains such a task.
@@ -95,6 +70,10 @@ public class DatabaseTest {
         if(content.moveToFirst()){
             //Ensuring the db does have an entry after calling addData
             assertEquals(1, content.getCount());
+            String nameInDb = content.getString(content.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
+            String descrInDb = content.getString(content.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
+            assertTrue(nameInDb.equals(name));
+            assertTrue(descrInDb.equals(description));
         }else{
             //the cursor should be able to move to the first element.
             fail();
