@@ -82,4 +82,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         return mDatabase.rawQuery("SELECT * FROM " + DatabaseContract.TaskEntry.TABLE_NAME, null);
     }
+
+    /**
+     *
+     * @param task
+     * @return
+     */
+    public boolean removeData(Task task) {
+        //Open the database
+        SQLiteDatabase mDatabase = this.getWritableDatabase();
+
+        String table = DatabaseContract.TaskEntry.TABLE_NAME;
+        String whereClause = DatabaseContract.TaskEntry.COLUMN_TASK_TITLE + " = ? and " +
+                DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION + " = ?";
+        String whereArgs[] = {task.getName(), task.getDescription()};
+
+        int nbRowDeleted = mDatabase.delete(table, whereClause, whereArgs);
+
+        return nbRowDeleted == 1;
+    }
 }

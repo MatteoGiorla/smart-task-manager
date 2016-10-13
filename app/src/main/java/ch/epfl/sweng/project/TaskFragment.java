@@ -96,7 +96,6 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-<<<<<<< HEAD
      * Override the onCreateContextMenu method.
      * This method creates a floating context menu.
      *
@@ -127,6 +126,7 @@ public class TaskFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.floating_delete:
                 int position = itemInfo.position;
+                mDatabase.removeData(taskList.get(position));
                 String taskName = taskList.get(position).getName();
                 mTaskAdapter.remove(taskList.get(position));
                 mTaskAdapter.notifyDataSetChanged();
@@ -139,7 +139,8 @@ public class TaskFragment extends Fragment {
                 return super.onContextItemSelected(item);
         }
     }
-     /** Fetch the tasks from the database without using the UI thread.
+     /**
+      * Fetch the tasks from the database without using the UI thread.
      */
     private class FetchTask extends AsyncTask<Void,Void,Cursor> {
 
