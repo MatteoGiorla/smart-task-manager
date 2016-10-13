@@ -17,7 +17,8 @@ import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 /**
- * Created by cedric on 12.10.16.
+ * Unit Tests
+ * Testing the database with its only features.
  */
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
@@ -26,6 +27,7 @@ public class DatabaseTest {
     private Task task;
     private final String TASK_NAME = "task";
     private final String TASK_DESCR = "This is a task";
+
     //It is private to the database helper unfortunately
     private static final String DATABASE_NAME = "task.db";
     private DatabaseHelper testDbHelper;
@@ -58,22 +60,22 @@ public class DatabaseTest {
         Cursor content = testDbHelper.getAllContents();
 
         //Ensuring the good numbers of Columns is in the Db
-        // the columns are : ID, NAME, and DESCRIPTION
         assertEquals(3, content.getColumnCount());
         //Ensuring the dataBase upon first use has no data.
         assertEquals(0, content.getCount() );
 
         testDbHelper.addData(task);
 
-        //only way I found to refresh the cursor.
         content = testDbHelper.getAllContents();
         if(content.moveToFirst()){
             //Ensuring the db does have an entry after calling addData
             assertEquals(1, content.getCount());
+
+            //checking the name and the description of the task as saved by 
             String nameInDb = content.getString(content.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
-            String descrInDb = content.getString(content.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
+            String descriptionInDb = content.getString(content.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
             assertTrue(nameInDb.equals(name));
-            assertTrue(descrInDb.equals(description));
+            assertTrue(descriptionInDb.equals(description));
         }else{
             //the cursor should be able to move to the first element.
             fail();
