@@ -54,7 +54,7 @@ public final class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.menu_item_connection:
+            case R.id.menu_item_logout:
                 Intent intent = new  Intent(this, LoginActivity.class);
                 startActivity(intent);
                 return true;
