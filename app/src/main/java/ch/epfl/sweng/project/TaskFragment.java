@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import ch.epfl.sweng.project.data.DatabaseHelper;
  * Class that represents the inflated fragment located in the activity_main
  */
 public class TaskFragment extends Fragment {
+    public static final String TASK_EDIT = "ch.epfl.sweng.project.TASK_EDIT";
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
@@ -84,6 +87,18 @@ public class TaskFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
         listView.setAdapter(mTaskAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                Intent intent = new Intent(arg1.getContext(), EditTaskActivity.class);
+                Bundle b = new Bundle();
+                b.putParcelable(TASK_EDIT, taskList.get(arg2));
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
