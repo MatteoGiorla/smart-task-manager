@@ -99,8 +99,8 @@ public class TaskFragment extends Fragment {
      * Override the onCreateContextMenu method.
      * This method creates a floating context menu.
      *
-     * @param menu The context menu that is being built.
-     * @param v The view for which the context menu is being built.
+     * @param menu     The context menu that is being built.
+     * @param v        The view for which the context menu is being built.
      * @param menuInfo Extra information about the item
      *                 for which the context menu should be shown
      */
@@ -118,46 +118,59 @@ public class TaskFragment extends Fragment {
      *
      * @param item The context menu item that was selected
      * @return Return false to allow normal context menu processing to proceed,
-     *         true to consume it here
+     * true to consume it here
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_delete:
-                int position = itemInfo.position;
-                Task taskToBeDeleted = taskList.get(position);
-
-                //remove the task from the database
-                boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
-                if(!taskCorrectlyRemoved) {
-                    throw new SQLiteException("An error occurred while deleting " +
-                            "the task from the database");
-                }
-
-                String taskName = taskToBeDeleted.getName();
-
-                mTaskAdapter.remove(taskToBeDeleted);
-                mTaskAdapter.notifyDataSetChanged();
-
-                Context context = getActivity().getApplicationContext();
-                String TOAST_MESSAGE = taskName + " deleted";
-                int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(context, TOAST_MESSAGE, duration).show();
-
-                return true;
-
+                return removeTask(itemInfo);
             default:
                 return super.onContextItemSelected(item);
         }
     }
-     /**
-      * Fetch the tasks from the database without using the UI thread.
+
+    /**
+     * Remove a task from the database and the taskList.
+     *
+     * @param itemInfo Extra information about the item
+     *                 for which the context menu should be shown
+     * @return true if removed correctly or
+     * throw an SQLiteException if an error occured
      */
-    private class FetchTask extends AsyncTask<Void,Void,Cursor> {
+    public boolean removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+        int position = itemInfo.position;
+        Task taskToBeDeleted = taskList.get(position);
+
+        //Remove the task from the database
+        boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
+        if (!taskCorrectlyRemoved) {
+            throw new SQLiteException("An error occurred while deleting " +
+                    "the task from the database");
+        }
+
+        String taskName = taskToBeDeleted.getName();
+
+        mTaskAdapter.remove(taskToBeDeleted);
+        mTaskAdapter.notifyDataSetChanged();
+
+        Context context = getActivity().getApplicationContext();
+        String TOAST_MESSAGE = taskName + " deleted";
+        int duration = Toast.LENGTH_SHORT;
+        Toast.makeText(context, TOAST_MESSAGE, duration).show();
+
+        return true;
+    }
+
+    /**
+     * Fetch the tasks from the database without using the UI thread.
+     */
+    private class FetchTask extends AsyncTask<Void, Void, Cursor> {
 
         /**
          * Fetch the content from the database on a background thread.
+         *
          * @param params Void parameters
          * @return Cursor The tasks recovered from the database
          */
@@ -168,6 +181,7 @@ public class TaskFragment extends Fragment {
 
         /**
          * Add the recover tasks from the database to the taskList.
+         *
          * @param data The recovered tasks from the database
          */
         @Override
