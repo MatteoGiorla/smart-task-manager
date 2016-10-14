@@ -24,6 +24,6 @@
             android:name=".NewTaskActivity"
             android:label="@string/new_task"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
 </manifest>

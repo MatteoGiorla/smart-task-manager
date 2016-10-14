@@ -2,13 +2,18 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -85,11 +90,69 @@ public class TaskFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
         listView.setAdapter(mTaskAdapter);
 
+        registerForContextMenu(listView);
+
         return rootView;
     }
 
     /**
-     * Fetch the tasks from the database without using the UI thread.
+     * Override the onCreateContextMenu method.
+     * This method creates a floating context menu.
+     *
+     * @param menu The context menu that is being built.
+     * @param v The view for which the context menu is being built.
+     * @param menuInfo Extra information about the item
+     *                 for which the context menu should be shown
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.floating_context_menu, menu);
+    }
+
+    /**
+     * Override the onContextItemSelected.
+     * This method decides what to do depending of the context menu's item
+     * selected by the user.
+     *
+     * @param item The context menu item that was selected
+     * @return Return false to allow normal context menu processing to proceed,
+     *         true to consume it here
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.floating_delete:
+                int position = itemInfo.position;
+                Task taskToBeDeleted = taskList.get(position);
+
+                //remove the task from the database
+                boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
+                if(!taskCorrectlyRemoved) {
+                    throw new SQLiteException("An error occurred while deleting " +
+                            "the task from the database");
+                }
+
+                String taskName = taskToBeDeleted.getName();
+
+                mTaskAdapter.remove(taskToBeDeleted);
+                mTaskAdapter.notifyDataSetChanged();
+
+                Context context = getActivity().getApplicationContext();
+                String TOAST_MESSAGE = taskName + " deleted";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(context, TOAST_MESSAGE, duration).show();
+
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+     /**
+      * Fetch the tasks from the database without using the UI thread.
      */
     private class FetchTask extends AsyncTask<Void,Void,Cursor> {
 
