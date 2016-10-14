@@ -153,7 +153,7 @@ public final class NewTaskTest {
      * Test the describeContents method
      */
     @Test
-    public void testdescribeContents() {
+    public void testDescribeContents() {
         assertEquals(0, task.describeContents());
     }
     /**
@@ -170,13 +170,13 @@ public final class NewTaskTest {
         }
 
         //We delete the tasks
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(1).perform(longClick());
+                    .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
-           /* //Test if the tasks are correctly deleted
+            //Test if the tasks are correctly deleted
             if (i != 9) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
@@ -184,7 +184,7 @@ public final class NewTaskTest {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
-            }*/
+            }
         }
     }
 }

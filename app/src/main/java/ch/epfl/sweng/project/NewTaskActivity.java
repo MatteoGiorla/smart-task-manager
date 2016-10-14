@@ -54,7 +54,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
         final EditText titleEditText = (EditText) findViewById(R.id.input_title);
         final TextInputLayout textInputLayoutTitle = (TextInputLayout) findViewById(R.id.input_layout_title);
-
+        //We check the user's input
         titleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
