@@ -126,15 +126,27 @@ public class TaskFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.floating_delete:
                 int position = itemInfo.position;
-                mDatabase.removeData(taskList.get(position));
-                String taskName = taskList.get(position).getName();
-                mTaskAdapter.remove(taskList.get(position));
+                Task taskToBeDeleted = taskList.get(position);
+
+                //remove the task from the database
+                boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
+                if(!taskCorrectlyRemoved) {
+                    throw new SQLiteException("An error occurred while deleting " +
+                            "the task from the database");
+                }
+
+                String taskName = taskToBeDeleted.getName();
+
+                mTaskAdapter.remove(taskToBeDeleted);
                 mTaskAdapter.notifyDataSetChanged();
+
                 Context context = getActivity().getApplicationContext();
                 String TOAST_MESSAGE = taskName + " deleted";
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(context, TOAST_MESSAGE, duration).show();
+
                 return true;
+
             default:
                 return super.onContextItemSelected(item);
         }

@@ -12,13 +12,11 @@ public class DatabaseContract {
      */
     public static final class TaskEntry implements BaseColumns {
 
-        // The name of the table in the database
-        static final String TABLE_NAME = "task";
-
         // The column containing the title of the tasks
         public static final String COLUMN_TASK_TITLE = "title";
-
         // The column containing the description of the tasks
         public static final String COLUMN_TASK_DESCRIPTION = "description";
+        // The name of the table in the database
+        static final String TABLE_NAME = "task";
     }
 }
