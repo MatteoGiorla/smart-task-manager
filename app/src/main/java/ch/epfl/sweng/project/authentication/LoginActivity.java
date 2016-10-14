@@ -34,7 +34,5 @@ public class LoginActivity extends AppCompatActivity {
 
         mUsername = (EditText) findViewById(R.id.mUsername);
         mPassword = (EditText) findViewById(R.id.mPassword);
-        mPassword.setInputType(InputType.TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
-
     }
 }
