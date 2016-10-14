@@ -12,7 +12,7 @@ import android.widget.EditText;
  * Class that represents the inflated activity_new_task
  */
 public class NewTaskActivity extends AppCompatActivity {
-    public static final String returnedTask = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+    public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
 
     /**
      * Override the onCreate method
@@ -26,6 +26,7 @@ public class NewTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
+
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.newTask_toolbar);
         setSupportActionBar(mToolbar);
@@ -55,7 +56,7 @@ public class NewTaskActivity extends AppCompatActivity {
                 Task newTask = new Task(title, description);
 
                 Intent intent = getIntent();
-                intent.putExtra(returnedTask, newTask);
+                intent.putExtra(RETURNED_TASK, newTask);
 
                 setResult(RESULT_OK, intent);
                 finish();

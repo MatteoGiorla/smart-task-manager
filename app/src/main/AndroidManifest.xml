@@ -25,5 +25,9 @@
             android:label="@string/new_task"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".EditTaskActivity"
+            android:label="@string/edit_task"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
 </manifest>

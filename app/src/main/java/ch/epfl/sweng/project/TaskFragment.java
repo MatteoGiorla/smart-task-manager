@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -22,10 +23,17 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.data.DatabaseContract;
 import ch.epfl.sweng.project.data.DatabaseHelper;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Class that represents the inflated fragment located in the activity_main
  */
 public class TaskFragment extends Fragment {
+    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
+    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
+    private int editTaskRequestCode = 2;
+
+
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
@@ -126,8 +134,39 @@ public class TaskFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.floating_delete:
                 return removeTask(itemInfo);
+            case R.id.floating_edit:
+                editTask(itemInfo);
+                return true;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    public void editTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+        int position = itemInfo.position;
+        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+
+        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+
+        startActivityForResult(intent, editTaskRequestCode);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == editTaskRequestCode) {
+            if (resultCode == RESULT_OK) {
+                // Get result from the result intent.
+                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
+                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+                if(indexEditedTask == -1) {
+                    throw new IllegalArgumentException("Returned index to TaskFragment is invalid !");
+                }else{
+                    mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
+                    taskList.set(indexEditedTask, editedTask);
+                    mTaskAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 

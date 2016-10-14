@@ -73,7 +73,7 @@ public final class MainActivity extends AppCompatActivity {
         if (requestCode == newTaskRequestCode) {
             if (resultCode == RESULT_OK) {
                 // Get result from the result intent.
-                Task newTask = data.getParcelableExtra(NewTaskActivity.returnedTask);
+                Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
             }
