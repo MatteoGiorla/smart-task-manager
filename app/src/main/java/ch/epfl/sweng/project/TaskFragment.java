@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.project.data.DatabaseContract;
 import ch.epfl.sweng.project.data.DatabaseHelper;
@@ -26,6 +27,8 @@ import ch.epfl.sweng.project.data.DatabaseHelper;
  * Class that represents the inflated fragment located in the activity_main
  */
 public class TaskFragment extends Fragment {
+    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASK_LIST";
+
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
@@ -161,6 +164,15 @@ public class TaskFragment extends Fragment {
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
 
         return true;
+    }
+
+    /**
+     * Getter for the taskList
+     *
+     * @return an immutable copy of taskList
+     */
+    public List<Task> getTaskList() {
+        return new ArrayList<Task>(taskList);
     }
 
     /**

@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 
+import java.util.ArrayList;
+
 /**
  * MainActivity
  */
@@ -55,6 +57,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
+        intent.putParcelableArrayListExtra(fragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 

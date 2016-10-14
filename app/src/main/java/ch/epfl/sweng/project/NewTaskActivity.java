@@ -2,11 +2,14 @@ package ch.epfl.sweng.project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.List;
 
 /**
  * Class that represents the inflated activity_new_task
@@ -46,20 +49,46 @@ public class NewTaskActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = getIntent();
+                List<Task> taskList = intent
+                        .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+
                 EditText titleEditText = (EditText) findViewById(R.id.input_title);
                 String title = titleEditText.getText().toString();
 
-                EditText descriptionEditText = (EditText) findViewById(R.id.input_description);
-                String description = descriptionEditText.getText().toString();
+                if(titleAlreadyExist(taskList, title)) {
+                    TextInputLayout textInputLayoutTitle = (TextInputLayout) findViewById(R.id.input_layout_title);
+                    textInputLayoutTitle.setErrorEnabled(true);
+                    textInputLayoutTitle.setError("This title already exists");
+                } else {
 
-                Task newTask = new Task(title, description);
+                    EditText descriptionEditText = (EditText) findViewById(R.id.input_description);
+                    String description = descriptionEditText.getText().toString();
 
-                Intent intent = getIntent();
-                intent.putExtra(returnedTask, newTask);
+                    Task newTask = new Task(title, description);
 
-                setResult(RESULT_OK, intent);
-                finish();
+                    intent.putExtra(returnedTask, newTask);
+
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
+    }
+
+    /**
+     *
+     * @param taskList
+     * @param title
+     * @return
+     */
+    private boolean titleAlreadyExist(List<Task> taskList, String title) {
+        boolean result = false;
+        for(int i = 0; i < taskList.size(); i++) {
+            if(taskList.get(i).getName().equals(title)) {
+                result = true;
+            }
+        }
+        return result;
     }
 }

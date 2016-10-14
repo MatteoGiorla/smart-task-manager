@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import ch.epfl.sweng.project.Task;
 
@@ -98,7 +97,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int nbRowAffected = mDatabase.delete(table, whereClause, whereArgs);
 
-        Log.e("Error with the deletion", "number of row affected = " + nbRowAffected);
         return nbRowAffected == 1;
     }
 }
