@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,8 @@ import java.util.List;
  */
 public class NewTaskActivity extends AppCompatActivity {
     public static final String returnedTask = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+    private final String errorExistingTitle = "An existing task already has this title";
+    private final String errorEmptyTitle = "Your task's title can not be empty";
 
     /**
      * Override the onCreate method
@@ -33,15 +37,45 @@ public class NewTaskActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.newTask_toolbar);
         setSupportActionBar(mToolbar);
 
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        final Intent intent = getIntent();
+        final List<Task> taskList = intent
+                .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+        final EditText titleEditText = (EditText) findViewById(R.id.input_title);
+        final TextInputLayout textInputLayoutTitle = (TextInputLayout) findViewById(R.id.input_layout_title);
+
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                textInputLayoutTitle.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (titleAlreadyExist(taskList, s.toString())) {
+                    textInputLayoutTitle.setErrorEnabled(true);
+                    textInputLayoutTitle.setError(errorExistingTitle);
+                } else if (s.toString().isEmpty()) {
+                    textInputLayoutTitle.setErrorEnabled(true);
+                    textInputLayoutTitle.setError(errorEmptyTitle);
+                } else {
+                    textInputLayoutTitle.setErrorEnabled(false);
+                }
             }
         });
 
@@ -49,19 +83,11 @@ public class NewTaskActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = getIntent();
-                List<Task> taskList = intent
-                        .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
-
-                EditText titleEditText = (EditText) findViewById(R.id.input_title);
                 String title = titleEditText.getText().toString();
-
-                if(titleAlreadyExist(taskList, title)) {
-                    TextInputLayout textInputLayoutTitle = (TextInputLayout) findViewById(R.id.input_layout_title);
+                if (title.isEmpty()) {
                     textInputLayoutTitle.setErrorEnabled(true);
-                    textInputLayoutTitle.setError("This title already exists");
-                } else {
-
+                    textInputLayoutTitle.setError(errorEmptyTitle);
+                } else if (!title.isEmpty() && !titleAlreadyExist(taskList, title)) {
                     EditText descriptionEditText = (EditText) findViewById(R.id.input_description);
                     String description = descriptionEditText.getText().toString();
 
@@ -77,15 +103,18 @@ public class NewTaskActivity extends AppCompatActivity {
     }
 
     /**
+     * Private method that checks if an existing task in the list already contains
+     * the title.
      *
-     * @param taskList
-     * @param title
-     * @return
+     * @param taskList The task list
+     * @param title    The title
+     * @return true if the task list already contains an existing task with the same title
+     * false otherwise
      */
     private boolean titleAlreadyExist(List<Task> taskList, String title) {
         boolean result = false;
-        for(int i = 0; i < taskList.size(); i++) {
-            if(taskList.get(i).getName().equals(title)) {
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getName().equals(title)) {
                 result = true;
             }
         }
