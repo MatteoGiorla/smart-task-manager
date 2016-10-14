@@ -5,6 +5,9 @@
      TODO: Depending on your app's features, enable some Android features here
                such as backups or search indexing
     -->
+    <!-- ces deux lignes ont été ajouté pour authentication, pas sûr de son utilité -->
+    <uses-permission android:name="android.permission.ACCOUNT_MANAGER" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
