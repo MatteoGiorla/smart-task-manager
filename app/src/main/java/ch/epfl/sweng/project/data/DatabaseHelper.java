@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import ch.epfl.sweng.project.Task;
 
@@ -79,5 +80,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllContents() {
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         return mDatabase.rawQuery("SELECT * FROM " + DatabaseContract.TaskEntry.TABLE_NAME, null);
+    }
+
+    /**
+     * Delete the given task from the database.
+     *
+     * @param task Task that need to be deleted from the databases
+     * @return true if the task was deleted correctly otherwise false
+     */
+    public boolean removeData(Task task) {
+        SQLiteDatabase mDatabase = this.getWritableDatabase();
+
+        String table = DatabaseContract.TaskEntry.TABLE_NAME;
+        String whereClause = DatabaseContract.TaskEntry.COLUMN_TASK_TITLE + " = ? and " +
+                DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION + " = ?";
+        String whereArgs[] = {task.getName(), task.getDescription()};
+
+        int nbRowAffected = mDatabase.delete(table, whereClause, whereArgs);
+
+        Log.e("Error with the deletion", "number of row affected = " + nbRowAffected);
+        return nbRowAffected == 1;
     }
 }
