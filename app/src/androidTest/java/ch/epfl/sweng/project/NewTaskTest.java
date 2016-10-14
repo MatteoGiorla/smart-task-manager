@@ -22,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -122,7 +123,7 @@ public final class NewTaskTest {
     /**
      * Test that the setName setter throws an IllegalArgumentException
      * when its argument is null
-     */
+    */
     @Test
     public void testTaskSetNameException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -132,7 +133,7 @@ public final class NewTaskTest {
     /**
      * Test that the setDescription setter throws an IllegalArgumentException
      * when its argument is null
-     */
+    */
     @Test
     public void testTaskSetDescriptionException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -142,7 +143,7 @@ public final class NewTaskTest {
     /**
      * Test that the public constructor throws an IllegalArgumentException
      * when its arguments are null
-     */
+    */
     @Test
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -151,14 +152,14 @@ public final class NewTaskTest {
 
     /**
      * Test the describeContents method
-     */
+    */
     @Test
     public void testDescribeContents() {
         assertEquals(0, task.describeContents());
     }
     /**
      * Test that an added Task has been correctly deleted when clicking on Delete.
-     */
+    */
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
@@ -187,5 +188,42 @@ public final class NewTaskTest {
             }
         }
     }
-}
 
+    /**
+     * Test that we can't add a task with an already used title.
+     */
+    @Test
+    public void testCannotAddTaskWithExistingTitle() {
+
+        //Create a first task
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped));
+        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
+        onView(withId(R.id.button_submit_task)).perform(click());
+
+        //Try to create a second class with the same title as the first one
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped));
+        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
+        onView(withId(R.id.button_submit_task)).perform(click());
+
+        //We check that we still are on the activity_new_task (that the app didn't add the activity
+        // with the already used title)
+        onView(withId(R.id.newTask_toolbar)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Test that we can't add a task with an empty title.
+     */
+    @Test
+    public void testCannotAddTaskWithEmptyTitle() {
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.input_title)).perform(typeText(""));
+        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
+        onView(withId(R.id.button_submit_task)).perform(click());
+
+        //We check that we still are on the activity_new_task (that the app didn't add the activity
+        // with the empty title)
+        onView(withId(R.id.newTask_toolbar)).check(matches(isDisplayed()));
+    }
+}

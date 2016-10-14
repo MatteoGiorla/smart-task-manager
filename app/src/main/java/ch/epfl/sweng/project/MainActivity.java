@@ -57,7 +57,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
-        intent.putParcelableArrayListExtra(fragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
+        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 

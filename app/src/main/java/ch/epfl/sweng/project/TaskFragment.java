@@ -137,12 +137,12 @@ public class TaskFragment extends Fragment {
     /**
      * Remove a task from the database and the taskList.
      *
+     * @throw an SQLiteException if an error occurred
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @return true if removed correctly or
-     * throw an SQLiteException if an error occured
+     * @return true if removed correctly
      */
-    public boolean removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    private boolean removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);
 
@@ -172,7 +172,7 @@ public class TaskFragment extends Fragment {
      * @return an immutable copy of taskList
      */
     public List<Task> getTaskList() {
-        return new ArrayList<Task>(taskList);
+        return new ArrayList<>(taskList);
     }
 
     /**
