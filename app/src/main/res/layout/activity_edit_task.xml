@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,13 +11,16 @@
         android:theme="@style/ActionBar">
 
         <ImageButton
-            android:src="@drawable/ic_done"
+            android:src="@drawable/ic_done_white_36dp"
             android:contentDescription="@string/done_editing_task_description"
             android:id="@+id/edit_done_button_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@null"
-            android:layout_gravity="end"/>
+            android:layout_gravity="end"
+            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
+            tools:ignore="RtlSymmetry" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -44,9 +48,9 @@
                 android:id="@+id/title_existing_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/hint_title"
+                android:maxLength="@string/max_length_title"
                 android:inputType="textPersonName" />
-
-            <requestFocus />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -59,6 +63,7 @@
                 android:id="@+id/description_existing_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/hint_description"
                 android:inputType="textMultiLine|textAutoCorrect"
                 android:maxLines="4" />
         </android.support.design.widget.TextInputLayout>

@@ -50,16 +50,23 @@ public final class NewTaskTest {
 
     @Before
     public void initValidString() {
-        mTitleToBeTyped = "test title name number ";
-        mDescriptionToBeTyped = "test description input number ";
+        mTitleToBeTyped = "test title number ";
+        mDescriptionToBeTyped = "test description number ";
         name = "task";
-        description = "This is the first task";
+        description = "The first task";
         task = new Task(name, description);
+
+        //Empty the database
+        emptyDatabase();
     }
 
     //Empty the database once the tests are finished.
     @After
     public void tearDown() {
+        emptyDatabase();
+    }
+
+    private void emptyDatabase() {
         SQLiteDatabase myDb = getTargetContext()
                 .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
         myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
@@ -93,6 +100,8 @@ public final class NewTaskTest {
                     .atPosition(i)
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
+
+        emptyDatabase();
     }
 
     /**
@@ -153,7 +162,7 @@ public final class NewTaskTest {
      * Test the describeContents method
      */
     @Test
-    public void testdescribeContents() {
+    public void testDescribeContents() {
         assertEquals(0, task.describeContents());
     }
     /**
@@ -170,13 +179,13 @@ public final class NewTaskTest {
         }
 
         //We delete the tasks
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(1).perform(longClick());
+                    .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
-           /* //Test if the tasks are correctly deleted
+            //Test if the tasks are correctly deleted
             if (i != 9) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
@@ -184,8 +193,10 @@ public final class NewTaskTest {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
-            }*/
+            }
         }
+
+        emptyDatabase();
     }
 }
 

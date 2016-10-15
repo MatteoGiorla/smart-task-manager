@@ -100,6 +100,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return nbRowAffected == 1;
     }
 
+    /**
+     * Update a task from the database with a new one.
+     *
+     * @param oldTask The task to be edited
+     * @param newTask THe new task
+     * @return true if the task was updated correctly otherwise false
+     */
     public boolean editTask(Task oldTask, Task newTask) {
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

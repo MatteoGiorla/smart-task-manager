@@ -19,6 +19,13 @@
     <string name="flt_ctx_menu_delete">Delete</string>
     <string name="flt_ctx_menu_edit">Edit</string>
 
+    <!-- Maximum lengths -->
+    <string name="max_length_title">20</string>
+
+    <!-- Error messages -->
+    <string name="error_title_empty">The title can\'t be empty !</string>
+    <string name="error_title_duplicated">This title is already taken !</string>
+
     <!-- Buttons description-->
     <string name="button_location_description">Select your Location</string>
     <string name="button_vitality_description">Select your vitality</string>

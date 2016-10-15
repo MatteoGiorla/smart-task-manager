@@ -31,7 +31,7 @@ import static android.app.Activity.RESULT_OK;
 public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
-    private int editTaskRequestCode = 2;
+    private final int editTaskRequestCode = 2;
 
 
     private TaskListAdapter mTaskAdapter;
@@ -133,16 +133,62 @@ public class TaskFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_delete:
-                return removeTask(itemInfo);
+                removeTask(itemInfo);
+                return true;
             case R.id.floating_edit:
-                editTask(itemInfo);
+                startEditTaskActivity(itemInfo);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
-    public void editTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    /**
+     * Method called when an activity launch inside MainActivity,
+     * is finished. This method is triggered only if we use
+     * startActivityForResult.
+     *
+     * @param requestCode The integer request code supplied to startActivityForResult
+     *                    used as an identifier.
+     * @param resultCode  The integer result code returned by the child activity
+     * @param data        An intent which can return result data to the caller.
+     * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
+     * invalid
+     * @throws SQLiteException if more that one row was changed when editing a task.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Case when we returned from the EditTaskActivity
+        if (requestCode == editTaskRequestCode) {
+            if (resultCode == RESULT_OK) {
+                // Get result from the result intent.
+                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
+                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+                if (indexEditedTask == -1 || editedTask == null) {
+                    throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
+                } else {
+                    boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
+                    if(!correctlyEdited) {
+                        throw new SQLiteException("More that was row was edited !");
+                    }
+                    taskList.set(indexEditedTask, editedTask);
+                    mTaskAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            editedTask.getName() + " has been updated !",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     * Start the EditTaskActivity for result when the user press the edit button.
+     * The task index and the taskList are passed as extras to the intent.
+     *
+     * @param itemInfo Extra information about the item
+     *                 for which the context menu should be shown
+     */
+    private void startEditTaskActivity(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Intent intent = new Intent(getActivity(), EditTaskActivity.class);
 
@@ -152,33 +198,14 @@ public class TaskFragment extends Fragment {
         startActivityForResult(intent, editTaskRequestCode);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == editTaskRequestCode) {
-            if (resultCode == RESULT_OK) {
-                // Get result from the result intent.
-                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
-                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
-                if(indexEditedTask == -1) {
-                    throw new IllegalArgumentException("Returned index to TaskFragment is invalid !");
-                }else{
-                    mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
-                    taskList.set(indexEditedTask, editedTask);
-                    mTaskAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-    }
-
     /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @return true if removed correctly or
-     * throw an SQLiteException if an error occured
+     * @throws SQLiteException if an error occurred
      */
-    public boolean removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);
 
@@ -198,8 +225,6 @@ public class TaskFragment extends Fragment {
         String TOAST_MESSAGE = taskName + " deleted";
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
-
-        return true;
     }
 
     /**
