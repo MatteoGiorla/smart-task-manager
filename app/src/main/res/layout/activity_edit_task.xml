@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_title"
                 android:maxLength="@string/max_length_title"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName|textCapSentences"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_description"
-                android:inputType="textMultiLine|textAutoCorrect"
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                 android:maxLines="4" />
         </android.support.design.widget.TextInputLayout>
 
