@@ -32,8 +32,6 @@ public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
     private final int editTaskRequestCode = 2;
-
-
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
