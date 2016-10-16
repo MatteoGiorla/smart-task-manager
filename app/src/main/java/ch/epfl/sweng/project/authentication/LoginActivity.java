@@ -64,11 +64,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mUsername = (EditText) findViewById(R.id.mUsername);
         mPassword = (EditText) findViewById(R.id.mPassword);
         mSignIn = (Button) findViewById(R.id.mSignIn);//.setOnClickListener(this);
+        findViewById(R.id.sign_in_button).setOnClickListener(this); // ajouté après tuto google doc
 
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
+                .requestEmail() // to request the user email
                 .build();
 
         mGoogleClient = new GoogleApiClient.Builder(this)
@@ -159,10 +160,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     // [END auth_with_google]
 
     // [START signin]
-    private void signIn() {
+    /*private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+    }*/
     // [END signin]
 
     private void signOut() {
@@ -204,9 +205,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onClick(View v) {
-        int i = v.getId();
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                signIn();
+                break;
+        /*int i = v.getId();
         if (i == R.id.mSignIn) { // sign_in_button
-            signIn();
+            signIn();*/
         } /*else if (i == R.id.sign_out_button) {
             signOut();
         } else if (i == R.id.disconnect_button) {
@@ -214,17 +219,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }*/
     }
 
-   /* private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
+    public void signIn() {
+        Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
+        startActivityForResult(signIn, RC_SIGN_IN);
+    }
+
+    /*private void updateUI(FirebaseUser user) {
+        //hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+            mUsername.setText(getString(R.string.google_status_fmt, user.getEmail()));
+            mPassword.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.mSignIn).setVisibility(View.GONE); // sign_in_button
             //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
+            mUsername.setText(R.string.signed_out);
+            mPassword.setText(null);
 
             findViewById(R.id.mSignIn).setVisibility(View.VISIBLE); //sign_in_button
             //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
