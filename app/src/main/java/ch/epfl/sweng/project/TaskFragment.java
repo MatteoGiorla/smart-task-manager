@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -23,12 +24,15 @@ import java.util.List;
 import ch.epfl.sweng.project.data.DatabaseContract;
 import ch.epfl.sweng.project.data.DatabaseHelper;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Class that represents the inflated fragment located in the activity_main
  */
 public class TaskFragment extends Fragment {
-    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASK_LIST";
-
+    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
+    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
+    private final int editTaskRequestCode = 2;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
@@ -128,21 +132,79 @@ public class TaskFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_delete:
-                return removeTask(itemInfo);
+                removeTask(itemInfo);
+                return true;
+            case R.id.floating_edit:
+                startEditTaskActivity(itemInfo);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
     /**
-     * Remove a task from the database and the taskList.
+     * Method called when an activity launch inside MainActivity,
+     * is finished. This method is triggered only if we use
+     * startActivityForResult.
      *
-     * @throw an SQLiteException if an error occurred
+     * @param requestCode The integer request code supplied to startActivityForResult
+     *                    used as an identifier.
+     * @param resultCode  The integer result code returned by the child activity
+     * @param data        An intent which can return result data to the caller.
+     * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
+     * invalid
+     * @throws SQLiteException if more that one row was changed when editing a task.
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Case when we returned from the EditTaskActivity
+        if (requestCode == editTaskRequestCode) {
+            if (resultCode == RESULT_OK) {
+                // Get result from the result intent.
+                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
+                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+                if (indexEditedTask == -1 || editedTask == null) {
+                    throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
+                } else {
+                    boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
+                    if(!correctlyEdited) {
+                        throw new SQLiteException("More that was row was edited !");
+                    }
+                    taskList.set(indexEditedTask, editedTask);
+                    mTaskAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            editedTask.getName() + " has been updated !",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     * Start the EditTaskActivity for result when the user press the edit button.
+     * The task index and the taskList are passed as extras to the intent.
+     *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @return true if removed correctly
      */
-    private boolean removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    private void startEditTaskActivity(AdapterView.AdapterContextMenuInfo itemInfo) {
+        int position = itemInfo.position;
+        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+
+        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+
+        startActivityForResult(intent, editTaskRequestCode);
+    }
+
+    /**
+     * Remove a task from the database and the taskList.
+     *
+     * @throws SQLiteException if an error occurred
+     * @param itemInfo Extra information about the item
+     *                 for which the context menu should be shown
+     */
+    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);
 
@@ -162,8 +224,6 @@ public class TaskFragment extends Fragment {
         String TOAST_MESSAGE = taskName + " deleted";
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
-
-        return true;
     }
 
     /**
