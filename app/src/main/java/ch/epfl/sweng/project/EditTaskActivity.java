@@ -141,7 +141,7 @@ public class EditTaskActivity extends AppCompatActivity {
 
     /**
      * Private class that implement TextWatcher.
-     * This class is used to check on runtime if the input written by the user
+     * This class is used to check on runtime if the inputs written by the user
      * are valid or not.
      */
     private class TextWatcher implements android.text.TextWatcher {

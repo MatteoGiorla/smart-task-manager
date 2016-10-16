@@ -14,22 +14,22 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.project.data.DatabaseContract;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
+import static org.junit.Assert.assertThat;
 
 
 
@@ -87,7 +87,7 @@ public final class NewTaskTest {
      */
     @Test
     public void testCanAddTask() {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             onView(withId(R.id.add_task_button)).perform(click());
             onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped + i));
             onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped + i));
@@ -219,10 +219,17 @@ public final class NewTaskTest {
         onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
         onView(withId(R.id.button_submit_task)).perform(click());
 
+        //Get the error message
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.error_title_duplicated)
+                .toString();
+
         //Check that the error message is displayed
         onView(withId(R.id.input_layout_title))
-                .check(matches(ErrorTextInputLayoutMatcher.withErrorText(containsString("An existing task already has this title"))));
-        pressBack();
+                .check(matches(ErrorTextInputLayoutMatcher
+                .withErrorText(containsString(errorMessage))));
     }
 
     /**
@@ -236,10 +243,16 @@ public final class NewTaskTest {
         onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
         onView(withId(R.id.button_submit_task)).perform(click());
 
+        //Get the error message
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.error_title_empty)
+                .toString();
+
         //Check that the error message is displayed
         onView(withId(R.id.input_layout_title))
-                .check(matches(ErrorTextInputLayoutMatcher.withErrorText(containsString("Your task's title can not be empty"))));
-        pressBack();
+                .check(matches(ErrorTextInputLayoutMatcher
+                .withErrorText(containsString(errorMessage))));
     }
-
 }
