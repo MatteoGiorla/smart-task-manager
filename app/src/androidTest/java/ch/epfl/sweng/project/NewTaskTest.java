@@ -15,20 +15,22 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.project.data.DatabaseContract;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertThat;
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
+
 
 
 /**
@@ -132,7 +134,7 @@ public final class NewTaskTest {
     /**
      * Test that the setName setter throws an IllegalArgumentException
      * when its argument is null
-    */
+     */
     @Test
     public void testTaskSetNameException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -142,7 +144,7 @@ public final class NewTaskTest {
     /**
      * Test that the setDescription setter throws an IllegalArgumentException
      * when its argument is null
-    */
+     */
     @Test
     public void testTaskSetDescriptionException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -152,7 +154,7 @@ public final class NewTaskTest {
     /**
      * Test that the public constructor throws an IllegalArgumentException
      * when its arguments are null
-    */
+     */
     @Test
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -161,14 +163,14 @@ public final class NewTaskTest {
 
     /**
      * Test the describeContents method
-    */
+     */
     @Test
     public void testDescribeContents() {
         assertEquals(0, task.describeContents());
     }
     /**
      * Test that an added Task has been correctly deleted when clicking on Delete.
-    */
+     */
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
@@ -205,7 +207,6 @@ public final class NewTaskTest {
      */
     @Test
     public void testCannotAddTaskWithExistingTitle() {
-
         //Create a first task
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped));
@@ -218,9 +219,10 @@ public final class NewTaskTest {
         onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
         onView(withId(R.id.button_submit_task)).perform(click());
 
-        //We check that we still are on the activity_new_task (that the app didn't add the activity
-        // with the already used title)
-        onView(withId(R.id.newTask_toolbar)).check(matches(isDisplayed()));
+        //Check that the error message is displayed
+        onView(withId(R.id.input_layout_title))
+                .check(matches(ErrorTextInputLayoutMatcher.withErrorText(containsString("An existing task already has this title"))));
+        pressBack();
     }
 
     /**
@@ -228,13 +230,16 @@ public final class NewTaskTest {
      */
     @Test
     public void testCannotAddTaskWithEmptyTitle() {
+        //Create a task with empty titles
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.input_title)).perform(typeText(""));
         onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
         onView(withId(R.id.button_submit_task)).perform(click());
 
-        //We check that we still are on the activity_new_task (that the app didn't add the activity
-        // with the empty title)
-        onView(withId(R.id.newTask_toolbar)).check(matches(isDisplayed()));
+        //Check that the error message is displayed
+        onView(withId(R.id.input_layout_title))
+                .check(matches(ErrorTextInputLayoutMatcher.withErrorText(containsString("Your task's title can not be empty"))));
+        pressBack();
     }
+
 }
