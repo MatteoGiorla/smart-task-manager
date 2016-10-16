@@ -1,19 +1,12 @@
 package ch.epfl.sweng.project.authentication;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -26,7 +19,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -36,9 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import ch.epfl.sweng.project.R;
-
-import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
-import static com.google.android.gms.internal.zzs.TAG;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
@@ -53,6 +42,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+
+    /**
+     * Override the onCreate method
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +60,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mUsername = (EditText) findViewById(R.id.mUsername);
         mPassword = (EditText) findViewById(R.id.mPassword);
-        mSignIn = (Button) findViewById(R.id.mSignIn);//.setOnClickListener(this);
-        findViewById(R.id.sign_in_button).setOnClickListener(this); // ajouté après tuto google doc
+        mSignIn = (Button) findViewById(R.id.mSignIn); //.setOnClickListener(this);
+        // Google Sign In Button:
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -77,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
                 .build();
 
+        // configure Firebase part:
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -95,12 +94,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         };
     }
 
+    /**
+     * Override the onStart method.
+     * Attach the listener to the FirebaseAuth instance.
+     */
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
+    /**
+     * Override the onStop method.
+     * Remove the listener to the FirebaseAuth instance.
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -109,6 +116,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    /**
+     * Override the onActivityResult method.
+     * Retrieve the sign in result, use Firebase for the authentication (OAuth2) and
+     * make the UI update in consequence.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,24 +133,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                // Google Sign In was successful, authenticate with Firebase
+                // Google Sign In was successful, authenticate with Firebase:
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                //updateUI(true);
             } else {
-                // Google Sign In failed, update UI appropriately
-                // [START_EXCLUDE]
-                //updateUI(null);
-                // [END_EXCLUDE]
+                // Google Sign In failed:
+                //updateUI(false);
             }
         }
     }
 
-    // [START auth_with_google]
+    /**
+     * Authentication with Google in using Firebase (OAuth2)
+     *
+     * @param acct Class that holds the basic account information of the signed in Google user.
+     */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
         //showProgressDialog();
-        // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -151,20 +168,54 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // [START_EXCLUDE]
                         //hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
-    // [END auth_with_google]
 
-    // [START signin]
-    /*private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }*/
-    // [END signin]
+    /**
+     * Override the onConnectionFailed method.
+     *
+     * @param connectionResult
+     */
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Override the onClick method.
+     *
+     * @param v Required argument.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                signIn();
+                break;
+        }
+        /*if (i == R.id.mSignIn) { // sign_in_button
+            signIn();*/
+         /*else if (i == R.id.sign_out_button) {
+            signOut();
+        } else if (i == R.id.disconnect_button) {
+            revokeAccess();
+        }*/
+    }
+
+    /**
+     * Override the signIn method.
+     * Create a sign in intent.
+     */
+    public void signIn() {
+        Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
+        // start the intent:
+        startActivityForResult(signIn, RC_SIGN_IN);
+    }
 
     private void signOut() {
         // Firebase sign out
@@ -195,49 +246,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
-                break;
-        /*int i = v.getId();
-        if (i == R.id.mSignIn) { // sign_in_button
-            signIn();*/
-        } /*else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }*/
-    }
-
-    public void signIn() {
-        Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
-        startActivityForResult(signIn, RC_SIGN_IN);
-    }
-
     /*private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
-        if (user != null) {
-            mUsername.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mPassword.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
-            findViewById(R.id.mSignIn).setVisibility(View.GONE); // sign_in_button
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            mUsername.setText(R.string.signed_out);
-            mPassword.setText(null);
-
-            findViewById(R.id.mSignIn).setVisibility(View.VISIBLE); //sign_in_button
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
-        }
     }*/
 }
