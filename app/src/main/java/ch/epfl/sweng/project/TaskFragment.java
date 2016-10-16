@@ -200,13 +200,10 @@ public class TaskFragment extends Fragment {
     /**
      * Remove a task from the database and the taskList.
      *
-     * @throw an SQLiteException if an error occurred
+     * @throws SQLiteException if an error occurred
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-<<<<<<< HEAD
-     * @return true if removed correctly
      */
-
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);

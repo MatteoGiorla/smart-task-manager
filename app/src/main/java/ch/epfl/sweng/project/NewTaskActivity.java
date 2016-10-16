@@ -94,8 +94,8 @@ public class NewTaskActivity extends AppCompatActivity {
 
                     Task newTask = new Task(title, description);
 
-                Intent intent = getIntent();
-                intent.putExtra(RETURNED_TASK, newTask);
+                    intent.putExtra(RETURNED_TASK, newTask);
+
 
                     setResult(RESULT_OK, intent);
                     finish();

@@ -97,6 +97,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int nbRowAffected = mDatabase.delete(table, whereClause, whereArgs);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 266a549706759ef02de24153257df8dc682ab473
         return nbRowAffected == 1;
     }
 
@@ -118,6 +123,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String whereArgs[] = {oldTask.getName()};
         int nbRowAffected = mDatabase.update(table, contentValues, whereClause, whereArgs);
 
+<<<<<<< HEAD
+=======
+>>>>>>> edit_task
+>>>>>>> 266a549706759ef02de24153257df8dc682ab473
         return nbRowAffected == 1;
     }
 }
