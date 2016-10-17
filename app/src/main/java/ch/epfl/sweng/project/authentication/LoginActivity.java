@@ -246,8 +246,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    /*private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
-
-    }*/
+        Intent intent = new  Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 }
