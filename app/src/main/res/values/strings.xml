@@ -26,4 +26,8 @@
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google, Facebook or Twitter account.</string>
     <string name="welcome_title">Welcome !</string>
+    
+    <!-- Facebook App ID -->
+    <string name="facebook_app_id">104609210014543</string>
+
 </resources>

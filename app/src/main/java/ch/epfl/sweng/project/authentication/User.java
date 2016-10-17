@@ -18,6 +18,4 @@ public final class User {
         this.firstName = firstName;
         this.lastName = lastName;
     }
-
-    // toString() implémenter???
 }

@@ -5,7 +5,6 @@
      TODO: Depending on your app's features, enable some Android features here
                such as backups or search indexing
     -->
-    <!-- ces deux lignes ont été ajouté pour authentication, pas sûr de son utilité -->
     <uses-permission android:name="android.permission.ACCOUNT_MANAGER" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -14,6 +13,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
         <activity
             android:name=".EntryActivity">
             <intent-filter>
@@ -31,6 +31,10 @@
         <activity
             android:name=".authentication.LoginActivity">
         </activity>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"/>  <!-- TaskIt à la place de app_name -->
     </application>
 
 </manifest>
