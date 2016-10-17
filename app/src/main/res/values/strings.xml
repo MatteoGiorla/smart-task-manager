@@ -22,4 +22,7 @@
     <string name="location_square">L</string>
     <string name="energy_square">E</string>
     <string name="time_disposal_square">T</string>
+
+    <!-- Facebook App ID -->
+    <string name="facebook_app_id">104609210014543</string>
 </resources>
