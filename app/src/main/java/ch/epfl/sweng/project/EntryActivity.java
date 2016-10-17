@@ -42,11 +42,11 @@ public class EntryActivity extends Activity{
     private String getScreenClassName()
     {
         String activity = null;
-
-        if(false) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
             // if the user is already logged in the MainActivity with the tasks list is displayed
             activity = MainActivity.class.getName();
-        } else if (true) {
+        } else if (user == null) {
             // else, if the user isn't logged in, the LoginActivity will be displayed
             activity = LoginActivity.class.getName();
         } else {
