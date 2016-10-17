@@ -64,7 +64,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         // Sign In Buttons:
-        //findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
         findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
 
