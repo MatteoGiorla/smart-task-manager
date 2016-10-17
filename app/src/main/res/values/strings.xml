@@ -22,4 +22,8 @@
     <string name="location_square">L</string>
     <string name="energy_square">E</string>
     <string name="time_disposal_square">T</string>
+
+    <!-- Log in screen values -->
+    <string name="welcome_text">You can log in using your Google, Facebook or Twitter account.</string>
+    <string name="welcome_title">Welcome !</string>
 </resources>
