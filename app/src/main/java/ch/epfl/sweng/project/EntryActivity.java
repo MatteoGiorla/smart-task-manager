@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
 /**
@@ -46,11 +49,9 @@ public class EntryActivity extends Activity{
         if(user != null) {
             // if the user is already logged in the MainActivity with the tasks list is displayed
             activity = MainActivity.class.getName();
-        } else if (user == null) {
+        } else {
             // else, if the user isn't logged in, the LoginActivity will be displayed
             activity = LoginActivity.class.getName();
-        } else {
-            throw new NullPointerException("Starting activity couldn't be determined.");
         }
         return activity;
     }
