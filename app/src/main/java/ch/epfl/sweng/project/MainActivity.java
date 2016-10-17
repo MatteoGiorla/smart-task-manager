@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
 /**
@@ -55,6 +57,7 @@ public final class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_item_logout:
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new  Intent(this, LoginActivity.class);
                 startActivity(intent);
                 return true;
