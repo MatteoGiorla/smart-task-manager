@@ -32,9 +32,6 @@ import ch.epfl.sweng.project.R;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private GoogleApiClient mGoogleClient;
-    private EditText mUsername;
-    private EditText mPassword;
-    private Button mSignIn;
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -55,12 +52,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*final Button mSignIn = (Button) findViewById(R.id.mSignIn);
-        mSignIn.setEnabled(false);*/
-
-        mUsername = (EditText) findViewById(R.id.mUsername);
-        mPassword = (EditText) findViewById(R.id.mPassword);
-        mSignIn = (Button) findViewById(R.id.mSignIn); //.setOnClickListener(this);
         // Google Sign In Button:
         findViewById(R.id.sign_in_button).setOnClickListener(this);
 
@@ -167,6 +158,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+                            startActivity(intent);
                         }
                         //hideProgressDialog();
                     }
@@ -198,13 +192,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 signIn();
                 break;
         }
-        /*if (i == R.id.mSignIn) { // sign_in_button
-            signIn();*/
-         /*else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }*/
     }
 
     /**
@@ -248,7 +235,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
-        Intent intent = new  Intent(this, LoginActivity.class);
-        startActivity(intent);
     }
 }
