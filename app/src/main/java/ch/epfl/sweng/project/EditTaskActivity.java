@@ -92,7 +92,7 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     /**
-     * Check that the was correctly passed to the activity, and
+     * Check that the intent was correctly passed to the activity, and
      * initialize the global variables of the class.
      *
      * @param intent the intent passed to the activity.
