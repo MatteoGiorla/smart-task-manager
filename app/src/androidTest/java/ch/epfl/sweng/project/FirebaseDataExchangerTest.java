@@ -40,7 +40,7 @@ public final class FirebaseDataExchangerTest {
     public void setup(){
         wifiSwitch(ON);
     }
-    
+
     public void initPrivateField(){
         context = getContext();
         fDE = new FirebaseDataExchanger(context);
