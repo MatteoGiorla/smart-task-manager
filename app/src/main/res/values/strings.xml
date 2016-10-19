@@ -2,6 +2,8 @@
     <!-- Activity name strings-->
     <string name="app_name">TaskIt</string>
     <string name="new_task">Create a new task</string>
+    <string name="login_label">Log In</string>
+
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
