@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleClient;
     private CallbackManager mFacebook;
 
-    private static final String TAG = "GoogleActivity";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mAuth;
@@ -110,11 +111,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
+                Toast.makeText(LoginActivity.this, "Authentication canceled.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -157,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d(TAG, "handleSignInResult:" + result.isSuccess());
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase:
                 GoogleSignInAccount account = result.getSignInAccount();
@@ -164,6 +168,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 //updateUI(true);
             } else {
                 // Google Sign In failed:
+                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                 //updateUI(false);
             }
         }
@@ -193,7 +198,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                         //hideProgressDialog();
@@ -218,7 +223,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                     }
@@ -271,8 +276,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        //
-                        // updateUI(null);
+                        //updateUI(null);
                     }
                 });
     }
@@ -292,6 +296,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void updateUI(FirebaseUser user) {
-        //hideProgressDialog();
+        /*//hideProgressDialog();
+        Intent intent = new  Intent(this, LoginActivity.class);
+        startActivity(intent);
+        if (user != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }*/
     }
 }

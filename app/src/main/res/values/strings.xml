@@ -2,6 +2,8 @@
     <!-- Activity name strings-->
     <string name="app_name">TaskIt</string>
     <string name="new_task">Create a new task</string>
+    <string name="login_label">Log In</string>
+
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
@@ -24,7 +26,7 @@
     <string name="time_disposal_square">T</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">You can log in using your Google, Facebook or Twitter account.</string>
+    <string name="welcome_text">You can log in using your Google or Facebook account.</string>
     <string name="welcome_title">Welcome !</string>
     
     <!-- Facebook App ID -->

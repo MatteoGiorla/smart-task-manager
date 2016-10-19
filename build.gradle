@@ -15,7 +15,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        // added for Facebook Sign In button: 
+        // added for Facebook Sign In button:
         mavenCentral()
     }
 }
