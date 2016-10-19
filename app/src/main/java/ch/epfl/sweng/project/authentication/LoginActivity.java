@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleClient;
     private CallbackManager mFacebook;
 
-    private static final String TAG = "GoogleActivity";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth mAuth;
@@ -276,7 +276,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        updateUI(null);
+                        //updateUI(null);
                     }
                 });
     }
@@ -290,12 +290,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(@NonNull Status status) {
-                        updateUI(null);
+                        //updateUI(null);
                     }
                 });
     }
 
     private void updateUI(FirebaseUser user) {
-        //hideProgressDialog();
+        /*//hideProgressDialog();
+        Intent intent = new  Intent(this, LoginActivity.class);
+        startActivity(intent);
+        if (user != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }*/
     }
 }
