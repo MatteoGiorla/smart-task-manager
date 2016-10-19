@@ -53,7 +53,7 @@ public class DatabaseTest {
      * Test if after adding a task, the database contains such a task.
      */
     @Test
-    public void TestdatabaseAddCorrectly() {
+    public void TestDatabaseAddCorrectly() {
         Cursor content = testDbHelper.getAllContents();
 
         //Ensuring the good numbers of Columns is in the Db

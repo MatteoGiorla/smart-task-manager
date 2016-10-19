@@ -80,4 +80,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase mDatabase = this.getWritableDatabase();
         return mDatabase.rawQuery("SELECT * FROM " + DatabaseContract.TaskEntry.TABLE_NAME, null);
     }
+
+    /**
+     * Delete the given task from the database.
+     *
+     * @param task Task that need to be deleted from the databases
+     * @return true if the task was deleted correctly otherwise false
+     */
+    public boolean removeData(Task task) {
+        SQLiteDatabase mDatabase = this.getWritableDatabase();
+
+        String table = DatabaseContract.TaskEntry.TABLE_NAME;
+        String whereClause = DatabaseContract.TaskEntry.COLUMN_TASK_TITLE + " = ? and " +
+                DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION + " = ?";
+        String whereArgs[] = {task.getName(), task.getDescription()};
+
+        int nbRowAffected = mDatabase.delete(table, whereClause, whereArgs);
+
+        return nbRowAffected == 1;
+    }
+
+    /**
+     * Update a task from the database with a new one.
+     *
+     * @param oldTask The task to be edited
+     * @param newTask THe new task
+     * @return true if the task was updated correctly otherwise false
+     */
+    public boolean editTask(Task oldTask, Task newTask) {
+        SQLiteDatabase mDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE, newTask.getName());
+        contentValues.put(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION, newTask.getDescription());
+
+        String table = DatabaseContract.TaskEntry.TABLE_NAME;
+        String whereClause = DatabaseContract.TaskEntry.COLUMN_TASK_TITLE + " = ?";
+        String whereArgs[] = {oldTask.getName()};
+        int nbRowAffected = mDatabase.update(table, contentValues, whereClause, whereArgs);
+
+        return nbRowAffected == 1;
+    }
 }

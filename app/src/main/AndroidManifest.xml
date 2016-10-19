@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ch.epfl.sweng.project">
-
-    <!-- TODO: Depending on your app's features, enable some Android features here
-               such as backups or search indexing -->
-
+    <!--
+     TODO: Depending on your app's features, enable some Android features here
+               such as backups or search indexing
+    -->
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -24,6 +24,11 @@
             android:name=".NewTaskActivity"
             android:label="@string/new_task"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".EditTaskActivity"
+            android:label="@string/edit_task"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
     </application>
+
 </manifest>

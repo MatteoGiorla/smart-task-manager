@@ -20,7 +20,6 @@ public class DatabaseContract {
 
         // The column containing the title of the tasks
         public static final String COLUMN_TASK_TITLE = "title";
-
         // The column containing the description of the tasks
         public static final String COLUMN_TASK_DESCRIPTION = "description";
     }
