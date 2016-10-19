@@ -24,7 +24,7 @@
     <string name="time_disposal_square">T</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">You can log in using your Google, Facebook or Twitter account.</string>
+    <string name="welcome_text">You can log in using your Google or Facebook account.</string>
     <string name="welcome_title">Welcome !</string>
     
     <!-- Facebook App ID -->
