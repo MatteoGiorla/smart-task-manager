@@ -19,7 +19,6 @@ public class FirebaseDataExchanger implements dataExchanger {
      */
     public FirebaseDataExchanger(Context context){
         this.context = context;
-
     }
 
     @Override
