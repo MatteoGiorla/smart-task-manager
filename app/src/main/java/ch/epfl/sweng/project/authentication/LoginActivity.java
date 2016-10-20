@@ -15,6 +15,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -32,6 +33,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -156,6 +159,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Facebook Sign In:
+        mFacebook.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
@@ -181,7 +186,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        //showProgressDialog();
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -195,17 +199,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException().getMessage().contains("An account already " +
+                                    "exists with the same email address but different sign-in " +
+                                    "credentials.")) {
+                                Toast.makeText(LoginActivity.this, "You must use the same " +
+                                                "authentication service as before.",
+                                        Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
-                        //hideProgressDialog();
                     }
                 });
     }
 
+    /**
+     *
+     * @param token
+     */
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token); // Think to wash these LOG!!!!!!!!!!!!!!!!!!!!!!!!!!!
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -220,8 +235,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            if (task.getException().getMessage().contains("An account already " +
+                                    "exists with the same email address but different sign-in " +
+                                    "credentials.")) {
+                                Toast.makeText(LoginActivity.this, "You must use the same " +
+                                        "authentication service as before.",
+                                        Toast.LENGTH_LONG).show();
+                                // TODO IL FAUT QU'IL NE SE CONNECTE PAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             // ajouté pour tester
                             Toast.makeText(LoginActivity.this, "YOLO", Toast.LENGTH_SHORT).show();
@@ -270,6 +294,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         startActivityForResult(signIn, RC_SIGN_IN);
     }
 
+    /**
+     *
+     */
     private void signOut() {
         // Firebase sign out
         mAuth.signOut();
@@ -282,6 +309,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         //updateUI(null);
                     }
                 });
+
+        // Facebook sign out
+        LoginManager.getInstance().logOut();
     }
 
     private void revokeAccess() {
