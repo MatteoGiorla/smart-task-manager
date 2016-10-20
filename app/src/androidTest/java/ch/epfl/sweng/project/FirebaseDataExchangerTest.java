@@ -2,7 +2,7 @@ package ch.epfl.sweng.project;
 
 
 import android.content.Context;
-import android.media.UnsupportedSchemeException;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,16 +10,21 @@ import android.support.test.runner.AndroidJUnit4;
  *  Unit Test of the communication layer, since there is no firebase database for now, only
  *  checks the exceptions are thrown
  */
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.project.authentication.User;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
-import static android.support.test.InstrumentationRegistry.getContext;
+import ch.epfl.sweng.project.authentication.User;
+import ch.epfl.sweng.project.data.FirebaseDataExchanger;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public final class FirebaseDataExchangerTest {
@@ -32,16 +37,18 @@ public final class FirebaseDataExchangerTest {
     final private boolean ON = true;
     final private boolean OFF = false;
 
-    @Rule
-    public ExpectedException thrownException = ExpectedException.none();
-
     @Before
     public void setup(){
-        wifiSwitch(ON);
+        initPrivateField();
+    }
+
+    @After
+    public void tearDown(){
+        NetworkSwitch(ON);
     }
 
     public void initPrivateField(){
-        context = getContext();
+        context = getInstrumentation().getContext();
         fDE = new FirebaseDataExchanger(context);
         dummyTask1 = new Task("Task1", "dummy task1");
         dummyTask2 = new Task("Task2", "dummy task2");
@@ -49,49 +56,74 @@ public final class FirebaseDataExchangerTest {
     }
 
     @Test
-    public void hasAccessTest(){
-        wifiSwitch(OFF);
+    public void hasAccessReturnsFalseWithoutAccess(){
+        NetworkSwitch(OFF);
+        //without access to internet, .
         assertEquals(false, fDE.hasAccess());
-        wifiSwitch(ON);
-        //without access to internet, the test should fail.
-        thrownException.expect(UnsupportedSchemeException.class);
-        fDE.hasAccess();
+    }
+
+    @Test
+    public void hasAccesTest(){
+        NetworkSwitch(ON);
+        try{
+            fDE.hasAccess();
+            fail("Should have thrown an UnsupportedOperation Exception");
+        }catch(UnsupportedOperationException uns){
+            assertTrue("Exception correctly cached, but need implementing Firebase connection", true);
+        }
     }
 
     @Test
     public void retrieveAllDataTest(){
-        thrownException.expect(UnsupportedSchemeException.class);
-        fDE.retrieveAllData(dummyUser);
+        try{
+            fDE.retrieveAllData(dummyUser);
+            fail("Should have thrown an UnsupportedOperation Exception");
+        }catch(UnsupportedOperationException uns){
+            assertTrue("Need implementing Firebase connection", true);
+        }
+
     }
 
     @Test
     public void addNewTaskTest(){
-        thrownException.expect(UnsupportedSchemeException.class);
-        fDE.addNewTask(dummyTask1);
+        try{
+            fDE.addNewTask(dummyTask1);
+            fail("Should have thrown an UnsupportedOperation Exception");
+        }catch(UnsupportedOperationException uns){
+            assertTrue("Need implementing Firebase connection", true);
+        }
+
     }
 
     @Test
     public void updateTaskTest(){
-        thrownException.expect(UnsupportedSchemeException.class);
-        fDE.updateTask(dummyTask1, dummyTask2);
+        try{
+            fDE.updateTask(dummyTask1, dummyTask2);
+            fail("Should have thrown an UnsupportedOperation Exception");
+        }catch(UnsupportedOperationException uns){
+            assertTrue("Need implementing Firebase connection", true);
+        }
+
     }
 
     @Test
     public void deleteTaskTest(){
-        thrownException.expect(UnsupportedSchemeException.class);
-        fDE.deleteTask(dummyTask1);
+        try{
+            fDE.deleteTask(dummyTask1);
+            fail("Should have thrown an UnsupportedOperation Exception");
+        }catch(UnsupportedOperationException uns){
+            assertTrue("Need implementing Firebase connection", true);
+        }
     }
 
     /**
-     * Utilitary method to switch on or off the wifi connections of the phone,
-     * to
+     * Utilitary method to switch on or off the network connections of the phone
      *
-     * @param On sense of the switch (true = on, false = off)
+     * @param enable sense of the switch (true = on, false = off)
      */
-    private void wifiSwitch(Boolean On){
-        WifiManager wifi=(WifiManager) context.getSystemService(context.WIFI_SERVICE);
-        wifi.setWifiEnabled(On);
+    private void NetworkSwitch(Boolean enable){
+        WifiManager wifiManager = (WifiManager)this.context.getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(enable);
     }
-
 
 }
