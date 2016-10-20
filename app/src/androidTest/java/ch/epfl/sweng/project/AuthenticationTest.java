@@ -105,7 +105,7 @@ public class AuthenticationTest {
                 mPasswordText.setText(mFacebookPassword);
 
                 UiObject mLoginButton = mUiDevice.findObject(new UiSelector().text("LOG IN"));
-                mLoginButton.clickAndWaitForNewWindow(100000);
+                mLoginButton.clickAndWaitForNewWindow(untilTimeout);
                 checkIfMainActivity();
             }catch(UiObjectNotFoundException u0){
                 fail("Error encountered while logging on facebook");
