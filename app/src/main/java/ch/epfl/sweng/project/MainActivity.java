@@ -11,6 +11,8 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import java.util.ArrayList;
+
 
 /**
  * MainActivity
@@ -74,6 +76,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
+        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 
@@ -92,7 +95,7 @@ public final class MainActivity extends AppCompatActivity {
         if (requestCode == newTaskRequestCode) {
             if (resultCode == RESULT_OK) {
                 // Get result from the result intent.
-                Task newTask = data.getParcelableExtra(NewTaskActivity.returnedTask);
+                Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
             }
