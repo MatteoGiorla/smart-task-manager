@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.project.authentication.User;
 import ch.epfl.sweng.project.data.FirebaseDataExchanger;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -28,7 +27,6 @@ public final class FirebaseDataExchangerTest {
     private FirebaseDataExchanger fDE;
     private Task dummyTask1;
     private Task dummyTask2;
-    private User dummyUser;
     private Context context;
     final private boolean ON = true;
     final private boolean OFF = false;
@@ -48,7 +46,6 @@ public final class FirebaseDataExchangerTest {
         fDE = new FirebaseDataExchanger(context);
         dummyTask1 = new Task("Task1", "dummy task1");
         dummyTask2 = new Task("Task2", "dummy task2");
-        dummyUser = new User("250396", "viaccoz", "cedric.viaccoz@epfl.ch", "Cédric", "Viaccoz");
     }
 
     @Test
@@ -65,7 +62,7 @@ public final class FirebaseDataExchangerTest {
     @Test
     public void retrieveAllDataTest(){
         try{
-            fDE.retrieveAllData(dummyUser);
+            fDE.retrieveAllData();
             fail("Should have thrown an UnsupportedOperation Exception");
         }catch(UnsupportedOperationException uns){
             assertTrue("Need implementing Firebase connection", true);

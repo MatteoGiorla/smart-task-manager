@@ -3,10 +3,8 @@ package ch.epfl.sweng.project.data;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import java.lang.UnsupportedOperationException;
 
 import ch.epfl.sweng.project.Task;
-import ch.epfl.sweng.project.authentication.User;
 import ch.epfl.sweng.project.dataExchanger;
 
 //this class need to be expanded  and completed once the Firebase database will be set
@@ -35,7 +33,7 @@ public class FirebaseDataExchanger implements dataExchanger {
     }
 
     @Override
-    public boolean retrieveAllData(User user)
+    public boolean retrieveAllData()
             throws  UnsupportedOperationException{
         throw new UnsupportedOperationException("Need Firebase database implementation first");
     }

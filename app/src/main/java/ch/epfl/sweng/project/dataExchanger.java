@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project;
 
-import ch.epfl.sweng.project.authentication.User;
-
 public interface dataExchanger {
 
     /**
@@ -16,13 +14,11 @@ public interface dataExchanger {
      * Take care of retrieving all user data if there is no
      * data locally stored on the app.
      *
-     * @param user the user credentials to retrieve its attached
-     *             datas from the remote storage device.
      * @return true if all data have been correctly retrieved,
      *          false if for some reason the action could not
      *          be performed
      */
-    public boolean retrieveAllData(User user);
+    public boolean retrieveAllData();
 
     /**
      *  Add a tasks to the remote storage device
