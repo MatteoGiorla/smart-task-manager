@@ -76,6 +76,5 @@ public class FirebaseDataExchanger implements dataExchanger {
         }else{
             return false;
         }
-
     }
 }
