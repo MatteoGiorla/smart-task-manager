@@ -61,7 +61,9 @@ public final class MainActivity extends AppCompatActivity {
             case R.id.menu_item_logout:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new  Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
