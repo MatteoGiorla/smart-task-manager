@@ -2,29 +2,25 @@ package ch.epfl.sweng.project;
 
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.support.test.runner.AndroidJUnit4;
 
-/**
- *  Unit Test of the communication layer, since there is no firebase database for now, only
- *  checks the exceptions are thrown
- */
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import ch.epfl.sweng.project.authentication.User;
 import ch.epfl.sweng.project.data.FirebaseDataExchanger;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
+
+/**
+ * Unit Test of the communication layer, since there is no firebase database for now, only
+ * checks the exceptions are thrown
+ */
 
 @RunWith(AndroidJUnit4.class)
 public final class FirebaseDataExchangerTest {
@@ -53,13 +49,6 @@ public final class FirebaseDataExchangerTest {
         dummyTask1 = new Task("Task1", "dummy task1");
         dummyTask2 = new Task("Task2", "dummy task2");
         dummyUser = new User("250396", "viaccoz", "cedric.viaccoz@epfl.ch", "Cédric", "Viaccoz");
-    }
-
-    @Test
-    public void hasAccessReturnsFalseWithoutAccess(){
-        NetworkSwitch(OFF);
-        //without access to internet, .
-        assertEquals(false, fDE.hasAccess());
     }
 
     @Test
