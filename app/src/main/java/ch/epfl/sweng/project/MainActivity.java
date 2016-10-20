@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -60,6 +62,9 @@ public final class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_item_logout:
                 FirebaseAuth.getInstance().signOut();
+                if (Profile.getCurrentProfile() != null) {
+                    LoginManager.getInstance().logOut();
+                }
                 Intent intent = new  Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

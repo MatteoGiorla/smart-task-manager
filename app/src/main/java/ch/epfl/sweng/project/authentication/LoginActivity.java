@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -33,8 +31,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -243,15 +239,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 Toast.makeText(LoginActivity.this, "You must use the same " +
                                         "authentication service as before.",
                                         Toast.LENGTH_LONG).show();
-                                // TODO IL FAUT QU'IL NE SE CONNECTE PAS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                LoginManager.getInstance().logOut();
                             } else {
                                 Toast.makeText(LoginActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            // ajouté pour tester
-                            Toast.makeText(LoginActivity.this, "YOLO", Toast.LENGTH_SHORT).show();
-                            // fin du test
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
@@ -303,9 +296,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      */
     private void signOut() {
         // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
+        //mAuth.signOut();
+        
+        if(mGoogleClient.isConnected()) {
+            // Google sign out
         Auth.GoogleSignInApi.signOut(mGoogleClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -313,10 +307,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         //updateUI(null);
                     }
                 });
+        } else {
+            // Facebook log out
+            LoginManager.getInstance().logOut();
+        }
 
-        // Facebook sign out
-        LoginManager.getInstance().logOut();
+
+        FirebaseAuth.getInstance().signOut();
+
     }
+
+    /*@Override
+    public void onResume() {
+        // test
+        Log.d(TAG, "OUI");
+        // fin test
+        signOut();
+    }*/
 
     private void revokeAccess() {
         // Firebase sign out
