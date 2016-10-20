@@ -17,10 +17,8 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Status;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -37,7 +35,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class LoginActivity
+        extends AppCompatActivity
+        implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener
+{
 
     private GoogleApiClient mGoogleClient;
     private CallbackManager mFacebook;
@@ -59,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Initialize Facebook SDK:
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
@@ -68,7 +70,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
 
         // configure Google Sign In:
-        GoogleSignInOptions googleSignIn = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions googleSignIn =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail() // to request the user email
                 .build();
@@ -92,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                //updateUI(user);
             }
         };
 
@@ -110,13 +112,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                Toast.makeText(LoginActivity.this, "Authentication canceled.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Authentication canceled.",
+                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -148,9 +152,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * Retrieve the sign in result, use Firebase for the authentication (OAuth2) and
      * make the UI update in consequence.
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode The integer request code supplied to startActivityForResult
+     *                    used as an identifier.
+     * @param resultCode  The integer result code returned by the child activity
+     * @param data        An intent which can return result data to the caller.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -166,11 +171,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In was successful, authenticate with Firebase:
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-                //updateUI(true);
             } else {
                 // Google Sign In failed:
-                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                //updateUI(false);
+                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -216,11 +220,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     /**
+     * After a user successfully signs in get an access token for the signed-in user,
+     * exchange it for a Firebase credential, and authenticate with Firebase using
+     * the Firebase credential.
      *
-     * @param token
+     * @param token access token delivered by Facebook
      */
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token); // Think to wash these LOG!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -257,7 +264,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     /**
      * Override the onConnectionFailed method.
      *
-     * @param connectionResult
+     * @param connectionResult the connection result, indication on the failure.
      */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -292,9 +299,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     /**
-     *
+     * Not used method for the moment but maybe useful in the future.
      */
-    private void signOut() {
+    /*private void signOut() {
         // Firebase sign out
         //mAuth.signOut();
         
@@ -315,37 +322,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         FirebaseAuth.getInstance().signOut();
 
-    }
-
-    /*@Override
-    public void onResume() {
-        // test
-        Log.d(TAG, "OUI");
-        // fin test
-        signOut();
     }*/
-
-    private void revokeAccess() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google revoke access
-        Auth.GoogleSignInApi.revokeAccess(mGoogleClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        //updateUI(null);
-                    }
-                });
-    }
-
-    private void updateUI(FirebaseUser user) {
-        /*//hideProgressDialog();
-        Intent intent = new  Intent(this, LoginActivity.class);
-        startActivity(intent);
-        if (user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }*/
-    }
 }

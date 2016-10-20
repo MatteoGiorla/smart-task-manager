@@ -63,7 +63,7 @@ public final class MainActivity extends AppCompatActivity {
             case R.id.menu_item_logout:
                 FirebaseAuth.getInstance().signOut();
                 if (Profile.getCurrentProfile() != null) {
-                    LoginManager.getInstance().logOut();
+                    LoginManager.getInstance().logOut(); // log out the facebook button
                 }
                 Intent intent = new  Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
