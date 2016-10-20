@@ -35,6 +35,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 
+
+/**
+ * Class assuring the Login Activity and Authentication of the user
+ */
 public class LoginActivity
         extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener
