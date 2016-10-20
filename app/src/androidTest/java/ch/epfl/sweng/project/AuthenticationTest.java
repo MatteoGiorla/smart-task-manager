@@ -27,8 +27,8 @@ import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationTest {
-    private String mGoogEmail;
-    private String mGoogPassword;
+    private String mGoogleEmail;
+    private String mGooglePassword;
     private String mFacebookEmail;
     private String mFacebookPassword;
     private UiDevice mUiDevice;
@@ -42,8 +42,8 @@ public class AuthenticationTest {
     @Before
     public void setup(){
         mUiDevice = getInstance(getInstrumentation());
-        mGoogEmail = "trixyfinger@gmail.com";
-        mGoogPassword = "sweng1234TaskIt";
+        mGoogleEmail = "trixyfinger@gmail.com";
+        mGooglePassword = "sweng1234TaskIt";
         mFacebookEmail = "cirdec3961@gmail.com";
         mFacebookPassword = "Kristel";
         untilTimeout = 3000; //an estimation, but the connection procedure should not last more
@@ -64,13 +64,13 @@ public class AuthenticationTest {
 
     /**
      * perform user like actions on the phone to authenticate
-     * oneself.
+     * oneself into a google account (even if it is already memorized).
      */
     @Test
     public void GoogleLoginWorks() {
         onView(withId(R.id.google_sign_in_button)).perform(click());
         //first check if the user is already registered, if so just proceed to login.
-        UiObject mEmailText = mUiDevice.findObject(new UiSelector().text(mGoogEmail));
+        UiObject mEmailText = mUiDevice.findObject(new UiSelector().text(mGoogleEmail));
         try{
             mEmailText.click();
             checkIfMainActivity();
@@ -97,13 +97,7 @@ public class AuthenticationTest {
         UiObject mEmailText = mUiDevice.findObject(new UiSelector().resourceId(FB_MAIL_ID));
         try{
             //removing the pre existent text if there is one.
-            String text = mEmailText.getText();
             mEmailText.click();
-            mEmailText.click();
-            for(int i = 0; i<text.length(); ++i){
-                mUiDevice.pressDelete();
-            }
-
             mEmailText.setText(mFacebookEmail);
             UiObject mPasswordText = mUiDevice.findObject(new UiSelector().resourceId(FB_PASSWORD_ID));
             try{
@@ -111,8 +105,7 @@ public class AuthenticationTest {
                 mPasswordText.setText(mFacebookPassword);
 
                 UiObject mLoginButton = mUiDevice.findObject(new UiSelector().text("LOG IN"));
-                mLoginButton.click();
-
+                mLoginButton.clickAndWaitForNewWindow(100000);
                 checkIfMainActivity();
             }catch(UiObjectNotFoundException u0){
                 fail("Error encountered while logging on facebook");
@@ -135,13 +128,13 @@ public class AuthenticationTest {
     private void associateNewGoogleAccount() {
         try{
             UiObject emailHint = mUiDevice.findObject(new UiSelector().text("Enter your email"));
-            emailHint.setText(mGoogEmail);
+            emailHint.setText(mGoogleEmail);
 
             UiObject nextAction = mUiDevice.findObject(new UiSelector().resourceId(NEXT_BUTTON_ID));
             nextAction.clickAndWaitForNewWindow(untilTimeout);
 
             UiObject passwordHint = mUiDevice.findObject(new UiSelector().text("Password"));
-            passwordHint.setText(mGoogPassword);
+            passwordHint.setText(mGooglePassword);
 
             nextAction = mUiDevice.findObject(new UiSelector().resourceId(PASSWORD_NEXT_ID));
             nextAction.clickAndWaitForNewWindow(untilTimeout);
