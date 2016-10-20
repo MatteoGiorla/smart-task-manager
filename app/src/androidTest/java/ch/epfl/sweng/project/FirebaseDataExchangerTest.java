@@ -10,7 +10,6 @@ import android.support.test.runner.AndroidJUnit4;
  *  Unit Test of the communication layer, since there is no firebase database for now, only
  *  checks the exceptions are thrown
  */
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
