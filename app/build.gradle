@@ -20,10 +20,19 @@ android {
         debug {
             testCoverageEnabled true
         }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt')
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('/Users/bastiannanchen/.android/debug.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
         }
     }
 
@@ -45,7 +54,6 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.6.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
