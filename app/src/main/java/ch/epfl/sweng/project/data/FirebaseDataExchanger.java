@@ -10,7 +10,7 @@ import ch.epfl.sweng.project.dataExchanger;
 //this class need to be expanded  and completed once the Firebase database will be set
 public class FirebaseDataExchanger implements dataExchanger {
 
-    private Context context;
+    private final Context context;
 
     /**
      * Only constructor of FirebaseDataExchanger for the moment
