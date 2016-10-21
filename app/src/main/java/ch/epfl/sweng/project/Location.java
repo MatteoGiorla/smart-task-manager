@@ -12,6 +12,7 @@ public class Location {
     private String name;
     private LocationType type;
     private LatLng gpsCoordinates;
+    //TODO later : add icon corresponding to the location
 
     /**
      * Constructor of the class
@@ -30,7 +31,6 @@ public class Location {
         } else {
             this.name = name;
             this.type = type;
-            // TODO : Test validity of values
             this.gpsCoordinates = gpsCoordinates;
 
         }
@@ -48,6 +48,13 @@ public class Location {
      */
     public LatLng getGPSCoordinates() {
         return gpsCoordinates;
+    }
+
+    /**
+     * Getter returning the type of the location
+     */
+    public LocationType getType() {
+        return type;
     }
 
     /**
@@ -71,7 +78,7 @@ public class Location {
      * @throws IllegalArgumentException if the GPS coordinates value is not valid
      */
     public void setGpsCoordinates(LatLng gpsCoordinates) {
-        if (gpsCoordinates == null || false) { //TODO : test validity of argument
+        if (gpsCoordinates == null) {
             throw new IllegalArgumentException();
         } else {
             this.gpsCoordinates = gpsCoordinates;
