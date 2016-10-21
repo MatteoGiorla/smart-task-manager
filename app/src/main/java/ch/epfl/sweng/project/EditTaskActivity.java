@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
 import java.util.ArrayList;
 
 /**
@@ -43,6 +45,10 @@ public class EditTaskActivity extends AppCompatActivity {
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
         initializeToolbar(mToolbar);
+
+        //set the submit button to non visible
+        Button submitButton = (Button) findViewById(R.id.button_submit_task);
+        submitButton.setVisibility(View.GONE);
 
         //Populate the layout activity_task
         populateLayout();

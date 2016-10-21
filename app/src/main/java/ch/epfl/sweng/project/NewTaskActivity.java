@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class NewTaskActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //set the done editing button to non visible
+        ImageButton doneButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
+        doneButton.setVisibility(View.GONE);
+
 
         //Initialisation of the attributes
         intent = getIntent();
