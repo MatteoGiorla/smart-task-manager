@@ -2,6 +2,7 @@
     <!-- Activity name strings-->
     <string name="app_name">TaskIt</string>
     <string name="new_task">Create a new task</string>
+    <string name="login_label">Log In</string>
     <string name="edit_task">Edit a task</string>
 
     <!-- Menu strings-->
@@ -14,6 +15,13 @@
 
     <!-- Button strings-->
     <string name="submit_task_button">Submit</string>
+
+    <!-- Log in screen values -->
+    <string name="welcome_text">You can log in using your Google or Facebook account.</string>
+    <string name="welcome_title">Welcome !</string>
+    
+    <!-- Facebook App ID -->
+    <string name="facebook_app_id">104609210014543</string>
 
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>

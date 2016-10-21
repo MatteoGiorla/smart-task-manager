@@ -5,9 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+
+import ch.epfl.sweng.project.authentication.LoginActivity;
 import java.util.ArrayList;
+
 
 /**
  * MainActivity
@@ -47,6 +54,25 @@ public final class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_item_logout:
+                FirebaseAuth.getInstance().signOut();
+                if (Profile.getCurrentProfile() != null) {
+                    LoginManager.getInstance().logOut(); // log out the facebook button
+                }
+                Intent intent = new  Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**

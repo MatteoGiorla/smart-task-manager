@@ -5,26 +5,48 @@
      TODO: Depending on your app's features, enable some Android features here
                such as backups or search indexing
     -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- to enable and disable wifi on the tests -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <activity
-            android:name=".MainActivity"
+            android:name=".EntryActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity">
         </activity>
         <activity
             android:name=".NewTaskActivity"
             android:label="@string/new_task"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".authentication.LoginActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/login_label">
+        </activity>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"/>
         <activity android:name=".EditTaskActivity"
             android:label="@string/edit_task"
             android:screenOrientation="portrait"
