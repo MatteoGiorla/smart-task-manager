@@ -41,7 +41,7 @@ public final class FirebaseDataExchangerTest {
         NetworkSwitch(ON);
     }
 
-    public void initPrivateField(){
+    private void initPrivateField(){
         context = getInstrumentation().getContext();
         fDE = new FirebaseDataExchanger(context);
         dummyTask1 = new Task("Task1", "dummy task1");
