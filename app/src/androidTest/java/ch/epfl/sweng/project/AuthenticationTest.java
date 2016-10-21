@@ -23,6 +23,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.uiautomator.UiDevice.getInstance;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
@@ -86,35 +87,22 @@ public class AuthenticationTest {
         }
     }
 
-    /**
-     * perform user like actions on the phone to authenticate
-     * oneself.
-     */
-    //@Test
-    public void FacebookLoginWorks() {
+    @Test
+    public void facebookSignInGetLaunch(){
         onView(withId(R.id.facebook_sign_in_button)).perform(click());
-        //first check if the user is already registered, if so just proceed to login.
-        UiObject mEmailText = mUiDevice.findObject(new UiSelector().resourceId(FB_MAIL_ID));
+        //the android.webkit.WebView launched by facebook should be the only to have those properties
+        UiObject facebookWebLaunched = mUiDevice.findObject(new UiSelector().className("android.webkit.WebView"));
         try{
-            //removing the pre existent text if there is one.
-            mEmailText.click();
-            mEmailText.setText(mFacebookEmail);
-            UiObject mPasswordText = mUiDevice.findObject(new UiSelector().resourceId(FB_PASSWORD_ID));
-            try{
-                mPasswordText.click();
-                mPasswordText.setText(mFacebookPassword);
-
-                UiObject mLoginButton = mUiDevice.findObject(new UiSelector().text("LOG IN"));
-                mLoginButton.clickAndWaitForNewWindow(untilTimeout);
-                checkIfMainActivity();
-            }catch(UiObjectNotFoundException u0){
-                fail("Error encountered while logging on facebook");
-            }
-            checkIfMainActivity();
-        } catch(UiObjectNotFoundException u1){
-            //if not, check if we reach the main activity
+            facebookWebLaunched.click();
+            assertTrue("Facebook login web window correctly launched", true);
+        }catch(UiObjectNotFoundException u){
             checkIfMainActivity();
         }
+    }
+
+    @Test
+    public void logoutLogsOut(){
+
     }
 
     /**
