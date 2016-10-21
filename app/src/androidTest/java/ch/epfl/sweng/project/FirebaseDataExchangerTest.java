@@ -49,17 +49,6 @@ public final class FirebaseDataExchangerTest {
     }
 
     @Test
-    public void hasAccesTest(){
-        NetworkSwitch(ON);
-        try{
-            fDE.hasAccess();
-            fail("Should have thrown an UnsupportedOperation Exception");
-        }catch(UnsupportedOperationException uns){
-            assertTrue("Exception correctly cached, but need implementing Firebase connection", true);
-        }
-    }
-
-    @Test
     public void retrieveAllDataTest(){
         try{
             fDE.retrieveAllData();
