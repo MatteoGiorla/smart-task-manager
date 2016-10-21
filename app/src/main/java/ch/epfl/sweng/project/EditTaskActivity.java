@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import java.util.ArrayList;
 
 /**
- * Class that represents the inflated activity_edit_task
+ * Class that represents the inflated activity_task under the edit case
  */
 public class EditTaskActivity extends AppCompatActivity {
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
@@ -34,17 +34,17 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_task);
+        setContentView(R.layout.activity_task);
 
         //Initialize and check taskToBeEdited and taskList that were passed to the intent.
         final Intent intent = getIntent();
         checkIntent(intent);
 
         //Initialize the toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.editTask_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
         initializeToolbar(mToolbar);
 
-        //Populate the layout activity_edit_task
+        //Populate the layout activity_task
         populateLayout();
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -55,7 +55,7 @@ public class EditTaskActivity extends AppCompatActivity {
         });
 
         ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-        EditText titleEditText = (EditText) findViewById(R.id.title_existing_task);
+        EditText titleEditText = (EditText) findViewById(R.id.title_task);
 
         //Create a listener to check that the user is writing a valid input.
         titleEditText.addTextChangedListener(new TextWatcher());
@@ -65,7 +65,7 @@ public class EditTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isValidTitle) {
-                    EditText descriptionEditText = (EditText) findViewById(R.id.description_existing_task);
+                    EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                     mTaskToBeEdited.setDescription(descriptionEditText.getText().toString());
 
                     intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
@@ -116,10 +116,10 @@ public class EditTaskActivity extends AppCompatActivity {
      * Fill the layout with the old values of the task to be edited.
      */
     private void populateLayout() {
-        EditText titleEditText = (EditText) findViewById(R.id.title_existing_task);
+        EditText titleEditText = (EditText) findViewById(R.id.title_task);
         titleEditText.setText(mTaskToBeEdited.getName());
 
-        EditText descriptionEditText = (EditText) findViewById(R.id.description_existing_task);
+        EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
     }
 
@@ -146,7 +146,7 @@ public class EditTaskActivity extends AppCompatActivity {
      */
     private class TextWatcher implements android.text.TextWatcher {
         final ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-        final TextInputLayout title_layout = (TextInputLayout) findViewById(R.id.title_existing_task_layout);
+        final TextInputLayout title_layout = (TextInputLayout) findViewById(R.id.title_task_layout);
 
         /**
          * Check the input written by the user before it is changed.

@@ -34,10 +34,10 @@ public class NewTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_task);
+        setContentView(R.layout.activity_task);
 
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.newTask_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
@@ -56,8 +56,8 @@ public class NewTaskActivity extends AppCompatActivity {
         intent = getIntent();
         taskList = intent
                 .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
-        titleEditText = (EditText) findViewById(R.id.input_title);
-        textInputLayoutTitle = (TextInputLayout) findViewById(R.id.input_layout_title);
+        titleEditText = (EditText) findViewById(R.id.title_task);
+        textInputLayoutTitle = (TextInputLayout) findViewById(R.id.title_task_layout);
 
         //Control the user's inputs
         titleEditText.addTextChangedListener(new MyTextWatcher());
@@ -132,13 +132,12 @@ public class NewTaskActivity extends AppCompatActivity {
                 textInputLayoutTitle.setErrorEnabled(true);
                 textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
             } else if (!title.isEmpty() && !titleAlreadyExist(taskList, title)) {
-                EditText descriptionEditText = (EditText) findViewById(R.id.input_description);
+                EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 String description = descriptionEditText.getText().toString();
 
                 Task newTask = new Task(title, description);
 
                 intent.putExtra(RETURNED_TASK, newTask);
-
 
                 setResult(RESULT_OK, intent);
                 finish();
