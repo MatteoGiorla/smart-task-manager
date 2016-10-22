@@ -3,8 +3,6 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Class that represents the inflated activity_task under the edit case
  */
-public class EditTaskActivity extends AppCompatActivity {
+public class EditTaskActivity extends TaskActivity {
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     private Task mTaskToBeEdited;
@@ -36,15 +34,10 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task);
 
         //Initialize and check taskToBeEdited and taskList that were passed to the intent.
         final Intent intent = getIntent();
         checkIntent(intent);
-
-        //Initialize the toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
-        initializeToolbar(mToolbar);
 
         //set the submit button to non visible
         Button submitButton = (Button) findViewById(R.id.button_submit_task);
@@ -83,19 +76,6 @@ public class EditTaskActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Start the toolbar and enable that back button on the toolbar.
-     *
-     * @param mToolbar the toolbar of the activity
-     */
-    private void initializeToolbar(Toolbar mToolbar) {
-        setSupportActionBar(mToolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-    }
 
     /**
      * Check that the intent was correctly passed to the activity, and

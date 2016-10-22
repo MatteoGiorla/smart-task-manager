@@ -3,8 +3,6 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,7 +15,7 @@ import java.util.List;
 /**
  * Class that represents the inflated activity_new_task
  */
-public class NewTaskActivity extends AppCompatActivity {
+public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
     private Intent intent;
     private List<Task> taskList;
@@ -35,16 +33,6 @@ public class NewTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task);
-
-
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
-        setSupportActionBar(mToolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
