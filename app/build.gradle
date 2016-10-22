@@ -44,6 +44,10 @@ android {
         disable 'GoogleAppIndexingWarning', 'GradleDependency'
     }
 
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+
     // Workaround for an Android Studio bug in the "Missing Return Statement" warning
     return void
 }
