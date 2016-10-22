@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -23,6 +24,8 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
@@ -30,7 +33,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertThat;
-
 
 
 /**
@@ -240,6 +242,24 @@ public final class NewTaskTest {
         onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
+    }
+
+    /**
+     * checks that when launching an edit activity, the edit done button is visible
+     * but the submit button not.
+     */
+    @Test
+    public void testCantSeeSubmitButton(){
+        onView(withId(R.id.add_task_button)).perform(click());
+        createATask(mTitleToBeTyped, mDescriptionToBeTyped);
+        //want to update the title.
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0).perform(longClick());
+
+        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+        onView(withId(R.id.edit_done_button_toolbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.button_submit_task)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     /**
