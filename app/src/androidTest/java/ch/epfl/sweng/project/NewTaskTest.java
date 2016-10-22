@@ -245,21 +245,14 @@ public final class NewTaskTest {
     }
 
     /**
-     * checks that when launching an edit activity, the edit done button is visible
-     * but the submit button not.
+     * checks that the edit done button is not present but
+     * the button submit yes.
      */
     @Test
-    public void testCantSeeSubmitButton(){
+    public void testCantSeeEditButton(){
         onView(withId(R.id.add_task_button)).perform(click());
-        createATask(mTitleToBeTyped, mDescriptionToBeTyped);
-        //want to update the title.
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-
-        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
-        onView(withId(R.id.edit_done_button_toolbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.button_submit_task)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        onView(withId(R.id.button_submit_task)).check(matches(isDisplayed()));
+        onView(withId(R.id.edit_done_button_toolbar)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     /**

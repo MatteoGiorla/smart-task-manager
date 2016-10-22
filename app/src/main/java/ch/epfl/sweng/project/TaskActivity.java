@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     protected Toolbar mToolbar;
     protected Intent intent;
     protected ArrayList<Task> taskList;
+    protected EditText titleEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -36,8 +38,15 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
         taskList = intent
                 .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+
+        titleEditText = (EditText) findViewById(R.id.title_task);
     }
 
+    /**
+     * Private class that implement TextWatcher.
+     * This class is used to check on runtime if the inputs written by the user
+     * are valid or not.
+     */
     protected class TaskTextWatcher implements TextWatcher{
 
         @Override

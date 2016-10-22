@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
-    private EditText titleEditText;
 
     /**
      * Override the onCreate method
@@ -28,8 +27,8 @@ public class NewTaskActivity extends TaskActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialisation of the attributes
-        titleEditText = (EditText) findViewById(R.id.title_task);
+        //Control the user's inputs
+        titleEditText.addTextChangedListener(new TextWatcher());
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,9 +40,6 @@ public class NewTaskActivity extends TaskActivity {
         //set the done editing button to non visible
         ImageButton doneButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
         doneButton.setVisibility(View.GONE);
-
-        //Control the user's inputs
-        titleEditText.addTextChangedListener(new MyTextWatcher());
 
         Button submitButton = (Button) findViewById(R.id.button_submit_task);
 
@@ -75,7 +71,7 @@ public class NewTaskActivity extends TaskActivity {
      * This class is used to check on runtime if the user's
      * inputs are valid or not.
      */
-    private class MyTextWatcher extends TaskTextWatcher {
+    private class TextWatcher extends TaskTextWatcher {
 
         @Override
         public void afterTextChanged(Editable s) {

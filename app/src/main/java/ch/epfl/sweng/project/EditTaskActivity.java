@@ -34,6 +34,11 @@ public class EditTaskActivity extends TaskActivity {
         //Initialize and check taskToBeEdited and taskList that were passed to the intent.
         checkIntent(intent);
 
+        //Create a listener to check that the user is writing a valid input.
+        titleEditText.addTextChangedListener(new TextWatcher());
+
+        ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
+
         //set the submit button to non visible
         Button submitButton = (Button) findViewById(R.id.button_submit_task);
         submitButton.setVisibility(View.GONE);
@@ -48,11 +53,6 @@ public class EditTaskActivity extends TaskActivity {
             }
         });
 
-        ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-        EditText titleEditText = (EditText) findViewById(R.id.title_task);
-
-        //Create a listener to check that the user is writing a valid input.
-        titleEditText.addTextChangedListener(new TextWatcher());
 
         //Terminate the activity if the input written by the user is valid.
         doneEditButton.setOnClickListener(new View.OnClickListener() {
