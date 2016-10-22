@@ -81,10 +81,7 @@ public final class EditTaskTest {
 
         //Create two tasks
         for (int i = 0; i < 2; i++) {
-            onView(withId(R.id.add_task_button)).perform(click());
-            onView(withId(R.id.input_title)).perform(typeText(mOldTitle + i));
-            onView(withId(R.id.input_description)).perform(typeText(mOldDescription + i));
-            onView(withId(R.id.button_submit_task)).perform(click());
+            createATask(mOldTitle + i, mOldDescription + i);
         }
 
         //Try to edit the first task to put the same title as the first task
@@ -94,8 +91,8 @@ public final class EditTaskTest {
         onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
 
         //Update the title with an existing one
-        onView(withId(R.id.title_existing_task)).perform(clearText());
-        onView(withId(R.id.title_existing_task)).perform(typeText(mOldTitle + 1));
+        onView(withId(R.id.title_task)).perform(clearText());
+        onView(withId(R.id.title_task)).perform(typeText(mOldTitle + 1));
 
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
@@ -113,11 +110,7 @@ public final class EditTaskTest {
     @Test
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.input_title)).perform(typeText(mOldTitle));
-        onView(withId(R.id.input_description)).perform(typeText(mOldDescription));
-        onView(withId(R.id.button_submit_task)).perform(click());
-
+        createATask(mOldTitle, mOldDescription);
 
         //Try to edit the first task to put the same title as the first task
         onData(anything())
@@ -125,7 +118,7 @@ public final class EditTaskTest {
                 .atPosition(0).perform(longClick());
         onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
         //Update the title with empty string
-        onView(withId(R.id.title_existing_task)).perform(clearText());
+        onView(withId(R.id.title_task)).perform(clearText());
 
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
@@ -143,11 +136,7 @@ public final class EditTaskTest {
     @Test
     public void testCanEditTaskTitleAndDescription() {
         //Create a task
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.input_title)).perform(typeText(mOldTitle));
-        onView(withId(R.id.input_description)).perform(typeText(mOldDescription));
-        onView(withId(R.id.button_submit_task)).perform(click());
-
+        createATask(mOldTitle, mOldDescription);
 
         //Try to edit the first task to put the same title as the first task
         onData(anything())
@@ -155,10 +144,10 @@ public final class EditTaskTest {
                 .atPosition(0).perform(longClick());
         onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
         //Update the title and the description
-        onView(withId(R.id.title_existing_task)).perform(clearText());
-        onView(withId(R.id.description_existing_task)).perform(clearText());
-        onView(withId(R.id.title_existing_task)).perform(typeText(mEditedTitle));
-        onView(withId(R.id.description_existing_task)).perform(typeText(mEditedDescription));
+        onView(withId(R.id.title_task)).perform(clearText());
+        onView(withId(R.id.description_task)).perform(clearText());
+        onView(withId(R.id.title_task)).perform(typeText(mEditedTitle));
+        onView(withId(R.id.description_task)).perform(typeText(mEditedDescription));
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
@@ -178,5 +167,17 @@ public final class EditTaskTest {
         emptyDatabase();
     }
 
+    /**
+     *Method to add the task to enhance modularity of the tests.
+     *
+     * @param taskTitle the title of the task to add
+     * @param taskDescription the description of the task to add
+     */
+    private void createATask(String taskTitle, String taskDescription){
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
+        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
+        onView(withId(R.id.button_submit_task)).perform(click());
 
+    }
 }
