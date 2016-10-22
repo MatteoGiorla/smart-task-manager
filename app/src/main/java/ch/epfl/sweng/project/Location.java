@@ -29,8 +29,13 @@ public class Location {
             this.gpsCoordinates = null;
 
         } else {
-            this.name = name;
-            this.type = type;
+            if (name == null || type == null) {
+                throw new IllegalArgumentException("Name or type of new location can't be null");
+            } else {
+                this.name = name;
+                this.type = type;
+            }
+            //GPS coordinates are optional and can therefore be null
             this.gpsCoordinates = gpsCoordinates;
 
         }
@@ -75,13 +80,9 @@ public class Location {
      * Setter to modify the location GPS coordinates
      *
      * @param gpsCoordinates The new GPS coordinates of the location
-     * @throws IllegalArgumentException if the GPS coordinates value is not valid
      */
     public void setGpsCoordinates(LatLng gpsCoordinates) {
-        if (gpsCoordinates == null) {
-            throw new IllegalArgumentException();
-        } else {
-            this.gpsCoordinates = gpsCoordinates;
-        }
+        //GPS coordinates are optional and can therefore be null
+        this.gpsCoordinates = gpsCoordinates;
     }
 }
