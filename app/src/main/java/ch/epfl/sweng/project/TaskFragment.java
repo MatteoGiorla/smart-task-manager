@@ -99,6 +99,17 @@ public class TaskFragment extends Fragment {
 
         registerForContextMenu(listView);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
+                Task taskToBeDisplayed = taskList.get(position);
+                intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 

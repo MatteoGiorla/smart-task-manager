@@ -16,7 +16,7 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  *
  * source : http://stackoverflow.com/questions/17474793/conditionally-set-first-activity-in-android
  */
-public class EntryActivity extends Activity{
+public class EntryActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState)

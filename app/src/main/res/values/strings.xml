@@ -38,5 +38,5 @@
     <string name="button_location_description">Select your Location</string>
     <string name="button_vitality_description">Select your vitality</string>
     <string name="button_time_description">Select the time at your disposal</string>
-    <string name="done_editing_task_description">Done !</string>
+    <string name="done_task_description">Done !</string>
 </resources>

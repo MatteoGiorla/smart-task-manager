@@ -12,7 +12,7 @@
 
         <ImageButton
             android:src="@drawable/ic_done_white_36dp"
-            android:contentDescription="@string/done_editing_task_description"
+            android:contentDescription="@string/done_task_description"
             android:id="@+id/edit_done_button_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -37,7 +37,10 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="80dp">
+        android:paddingTop="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/title_existing_task_layout"
