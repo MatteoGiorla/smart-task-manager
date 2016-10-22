@@ -1,15 +1,23 @@
 package ch.epfl.sweng.project;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+
+import java.util.ArrayList;
 
 /**
  * Class which represents an activity regarding a task
- *
  */
 public abstract class TaskActivity extends AppCompatActivity {
+    protected TextInputLayout textInputLayoutTitle;
     protected Toolbar mToolbar;
+    protected Intent intent;
+    protected ArrayList<Task> taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -19,6 +27,32 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Initialize the toolbar
         mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
         initializeToolbar(mToolbar);
+
+        textInputLayoutTitle = (TextInputLayout) findViewById(R.id.title_task_layout);
+
+        intent = getIntent();
+        if (intent == null) {
+            throw new IllegalArgumentException("No intent was passed to TaskActivity !");
+        }
+        taskList = intent
+                .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+    }
+
+    protected class TaskTextWatcher implements TextWatcher{
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            textInputLayoutTitle.setErrorEnabled(false);
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s){
+        }
+
     }
 
     /**

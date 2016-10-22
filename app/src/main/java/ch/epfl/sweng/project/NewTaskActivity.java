@@ -1,10 +1,7 @@
 package ch.epfl.sweng.project;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +14,7 @@ import java.util.List;
  */
 public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
-    private Intent intent;
-    private List<Task> taskList;
     private EditText titleEditText;
-    private TextInputLayout textInputLayoutTitle;
 
     /**
      * Override the onCreate method
@@ -34,6 +28,9 @@ public class NewTaskActivity extends TaskActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Initialisation of the attributes
+        titleEditText = (EditText) findViewById(R.id.title_task);
+
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,14 +41,6 @@ public class NewTaskActivity extends TaskActivity {
         //set the done editing button to non visible
         ImageButton doneButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
         doneButton.setVisibility(View.GONE);
-
-
-        //Initialisation of the attributes
-        intent = getIntent();
-        taskList = intent
-                .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
-        titleEditText = (EditText) findViewById(R.id.title_task);
-        textInputLayoutTitle = (TextInputLayout) findViewById(R.id.title_task_layout);
 
         //Control the user's inputs
         titleEditText.addTextChangedListener(new MyTextWatcher());
@@ -86,16 +75,7 @@ public class NewTaskActivity extends TaskActivity {
      * This class is used to check on runtime if the user's
      * inputs are valid or not.
      */
-    private class MyTextWatcher implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            textInputLayoutTitle.setErrorEnabled(false);
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
+    private class MyTextWatcher extends TaskTextWatcher {
 
         @Override
         public void afterTextChanged(Editable s) {
