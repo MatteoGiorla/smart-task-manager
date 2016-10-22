@@ -123,7 +123,7 @@ public class AuthenticationTest {
     }
 
     /**
-     * method that proceeds to go through all the authentification process
+     * method that proceeds to go through all the authentication process
      * when it is the first time we try to connect a google account with the app.
      *
      * The test might takes some time after clicking on the sign in button,
