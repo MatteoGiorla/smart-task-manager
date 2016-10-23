@@ -16,7 +16,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_below="@id/editTask_toolbar"
+        android:layout_below="@id/task_toolbar"
         android:background="@drawable/toolbar_shadow" />
 
     <LinearLayout
