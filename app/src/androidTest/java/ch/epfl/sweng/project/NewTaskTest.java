@@ -18,6 +18,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -86,7 +87,7 @@ public final class NewTaskTest {
      */
     @Test
     public void testCanAddTask() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
             //Check title name inside listView
             onData(anything())
@@ -170,19 +171,19 @@ public final class NewTaskTest {
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
         }
 
         //We delete the tasks
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
             //Test if the tasks are correctly deleted
-            if (i != 9) {
+            if (i != 2) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
@@ -215,6 +216,7 @@ public final class NewTaskTest {
         onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
                         .withErrorText(containsString(errorMessage))));
+        pressBack();
     }
 
     /**
@@ -239,6 +241,7 @@ public final class NewTaskTest {
         onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
+        pressBack();
     }
 
     /**
