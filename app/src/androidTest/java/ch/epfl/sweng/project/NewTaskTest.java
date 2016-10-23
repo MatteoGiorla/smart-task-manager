@@ -18,19 +18,21 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
-
 
 
 /**
@@ -87,11 +89,8 @@ public final class NewTaskTest {
      */
     @Test
     public void testCanAddTask() {
-        for (int i = 0; i < 10; i++) {
-            onView(withId(R.id.add_task_button)).perform(click());
-            onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped + i));
-            onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped + i));
-            onView(withId(R.id.button_submit_task)).perform(click());
+        for (int i = 0; i < 3; i++) {
+            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
             //Check title name inside listView
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
@@ -174,22 +173,19 @@ public final class NewTaskTest {
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
-        for (int i = 0; i < 10; i++) {
-            onView(withId(R.id.add_task_button)).perform(click());
-            onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped + i));
-            onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped + i));
-            onView(withId(R.id.button_submit_task)).perform(click());
+        for (int i = 0; i < 3; i++) {
+            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
         }
 
         //We delete the tasks
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
             //Test if the tasks are correctly deleted
-            if (i != 9) {
+            if (i != 2) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
@@ -202,35 +198,6 @@ public final class NewTaskTest {
         emptyDatabase();
     }
 
-    /**
-     * Test that we can't add a task with an already used title.
-     */
-    @Test
-    public void testCannotAddTaskWithExistingTitle() {
-        //Create a first task
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped));
-        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
-        onView(withId(R.id.button_submit_task)).perform(click());
-
-        //Try to create a second class with the same title as the first one
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.input_title)).perform(typeText(mTitleToBeTyped));
-        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
-        onView(withId(R.id.button_submit_task)).perform(click());
-
-        //Get the error message
-        String errorMessage = getInstrumentation()
-                .getTargetContext()
-                .getResources()
-                .getText(R.string.error_title_duplicated)
-                .toString();
-
-        //Check that the error message is displayed
-        onView(withId(R.id.input_layout_title))
-                .check(matches(ErrorTextInputLayoutMatcher
-                .withErrorText(containsString(errorMessage))));
-    }
 
     /**
      * Test that we can't add a task with an empty title.
@@ -238,10 +205,7 @@ public final class NewTaskTest {
     @Test
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task with empty titles
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.input_title)).perform(typeText(""));
-        onView(withId(R.id.input_description)).perform(typeText(mDescriptionToBeTyped));
-        onView(withId(R.id.button_submit_task)).perform(click());
+        createATask("", mDescriptionToBeTyped);
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -251,8 +215,52 @@ public final class NewTaskTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.input_layout_title))
+        onView(withId(R.id.title_task_layout))
+                .check(matches(ErrorTextInputLayoutMatcher
+                        .withErrorText(containsString(errorMessage))));
+        pressBack();
+    }
+
+    /**
+     * Test that we can't add a task with an already used title.
+     */
+    @Test
+    public void testCannotAddTaskWithExistingTitle() {
+        //Create a first task
+        createATask(mTitleToBeTyped, mDescriptionToBeTyped);
+
+        //Try to create a second class with the same title as the first one
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
+        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
+        //Check that the done editing button is not displayed
+        onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
+
+
+        //Get the error message
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.error_title_duplicated)
+                .toString();
+
+        //Check that the error message is displayed
+        onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
+        pressBack();
+    }
+
+    /**
+     *Method to add the task to enhance modularity of the tests.
+     *
+     * @param taskTitle the title of the task to add
+     * @param taskDescription the description of the task to add
+     */
+    private void createATask(String taskTitle, String taskDescription){
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
+        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }
