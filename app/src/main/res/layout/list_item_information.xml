@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/title_field_information"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
+        android:textStyle="normal"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/body_field_information"
