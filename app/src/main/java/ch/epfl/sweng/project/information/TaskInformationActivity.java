@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
@@ -22,6 +25,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     private Task taskToBeDisplayed;
     private ArrayList<InformationItem> informationItemsList;
     private Intent intent;
+    private Set<Integer> titles;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,42 +75,65 @@ public class TaskInformationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialise and fill the informationItemsList.
+     */
     private void createInformationItemList() {
         informationItemsList = new ArrayList<>();
 
-        //Create the Information Item for the task's title
-        InformationItem taskTitleItem = new InformationItem(getString(R
-                .string.title_field),
-                taskToBeDisplayed.getName());
+        //Get the map with the task's information
+        SparseArray<String> titleToBody = taskToBeDisplayed.getTitleToBody();
+        titles = new HashSet<>();
+        constructTitlesSet();
 
-        //Create the Information Item for the task's description
-        InformationItem taskDescriptionItem = new InformationItem(getString(R
-                .string.description_field),
-                taskToBeDisplayed.getDescription());
+        //Fill the informationItemsList
+        for (Integer title : titles) {
+            informationItemsList
+                    .add(new InformationItem(getString(title), titleToBody.get(title)));
 
-
-        informationItemsList.add(taskTitleItem);
-        informationItemsList.add(taskDescriptionItem);
+        }
     }
 
+    /**
+     * Construct the Set with the InformationItem's titles.
+     * Each time a new field is added to the Task class, this method
+     * needs to be updated.
+     */
+    private void constructTitlesSet() {
+        titles.add(R.string.title_field);
+        titles.add(R.string.description_field);
+    }
+
+    /**
+     *  Set the tool bar with the return arrow on top left.
+     */
     private void setToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.task_information_toolbar);
         initializeToolbar(mToolbar);
         mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
     }
 
+    /**
+     * Check the intent validity.
+     */
     private void checkIntent() {
         if(intent == null) {
             throw new IllegalArgumentException("No intent was passed to TaskInformationActivity !");
         }
     }
 
+    /**
+     * Check the intent's extras validity.
+     */
     private void checkIntentExtras() {
         if(taskList == null || position == -1) {
             throw new IllegalArgumentException("Error on extras passed to TaskInformationActivity !");
         }
     }
 
+    /**
+     * OnClickListener on the return arrow.
+     */
     private class OnReturnArrowClickListener implements View.OnClickListener {
 
         /**
