@@ -68,14 +68,5 @@
                 android:maxLines="4" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/button_submit_task"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/submit_task_button"
-            android:textColor="@android:color/white" />
-
     </LinearLayout>
 </RelativeLayout>
