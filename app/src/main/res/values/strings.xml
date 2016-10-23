@@ -19,7 +19,7 @@
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google or Facebook account.</string>
     <string name="welcome_title">Welcome !</string>
-    
+
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
 
@@ -39,4 +39,6 @@
     <string name="button_vitality_description">Select your vitality</string>
     <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_task_description">Done !</string>
+
+    <string name="title_activity_maps">Map</string>
 </resources>
