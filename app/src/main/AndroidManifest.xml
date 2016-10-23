@@ -62,7 +62,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
-            android:name=".TaskInformationActivity"
+            android:name=".information.TaskInformationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar">
         </activity>

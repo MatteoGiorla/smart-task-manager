@@ -40,5 +40,9 @@
     <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_task_description">Done !</string>
 
+    <!-- Fields titles of task information activity -->
+    <string name="title_field">Title</string>
+    <string name="description_field">Description</string>
+
     <string name="title_activity_maps">Map</string>
 </resources>
