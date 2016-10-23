@@ -86,6 +86,21 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Start the toolbar and enable that back button on the toolbar.
+     *
+     * @param mToolbar the toolbar of the activity
+     */
+    private void initializeToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
     /**
      * Private class that implement TextWatcher.
      * This class is used to check on runtime if the inputs written by the user
@@ -141,20 +156,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
-        }
-    }
-
-    /**
-     * Start the toolbar and enable that back button on the toolbar.
-     *
-     * @param mToolbar the toolbar of the activity
-     */
-    private void initializeToolbar(Toolbar mToolbar) {
-        setSupportActionBar(mToolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
 
