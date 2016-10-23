@@ -52,7 +52,11 @@ public class Location {
      * Getter returning the gps coordinates of the location
      */
     public LatLng getGPSCoordinates() {
-        return new LatLng(this.gpsCoordinates.latitude, this.gpsCoordinates.longitude);
+        if (this.gpsCoordinates == null){
+            return null;
+        } else {
+            return new LatLng(this.gpsCoordinates.latitude, this.gpsCoordinates.longitude);
+        }
     }
 
     /**

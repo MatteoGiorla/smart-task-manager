@@ -139,7 +139,9 @@ public final class NewTaskTest {
         testTask.setDurationInMinutes(60);
         testTask.setEnergyNeeded(Task.Energy.HIGH);
 
-        assertEquals(newLocationTest, testTask.getLocation());
+        assertEquals(newLocationTest.getName(), testTask.getLocation().getName());
+        assertEquals(newLocationTest.getGPSCoordinates(), testTask.getLocation().getGPSCoordinates());
+        assertEquals(newLocationTest.getType(), testTask.getLocation().getType());
         assertEquals(2017, testTask.getDueDate().get(Calendar.YEAR));
         assertEquals(60, testTask.getDuration());
         assertEquals(Task.Energy.HIGH, testTask.getEnergy());

@@ -15,7 +15,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        multiDexEnabled true
+        //multiDexEnabled true
     }
 
     buildTypes {
@@ -43,10 +43,10 @@ android {
         // TODO consider re-enabling app indexing before publishing your application.
         disable 'GoogleAppIndexingWarning', 'GradleDependency'
     }
-
+/*
     dexOptions {
         javaMaxHeapSize "2g"
-    }
+    }*/
 
     // Workaround for an Android Studio bug in the "Missing Return Statement" warning
     return void
@@ -63,7 +63,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.6.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.google.android.gms:play-services:9.6.1'
+    compile 'com.google.android.gms:play-services-maps:9.6.1'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:multidex:1.0.0'

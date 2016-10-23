@@ -33,7 +33,8 @@ public class DatabaseTest {
     public void initTask() {
         name = "task";
         description = "This is a task";
-        task = new Task(name, description);
+        task = new Task(name);
+        task.setDescription(description);
     }
 
     @Before

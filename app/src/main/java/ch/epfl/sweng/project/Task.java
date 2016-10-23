@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Task is the class representing a task
@@ -42,18 +45,18 @@ public class Task implements Parcelable {
         }
     };
     private String name;
-    private String description = "";
-    private Location location = null;
-    private GregorianCalendar dueDate = null;
-    private long durationInMinutes = 0;
-    private Energy energyNeeded = Energy.NORMAL;
+    private String description;
+    private Location location;
+    private GregorianCalendar dueDate;
+    private long durationInMinutes;
+    private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
     private String author;
 
     /**
      * Constructor of the class
      *
-     * @param name        Task's name
+     * @param name Task's name
      * @throws IllegalArgumentException if the parameter is null
      */
     public Task(String name) {
@@ -61,7 +64,14 @@ public class Task implements Parcelable {
             throw new IllegalArgumentException();
         } else {
             this.name = name;
-            this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            this.description = "";
+            this.location = null;
+            this.dueDate = null;
+            this.durationInMinutes = 0;
+            this.energyNeeded = null;
+            if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            }
         }
     }
 
