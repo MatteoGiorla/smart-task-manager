@@ -42,32 +42,26 @@ public class Task implements Parcelable {
         }
     };
     private String name;
-    private String description;
-    private Location location;
-    private GregorianCalendar dueDate;
-    private long durationInMinutes;
-    private Energy energyNeeded;
+    private String description = "";
+    private Location location = null;
+    private GregorianCalendar dueDate = null;
+    private long durationInMinutes = 0;
+    private Energy energyNeeded = Energy.NORMAL;
     private long timeOfAFractionInMinutes; //to be added optionally later
-    private List<String> listOfContributors;
+    private String author;
 
     /**
      * Constructor of the class
      *
      * @param name        Task's name
-     * @param description Task's description
      * @throws IllegalArgumentException if the parameter is null
      */
-    public Task(String name, String description) {
-        if (name == null || description == null) {
+    public Task(String name) {
+        if (name == null) {
             throw new IllegalArgumentException();
         } else {
             this.name = name;
-            this.description = description;
-            //Add the user himself in the list of contributors to be able to retrieve
-            // only his own tasks from the online database
-            this.listOfContributors = new ArrayList<String>();
-            String emailOfUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            this.listOfContributors.add(emailOfUser);
+            this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         }
     }
 
@@ -105,14 +99,22 @@ public class Task implements Parcelable {
      * Getter returning a copy of the task's location
      */
     public Location getLocation() {
-        return new Location(location.getName(), location.getType(), location.getGPSCoordinates());
+        if (location == null) {
+            return null;
+        } else {
+            return new Location(location.getName(), location.getType(), location.getGPSCoordinates());
+        }
     }
 
     /**
      * Getter returning a copy of the task's due date
      */
     public GregorianCalendar getDueDate() {
-        return new GregorianCalendar(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH), dueDate.get(Calendar.DAY_OF_MONTH));
+        if (dueDate == null) {
+            return null;
+        } else {
+            return new GregorianCalendar(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH), dueDate.get(Calendar.DAY_OF_MONTH));
+        }
     }
 
     /**
@@ -161,56 +163,36 @@ public class Task implements Parcelable {
      * Setter to modify the task's location
      *
      * @param newLocation The new task's location
-     * @throws IllegalArgumentException if newLocation is null
      */
     public void setLocation(Location newLocation) {
-        if (newLocation == null) {
-            throw new IllegalArgumentException();
-        } else {
-            location = newLocation;
-        }
+        location = newLocation;
     }
 
     /**
      * Setter to modify the task's due date
      *
      * @param newDueDate The new task's due date
-     * @throws IllegalArgumentException if newDueDate is null
      */
     public void setDueDate(GregorianCalendar newDueDate) {
-        if (newDueDate == null) {
-            throw new IllegalArgumentException();
-        } else {
-            dueDate = newDueDate;
-        }
+        dueDate = newDueDate;
     }
 
     /**
      * Setter to modify the task's duration
      *
      * @param newDurationInMinutes The new task's duration
-     * @throws IllegalArgumentException if newDurationInMinutes is 0
      */
     public void setDurationInMinutes(long newDurationInMinutes) {
-        if (newDurationInMinutes == 0) {
-            throw new IllegalArgumentException();
-        } else {
-            durationInMinutes= newDurationInMinutes;
-        }
+        durationInMinutes= newDurationInMinutes;
     }
 
     /**
      * Setter to modify the task's energy need
      *
      * @param newEnergyNeeded The new task's energy need
-     * @throws IllegalArgumentException if newDurationInMinutes is 0
      */
     public void setEnergyNeeded(Energy newEnergyNeeded) {
-        if (newEnergyNeeded == null) {
-            throw new IllegalArgumentException();
-        } else {
-            energyNeeded= newEnergyNeeded;
-        }
+        energyNeeded= newEnergyNeeded;
     }
 
     /**
