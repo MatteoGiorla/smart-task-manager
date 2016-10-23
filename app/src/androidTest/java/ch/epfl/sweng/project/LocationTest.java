@@ -24,8 +24,10 @@ import static org.junit.Assert.assertThat;
 public final class LocationTest {
     private String name;
     private Location location;
+    private Location locationEW;
     private LatLng gpsCoordinates;
     private Location.LocationType type;
+    private Location.LocationType typeEW;
 
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
@@ -36,6 +38,12 @@ public final class LocationTest {
         type = Location.LocationType.HOME;
         gpsCoordinates = new LatLng(41, 38);
         location = new Location(name, type, gpsCoordinates);
+    }
+
+    @Before
+    public void initEverywhereLocation() {
+        typeEW = Location.LocationType.EVERYWHERE;
+        locationEW = new Location(null, typeEW, null);
     }
 
     @Test
@@ -55,6 +63,16 @@ public final class LocationTest {
     }
 
     /**
+     * Test that the getters for "everywhere" location return the good value
+     */
+    @Test
+    public void testEverywhereLocationGetters() {
+        assertEquals("Everywhere", locationEW.getName());
+        assertEquals(typeEW, locationEW.getType());
+        assertEquals(null, locationEW.getGPSCoordinates());
+    }
+
+    /**
      * Test that the setters modify correctly the location
      */
     @Test
@@ -63,10 +81,14 @@ public final class LocationTest {
         LatLng newGPSCoordinates = new LatLng(20, 45);
 
         location.setName(newName);
+        locationEW.setName(null);
         location.setGpsCoordinates(newGPSCoordinates);
+        locationEW.setGpsCoordinates(newGPSCoordinates);
 
         assertEquals(newName, location.getName());
+        assertEquals("Everywhere", locationEW.getName());
         assertEquals(newGPSCoordinates, location.getGPSCoordinates());
+        assertEquals(null, locationEW.getGPSCoordinates());
     }
 
     /**

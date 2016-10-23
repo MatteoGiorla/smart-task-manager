@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Location {
 
-    public enum LocationType { HOME, OFFICE, EVERYWHERE };
+    public enum LocationType { HOME, WORKPLACE, EVERYWHERE };
 
     private String name;
     private LocationType type;
@@ -69,7 +69,9 @@ public class Location {
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
-        if (newName == null) {
+        if (this.type == LocationType.EVERYWHERE) {
+            this.name = "Everywhere";
+        } else if (newName == null) {
             throw new IllegalArgumentException();
         } else {
             this.name = newName;
@@ -82,7 +84,11 @@ public class Location {
      * @param gpsCoordinates The new GPS coordinates of the location
      */
     public void setGpsCoordinates(LatLng gpsCoordinates) {
-        //GPS coordinates are optional and can therefore be null
-        this.gpsCoordinates = gpsCoordinates;
+        if (this.type == LocationType.EVERYWHERE) {
+            this.gpsCoordinates = null;
+        } else {
+            //GPS coordinates are optional and can therefore be null
+            this.gpsCoordinates = gpsCoordinates;
+        }
     }
 }
