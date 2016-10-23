@@ -1,14 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-
-import java.util.List;
-
 /**
  * Class that represents the inflated activity_new_task
  */
@@ -16,47 +7,13 @@ public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
 
     /**
-     * Override the onCreate method
-     * Create a new Task and puts in the intent
+     * Check if the title written is unique or not.
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously
-     *                           being shut down then this Bundle contains the data it
-     *                           most recently supplied in onSaveInstanceState(Bundle)
+     * @param title The new title of the task
+     * @return true if the title is already used or false otherwise.
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //Control the user's inputs
-        titleEditText.addTextChangedListener(new TextWatcher());
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        //set the done editing button to non visible
-        ImageButton doneButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-        doneButton.setVisibility(View.GONE);
-
-        Button submitButton = (Button) findViewById(R.id.button_submit_task);
-
-        //When the user clicks on the "Submit" button
-        submitButton.setOnClickListener(new MyOnClickListener());
-    }
-
-    /**
-     * Private method that checks if an existing task in the list already contains
-     * the title.
-     *
-     * @param taskList The task list
-     * @param title    The title
-     * @return true if the task list already contains an existing task with the same title
-     * false otherwise
-     */
-    private boolean titleAlreadyExist(List<Task> taskList, String title) {
+    boolean titleIsNotUnique(String title) {
         boolean result = false;
         for (int i = 0; i < taskList.size(); i++) {
             if (taskList.get(i).getName().equals(title)) {
@@ -66,52 +23,9 @@ public class NewTaskActivity extends TaskActivity {
         return result;
     }
 
-    /**
-     * Private class that implements TextWatcher.
-     * This class is used to check on runtime if the user's
-     * inputs are valid or not.
-     */
-    private class TextWatcher extends TaskTextWatcher {
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (titleAlreadyExist(taskList, s.toString())) {
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_duplicated));
-            } else if (s.toString().isEmpty()) {
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
-            } else {
-                textInputLayoutTitle.setErrorEnabled(false);
-            }
-        }
-    }
-
-    /**
-     * Private class that implements OnClickListener.
-     * This class is used to do the necessary treatment when the user
-     * click on the "Submit" button. It checks that the title is not
-     * empty and if not, creates the task and finish.
-     */
-    private class MyOnClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            String title = titleEditText.getText().toString();
-            if (title.isEmpty()) {
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
-            } else if (!title.isEmpty() && !titleAlreadyExist(taskList, title)) {
-                EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
-                String description = descriptionEditText.getText().toString();
-
-                Task newTask = new Task(title, description);
-
-                intent.putExtra(RETURNED_TASK, newTask);
-
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        }
+    @Override
+    void resultActivity() {
+        Task newTask = new Task(title, description);
+        intent.putExtra(RETURNED_TASK, newTask);
     }
 }

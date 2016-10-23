@@ -1,6 +1,8 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.data;
 
-public interface dataExchanger {
+import ch.epfl.sweng.project.Task;
+
+public interface DataExchanger {
 
     /**
      * Checks if the remote storage device can be accessed at the

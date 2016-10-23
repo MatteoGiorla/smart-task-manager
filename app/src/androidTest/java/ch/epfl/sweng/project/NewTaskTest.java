@@ -24,12 +24,14 @@ import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
 
@@ -87,7 +89,7 @@ public final class NewTaskTest {
      */
     @Test
     public void testCanAddTask() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 10; i++) {
             createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
             //Check title name inside listView
             onData(anything())
@@ -171,19 +173,19 @@ public final class NewTaskTest {
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 10; i++) {
             createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
         }
 
         //We delete the tasks
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 10; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
             //Test if the tasks are correctly deleted
-            if (i != 2) {
+            if (i != 9) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
@@ -228,7 +230,12 @@ public final class NewTaskTest {
         createATask(mTitleToBeTyped, mDescriptionToBeTyped);
 
         //Try to create a second class with the same title as the first one
-        createATask(mTitleToBeTyped, mDescriptionToBeTyped);
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
+        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
+        //Check that the done editing button is not displayed
+        onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
+
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -254,6 +261,6 @@ public final class NewTaskTest {
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(taskTitle));
         onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.button_submit_task)).perform(click());
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }

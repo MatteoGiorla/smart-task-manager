@@ -1,12 +1,7 @@
 package ch.epfl.sweng.project;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -16,7 +11,6 @@ public class EditTaskActivity extends TaskActivity {
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     private Task mTaskToBeEdited;
     private int mIndexTaskToBeEdited;
-    private boolean isValidTitle = true;
 
     /**
      * Override the onCreate method
@@ -31,60 +25,52 @@ public class EditTaskActivity extends TaskActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize and check taskToBeEdited and taskList that were passed to the intent.
-        checkIntent(intent);
+        //Get the index and check its validity
+        mIndexTaskToBeEdited = intent.getIntExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
+        checkTaskToBeEditedIndex();
 
-        //Create a listener to check that the user is writing a valid input.
-        titleEditText.addTextChangedListener(new TextWatcher());
-
-        ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-
-        //set the submit button to non visible
-        Button submitButton = (Button) findViewById(R.id.button_submit_task);
-        submitButton.setVisibility(View.GONE);
+        //Get the task to be edited
+        mTaskToBeEdited = taskList.get(mIndexTaskToBeEdited);
 
         //Populate the layout activity_task
         populateLayout();
-
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
-        //Terminate the activity if the input written by the user is valid.
-        doneEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValidTitle) {
-                    EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
-                    mTaskToBeEdited.setDescription(descriptionEditText.getText().toString());
-
-                    intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
-                    intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            }
-        });
     }
 
     /**
-     * Check that the intent was correctly passed to the activity, and
-     * initialize the global variables of the class.
+     * Check if the title written is unique or not.
      *
-     * @param intent the intent passed to the activity.
+     * @param title The new title of the task
+     * @return true if the title is already used or false otherwise.
+     */
+    @Override
+    boolean titleIsNotUnique(String title) {
+        boolean result = false;
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getName().equals(title) && i != mIndexTaskToBeEdited) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    void resultActivity() {
+        mTaskToBeEdited.setName(title);
+        mTaskToBeEdited.setDescription(description);
+        intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
+        intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
+    }
+
+    /**
+     * Check that the 'task to be edited' 's index is valid
+     *
      * @throws IllegalArgumentException If there is an error with the intent passed
      * to the activity.
      */
-    private void checkIntent(Intent intent) {
-        mIndexTaskToBeEdited = intent.getIntExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
-        if (mIndexTaskToBeEdited == -1 || taskList == null) {
-            throw new IllegalArgumentException("Error on extras passed to EditTaskActivity !");
+    private void checkTaskToBeEditedIndex() {
+        if (mIndexTaskToBeEdited == -1) {
+            throw new IllegalArgumentException("Error on the index passed with the intent !");
         }
-        mTaskToBeEdited = taskList.get(mIndexTaskToBeEdited);
     }
 
     /**
@@ -96,60 +82,5 @@ public class EditTaskActivity extends TaskActivity {
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
-    }
-
-    /**
-     * Check if the title written is unique or not.
-     *
-     * @param title The new title of the task
-     * @return true if the title is already used or false otherwise.
-     */
-    private boolean titleIsNotUnique(String title) {
-        boolean result = false;
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getName().equals(title) && i != mIndexTaskToBeEdited) {
-                result = true;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Private class that implement TextWatcher.
-     * This class is used to check on runtime if the inputs written by the user
-     * are valid or not.
-     */
-    private class TextWatcher extends TaskTextWatcher {
-        final ImageButton doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-
-        /**
-         * Check the input written by the user before it is changed.
-         */
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            textInputLayoutTitle.setErrorEnabled(false);
-            isValidTitle = false;
-        }
-
-        /**
-         * Check the input written by the user after it was changed.
-         */
-        @Override
-        public void afterTextChanged(Editable s) {
-            isValidTitle = !(titleIsNotUnique(s.toString()));
-            if (!isValidTitle) {
-                doneEditButton.setVisibility(View.INVISIBLE);
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_duplicated));
-            } else if (s.toString().isEmpty()) {
-                isValidTitle = false;
-                doneEditButton.setVisibility(View.INVISIBLE);
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
-            } else {
-                doneEditButton.setVisibility(View.VISIBLE);
-                mTaskToBeEdited.setName(s.toString());
-            }
-        }
     }
 }

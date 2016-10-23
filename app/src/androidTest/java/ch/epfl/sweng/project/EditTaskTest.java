@@ -80,7 +80,7 @@ public final class EditTaskTest {
     public void testCannotEditTaskWithAlreadyExistingTitle() {
 
         //Create two tasks
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             createATask(mOldTitle + i, mOldDescription + i);
         }
 
@@ -177,6 +177,6 @@ public final class EditTaskTest {
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(taskTitle));
         onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.button_submit_task)).perform(click());
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }

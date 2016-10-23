@@ -5,10 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import ch.epfl.sweng.project.Task;
-import ch.epfl.sweng.project.dataExchanger;
 
 //this class need to be expanded  and completed once the Firebase database will be set
-public class FirebaseDataExchanger implements dataExchanger {
+public class FirebaseDataExchanger implements DataExchanger {
 
     private final Context context;
 
