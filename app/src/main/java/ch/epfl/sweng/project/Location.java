@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Location {
 
-    public enum LocationType { HOME, WORKPLACE, EVERYWHERE };
+    public enum LocationType { HOME, WORKPLACE, EVERYWHERE }
 
     private String name;
     private LocationType type;

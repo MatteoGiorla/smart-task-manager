@@ -2,23 +2,18 @@ package ch.epfl.sweng.project;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Task is the class representing a task
  */
 public class Task implements Parcelable {
 
-    public enum Energy { LOW, NORMAL, HIGH };
+    public enum Energy { LOW, NORMAL, HIGH }
 
     /**
      * Used to regenerate a Task, all parcelables must have a creator
@@ -71,6 +66,8 @@ public class Task implements Parcelable {
             this.energyNeeded = null;
             if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                 this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            } else {
+                this.author = "";
             }
         }
     }
@@ -139,6 +136,13 @@ public class Task implements Parcelable {
      */
     public Energy getEnergy() {
         return energyNeeded;
+    }
+
+    /**
+     * Getter returning the task's author
+     */
+    public String getAuthor() {
+        return author;
     }
 
     /**

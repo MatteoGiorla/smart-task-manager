@@ -13,9 +13,6 @@
     <string name="hint_title">Title</string>
     <string name="hint_description">Description</string>
 
-    <!-- Button strings-->
-    <string name="submit_task_button">Submit</string>
-
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google or Facebook account.</string>
     <string name="welcome_title">Welcome !</string>

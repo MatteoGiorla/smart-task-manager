@@ -2,7 +2,6 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
