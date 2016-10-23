@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.hardware.camera2.CameraConstrainedHighSpeedCaptureSession;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -11,6 +12,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import ch.epfl.sweng.project.data.DatabaseContract;
 
@@ -57,7 +61,8 @@ public final class NewTaskTest {
         mDescriptionToBeTyped = "test description number ";
         name = "task";
         description = "The first task";
-        task = new Task(name, description);
+        task = new Task(name);
+        task.setDescription(description);
 
         //Empty the database
         emptyDatabase();
@@ -114,6 +119,31 @@ public final class NewTaskTest {
     public void testTaskGetters() {
         assertEquals(name, task.getName());
         assertEquals(description, task.getDescription());
+
+
+    }
+
+    /**
+     * Test that the getters and setters work correctly with parameters
+     */
+    @Test
+    public void testParameters() {
+        Task testTask = new Task("Test with parameters");
+        assertEquals(null, testTask.getLocation());
+        assertEquals(null, testTask.getDueDate());
+        assertEquals(0, testTask.getDuration());
+        assertEquals(null, testTask.getEnergy());
+
+        Location newLocationTest = new Location("Office", Location.LocationType.WORKPLACE, null);
+        testTask.setLocation(newLocationTest);
+        testTask.setDueDate(new GregorianCalendar(2017, 10, 23));
+        testTask.setDurationInMinutes(60);
+        testTask.setEnergyNeeded(Task.Energy.HIGH);
+
+        assertEquals(newLocationTest, testTask.getLocation());
+        assertEquals(2017, testTask.getDueDate().get(Calendar.YEAR));
+        assertEquals(60, testTask.getDuration());
+        assertEquals(Task.Energy.HIGH, testTask.getEnergy());
     }
 
     /**
@@ -158,7 +188,7 @@ public final class NewTaskTest {
     @Test
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
-        new Task(null, null);
+        new Task(null);
     }
 
     /**
