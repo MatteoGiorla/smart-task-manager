@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -47,10 +46,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         titleEditText = (EditText) findViewById(R.id.title_task);
 
         doneEditButton = (ImageButton) findViewById(R.id.edit_done_button_toolbar);
-
-        //set the submit button to non visible
-        Button submitButton = (Button) findViewById(R.id.button_submit_task);
-        submitButton.setVisibility(View.GONE);
 
         //Create a listener to check that the user is writing a valid input.
         titleEditText.addTextChangedListener(new TaskTextWatcher());
