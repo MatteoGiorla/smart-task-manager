@@ -12,8 +12,9 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-import ch.epfl.sweng.project.authentication.LoginActivity;
 import java.util.ArrayList;
+
+import ch.epfl.sweng.project.authentication.LoginActivity;
 
 
 /**

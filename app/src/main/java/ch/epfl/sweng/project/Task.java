@@ -5,9 +5,8 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DateFormat;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Task is the class representing a task
@@ -48,6 +47,7 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
     private String author;
+    private DateFormat dateFormat;
 
 
     /**
@@ -76,8 +76,12 @@ public class Task implements Parcelable {
        }
        this.name = name;
        this.description = description;
-       this.durationInMinutes = 0;
+       this.durationInMinutes = durationInMinutes;
        this.author = author;
+       this.dueDate = dueDate;
+       this.energyNeeded = energyNeeded;
+       this.location = new Location(location);
+       dateFormat = DateFormat.getDateInstance();
    }
 
     /**
@@ -89,13 +93,13 @@ public class Task implements Parcelable {
      * @param description Task's description
      */
     public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
-        LatLng coordinates = new LatLng(0, 0);
-        location = new Location("Every where", Location.LocationType.EVERYWHERE, coordinates);
-        dueDate = new GregorianCalendar(TimeZone.getDefault(), Locale.FRANCE);
-        author = "Me";
-        energyNeeded = Energy.NORMAL;
+        this(name,
+                description,
+                new Location("Every where", Location.LocationType.EVERYWHERE, new LatLng(0, 0)),
+                new GregorianCalendar(2014, 12, 31),
+                0,
+                Energy.NORMAL,
+                "Me myself and I");
     }
 
     /**
@@ -103,14 +107,19 @@ public class Task implements Parcelable {
      * it was put inside an Intent.
      *
      * @param in Container of a Task
-     * @throws IllegalArgumentException if the parameter is null
      */
     private Task(Parcel in) {
-        if (in == null) {
-            throw new IllegalArgumentException();
+        if(in == null) {
+            throw new IllegalArgumentException("In is null");
         }
-        this.name = in.readString();
-        this.description = in.readString();
+        setName(in.readString());
+        setDescription(in.readString());
+        setLocation(new Location("Every where", Location.LocationType.EVERYWHERE, new LatLng(0, 0)));
+        setDueDate(new GregorianCalendar(2014, 12, 31));
+        setDurationInMinutes(0);
+        setEnergyNeeded(Energy.NORMAL);
+        setAuthor("Me myself and I");
+        dateFormat = DateFormat.getDateInstance();
     }
 
     /**
@@ -142,6 +151,10 @@ public class Task implements Parcelable {
         return dueDate;
     }
 
+    public String dueDateToString() {
+        return dateFormat.format(dueDate.getTime());
+    }
+
     /**
      * Getter returning the task's duration
      */
@@ -171,7 +184,7 @@ public class Task implements Parcelable {
      */
     public void setName(String newName) {
         if (newName == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("newName passed to the Task's setter is null");
         } else {
             name = newName;
         }
@@ -185,7 +198,7 @@ public class Task implements Parcelable {
      */
     public void setDescription(String newDescription) {
         if (newDescription == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("newDescription passed to the Task's setter is null");
         } else {
             description = newDescription;
         }
@@ -198,7 +211,7 @@ public class Task implements Parcelable {
      */
     public void setLocation(Location newLocation) {
         if(newLocation == null) {
-            throw new IllegalArgumentException("newLocation passed to the setter is null");
+            throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
         }
         location = newLocation;
     }
@@ -210,7 +223,7 @@ public class Task implements Parcelable {
      */
     public void setDueDate(GregorianCalendar newDueDate) {
         if(newDueDate == null) {
-            throw new IllegalArgumentException("newDueDate passed to the setter is null");
+            throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
         }
         dueDate = newDueDate;
     }
@@ -231,9 +244,16 @@ public class Task implements Parcelable {
      */
     public void setEnergyNeeded(Energy newEnergyNeeded) {
         if(newEnergyNeeded == null) {
-            throw new IllegalArgumentException("newEnergyNeeded passed to the setter is null");
+            throw new IllegalArgumentException("newEnergyNeeded passed to the Task's setter is null");
         }
         energyNeeded= newEnergyNeeded;
+    }
+
+    public void setAuthor(String newAuthor) {
+        if(newAuthor == null) {
+            throw new IllegalArgumentException("newAuthor passed to the Task's setter is null");
+        }
+        author = newAuthor;
     }
 
     /**

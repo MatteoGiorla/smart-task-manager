@@ -23,11 +23,14 @@ public class Location {
      * @throws IllegalArgumentException if the parameter is null
      */
     public Location(String name, LocationType type, LatLng gpsCoordinates) {
-        if (name == null || type == null) {
-            throw new IllegalArgumentException("Name or type of new location can't be null");
+        if(name == null) {
+            throw new IllegalArgumentException("Name passed to the Location's constructor is null");
+        }
+        if(type == null) {
+            throw new IllegalArgumentException("Type passed to the Location's constructor is null");
         }
         if(gpsCoordinates == null) {
-            throw new IllegalArgumentException("gpsCoordinates passed to the constructor is are null");
+            throw new IllegalArgumentException("gpsCoordinates passed to the Location's constructor is are null");
         }
         this.name = name;
         this.type = type;
