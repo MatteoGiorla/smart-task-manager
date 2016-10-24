@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -50,6 +51,10 @@ public class TaskInformationActivity extends AppCompatActivity {
                 informationItemsList
         );
 
+        //Get the TextView containing the task's title
+        TextView taskTitleTextView = (TextView) findViewById(R.id.title_task_information_activity);
+        taskTitleTextView.setText(taskToBeDisplayed.getName());
+
         //Get the ListView layout
         ListView listView = (ListView) findViewById(R.id.list_view_information);
 
@@ -76,12 +81,12 @@ public class TaskInformationActivity extends AppCompatActivity {
      */
     private void createInformationItemList() {
         informationItemsList = new ArrayList<>();
-        informationItemsList.add(new InformationItem(getString(R
+       /* informationItemsList.add(new InformationItem(getString(R
                 .string.title_field),
-                taskToBeDisplayed.getName()));
+                taskToBeDisplayed.getName()));*/
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
-                taskToBeDisplayed.getDescription()));
+                taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
     }
 
     /**

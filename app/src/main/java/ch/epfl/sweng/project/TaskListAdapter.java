@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ class TaskListAdapter extends ArrayAdapter<Task> {
      *                 when instantiating views
      * @param objects  The objects to represent in the ListView
      */
-    public TaskListAdapter(Context context, int resource, List<Task> objects) {
+    TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
     }
 
@@ -35,8 +36,9 @@ class TaskListAdapter extends ArrayAdapter<Task> {
      * @param parent      ViewGroup that this view will eventually be attached to
      * @return the view to be displayed
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
 
         //There is no recycled view, we need to create a new one
