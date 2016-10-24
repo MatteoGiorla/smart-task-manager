@@ -132,7 +132,7 @@ public class Task implements Parcelable {
      * Getter returning a copy of the task's location
      */
     public Location getLocation() {
-        return location;
+        return new Location(location);
     }
 
     /**

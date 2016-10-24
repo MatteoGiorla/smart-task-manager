@@ -23,22 +23,20 @@ public class Location {
      * @throws IllegalArgumentException if the parameter is null
      */
     public Location(String name, LocationType type, LatLng gpsCoordinates) {
-        if (type == LocationType.EVERYWHERE) {
-            this.name = "Everywhere";
-            this.type = LocationType.EVERYWHERE;
-            this.gpsCoordinates = null;
-
-        } else {
-            if (name == null || type == null) {
-                throw new IllegalArgumentException("Name or type of new location can't be null");
-            } else {
-                this.name = name;
-                this.type = type;
-            }
-            //GPS coordinates are optional and can therefore be null
-            this.gpsCoordinates = gpsCoordinates;
-
+        if (name == null || type == null) {
+            throw new IllegalArgumentException("Name or type of new location can't be null");
         }
+        if(gpsCoordinates == null) {
+            throw new IllegalArgumentException("gpsCoordinates passed to the constructor is are null");
+        }
+        this.name = name;
+        this.type = type;
+        //GPS coordinates are optional and can therefore be null
+        this.gpsCoordinates = gpsCoordinates;
+    }
+
+    public Location(Location location) {
+        new Location(location.getName(), location.getType(), location.getGPSCoordinates());
     }
 
     /**
