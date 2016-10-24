@@ -275,7 +275,8 @@ public class TaskFragment extends Fragment {
                 while (data.moveToNext()) {
                     String taskTitle = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
                     String taskDescription = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
-                    Task newTask = new Task(taskTitle, taskDescription);
+                    Task newTask = new Task(taskTitle);
+                    newTask.setDescription(taskDescription);
                     taskList.add(newTask);
                 }
                 mTaskAdapter.notifyDataSetChanged();

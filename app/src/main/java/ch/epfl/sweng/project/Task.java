@@ -3,10 +3,18 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /**
  * Task is the class representing a task
  */
 public class Task implements Parcelable {
+
+    public enum Energy { LOW, NORMAL, HIGH }
+
     /**
      * Used to regenerate a Task, all parcelables must have a creator
      */
@@ -33,20 +41,35 @@ public class Task implements Parcelable {
     };
     private String name;
     private String description;
+    private Location location;
+    private GregorianCalendar dueDate;
+    private long durationInMinutes;
+    private Energy energyNeeded;
+    private long timeOfAFractionInMinutes; //to be added optionally later
+    private String author;
+
 
     /**
      * Constructor of the class
      *
-     * @param name        Task's name
-     * @param description Task's description
+     * @param name Task's name
      * @throws IllegalArgumentException if the parameter is null
      */
-    public Task(String name, String description) {
-        if (name == null || description == null) {
+    public Task(String name) {
+        if (name == null) {
             throw new IllegalArgumentException();
         } else {
             this.name = name;
-            this.description = description;
+            this.description = "";
+            this.location = null;
+            this.dueDate = null;
+            this.durationInMinutes = 0;
+            this.energyNeeded = null;
+            if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            } else {
+                this.author = "";
+            }
         }
     }
 
@@ -72,6 +95,57 @@ public class Task implements Parcelable {
         return name;
     }
 
+
+    /**
+     * Getter returning a copy of the task's description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Getter returning a copy of the task's location
+     */
+    public Location getLocation() {
+        if (location == null) {
+            return null;
+        } else {
+            return new Location(location.getName(), location.getType(), location.getGPSCoordinates());
+        }
+    }
+
+    /**
+     * Getter returning a copy of the task's due date
+     */
+    public GregorianCalendar getDueDate() {
+        if (dueDate == null) {
+            return null;
+        } else {
+            return new GregorianCalendar(dueDate.get(Calendar.YEAR), dueDate.get(Calendar.MONTH), dueDate.get(Calendar.DAY_OF_MONTH));
+        }
+    }
+
+    /**
+     * Getter returning the task's duration
+     */
+    public long getDuration() {
+        return durationInMinutes;
+    }
+
+    /**
+     * Getter returning the task's energy need
+     */
+    public Energy getEnergy() {
+        return energyNeeded;
+    }
+
+    /**
+     * Getter returning the task's author
+     */
+    public String getAuthor() {
+        return author;
+    }
+
     /**
      * Setter to modify the task's name
      *
@@ -87,13 +161,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning a copy of the task's description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
      * Setter to modify the task's description
      *
      * @param newDescription The new task's description
@@ -105,6 +172,42 @@ public class Task implements Parcelable {
         } else {
             description = newDescription;
         }
+    }
+
+    /**
+     * Setter to modify the task's location
+     *
+     * @param newLocation The new task's location
+     */
+    public void setLocation(Location newLocation) {
+        location = newLocation;
+    }
+
+    /**
+     * Setter to modify the task's due date
+     *
+     * @param newDueDate The new task's due date
+     */
+    public void setDueDate(GregorianCalendar newDueDate) {
+        dueDate = newDueDate;
+    }
+
+    /**
+     * Setter to modify the task's duration
+     *
+     * @param newDurationInMinutes The new task's duration
+     */
+    public void setDurationInMinutes(long newDurationInMinutes) {
+        durationInMinutes= newDurationInMinutes;
+    }
+
+    /**
+     * Setter to modify the task's energy need
+     *
+     * @param newEnergyNeeded The new task's energy need
+     */
+    public void setEnergyNeeded(Energy newEnergyNeeded) {
+        energyNeeded= newEnergyNeeded;
     }
 
     /**

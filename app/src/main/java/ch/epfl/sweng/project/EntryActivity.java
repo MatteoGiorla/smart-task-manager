@@ -44,7 +44,7 @@ public class EntryActivity extends Activity {
     /** return Class name of Activity to show **/
     private String getScreenClassName()
     {
-        String activity = null;
+        String activity;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
             // if the user is already logged in the MainActivity with the tasks list is displayed

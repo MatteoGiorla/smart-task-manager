@@ -45,7 +45,7 @@ public class AuthenticationTest {
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityRule =
-            new ActivityTestRule<LoginActivity>(LoginActivity.class);
+            new ActivityTestRule<>(LoginActivity.class);
 
     /**
      * Click on the facebook sign in button,
