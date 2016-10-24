@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
@@ -25,7 +22,6 @@ public class TaskInformationActivity extends AppCompatActivity {
     private Task taskToBeDisplayed;
     private ArrayList<InformationItem> informationItemsList;
     private Intent intent;
-    private Set<Integer> titles;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,28 +76,12 @@ public class TaskInformationActivity extends AppCompatActivity {
      */
     private void createInformationItemList() {
         informationItemsList = new ArrayList<>();
-
-        //Get the map with the task's information
-        SparseArray<String> titleToBody = taskToBeDisplayed.getTitleToBody();
-        titles = new HashSet<>();
-        constructTitlesSet();
-
-        //Fill the informationItemsList
-        for (Integer title : titles) {
-            informationItemsList
-                    .add(new InformationItem(getString(title), titleToBody.get(title)));
-
-        }
-    }
-
-    /**
-     * Construct the Set with the InformationItem's titles.
-     * Each time a new field is added to the Task class, this method
-     * needs to be updated.
-     */
-    private void constructTitlesSet() {
-        titles.add(R.string.title_field);
-        titles.add(R.string.description_field);
+        informationItemsList.add(new InformationItem(getString(R
+                .string.title_field),
+                taskToBeDisplayed.getName()));
+        informationItemsList.add(new InformationItem(getString(R
+                .string.description_field),
+                taskToBeDisplayed.getDescription()));
     }
 
     /**

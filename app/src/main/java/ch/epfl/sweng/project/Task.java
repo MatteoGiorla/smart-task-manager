@@ -2,7 +2,6 @@ package ch.epfl.sweng.project;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.SparseArray;
 
 /**
  * Task is the class representing a task
@@ -106,17 +105,6 @@ public class Task implements Parcelable {
         } else {
             description = newDescription;
         }
-    }
-
-    /**
-     * Construct and return the association of
-     * the information's title to the information's body.
-     */
-    public SparseArray<String> getTitleToBody() {
-        SparseArray<String> titleToBody = new SparseArray<>();
-        titleToBody.put(R.string.title_field, name);
-        titleToBody.put(R.string.description_field, description);
-        return titleToBody;
     }
 
     /**

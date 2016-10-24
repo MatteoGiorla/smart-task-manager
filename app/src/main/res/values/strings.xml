@@ -29,6 +29,7 @@
 
     <!-- Maximum lengths -->
     <string name="max_length_title">20</string>
+    <string name="max_length_description">150</string>
 
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
