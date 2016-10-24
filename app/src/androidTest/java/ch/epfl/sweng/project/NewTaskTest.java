@@ -12,6 +12,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import ch.epfl.sweng.project.data.DatabaseContract;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -59,7 +62,8 @@ public final class NewTaskTest {
         mDescriptionToBeTyped = "test description number ";
         name = "task";
         description = "The first task";
-        task = new Task(name, description);
+        task = new Task(name);
+        task.setDescription(description);
 
         //Empty the database
         emptyDatabase();
@@ -113,6 +117,33 @@ public final class NewTaskTest {
     public void testTaskGetters() {
         assertEquals(name, task.getName());
         assertEquals(description, task.getDescription());
+
+
+    }
+
+    /**
+     * Test that the getters and setters work correctly with parameters
+     */
+    @Test
+    public void testParameters() {
+        Task testTask = new Task("Test with parameters");
+        assertEquals(null, testTask.getLocation());
+        assertEquals(null, testTask.getDueDate());
+        assertEquals(0, testTask.getDuration());
+        assertEquals(null, testTask.getEnergy());
+
+        Location newLocationTest = new Location("Office", Location.LocationType.WORKPLACE, null);
+        testTask.setLocation(newLocationTest);
+        testTask.setDueDate(new GregorianCalendar(2017, 10, 23));
+        testTask.setDurationInMinutes(60);
+        testTask.setEnergyNeeded(Task.Energy.HIGH);
+
+        assertEquals(newLocationTest.getName(), testTask.getLocation().getName());
+        assertEquals(newLocationTest.getGPSCoordinates(), testTask.getLocation().getGPSCoordinates());
+        assertEquals(newLocationTest.getType(), testTask.getLocation().getType());
+        assertEquals(2017, testTask.getDueDate().get(Calendar.YEAR));
+        assertEquals(60, testTask.getDuration());
+        assertEquals(Task.Energy.HIGH, testTask.getEnergy());
     }
 
     /**
@@ -157,7 +188,7 @@ public final class NewTaskTest {
     @Test
     public void testConstructorException() {
         thrownException.expect(IllegalArgumentException.class);
-        new Task(null, null);
+        new Task(null);
     }
 
     /**

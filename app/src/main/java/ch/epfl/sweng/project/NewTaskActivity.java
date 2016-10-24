@@ -25,7 +25,8 @@ public class NewTaskActivity extends TaskActivity {
 
     @Override
     void resultActivity() {
-        Task newTask = new Task(title, description);
+        Task newTask = new Task(title);
+        newTask.setDescription(description);
         intent.putExtra(RETURNED_TASK, newTask);
     }
 }
