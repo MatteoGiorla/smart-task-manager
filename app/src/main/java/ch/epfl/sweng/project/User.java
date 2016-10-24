@@ -18,7 +18,7 @@ public class User {
     private Location currentLocation;
     private Task.Energy currentEnergy;
     private long currentTimeAtDisposal;
-    private List<Location> listLocation;
+    private List<Location> listLocations;
     private static final String TAG = "User Class";
 
     /**
@@ -44,11 +44,11 @@ public class User {
         Location office = new Location("Office", Location.LocationType.WORKPLACE, null);
         Location school = new Location("School", Location.LocationType.WORKPLACE, null);
         Location everywhere = new Location("", Location.LocationType.EVERYWHERE, null);
-        this.listLocation = new ArrayList<Location>();
-        this.listLocation.add(home);
-        this.listLocation.add(office);
-        this.listLocation.add(school);
-        this.listLocation.add(everywhere);
+        this.listLocations = new ArrayList<Location>();
+        this.listLocations.add(home);
+        this.listLocations.add(office);
+        this.listLocations.add(school);
+        this.listLocations.add(everywhere);
     }
 
     /**
@@ -70,23 +70,22 @@ public class User {
     }
 
     /**
-     * Add a Task to the list of Tasks of the user.
+     * Add the id of a task to the list of tasks' id of the user.
      *
-     * @param index
-     * @param task
+     * @param idTask id of the task to add.
      */
-    public void addListTasks(int index, Task task) {
-        this.listTasks.add(index, task);
+    public void addListTasks(long idTask) {
+        this.listTasks.add(idTask);
     }
 
     /**
-     * Remove a task from the list of tasks of the user.
+     * Remove an id of a task from the list of tasks' id of the user.
      *
-     * @param task the task to add.
-     * @return true if the task was inside the list and was well removed, otherwise false.
+     * @param idTask the id of a task to remove.
+     * @return true if the id of the task was inside the list and was well removed, otherwise false.
      */
-    public boolean removeListTasks(Task task) {
-            return this.listTasks.remove(task);
+    public boolean removeListTasks(long idTask) {
+            return this.listTasks.remove(idTask);
     }
 
     /**
@@ -154,7 +153,7 @@ public class User {
         if (newLocation.getType() == Location.LocationType.EVERYWHERE) {
             throw new IllegalArgumentException();
         } else {
-            this.listLocation.add(newLocation);
+            this.listLocations.add(newLocation);
         }
     }
 
@@ -170,7 +169,7 @@ public class User {
         if (toRemoveLocation.getType() == Location.LocationType.EVERYWHERE) {
             throw new IllegalArgumentException();
         } else {
-            return this.listLocation.remove(toRemoveLocation);
+            return this.listLocations.remove(toRemoveLocation);
         }
     }
 }
