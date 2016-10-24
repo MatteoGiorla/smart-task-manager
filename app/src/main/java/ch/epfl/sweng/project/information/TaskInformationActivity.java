@@ -81,12 +81,19 @@ public class TaskInformationActivity extends AppCompatActivity {
      */
     private void createInformationItemList() {
         informationItemsList = new ArrayList<>();
-       /* informationItemsList.add(new InformationItem(getString(R
-                .string.title_field),
-                taskToBeDisplayed.getName()));*/
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
+        informationItemsList.add(new InformationItem(getString(R.string.author_field),
+                taskToBeDisplayed.getAuthor(), R.drawable.author_36dp));
+//        informationItemsList.add(new InformationItem(getString(R.string.location_field),
+//                taskToBeDisplayed.getLocation().toString(), R.drawable.task_location_36dp));
+        /*informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
+                taskToBeDisplayed.getDueDate().toString(), R.drawable.calendar_36dp));*/
+        informationItemsList.add(new InformationItem(getString(R.string.duration_field),
+                String.valueOf(taskToBeDisplayed.getDuration()) , R.drawable.minutes_needed_36dp));
+//        informationItemsList.add(new InformationItem(getString(R.string.energy_field),
+//                taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
     }
 
     /**

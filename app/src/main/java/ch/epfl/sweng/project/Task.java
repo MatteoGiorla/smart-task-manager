@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -46,7 +47,7 @@ public class Task implements Parcelable {
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
-    private String author;
+    private String author = "";
 
 
     /**
@@ -61,10 +62,11 @@ public class Task implements Parcelable {
         } else {
             this.name = name;
             this.description = "";
-            this.location = null;
+            LatLng coordinates = new LatLng(0, 0);
+            this.location = new Location("Every where", Location.LocationType.EVERYWHERE, coordinates);
             this.dueDate = null;
             this.durationInMinutes = 0;
-            this.energyNeeded = null;
+            this.energyNeeded = Energy.NORMAL;
             if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                 this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             } else {
@@ -107,11 +109,7 @@ public class Task implements Parcelable {
      * Getter returning a copy of the task's location
      */
     public Location getLocation() {
-        if (location == null) {
-            return null;
-        } else {
-            return new Location(location.getName(), location.getType(), location.getGPSCoordinates());
-        }
+        return location;
     }
 
     /**
