@@ -5,8 +5,10 @@ import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Task is the class representing a task
@@ -39,6 +41,7 @@ public class Task implements Parcelable {
             return new Task[size];
         }
     };
+    private long id;
     private String name;
     private String description;
     private Location location;
@@ -46,7 +49,7 @@ public class Task implements Parcelable {
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
-    private String author;
+    private List<String> listOfContributors;
 
     /**
      * Constructor of the class
@@ -58,6 +61,7 @@ public class Task implements Parcelable {
         if (name == null) {
             throw new IllegalArgumentException();
         } else {
+            this.id = 0; // TODO : appeler la méthode qui fixe l'id
             this.name = name;
             this.description = "";
             this.location = null;
@@ -65,9 +69,11 @@ public class Task implements Parcelable {
             this.durationInMinutes = 0;
             this.energyNeeded = null;
             if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-                this.author = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                this.listOfContributors = new ArrayList<String>();
+                String emailOfUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                this.listOfContributors.add(emailOfUser);
             } else {
-                this.author = "";
+                this.listOfContributors.add(""); // TODO : à améliorer (n.B. lancer une exception fait planter les tests parce que tous ne se font pas une fois l'utilisateur authentifié)
             }
         }
     }
@@ -136,13 +142,6 @@ public class Task implements Parcelable {
      */
     public Energy getEnergy() {
         return energyNeeded;
-    }
-
-    /**
-     * Getter returning the task's author
-     */
-    public String getAuthor() {
-        return author;
     }
 
     /**
