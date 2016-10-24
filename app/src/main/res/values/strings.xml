@@ -37,4 +37,9 @@
     <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_editing_task_description">Done !</string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- Energy description-->
+    <string name="low_energy">Low</string>
+    <string name="normal_energy">Normal</string>
+    <string name="high_energy">High</string>
 </resources>
