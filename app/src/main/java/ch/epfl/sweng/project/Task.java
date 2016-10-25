@@ -1,4 +1,4 @@
-package ch.epackage ch.epfl.sweng.project;
+package ch.epfl.sweng.project;
 
 import android.os.Parcel;
 import android.os.Parcelable;

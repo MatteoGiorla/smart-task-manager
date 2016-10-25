@@ -68,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_description"
                 android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:maxLines="4" />
+                android:maxLines="4"
+                android:maxLength="@string/max_length_description"/>
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>

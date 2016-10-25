@@ -1,5 +1,9 @@
 package ch.epfl.sweng.project;
 
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,34 +16,32 @@ public class User {
     private List<Location> listLocations;
     private static final String TAG = "User Class";
 
-    /**
-     * Constructor of the class with only email. The list of task's id and location
-     * are initialized with empty arrays.
-     *
-     * @param mail The email of the user
-     */
     public User(String mail) {
         if (mail != null) {
             this.email = mail;
         } else {
-            throw new NullPointerException("User email is invalid !");
+            Log.d(TAG, "Error the user doesn't exist.");
+            throw new NullPointerException();
         }
         this.listTasks = new ArrayList<String>();
         this.listLocations = new ArrayList<Location>();
     }
     /**
-     * Constructor of the class.
+     * Constructor of the class. Implementation of the fields of the class with
+     * default values.
      *
-     * @throws NullPointerException if the parameters are invalid
+     * @throws FirebaseAuthInvalidUserException if the FirebaseUser user doesn't exist.
      */
     public User(String mail, List<String> listTasks, List<Location> locations) {
-        if (mail == null || listTasks == null || locations == null) {
-            throw new NullPointerException("Invalid parameters when creating a new user");
-        } else {
+        if (mail != null) {
             this.email = mail;
-            this.listTasks = new ArrayList<String>(listTasks);
-            this.listLocations = new ArrayList<Location>(locations);
+        } else {
+            Log.d(TAG, "Error the user doesn't exist.");
+            throw new NullPointerException();
         }
+        // Default values:
+        this.listTasks = new ArrayList<String>(listTasks);
+        this.listLocations = new ArrayList<Location>(locations);
     }
 
     /**
@@ -76,7 +78,7 @@ public class User {
      * @return true if the id of the task was inside the list and was well removed, otherwise false.
      */
     public boolean removeListTasks(long idTask) {
-        return this.listTasks.remove(idTask);
+            return this.listTasks.remove(idTask);
     }
 
 
