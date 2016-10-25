@@ -23,6 +23,7 @@ import java.util.List;
 
 import ch.epfl.sweng.project.data.DatabaseContract;
 import ch.epfl.sweng.project.data.DatabaseHelper;
+import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -98,6 +99,16 @@ public class TaskFragment extends Fragment {
         listView.setAdapter(mTaskAdapter);
 
         registerForContextMenu(listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
+                intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
