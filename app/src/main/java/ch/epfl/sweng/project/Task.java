@@ -265,7 +265,7 @@ public class Task implements Parcelable {
         return new ArrayList<>(listOfContributors);
     }
 
-    public String listOfContributorToString() {
+    public String listOfContributorsToString() {
         if(listOfContributors.isEmpty())
             return "";
 
