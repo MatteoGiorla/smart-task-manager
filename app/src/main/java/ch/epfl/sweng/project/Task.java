@@ -4,8 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.DateFormat;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.Date;
 
 /**
  * Task is the class representing a task
@@ -41,7 +40,8 @@ public class Task implements Parcelable {
     private String name;
     private String description;
     private Location location;
-    private GregorianCalendar dueDate;
+    private Date dueDate;
+    private long dueDateAttribute;
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
@@ -55,29 +55,36 @@ public class Task implements Parcelable {
      * @param name Task's name
      * @param description Task's description
      * @param location Task's location
-     * @param dueDate Task's due date
+     * @param dueDateAttribute Task's due date attribute
      * @param durationInMinutes Task's duration in minutes
      * @param energyNeeded Task's energy needed
      * @param author Task's author
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-   public Task(String name, String description, Location location, GregorianCalendar dueDate,
+   public Task(String name, String description, Location location, long dueDateAttribute,
                 long durationInMinutes, Energy energyNeeded, String author) {
 
        if(location == null) {
            throw new IllegalArgumentException("Location passed to the constructor is null");
        }
-       if(dueDate == null) {
-           throw new IllegalArgumentException("Due date passed to the constructor is null");
-       }
        if(energyNeeded == null) {
            throw new IllegalArgumentException("Energy passed to the constructor is null");
+       }
+       if(name == null) {
+           throw new IllegalArgumentException("Name passed to the constructor is null");
+       }
+       if(description == null) {
+           throw new IllegalArgumentException("Description passed to the constructor is null");
+       }
+       if(author == null) {
+           throw new IllegalArgumentException("Author passed to the constructor is null");
        }
        this.name = name;
        this.description = description;
        this.durationInMinutes = durationInMinutes;
        this.author = author;
-       this.dueDate = dueDate;
+       this.dueDateAttribute = dueDateAttribute;
+       dueDate = new Date(this.dueDateAttribute);
        this.energyNeeded = energyNeeded;
        this.location = new Location(location);
        dateFormat = DateFormat.getDateInstance();
@@ -95,7 +102,7 @@ public class Task implements Parcelable {
         this(name,
                 description,
                 new Location(),
-                new GregorianCalendar(Locale.FRANCE),
+                0,
                 30,
                 Energy.NORMAL,
                 "Me myself and I");
@@ -114,7 +121,7 @@ public class Task implements Parcelable {
         setName(in.readString());
         setDescription(in.readString());
         setLocation(new Location());
-        setDueDate(new GregorianCalendar(Locale.FRANCE));
+        setDueDate(new Date(0));
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         setAuthor("Me myself and I");
@@ -146,7 +153,7 @@ public class Task implements Parcelable {
     /**
      * Getter returning a copy of the task's due date
      */
-    public GregorianCalendar getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
@@ -220,7 +227,7 @@ public class Task implements Parcelable {
      *
      * @param newDueDate The new task's due date
      */
-    public void setDueDate(GregorianCalendar newDueDate) {
+    public void setDueDate(Date newDueDate) {
         if(newDueDate == null) {
             throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
         }

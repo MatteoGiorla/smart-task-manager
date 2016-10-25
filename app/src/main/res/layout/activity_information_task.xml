@@ -40,6 +40,19 @@
 
         <FrameLayout
             android:layout_width="match_parent"
+            android:layout_height="4dp">
+
+            <!-- Trick to simulate the toolbar shadow for android pre Lollipop version -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_below="@id/title_task_information_activity"
+                android:background="@drawable/toolbar_shadow" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ListView

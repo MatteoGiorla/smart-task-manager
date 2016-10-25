@@ -44,10 +44,8 @@ public final class FirebaseDataExchangerTest {
     private void initPrivateField(){
         context = getInstrumentation().getContext();
         fDE = new FirebaseDataExchanger(context);
-        dummyTask1 = new Task("Task1");
-        dummyTask1.setDescription("dummy task1");
-        dummyTask2 = new Task("Task2");
-        dummyTask2.setDescription("dummy task2");
+        dummyTask1 = new Task("Task1", "dummy task1");
+        dummyTask2 = new Task("Task2", "dummy task2");
 
     }
 
