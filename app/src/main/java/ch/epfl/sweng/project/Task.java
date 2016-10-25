@@ -3,10 +3,9 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.text.DateFormat;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Task is the class representing a task
@@ -95,9 +94,9 @@ public class Task implements Parcelable {
     public Task(String name, String description) {
         this(name,
                 description,
-                new Location("Every where", Location.LocationType.EVERYWHERE, new LatLng(0, 0)),
-                new GregorianCalendar(2014, 12, 31),
-                0,
+                new Location(),
+                new GregorianCalendar(Locale.FRANCE),
+                30,
                 Energy.NORMAL,
                 "Me myself and I");
     }
@@ -114,9 +113,9 @@ public class Task implements Parcelable {
         }
         setName(in.readString());
         setDescription(in.readString());
-        setLocation(new Location("Every where", Location.LocationType.EVERYWHERE, new LatLng(0, 0)));
-        setDueDate(new GregorianCalendar(2014, 12, 31));
-        setDurationInMinutes(0);
+        setLocation(new Location());
+        setDueDate(new GregorianCalendar(Locale.FRANCE));
+        setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         setAuthor("Me myself and I");
         dateFormat = DateFormat.getDateInstance();

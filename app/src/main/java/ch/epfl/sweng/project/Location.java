@@ -12,7 +12,6 @@ public class Location {
     private String name;
     private LocationType type;
     private LatLng gpsCoordinates;
-    //TODO later : add icon corresponding to the location
 
     /**
      * Constructor of the class
@@ -34,12 +33,15 @@ public class Location {
         }
         this.name = name;
         this.type = type;
-        //GPS coordinates are optional and can therefore be null
         this.gpsCoordinates = gpsCoordinates;
     }
 
     public Location(Location location) {
-        new Location(location.getName(), location.getType(), location.getGPSCoordinates());
+        this(location.getName(), location.getType(), location.getGPSCoordinates());
+    }
+
+    public Location() {
+        this("Every where", LocationType.EVERYWHERE, new LatLng(0, 0));
     }
 
     /**
@@ -53,11 +55,7 @@ public class Location {
      * Getter returning the gps coordinates of the location
      */
     public LatLng getGPSCoordinates() {
-        if (this.gpsCoordinates == null){
-            return null;
-        } else {
-            return new LatLng(this.gpsCoordinates.latitude, this.gpsCoordinates.longitude);
-        }
+        return gpsCoordinates;
     }
 
     /**
@@ -74,26 +72,21 @@ public class Location {
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
-        if (this.type == LocationType.EVERYWHERE) {
-            this.name = "Everywhere";
-        } else if (newName == null) {
-            throw new IllegalArgumentException();
-        } else {
-            this.name = newName;
+        if (newName == null) {
+            throw new IllegalArgumentException("New name passed to the Location's setter is null");
         }
+        this.name = newName;
     }
 
     /**
      * Setter to modify the location GPS coordinates
      *
-     * @param gpsCoordinates The new GPS coordinates of the location
+     * @param newGpsCoordinates The new GPS coordinates of the location
      */
-    public void setGpsCoordinates(LatLng gpsCoordinates) {
-        if (this.type == LocationType.EVERYWHERE) {
-            this.gpsCoordinates = null;
-        } else {
-            //GPS coordinates are optional and can therefore be null
-            this.gpsCoordinates = gpsCoordinates;
+    public void setGpsCoordinates(LatLng newGpsCoordinates) {
+        if (newGpsCoordinates == null) {
+            throw new IllegalArgumentException("new gps coordinates passed to the Location's setter are null");
         }
+        gpsCoordinates = newGpsCoordinates;
     }
 }
