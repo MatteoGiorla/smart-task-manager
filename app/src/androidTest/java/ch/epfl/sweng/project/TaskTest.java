@@ -2,17 +2,18 @@ package ch.epfl.sweng.project;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -26,12 +27,14 @@ public class TaskTest {
     public void initValidValues() {
         String taskName = "test task";
         String taskDescription = "Task built with all parameters";
-        Location location = new Location("Office", Location.LocationType.WORKPLACE, new LatLng(80, 89));
+        Location location = new Location("Office", Location.LocationType.WORKPLACE.toString(), 80, 89);
         long dueDateAttribute = 3;
         String author = "Arthur Rimbaud";
         Task.Energy energy = Task.Energy.HIGH;
         long duration = 60;
-        testTask = new Task(taskName , taskDescription, location, dueDateAttribute, duration, energy, author);
+        List<String> listOfContributors = new ArrayList<>();
+        listOfContributors.add(author);
+        testTask = new Task(taskName , taskDescription, location, dueDateAttribute, duration, energy, listOfContributors);
     }
 
     @Rule
@@ -47,20 +50,23 @@ public class TaskTest {
 
         String locationNameTest = "location test workplace";
         Location.LocationType locationTypeTest = Location.LocationType.WORKPLACE;
-        LatLng latLngTest = new LatLng(32, 55);
-        Location locationTest = new Location(locationNameTest, locationTypeTest, latLngTest);
+        double latTest = 32;
+        double longTest = 55;
+        Location locationTest = new Location(locationNameTest, locationTypeTest.toString(), latTest, longTest);
         long dueDateAttributesTest = 0;
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
         String authorTest = "A test author";
+        List<String> listContributorsTest = new ArrayList<>();
+        listContributorsTest.add(authorTest);
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateAttributesTest, durationTest, energyTest, authorTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateAttributesTest, durationTest, energyTest, listContributorsTest);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
         assertEquals(locationTest.getName(), newTaskTest.getLocation().getName());
-        assertEquals(locationTest.getGPSCoordinates().longitude, newTaskTest.getLocation().getGPSCoordinates().longitude);
-        assertEquals(locationTest.getGPSCoordinates().latitude, newTaskTest.getLocation().getGPSCoordinates().latitude);
+        assertEquals(longTest, newTaskTest.getLocation().getLongitude());
+        assertEquals(latTest, newTaskTest.getLocation().getLatitude());
         assertEquals(locationTest.getType(), newTaskTest.getLocation().getType());
         assertEquals(dueDateAttributesTest, newTaskTest.getDueDate().getTime());
         assertEquals(durationTest, newTaskTest.getDuration());
@@ -105,22 +111,23 @@ public class TaskTest {
     public void testTaskSetLocation() {
         String newLocationName = "Home";
         Location.LocationType newLocationType = Location.LocationType.HOME;
-        LatLng newLatLng = new LatLng(12, 17);
-        Location newLocation = new Location(newLocationName, newLocationType, newLatLng);
+        double newLat = 12;
+        double newLong = 17;
+        Location newLocation = new Location(newLocationName, newLocationType.toString(), newLat, newLong);
 
         testTask.setLocation(newLocation);
 
         assertEquals(newLocationName, newLocation.getName());
         assertEquals(newLocationType, newLocation.getType());
-        assertEquals(newLatLng.latitude, newLocation.getGPSCoordinates().latitude);
-        assertEquals(newLatLng.longitude, newLocation.getGPSCoordinates().longitude);
+        assertEquals(newLat, newLocation.getLatitude());
+        assertEquals(newLong, newLocation.getLongitude());
     }
 
     @Test
     public void testTaskSetDueDate() {
         Date newDueDate = new Date(0);
         testTask.setDueDate(newDueDate);
-        assertEquals(0, testTask.getDueDate().getTime());       //Peut-être pas ça !!!
+        assertEquals(0, testTask.getDueDate().getTime());
     }
 
     @Test
@@ -137,8 +144,8 @@ public class TaskTest {
 
     @Test
     public void testTaskSetAuthor() {
-        testTask.setAuthor("New author");
-        assertEquals("New author", testTask.getAuthor());
+        testTask.addContributor("New author");
+        assertTrue(testTask.getListOfContributors().contains("New author"));
     }
 
     /**
@@ -179,9 +186,9 @@ public class TaskTest {
     }
 
     @Test
-    public void testTaskSetAuthorException() {
+    public void testTaskAddContributorException() {
         thrownException.expect(IllegalArgumentException.class);
-        testTask.setAuthor(null);
+        testTask.addContributor(null);
     }
 
     @Test

@@ -4,7 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Task is the class representing a task
@@ -45,7 +48,7 @@ public class Task implements Parcelable {
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
-    private String author;
+    private List<String> listOfConstributors;
     private DateFormat dateFormat;
 
 
@@ -58,11 +61,11 @@ public class Task implements Parcelable {
      * @param dueDateAttribute Task's due date attribute
      * @param durationInMinutes Task's duration in minutes
      * @param energyNeeded Task's energy needed
-     * @param author Task's author
+     * @param listOfConstributors Task's list of contributors
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
    public Task(String name, String description, Location location, long dueDateAttribute,
-                long durationInMinutes, Energy energyNeeded, String author) {
+                long durationInMinutes, Energy energyNeeded, List<String> listOfConstributors) {
 
        if(location == null) {
            throw new IllegalArgumentException("Location passed to the constructor is null");
@@ -76,13 +79,13 @@ public class Task implements Parcelable {
        if(description == null) {
            throw new IllegalArgumentException("Description passed to the constructor is null");
        }
-       if(author == null) {
-           throw new IllegalArgumentException("Author passed to the constructor is null");
+       if(listOfConstributors == null || listOfConstributors.size() == 0) {
+           throw new IllegalArgumentException("List of contributors passed to the constructor is invalid");
        }
        this.name = name;
        this.description = description;
        this.durationInMinutes = durationInMinutes;
-       this.author = author;
+       this.listOfConstributors = new ArrayList<>(listOfConstributors);
        this.dueDateAttribute = dueDateAttribute;
        dueDate = new Date(this.dueDateAttribute);
        this.energyNeeded = energyNeeded;
@@ -105,7 +108,7 @@ public class Task implements Parcelable {
                 0,
                 30,
                 Energy.NORMAL,
-                "Me myself and I");
+                Arrays.asList("Me", "myself", "I"));
     }
 
     /**
@@ -124,7 +127,10 @@ public class Task implements Parcelable {
         setDueDate(new Date(0));
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
-        setAuthor("Me myself and I");
+        listOfConstributors = new ArrayList<>();
+        addContributor("Me");
+        addContributor("myself");
+        addContributor("I");
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -176,10 +182,10 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning the task's author
+     * Getter returning the task's list of contributors
      */
-    public String getAuthor() {
-        return author;
+    public List<String> getAuthor() {
+        return new ArrayList<>(listOfConstributors);
     }
 
     /**
@@ -255,11 +261,32 @@ public class Task implements Parcelable {
         energyNeeded= newEnergyNeeded;
     }
 
-    public void setAuthor(String newAuthor) {
-        if(newAuthor == null) {
-            throw new IllegalArgumentException("newAuthor passed to the Task's setter is null");
+    public List<String> getListOfContributors() {
+        return new ArrayList<>(listOfConstributors);
+    }
+
+    public String listOfContributorToString() {
+        if(listOfConstributors.isEmpty())
+            return "";
+
+       StringBuilder contributorsToString = new StringBuilder();
+        for(String contributor: listOfConstributors) {
+            contributorsToString.append(contributor+", ");
         }
-        author = newAuthor;
+        contributorsToString.delete(contributorsToString.length()-2, contributorsToString.length()); //remove the last ", "
+        return contributorsToString.toString();
+    }
+
+    public boolean addContributor(String contributor) {
+        if(contributor == null)
+            throw new IllegalArgumentException("Contributor to be added null");
+        return listOfConstributors.add(contributor);
+    }
+
+    public boolean deleteContributor(String contributor) {
+        if(contributor == null || !listOfConstributors.contains(contributor))
+            throw new IllegalArgumentException("Constributor to be deleted invalid");
+        return listOfConstributors.remove(contributor);
     }
 
     /**

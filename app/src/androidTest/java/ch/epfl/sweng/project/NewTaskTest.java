@@ -41,9 +41,6 @@ import static org.junit.Assert.assertThat;
 public final class NewTaskTest {
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
-    private String name;
-    private String description;
-    private Task task;
 
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
@@ -56,9 +53,6 @@ public final class NewTaskTest {
     public void initValidString() {
         mTitleToBeTyped = "test title number ";
         mDescriptionToBeTyped = "test description number ";
-        name = "task";
-        description = "The first task";
-        task = new Task(name, description);
         //Empty the database
         emptyDatabase();
     }

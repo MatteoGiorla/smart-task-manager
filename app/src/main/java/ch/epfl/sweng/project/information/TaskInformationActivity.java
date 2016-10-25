@@ -85,7 +85,7 @@ public class TaskInformationActivity extends AppCompatActivity {
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.author_field),
-                taskToBeDisplayed.getAuthor(), R.drawable.author_36dp));
+                taskToBeDisplayed.listOfContributorToString().toString(), R.drawable.author_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
                 taskToBeDisplayed.getLocation().getName(), R.drawable.task_location_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
