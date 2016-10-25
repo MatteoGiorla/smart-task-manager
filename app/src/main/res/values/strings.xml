@@ -10,8 +10,8 @@
     <string name="logout_menu">Log Out</string>
 
     <!-- Hint strings-->
-    <string name="hint_title">Title</string>
-    <string name="hint_description">Description</string>
+    <string name="hint_title">Enter title</string>
+    <string name="hint_description">Enter description</string>
 
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google or Facebook account.</string>
@@ -42,4 +42,16 @@
     <string name="low_energy">Low</string>
     <string name="normal_energy">Normal</string>
     <string name="high_energy">High</string>
+
+    <string-array name="energy_array">
+        <item>@string/low_energy</item>
+        <item>@string/normal_energy</item>
+        <item>@string/high_energy</item>
+    </string-array>
+
+    <string-array name="location_array">
+        <item>Home</item>
+        <item>Office</item>
+        <item>Everywhere</item>
+    </string-array>
 </resources>
