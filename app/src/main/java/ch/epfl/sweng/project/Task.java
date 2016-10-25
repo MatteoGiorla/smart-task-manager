@@ -48,7 +48,7 @@ public class Task implements Parcelable {
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
-    private List<String> listOfConstributors;
+    private List<String> listOfContributors;
     private DateFormat dateFormat;
 
 
@@ -85,7 +85,7 @@ public class Task implements Parcelable {
        this.name = name;
        this.description = description;
        this.durationInMinutes = durationInMinutes;
-       this.listOfConstributors = new ArrayList<>(listOfContributors);
+       this.listOfContributors = new ArrayList<>(listOfContributors);
        this.dueDateAttribute = dueDateAttribute;
        dueDate = new Date(this.dueDateAttribute);
        this.energyNeeded = energyNeeded;
@@ -127,7 +127,7 @@ public class Task implements Parcelable {
         setDueDate(new Date(0));
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
-        listOfConstributors = new ArrayList<>();
+        listOfContributors = new ArrayList<>();
         addContributor("Me");
         addContributor("myself");
         addContributor("I");
@@ -185,7 +185,7 @@ public class Task implements Parcelable {
      * Getter returning the task's list of contributors
      */
     public List<String> getAuthor() {
-        return new ArrayList<>(listOfConstributors);
+        return new ArrayList<>(listOfContributors);
     }
 
     /**
@@ -262,16 +262,16 @@ public class Task implements Parcelable {
     }
 
     public List<String> getListOfContributors() {
-        return new ArrayList<>(listOfConstributors);
+        return new ArrayList<>(listOfContributors);
     }
 
     public String listOfContributorToString() {
-        if(listOfConstributors.isEmpty())
+        if(listOfContributors.isEmpty())
             return "";
 
        StringBuilder contributorsToString = new StringBuilder();
-        for(String contributor: listOfConstributors) {
-            contributorsToString.append(contributor+", ");
+        for(String contributor: listOfContributors) {
+            contributorsToString.append(contributor).append(", ");
         }
         contributorsToString.delete(contributorsToString.length()-2, contributorsToString.length()); //remove the last ", "
         return contributorsToString.toString();
@@ -280,13 +280,13 @@ public class Task implements Parcelable {
     public boolean addContributor(String contributor) {
         if(contributor == null)
             throw new IllegalArgumentException("Contributor to be added null");
-        return listOfConstributors.add(contributor);
+        return listOfContributors.add(contributor);
     }
 
     public boolean deleteContributor(String contributor) {
-        if(contributor == null || !listOfConstributors.contains(contributor))
-            throw new IllegalArgumentException("Constributor to be deleted invalid");
-        return listOfConstributors.remove(contributor);
+        if(contributor == null || !listOfContributors.contains(contributor))
+            throw new IllegalArgumentException("Contributor to be deleted invalid");
+        return listOfContributors.remove(contributor);
     }
 
     /**
