@@ -26,6 +26,7 @@ import ch.epfl.sweng.project.data.DatabaseHelper;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
+import static ch.epfl.sweng.project.information.TaskInformationActivity.IS_MODIFIED_KEY;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -33,7 +34,9 @@ import static android.app.Activity.RESULT_OK;
 public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
+    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
+    private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DatabaseHelper mDatabase;
@@ -104,9 +107,9 @@ public class TaskFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
                 intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-                startActivity(intent);
+                startActivityForResult(intent, displayTaskRequestCode);
             }
         });
 
@@ -169,25 +172,31 @@ public class TaskFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
-        if (requestCode == editTaskRequestCode) {
-            if (resultCode == RESULT_OK) {
-                // Get result from the result intent.
-                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
-                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
-                if (indexEditedTask == -1 || editedTask == null) {
-                    throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
-                } else {
-                    boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
-                    if(!correctlyEdited) {
-                        throw new SQLiteException("More that was row was edited !");
-                    }
-                    taskList.set(indexEditedTask, editedTask);
-                    mTaskAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            editedTask.getName() + " has been updated !",
-                            Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
+            actionOnActivityResult(data);
+        } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
+            boolean isTaskModified = data.getBooleanExtra(IS_MODIFIED_KEY, false);
+            if(isTaskModified)
+                actionOnActivityResult(data);
+        }
+    }
+
+    private void actionOnActivityResult(Intent data) {
+        // Get result from the result intent.
+        Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
+        int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+        if (indexEditedTask == -1 || editedTask == null) {
+            throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
+        } else {
+            boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
+            if(!correctlyEdited) {
+                throw new SQLiteException("More that was row was edited !");
             }
+            taskList.set(indexEditedTask, editedTask);
+            mTaskAdapter.notifyDataSetChanged();
+            Toast.makeText(getActivity().getApplicationContext(),
+                    editedTask.getName() + " has been updated !",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

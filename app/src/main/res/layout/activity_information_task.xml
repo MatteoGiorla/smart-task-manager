@@ -69,7 +69,6 @@
         android:id="@+id/edit_button_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="8"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -90,7 +89,8 @@
             app:backgroundTint="@color/blue"
             app:elevation="0dp"
             app:fabSize="normal"
-            android:paddingTop="10dp" />
+            android:paddingTop="10dp"
+            android:onClick="openEditTaskActivity"/>
     </FrameLayout>
 
 

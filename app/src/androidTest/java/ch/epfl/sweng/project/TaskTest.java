@@ -34,7 +34,7 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        testTask = new Task(taskName , taskDescription, location, dueDateAttribute, duration, energy, listOfContributors);
+        testTask = new Task(taskName , taskDescription, location, dueDateAttribute, duration, energy.toString(), listOfContributors);
     }
 
     @Rule
@@ -60,7 +60,7 @@ public class TaskTest {
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateAttributesTest, durationTest, energyTest, listContributorsTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateAttributesTest, durationTest, energyTest.toString(), listContributorsTest);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());

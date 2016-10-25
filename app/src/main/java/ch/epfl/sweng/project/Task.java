@@ -65,7 +65,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
    public Task(String name, String description, Location location, long dueDateAttribute,
-                long durationInMinutes, Energy energyNeeded, List<String> listOfContributors) {
+                long durationInMinutes, String energyNeeded, List<String> listOfContributors) {
 
        if(location == null) {
            throw new IllegalArgumentException("Location passed to the constructor is null");
@@ -88,7 +88,7 @@ public class Task implements Parcelable {
        this.listOfContributors = new ArrayList<>(listOfContributors);
        this.dueDateAttribute = dueDateAttribute;
        dueDate = new Date(this.dueDateAttribute);
-       this.energyNeeded = energyNeeded;
+       this.energyNeeded = Energy.valueOf(energyNeeded);
        this.location = new Location(location);
        dateFormat = DateFormat.getDateInstance();
    }
@@ -107,7 +107,7 @@ public class Task implements Parcelable {
                 new Location(),
                 0,
                 30,
-                Energy.NORMAL,
+                Energy.NORMAL.toString(),
                 Arrays.asList("Me", "myself", "I"));
     }
 
