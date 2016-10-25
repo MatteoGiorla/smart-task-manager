@@ -61,11 +61,11 @@ public class Task implements Parcelable {
      * @param dueDateAttribute Task's due date attribute
      * @param durationInMinutes Task's duration in minutes
      * @param energyNeeded Task's energy needed
-     * @param listOfConstributors Task's list of contributors
+     * @param listOfContributors Task's list of contributors
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
    public Task(String name, String description, Location location, long dueDateAttribute,
-                long durationInMinutes, Energy energyNeeded, List<String> listOfConstributors) {
+                long durationInMinutes, Energy energyNeeded, List<String> listOfContributors) {
 
        if(location == null) {
            throw new IllegalArgumentException("Location passed to the constructor is null");
@@ -79,13 +79,13 @@ public class Task implements Parcelable {
        if(description == null) {
            throw new IllegalArgumentException("Description passed to the constructor is null");
        }
-       if(listOfConstributors == null || listOfConstributors.size() == 0) {
+       if(listOfContributors == null || listOfContributors.size() == 0) {
            throw new IllegalArgumentException("List of contributors passed to the constructor is invalid");
        }
        this.name = name;
        this.description = description;
        this.durationInMinutes = durationInMinutes;
-       this.listOfConstributors = new ArrayList<>(listOfConstributors);
+       this.listOfConstributors = new ArrayList<>(listOfContributors);
        this.dueDateAttribute = dueDateAttribute;
        dueDate = new Date(this.dueDateAttribute);
        this.energyNeeded = energyNeeded;
