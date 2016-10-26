@@ -1,18 +1,14 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import ch.epfl.sweng.project.data.DatabaseContract;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -38,7 +34,7 @@ import static org.junit.Assert.assertThat;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class NewTaskTest {
+public final class NewTaskTest extends SuperTest{
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
 
@@ -55,18 +51,6 @@ public final class NewTaskTest {
         mDescriptionToBeTyped = "test description number ";
         //Empty the database
         emptyDatabase();
-    }
-
-    //Empty the database once the tests are finished.
-    @After
-    public void tearDown() {
-        emptyDatabase();
-    }
-
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
     }
 
     @Test
@@ -178,18 +162,5 @@ public final class NewTaskTest {
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
         pressBack();
-    }
-
-    /**
-     *Method to add the task to enhance modularity of the tests.
-     *
-     * @param taskTitle the title of the task to add
-     * @param taskDescription the description of the task to add
-     */
-    private void createATask(String taskTitle, String taskDescription){
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
-        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }

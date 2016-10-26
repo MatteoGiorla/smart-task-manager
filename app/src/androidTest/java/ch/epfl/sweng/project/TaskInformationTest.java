@@ -1,23 +1,19 @@
 package ch.epfl.sweng.project;
 
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.project.data.DatabaseContract;
-
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -25,8 +21,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-
-public class TaskInformationTest {
+@RunWith(AndroidJUnit4.class)
+public class TaskInformationTest extends SuperTest{
 
     private Task task;
 
@@ -43,11 +39,6 @@ public class TaskInformationTest {
                 .inAdapterView(withId(R.id.list_view_tasks))
                 .atPosition(0)
                 .perform(click());
-    }
-
-    @After
-    public void tearDown() {
-        emptyDatabase();
     }
 
     @After
@@ -119,18 +110,4 @@ public class TaskInformationTest {
                 .atPosition(5)
                 .check(matches(hasDescendant(withText(String.valueOf(task.getEnergy())))));
     }
-
-    private void createATask(String taskTitle, String taskDescription){
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
-        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
-    }
-
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
-    }
-
 }

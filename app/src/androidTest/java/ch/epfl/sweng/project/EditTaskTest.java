@@ -1,20 +1,14 @@
 package ch.epfl.sweng.project;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.project.data.DatabaseContract;
-
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -34,7 +28,7 @@ import static org.hamcrest.core.IsNot.not;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class EditTaskTest {
+public final class EditTaskTest extends SuperTest{
     private String mEditedTitle;
     private String mEditedDescription;
     private String mOldTitle;
@@ -56,21 +50,6 @@ public final class EditTaskTest {
 
         //Make sur the database is empty before starting the tests
         emptyDatabase();
-    }
-
-    @After
-    public void tearDown() {
-        //Empty the database once the tests are finished.
-        emptyDatabase();
-    }
-
-    /**
-     * Empty the local database of the app.
-     */
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
     }
 
     /**
@@ -165,18 +144,5 @@ public final class EditTaskTest {
 
         //empty the database for the next test
         emptyDatabase();
-    }
-
-    /**
-     *Method to add the task to enhance modularity of the tests.
-     *
-     * @param taskTitle the title of the task to add
-     * @param taskDescription the description of the task to add
-     */
-    private void createATask(String taskTitle, String taskDescription){
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
-        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }

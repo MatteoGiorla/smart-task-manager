@@ -1,18 +1,12 @@
 package ch.epfl.sweng.project;
 
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.project.data.DatabaseContract;
-
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -25,7 +19,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-public class EditInformationTaskTest {
+public class EditInformationTaskTest extends SuperTest{
 
     @Before
     public void addTheTask() {
@@ -41,21 +35,9 @@ public class EditInformationTaskTest {
                 .perform(click());
     }
 
-    @After
-    public void tearDown() {
-        emptyDatabase();
-    }
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
-
-    private void createATask(String taskTitle, String taskDescription){
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
-        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
-    }
 
     @Test
     public void canEditDescription() {
@@ -91,13 +73,4 @@ public class EditInformationTaskTest {
 
         pressBack();
     }
-
-
-
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
-    }
-
 }
