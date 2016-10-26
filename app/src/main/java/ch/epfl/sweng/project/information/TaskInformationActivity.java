@@ -101,11 +101,6 @@ public class TaskInformationActivity extends AppCompatActivity {
                 informationItemsList.clear();
                 createInformationItemList();
                 mInformationAdapter.notifyDataSetChanged();
-
-                intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
-                intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
-                intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
-                setResult(RESULT_OK, intent);
             }
         }
     }
@@ -182,6 +177,10 @@ public class TaskInformationActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
+            intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }
