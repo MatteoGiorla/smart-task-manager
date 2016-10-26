@@ -176,7 +176,7 @@ public class FirebaseDataExchanger implements DataExchanger {
                     String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);
                     Double longitude = data.child("longitude").getValue(Double.class);
-
+                    //Create location
                     Location location = new Location(name, type, latitude, longitude);
                     listLocations.add(location);
                 }
