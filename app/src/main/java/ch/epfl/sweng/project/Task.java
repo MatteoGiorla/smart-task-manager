@@ -167,6 +167,11 @@ public class Task implements Parcelable {
         return dueDate;
     }
 
+
+    /**
+     * Transform the date as a string
+     * @return The formatted date
+     */
     public String dueDateToString() {
         return dateFormat.format(dueDate.getTime());
     }
@@ -217,6 +222,7 @@ public class Task implements Parcelable {
      * Setter to modify the task's location
      *
      * @param newLocation The new task's location
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setLocation(Location newLocation) {
         if(newLocation == null) {
@@ -229,6 +235,7 @@ public class Task implements Parcelable {
      * Setter to modify the task's due date
      *
      * @param newDueDate The new task's due date
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setDueDate(Date newDueDate) {
         if(newDueDate == null) {
@@ -250,6 +257,7 @@ public class Task implements Parcelable {
      * Setter to modify the task's energy need
      *
      * @param newEnergyNeeded The new task's energy need
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setEnergyNeeded(Energy newEnergyNeeded) {
         if(newEnergyNeeded == null) {
@@ -258,10 +266,21 @@ public class Task implements Parcelable {
         energyNeeded= newEnergyNeeded;
     }
 
+    /**
+     * Getter returning the list of contributors of the task
+     *
+     * @return list of contributors
+     */
     public List<String> getListOfContributors() {
         return new ArrayList<>(listOfContributors);
     }
 
+    /**
+     * Getter returning the list of contributors of the task
+     * as a string.
+     *
+     * @return list of contributors formatted as a string.
+     */
     public String listOfContributorsToString() {
         if(listOfContributors.isEmpty())
             return "";
@@ -274,6 +293,11 @@ public class Task implements Parcelable {
         return contributorsToString.toString();
     }
 
+    /**
+     * Add a given contributor to the list of contributors
+     *
+     * @param contributor Email of the contributor
+     */
     public void addContributor(String contributor) {
         if(contributor == null)
             listOfContributors.add(User.DEFAULT_EMAIL);
@@ -281,6 +305,12 @@ public class Task implements Parcelable {
         listOfContributors.add(contributor);
     }
 
+    /**
+     * Delete a given contributor of the list of contributors
+     *
+     * @param contributor Email of the contributor
+     * @throws IllegalArgumentException if the argument is null
+     */
     public boolean deleteContributor(String contributor) {
         if(contributor == null || !listOfContributors.contains(contributor))
             throw new IllegalArgumentException("Contributor to be deleted invalid");
