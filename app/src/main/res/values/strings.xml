@@ -26,6 +26,7 @@
 
     <!-- Maximum lengths -->
     <string name="max_length_title">20</string>
+    <string name="max_length_description">150</string>
 
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
@@ -35,6 +36,19 @@
     <string name="button_location_description">Select your Location</string>
     <string name="button_vitality_description">Select your vitality</string>
     <string name="button_time_description">Select the time at your disposal</string>
-    <string name="done_editing_task_description">Done !</string>
+    <string name="done_task_description">Done !</string>
+
+
+    <string name="image_information_field_description">Image</string>
+
+    <!-- Fields titles of task information activity -->
+    <string name="description_field">Description</string>
+    <string name="location_field">Task\'s location</string>
+    <string name="due_date_field">Deadline</string>
+    <string name="duration_field">Duration (in minutes)</string>
+    <string name="energy_field">Energy needed</string>
+    <string name="contributors_field">Contributor(s)</string>
+
+
     <string name="title_activity_maps">Map</string>
 </resources>
