@@ -16,6 +16,6 @@ public class StateEnergy {
     }
 
     public Task.Energy getEnergy() {
-        return energy; //Task.Energy.values()[energy];
+        return energy;
     }
 }

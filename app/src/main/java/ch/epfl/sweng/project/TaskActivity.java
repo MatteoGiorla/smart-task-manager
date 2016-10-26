@@ -1,9 +1,14 @@
 package ch.epfl.sweng.project;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +18,12 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -26,9 +35,19 @@ public abstract class TaskActivity extends AppCompatActivity {
     protected Intent intent;
     protected ArrayList<Task> taskList;
     private EditText titleEditText;
+    private Spinner mLocation;
+    private Spinner mDuration;
+    private Spinner mEnergy;
     String title;
     String description;
+    static int taskDay;
+    static int taskMonth;
+    static int taskYear;
+    String location;
+    long duration;
+    Task.Energy energy;
     private ImageButton doneEditButton;
+    private static Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -58,6 +77,45 @@ public abstract class TaskActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
+
+        mButton = (Button)findViewById(R.id.pick_date);
+
+        mLocation = (Spinner)findViewById(R.id.spinner);
+
+        mDuration = (Spinner)findViewById(R.id.spinner3);
+
+        /*
+        * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
+         */
+        ArrayAdapter spinnerArrayAdapter1 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, new StateDuration[] {
+                new StateDuration( 5, "5 minutes"),
+                new StateDuration( 10, "10 minutes"),
+                new StateDuration(30, "30 minutes"),
+                new StateDuration(60, "1 hour"),
+                new StateDuration(120, "2 hours"),
+                new StateDuration(240, "4 hours"),
+                new StateDuration(480, "1 day"),
+                new StateDuration(960, "2 days"),
+                new StateDuration(1920, "4 days"),
+                new StateDuration(3360, "1 week"),
+                new StateDuration(6720, "2 weeks"),
+                new StateDuration(13440, "1 month")
+
+        });
+
+        mDuration.setAdapter(spinnerArrayAdapter1);
+
+        mEnergy = (Spinner)findViewById(R.id.spinner2);
+
+        ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, "Low"),
+                new StateEnergy(Task.Energy.NORMAL, "Normal"),
+                new StateEnergy(Task.Energy.HIGH, "High")
+        });
+
+        mEnergy.setAdapter(spinnerArrayAdapter2);
     }
 
     /**
@@ -152,6 +210,9 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
+                location = mLocation.getSelectedItem().toString();
+                duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+                energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -201,5 +262,31 @@ public abstract class TaskActivity extends AppCompatActivity {
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            // TODO display differently the date depend on the region of the user
+            mButton.setText(day +"."+ month +"."+ year);
+            taskDay = day;
+            taskMonth = month;
+            taskYear = year;
+        }
     }
 }
