@@ -25,7 +25,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Class which represents an activity regarding a task
@@ -48,6 +50,8 @@ public abstract class TaskActivity extends AppCompatActivity {
     Task.Energy energy;
     private ImageButton doneEditButton;
     private static Button mButton;
+    private static DateFormat dateFormat = DateFormat.getDateInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -80,28 +84,28 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mButton = (Button)findViewById(R.id.pick_date);
 
+        //a supprimer plus tard
         mLocation = (Spinner)findViewById(R.id.spinner);
 
         mDuration = (Spinner)findViewById(R.id.spinner3);
 
         /*
-        * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
+         * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter spinnerArrayAdapter1 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, new StateDuration[] {
-                new StateDuration( 5, "5 minutes"),
-                new StateDuration( 10, "10 minutes"),
-                new StateDuration(30, "30 minutes"),
-                new StateDuration(60, "1 hour"),
-                new StateDuration(120, "2 hours"),
-                new StateDuration(240, "4 hours"),
-                new StateDuration(480, "1 day"),
-                new StateDuration(960, "2 days"),
-                new StateDuration(1920, "4 days"),
-                new StateDuration(3360, "1 week"),
-                new StateDuration(6720, "2 weeks"),
-                new StateDuration(13440, "1 month")
-
+                new StateDuration(5, getString(R.string.duration5m)),
+                new StateDuration(15, getString(R.string.duration15m)),
+                new StateDuration(30, getString(R.string.duration30m)),
+                new StateDuration(60, getString(R.string.duration1h)),
+                new StateDuration(120, getString(R.string.duration2h)),
+                new StateDuration(240, getString(R.string.duration4h)),
+                new StateDuration(480, getString(R.string.duration1d)),
+                new StateDuration(960, getString(R.string.duration2d)),
+                new StateDuration(1920, getString(R.string.duration4d)),
+                new StateDuration(3360, getString(R.string.duration1w)),
+                new StateDuration(6720, getString(R.string.duration2w)),
+                new StateDuration(13440, getString(R.string.duration1m))
         });
 
         mDuration.setAdapter(spinnerArrayAdapter1);
@@ -110,12 +114,25 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
-                new StateEnergy(Task.Energy.LOW, "Low"),
-                new StateEnergy(Task.Energy.NORMAL, "Normal"),
-                new StateEnergy(Task.Energy.HIGH, "High")
+                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
+                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
+                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
         });
 
         mEnergy.setAdapter(spinnerArrayAdapter2);
+/*
+        //A ADAPTER
+        mLocation = (Spinner)findViewById(R.id.locationSpinner);
+
+        ArrayAdapter spinnerArrayAdapter3 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item, new StateLocation[] {
+                for (elem in listOfLocations) {
+                    new StateLocation(ID, TITRE DE LA LOCATION)
+                }
+        });
+
+        mLocation.setAdapter(spinnerArrayAdapter3);
+ */
     }
 
     /**
@@ -280,10 +297,14 @@ public abstract class TaskActivity extends AppCompatActivity {
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            // TODO display differently the date depend on the region of the user
-            mButton.setText(day +"."+ month +"."+ year);
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            Date dateRepresentation = cal.getTime();
+            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
             taskDay = day;
             taskMonth = month;
             taskYear = year;

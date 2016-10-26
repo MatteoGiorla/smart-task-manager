@@ -57,30 +57,22 @@
     <string name="normal_energy">Normal</string>
     <string name="high_energy">High</string>
 
-    <string-array name="energy_array">
-        <item>@string/low_energy</item>
-        <item>@string/normal_energy</item>
-        <item>@string/high_energy</item>
-    </string-array>
-
     <string-array name="location_array">
+        <item>Everywhere</item>
         <item>Home</item>
         <item>Office</item>
-        <item>Everywhere</item>
     </string-array>
 
-    <string-array name="duration_array">
-        <item>5 minutes</item>
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>4 hours</item>
-        <item>1 day</item>
-        <item>2 days</item>
-        <item>4 days</item>
-        <item>1 week</item>
-        <item>2 weeks</item>
-        <item>1 month</item>
-    </string-array>
+    <string name="duration5m">5 minutes</string>
+    <string name="duration15m">10 minutes</string>
+    <string name="duration30m">30 minutes</string>
+    <string name="duration1h">1 hour</string>
+    <string name="duration2h">2 hours</string>
+    <string name="duration4h">4 hours</string>
+    <string name="duration1d">1 day</string>
+    <string name="duration2d">2 days</string>
+    <string name="duration4d">4 days</string>
+    <string name="duration1w">1 week</string>
+    <string name="duration2w">2 weeks</string>
+    <string name="duration1m">1 month</string>
 </resources>
