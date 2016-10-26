@@ -20,15 +20,14 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public final class LocationTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
     private String name;
     private Location location;
     private Location defaultLocation;
     private double latitude;
     private double longitude;
     private Location.LocationType type;
-
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
 
     @Before
     public void initValidLocation() {

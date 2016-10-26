@@ -24,9 +24,9 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
+    private static boolean isAlreadyPersistent = false;
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
-    private static boolean isAlreadyPersistent = false;
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -40,7 +40,7 @@ public final class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Make the database persistent, must be called before anything is done in the database.
-        if(!isAlreadyPersistent) {
+        if (!isAlreadyPersistent) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             isAlreadyPersistent = true;
         }
@@ -78,7 +78,7 @@ public final class MainActivity extends AppCompatActivity {
                 if (Profile.getCurrentProfile() != null) {
                     LoginManager.getInstance().logOut(); // log out the facebook button
                 }
-                Intent intent = new  Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -96,7 +96,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
-        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
+        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) fragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 

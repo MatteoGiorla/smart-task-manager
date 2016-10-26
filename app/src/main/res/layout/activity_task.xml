@@ -11,15 +11,15 @@
         android:theme="@style/ActionBar">
 
         <ImageButton
-            android:src="@drawable/ic_done_white_36dp"
-            android:contentDescription="@string/done_task_description"
             android:id="@+id/edit_done_button_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@null"
             android:layout_gravity="end"
-            android:paddingRight="10dp"
+            android:background="@null"
+            android:contentDescription="@string/done_task_description"
             android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_done_white_36dp"
             tools:ignore="RtlSymmetry" />
 
     </android.support.v7.widget.Toolbar>
@@ -34,13 +34,13 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="80dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:paddingTop="80dp">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/title_task_layout"
@@ -52,8 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_title"
-                android:maxLength="@string/max_length_title"
-                android:inputType="textPersonName|textCapSentences"/>
+                android:inputType="textPersonName|textCapSentences"
+                android:maxLength="@string/max_length_title" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -68,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_description"
                 android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:maxLines="4"
-                android:maxLength="@string/max_length_description"/>
+                android:maxLength="@string/max_length_description"
+                android:maxLines="4" />
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>

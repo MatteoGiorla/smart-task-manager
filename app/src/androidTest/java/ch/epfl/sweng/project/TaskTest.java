@@ -21,6 +21,8 @@ import static junit.framework.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class TaskTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
     private Task testTask;
 
     @Before
@@ -34,11 +36,8 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        testTask = new Task(taskName , taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
+        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
     }
-
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
 
     /**
      * Test that the getters and setters work correctly with parameters

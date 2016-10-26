@@ -7,20 +7,20 @@
 
     <TextView
         android:id="@+id/list_entry_title"
-        android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/task_title_size" />
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/list_entry_description"
-        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding_between_tasks"
-        android:textSize="@dimen/task_description_size"
         android:ellipsize="end"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:paddingBottom="@dimen/padding_between_tasks"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_description_size" />
 
 </LinearLayout>

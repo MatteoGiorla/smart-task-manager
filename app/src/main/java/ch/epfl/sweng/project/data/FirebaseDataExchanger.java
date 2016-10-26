@@ -65,7 +65,7 @@ public class FirebaseDataExchanger implements DataExchanger {
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
+                if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
                     Toast.makeText(mContext, "You don't have any tasks !", Toast.LENGTH_SHORT).show();
                 }
                 mTaskList.clear();
@@ -103,7 +103,7 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public void addNewTask(Task task) {
-        for(String mail : task.getListOfContributors()) {
+        for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
@@ -113,7 +113,7 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public void deleteTask(Task task) {
-        for(String mail : task.getListOfContributors()) {
+        for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.removeValue();
         }
@@ -148,10 +148,10 @@ public class FirebaseDataExchanger implements DataExchanger {
         DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
         final List<Location> listLocations = new ArrayList<>();
 
-         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     String name = (String) data.child("name").getValue();
                     String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);

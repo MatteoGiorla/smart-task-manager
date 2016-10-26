@@ -17,16 +17,16 @@ import java.util.ArrayList;
  * Class which represents an activity regarding a task
  */
 public abstract class TaskActivity extends AppCompatActivity {
-    private TextInputLayout textInputLayoutTitle;
     Intent intent;
     ArrayList<Task> taskList;
-    private EditText titleEditText;
     String title;
     String description;
+    private TextInputLayout textInputLayoutTitle;
+    private EditText titleEditText;
     private ImageButton doneEditButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
 
@@ -76,7 +76,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private void checkTaskList() {
-        if(taskList == null) {
+        if (taskList == null) {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
         }
     }
@@ -101,7 +101,7 @@ public abstract class TaskActivity extends AppCompatActivity {
      * This class is used to check on runtime if the inputs written by the user
      * are valid or not.
      */
-    private class TaskTextWatcher implements TextWatcher{
+    private class TaskTextWatcher implements TextWatcher {
 
         /**
          * Check the input written by the user before it is changed.

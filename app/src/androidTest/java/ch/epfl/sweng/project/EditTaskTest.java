@@ -28,18 +28,16 @@ import static org.hamcrest.Matchers.anything;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class EditTaskTest extends SuperTest{
+public final class EditTaskTest extends SuperTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
     private String mEditedTitle;
     private String mEditedDescription;
     private String mOldTitle;
     private String mOldDescription;
-
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
 
     @Before
     public void init() {

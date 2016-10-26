@@ -34,16 +34,14 @@ import static org.junit.Assert.assertThat;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class NewTaskTest extends SuperTest{
-    private String mTitleToBeTyped;
-    private String mDescriptionToBeTyped;
-
+public final class NewTaskTest extends SuperTest {
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
+    private String mTitleToBeTyped;
+    private String mDescriptionToBeTyped;
 
     @Before
     public void initValidString() {
@@ -64,7 +62,7 @@ public final class NewTaskTest extends SuperTest{
     @Test
     public void testCanAddTask() {
         for (int i = 0; i < 3; i++) {
-            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
+            createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
@@ -85,7 +83,7 @@ public final class NewTaskTest extends SuperTest{
     public void testCanDeleteTasks() {
         //We create and add tasks
         for (int i = 0; i < 3; i++) {
-            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
+            createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
         }
 
         //We delete the tasks
@@ -156,7 +154,7 @@ public final class NewTaskTest extends SuperTest{
         //Check that the error message is displayed
         onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
-                .withErrorText(containsString(errorMessage))));
+                        .withErrorText(containsString(errorMessage))));
         pressBack();
         pressBack();
         emptyDatabase(1);
