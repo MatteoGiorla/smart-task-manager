@@ -42,13 +42,13 @@
     <string name="image_information_field_description">Image</string>
 
     <!-- Fields titles of task information activity -->
-    <string name="title_field">Title</string>
     <string name="description_field">Description</string>
     <string name="location_field">Task\'s location</string>
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration (in minutes)</string>
     <string name="energy_field">Energy needed</string>
-    <string name="author_field">Contributor(s)</string>
+    <string name="contributors_field">Contributor(s)</string>
+
 
     <string name="title_activity_maps">Map</string>
 </resources>

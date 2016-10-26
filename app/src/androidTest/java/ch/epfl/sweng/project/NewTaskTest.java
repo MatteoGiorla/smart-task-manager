@@ -49,8 +49,6 @@ public final class NewTaskTest extends SuperTest{
     public void initValidString() {
         mTitleToBeTyped = "test title number ";
         mDescriptionToBeTyped = "test description number ";
-        //Empty the database
-        emptyDatabase();
     }
 
     @Test
@@ -79,7 +77,7 @@ public final class NewTaskTest extends SuperTest{
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
 
-        emptyDatabase();
+        emptyDatabase(3);
     }
 
 
@@ -107,8 +105,6 @@ public final class NewTaskTest extends SuperTest{
                         .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
             }
         }
-
-        emptyDatabase();
     }
 
 
@@ -162,5 +158,7 @@ public final class NewTaskTest extends SuperTest{
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
         pressBack();
+        pressBack();
+        emptyDatabase(1);
     }
 }

@@ -1,26 +1,25 @@
 package ch.epfl.sweng.project.data;
 
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.User;
 
 interface DataExchanger {
 
     /**
-     * Checks if the remote storage device can be accessed at the
-     * moment.
+     * Recover the information from the user in the
+     * database and return it.
      *
-     * @return true if the remote storage device can be accessed,
-     *          false otherwise
+     * @return the User recovered from the database
      */
-    boolean hasAccess();
+    User retrieveUserInformation();
+
     /**
      * Take care of retrieving all user data if there is no
      * data locally stored on the app.
      *
-     * @return true if all data have been correctly retrieved,
-     *          false if for some reason the action could not
-     *          be performed
+     * @param user The user we want to retrieve data from.
      */
-    boolean retrieveAllData();
+    void retrieveAllData(User user);
 
     /**
      *  Add a tasks to the remote storage device
@@ -43,4 +42,18 @@ interface DataExchanger {
      * @param task the task to be deleted
      */
     void deleteTask(Task task);
+
+    /**
+     * Add user in the database
+     *
+     * @param user The user to be added
+     */
+    void addUser(User user);
+
+    /**
+     * Update user in the database
+     *
+     * @param user the user to be updated
+     */
+    void updateUser(User user);
 }

@@ -56,6 +56,8 @@ public class EditInformationTaskTest extends SuperTest{
                 .check(matches(hasDescendant(withText(mEditedDescription))));
 
         pressBack();
+
+        emptyDatabase(1);
     }
 
     @Test
@@ -72,5 +74,7 @@ public class EditInformationTaskTest extends SuperTest{
                 .check(matches(withText(mEditedName)));
 
         pressBack();
+
+        emptyDatabase(1);
     }
 }

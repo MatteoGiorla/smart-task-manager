@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.Exclude;
 
 /**
  * Class representing a location
@@ -75,6 +76,7 @@ public class Location {
     /**
      * Getter returning the gps coordinates of the location
      */
+    @Exclude
     public LatLng getGPSCoordinates() {
         return new LatLng(latitude, longitude);
     }

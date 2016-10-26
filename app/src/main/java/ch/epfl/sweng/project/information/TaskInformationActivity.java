@@ -32,7 +32,6 @@ public class TaskInformationActivity extends AppCompatActivity {
     private InformationListAdapter mInformationAdapter;
     private boolean isTaskModified = false;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +64,7 @@ public class TaskInformationActivity extends AppCompatActivity {
 
         //Get the TextView containing the task's title
         taskTitleTextView = (TextView) findViewById(R.id.title_task_information_activity);
+
         taskTitleTextView.setText(taskToBeDisplayed.getName());
 
         //Get the ListView layout
@@ -131,7 +131,7 @@ public class TaskInformationActivity extends AppCompatActivity {
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.author_field),
+        informationItemsList.add(new InformationItem(getString(R.string.contributors_field),
                 taskToBeDisplayed.listOfContributorsToString(), R.drawable.author_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
                 taskToBeDisplayed.getLocation().getName(), R.drawable.task_location_36dp));

@@ -4,9 +4,7 @@ package ch.epfl.sweng.project;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,8 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.DatabaseContract;
-import ch.epfl.sweng.project.data.DatabaseHelper;
+import ch.epfl.sweng.project.data.FirebaseDataExchanger;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -39,7 +36,7 @@ public class TaskFragment extends Fragment {
     private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private DatabaseHelper mDatabase;
+    private FirebaseDataExchanger firebaseDatabase;
 
     /**
      * Method that adds a task in the taskList and in the database.
@@ -51,13 +48,7 @@ public class TaskFragment extends Fragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        boolean newTaskCorrectlyInserted = mDatabase.addData(task);
-        if (!newTaskCorrectlyInserted) {
-            throw new SQLiteException("An error occurred while inserting " +
-                    "the new task in the database");
-        }
-        taskList.add(task);
-        mTaskAdapter.notifyDataSetChanged();
+        firebaseDatabase.addNewTask(task);
     }
 
     /**
@@ -71,7 +62,6 @@ public class TaskFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskList = new ArrayList<>();
-        mDatabase = new DatabaseHelper(getActivity(), DatabaseContract.DATABASE_NAME);
 
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
@@ -79,7 +69,9 @@ public class TaskFragment extends Fragment {
                 taskList
         );
 
-        new FetchTask().execute();
+        firebaseDatabase = new FirebaseDataExchanger(getActivity(), mTaskAdapter, taskList);
+        User currentUser = firebaseDatabase.retrieveUserInformation();
+        firebaseDatabase.retrieveAllData(currentUser);
     }
 
     /**
@@ -188,10 +180,7 @@ public class TaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
-            if(!correctlyEdited) {
-                throw new SQLiteException("More that was row was edited !");
-            }
+            firebaseDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
             taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
@@ -228,17 +217,9 @@ public class TaskFragment extends Fragment {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);
 
-        //Remove the task from the database
-        boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
-        if (!taskCorrectlyRemoved) {
-            throw new SQLiteException("An error occurred while deleting " +
-                    "the task from the database");
-        }
-
         String taskName = taskToBeDeleted.getName();
 
-        mTaskAdapter.remove(taskToBeDeleted);
-        mTaskAdapter.notifyDataSetChanged();
+        firebaseDatabase.deleteTask(taskToBeDeleted);
 
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE = taskName + " deleted";
@@ -253,42 +234,5 @@ public class TaskFragment extends Fragment {
      */
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
-    }
-
-    /**
-     * Fetch the tasks from the database without using the UI thread.
-     */
-    private class FetchTask extends AsyncTask<Void, Void, Cursor> {
-
-        /**
-         * Fetch the content from the database on a background thread.
-         *
-         * @param params Void parameters
-         * @return Cursor The tasks recovered from the database
-         */
-        @Override
-        protected Cursor doInBackground(Void... params) {
-            return mDatabase.getAllContents();
-        }
-
-        /**
-         * Add the recover tasks from the database to the taskList.
-         *
-         * @param data The recovered tasks from the database
-         */
-        @Override
-        protected void onPostExecute(Cursor data) {
-            if (data.getCount() == 0) {
-                Toast.makeText(getActivity(), "You don't have any tasks yet !", Toast.LENGTH_SHORT).show();
-            } else {
-                while (data.moveToNext()) {
-                    String taskTitle = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
-                    String taskDescription = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
-                    Task newTask = new Task(taskTitle, taskDescription);
-                    taskList.add(newTask);
-                }
-                mTaskAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }

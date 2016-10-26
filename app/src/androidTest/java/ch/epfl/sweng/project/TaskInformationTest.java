@@ -42,8 +42,10 @@ public class TaskInformationTest extends SuperTest{
     }
 
     @After
-    public void goBackOnMainScreen() {
+    public void goBackOnMainScreenAndEmptyDatabase() {
         pressBack();
+        emptyDatabase(1);
+
     }
 
     @Rule

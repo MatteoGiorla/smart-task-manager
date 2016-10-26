@@ -3,9 +3,11 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -44,12 +46,11 @@ public class Task implements Parcelable {
     private String description;
     private Location location;
     private Date dueDate;
-    private long durationInMinutes;
+    private Long durationInMinutes;
     private Energy energyNeeded;
-    private long timeOfAFractionInMinutes; //to be added optionally later
+    private Long timeOfAFractionInMinutes; //to be added optionally later
     private List<String> listOfContributors;
     private DateFormat dateFormat;
-
 
     /**
      * Constructor of the class.
@@ -106,7 +107,7 @@ public class Task implements Parcelable {
                 new Date(0),
                 30,
                 Energy.NORMAL.toString(),
-                Arrays.asList("Me", "myself", "I"));
+                Collections.singletonList(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
     }
 
     /**
@@ -126,9 +127,7 @@ public class Task implements Parcelable {
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         listOfContributors = new ArrayList<>();
-        addContributor("Me");
-        addContributor("myself");
-        addContributor("I");
+        addContributor(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -177,13 +176,6 @@ public class Task implements Parcelable {
      */
     public Energy getEnergy() {
         return energyNeeded;
-    }
-
-    /**
-     * Getter returning the task's list of contributors
-     */
-    public List<String> getAuthor() {
-        return new ArrayList<>(listOfContributors);
     }
 
     /**
@@ -275,10 +267,10 @@ public class Task implements Parcelable {
         return contributorsToString.toString();
     }
 
-    public boolean addContributor(String contributor) {
+    public void addContributor(String contributor) {
         if(contributor == null)
             throw new IllegalArgumentException("Contributor to be added null");
-        return listOfContributors.add(contributor);
+        listOfContributors.add(contributor);
     }
 
     public boolean deleteContributor(String contributor) {

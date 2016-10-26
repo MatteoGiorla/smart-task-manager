@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:id="@+id/title_task_containter_information_activity">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -47,7 +46,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:layout_below="@id/title_task_information_activity"
                 android:background="@drawable/toolbar_shadow" />
 
         </FrameLayout>
@@ -80,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="125dp"
             android:src="@drawable/ic_mode_edit_white_48dp"
@@ -87,6 +86,7 @@
             app:elevation="0dp"
             app:fabSize="normal"
             android:onClick="openEditTaskActivity"/>
+
     </FrameLayout>
 
 
