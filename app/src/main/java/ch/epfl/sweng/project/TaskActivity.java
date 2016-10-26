@@ -88,7 +88,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter spinnerArrayAdapter1 = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, new StateDuration[] {
+                android.R.layout.simple_spinner_dropdown_item, new StateDuration[] {
                 new StateDuration( 5, "5 minutes"),
                 new StateDuration( 10, "10 minutes"),
                 new StateDuration(30, "30 minutes"),
@@ -109,7 +109,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         mEnergy = (Spinner)findViewById(R.id.spinner2);
 
         ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, new StateEnergy[] {
+                android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
                 new StateEnergy(Task.Energy.LOW, "Low"),
                 new StateEnergy(Task.Energy.NORMAL, "Normal"),
                 new StateEnergy(Task.Energy.HIGH, "High")
