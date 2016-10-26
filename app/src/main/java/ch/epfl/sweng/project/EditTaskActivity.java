@@ -1,7 +1,12 @@
 package ch.epfl.sweng.project;
 
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.widget.EditText;
+
+import java.util.Date;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -53,10 +58,23 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
         mTaskToBeEdited.setName(title);
         mTaskToBeEdited.setDescription(description);
+
+        //prepare date
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, taskYear);
+        cal.set(Calendar.MONTH, taskMonth);
+        cal.set(Calendar.DAY_OF_MONTH, taskDay);
+        Date dateRepresentation = cal.getTime();
+
+        mTaskToBeEdited.setDueDate(dateRepresentation);
+        mTaskToBeEdited.setDurationInMinutes(duration);
+        mTaskToBeEdited.setLocation(new Location(location, Location.LocationType.HOME.toString(), 0, 0));
+        mTaskToBeEdited.setEnergyNeeded(energy);
         intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
     }

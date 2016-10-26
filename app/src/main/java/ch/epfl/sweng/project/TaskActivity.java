@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Class which represents an activity regarding a task
@@ -45,9 +46,10 @@ public abstract class TaskActivity extends AppCompatActivity {
     static int taskDay;
     static int taskMonth;
     static int taskYear;
-    String location;
     long duration;
+    String location;
     Task.Energy energy;
+    List<String> listOfContributors;
     private ImageButton doneEditButton;
     private static Button mButton;
     private static DateFormat dateFormat = DateFormat.getDateInstance();
@@ -230,6 +232,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 location = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
                 energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
+
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
