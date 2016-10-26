@@ -45,7 +45,12 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public User retrieveUserInformation() {
-        String mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        String mail;
+        try {
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
+        }
         User user = new User(mail);
         recoverUserLocations(user);
         return user;

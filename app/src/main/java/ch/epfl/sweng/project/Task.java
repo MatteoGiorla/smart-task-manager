@@ -3,8 +3,6 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,7 +105,7 @@ public class Task implements Parcelable {
                 new Date(0),
                 30,
                 Energy.NORMAL.toString(),
-                Collections.singletonList(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
+                Collections.singletonList(User.DEFAULT_EMAIL));
     }
 
     /**
@@ -127,7 +125,7 @@ public class Task implements Parcelable {
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         listOfContributors = new ArrayList<>();
-        addContributor(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        addContributor(User.DEFAULT_EMAIL);
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -269,7 +267,8 @@ public class Task implements Parcelable {
 
     public void addContributor(String contributor) {
         if(contributor == null)
-            throw new IllegalArgumentException("Contributor to be added null");
+            listOfContributors.add(User.DEFAULT_EMAIL);
+        else
         listOfContributors.add(contributor);
     }
 

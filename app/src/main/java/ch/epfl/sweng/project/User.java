@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +11,13 @@ public class User {
     private String email;
     private List<Location> listLocations;
     private static final String TAG = "User Class";
+    public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
     public User(String mail) {
-        if (mail != null) {
-            this.email = mail;
+        if (mail == null) {
+            this.email = DEFAULT_EMAIL;
         } else {
-            Log.d(TAG, "Error the user doesn't exist.");
-            throw new NullPointerException();
+            this.email = mail;
         }
         // Default values:
         this.listLocations = Arrays.asList(new Location(), new Location());
@@ -31,10 +29,13 @@ public class User {
      * @throws NullPointerException if an argument is null
      */
     public User(String mail, List<Location> listLocations) {
-        if (mail == null || listLocations == null) {
+        if (listLocations == null) {
             throw new NullPointerException();
         } else {
-            this.email = mail;
+            if(email == null)
+                this.email = DEFAULT_EMAIL;
+            else
+                this.email = mail;
             this.listLocations = new ArrayList<>(listLocations);
         }
     }

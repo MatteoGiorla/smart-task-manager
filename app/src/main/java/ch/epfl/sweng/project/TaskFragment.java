@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.project.data.DataExchanger;
 import ch.epfl.sweng.project.data.FirebaseDataExchanger;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
@@ -36,7 +37,7 @@ public class TaskFragment extends Fragment {
     private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private FirebaseDataExchanger firebaseDatabase;
+    private DataExchanger firebaseDatabase;
 
     /**
      * Method that adds a task in the taskList and in the database.

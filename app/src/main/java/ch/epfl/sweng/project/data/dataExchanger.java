@@ -3,7 +3,7 @@ package ch.epfl.sweng.project.data;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
-interface DataExchanger {
+public interface DataExchanger {
 
     /**
      * Recover the information from the user in the

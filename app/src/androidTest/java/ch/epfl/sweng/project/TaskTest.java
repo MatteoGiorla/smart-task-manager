@@ -186,12 +186,6 @@ public class TaskTest {
     }
 
     @Test
-    public void testTaskAddContributorException() {
-        thrownException.expect(IllegalArgumentException.class);
-        testTask.addContributor(null);
-    }
-
-    @Test
     public void testTaskSetEnergyException() {
         thrownException.expect(IllegalArgumentException.class);
         testTask.setEnergyNeeded(null);
