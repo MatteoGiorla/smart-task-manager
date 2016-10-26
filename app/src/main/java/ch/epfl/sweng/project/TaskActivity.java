@@ -32,8 +32,8 @@ import java.util.ArrayList;
  */
 public abstract class TaskActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutTitle;
-    protected Intent intent;
-    protected ArrayList<Task> taskList;
+    Intent intent;
+    ArrayList<Task> taskList;
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
