@@ -13,10 +13,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-/**
- * Created by charlesparzy on 26/10/2016.
- */
-
 public class SuperTest {
 
     @After

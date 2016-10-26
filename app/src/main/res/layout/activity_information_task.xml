@@ -72,25 +72,20 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="470dp"
-        android:layout_marginRight="10dp">
+        android:layout_alignParentStart="true">
 
         <!--MarginRight to support older versions than API 17-->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_task_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="6dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginRight="3dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="125dp"
             android:src="@drawable/ic_mode_edit_white_48dp"
             app:backgroundTint="@color/blue"
             app:elevation="0dp"
             app:fabSize="normal"
-            android:paddingTop="10dp"
             android:onClick="openEditTaskActivity"/>
     </FrameLayout>
 
