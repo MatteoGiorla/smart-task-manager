@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +28,6 @@ public class TaskInformationActivity extends AppCompatActivity {
     private Task taskToBeDisplayed;
     private ArrayList<InformationItem> informationItemsList;
     private Intent intent;
-    private final int editTaskRequestCode = 1;
     private TextView taskTitleTextView;
     private InformationListAdapter mInformationAdapter;
     private boolean isTaskModified = false;
@@ -71,7 +69,6 @@ public class TaskInformationActivity extends AppCompatActivity {
 
         //Get the ListView layout
         ListView listView = (ListView) findViewById(R.id.list_view_information);
-        Log.e("in create", "I'm in onCreate method of TaskInformationActivity");
 
         listView.setAdapter(mInformationAdapter);
 
@@ -83,6 +80,7 @@ public class TaskInformationActivity extends AppCompatActivity {
         if(taskList == null)
             throw new IllegalArgumentException("taskList is null before been passed to the intent");
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+        int editTaskRequestCode = 1;
         startActivityForResult(intent, editTaskRequestCode);
         isTaskModified = true;
     }
@@ -100,9 +98,14 @@ public class TaskInformationActivity extends AppCompatActivity {
                 taskToBeDisplayed = editedTask;
                 taskList.set(editedTaskIndex, editedTask);
                 taskTitleTextView.setText(taskToBeDisplayed.getName());
-                informationItemsList.removeAll(informationItemsList);
+                informationItemsList.clear();
                 createInformationItemList();
                 mInformationAdapter.notifyDataSetChanged();
+
+                intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
+                intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
+                intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
+                setResult(RESULT_OK, intent);
             }
         }
     }
@@ -179,10 +182,6 @@ public class TaskInformationActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-            intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
-            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
-            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
-            setResult(RESULT_OK, intent);
             finish();
         }
     }

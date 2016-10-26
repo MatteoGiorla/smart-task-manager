@@ -44,7 +44,6 @@ public class Task implements Parcelable {
     private String description;
     private Location location;
     private Date dueDate;
-    private long dueDateAttribute;
     private long durationInMinutes;
     private Energy energyNeeded;
     private long timeOfAFractionInMinutes; //to be added optionally later
@@ -58,13 +57,13 @@ public class Task implements Parcelable {
      * @param name Task's name
      * @param description Task's description
      * @param location Task's location
-     * @param dueDateAttribute Task's due date attribute
+     * @param dueDate Task's due date
      * @param durationInMinutes Task's duration in minutes
      * @param energyNeeded Task's energy needed
      * @param listOfContributors Task's list of contributors
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-   public Task(String name, String description, Location location, long dueDateAttribute,
+   public Task(String name, String description, Location location, Date dueDate,
                 long durationInMinutes, String energyNeeded, List<String> listOfContributors) {
 
        if(location == null) {
@@ -86,8 +85,7 @@ public class Task implements Parcelable {
        this.description = description;
        this.durationInMinutes = durationInMinutes;
        this.listOfContributors = new ArrayList<>(listOfContributors);
-       this.dueDateAttribute = dueDateAttribute;
-       dueDate = new Date(this.dueDateAttribute);
+       this.dueDate = dueDate;
        this.energyNeeded = Energy.valueOf(energyNeeded);
        this.location = new Location(location);
        dateFormat = DateFormat.getDateInstance();
@@ -105,7 +103,7 @@ public class Task implements Parcelable {
         this(name,
                 description,
                 new Location(),
-                0,
+                new Date(0),
                 30,
                 Energy.NORMAL.toString(),
                 Arrays.asList("Me", "myself", "I"));

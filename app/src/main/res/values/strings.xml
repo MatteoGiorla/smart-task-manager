@@ -48,7 +48,7 @@
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration (in minutes)</string>
     <string name="energy_field">Energy needed</string>
-    <string name="author_field">Author(s)</string>
+    <string name="author_field">Contributor(s)</string>
 
     <string name="title_activity_maps">Map</string>
 </resources>

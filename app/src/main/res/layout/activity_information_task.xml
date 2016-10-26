@@ -22,7 +22,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="100dp"
+            android:id="@+id/title_task_containter_information_activity">
 
             <TextView
                 android:layout_width="match_parent"

@@ -28,13 +28,13 @@ public class TaskTest {
         String taskName = "test task";
         String taskDescription = "Task built with all parameters";
         Location location = new Location("Office", Location.LocationType.WORKPLACE.toString(), 80, 89);
-        long dueDateAttribute = 3;
+        Date dueDate = new Date(3);
         String author = "Arthur Rimbaud";
         Task.Energy energy = Task.Energy.HIGH;
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        testTask = new Task(taskName , taskDescription, location, dueDateAttribute, duration, energy.toString(), listOfContributors);
+        testTask = new Task(taskName , taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
     }
 
     @Rule
@@ -53,14 +53,14 @@ public class TaskTest {
         double latTest = 32;
         double longTest = 55;
         Location locationTest = new Location(locationNameTest, locationTypeTest.toString(), latTest, longTest);
-        long dueDateAttributesTest = 0;
+        Date dueDateTest = new Date(0);
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
         String authorTest = "A test author";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateAttributesTest, durationTest, energyTest.toString(), listContributorsTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
@@ -68,7 +68,7 @@ public class TaskTest {
         assertEquals(longTest, newTaskTest.getLocation().getLongitude());
         assertEquals(latTest, newTaskTest.getLocation().getLatitude());
         assertEquals(locationTest.getType(), newTaskTest.getLocation().getType());
-        assertEquals(dueDateAttributesTest, newTaskTest.getDueDate().getTime());
+        assertEquals(dueDateTest.getTime(), newTaskTest.getDueDate().getTime());
         assertEquals(durationTest, newTaskTest.getDuration());
         assertEquals(energyTest, newTaskTest.getEnergy());
     }
