@@ -1,18 +1,14 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import ch.epfl.sweng.project.data.DatabaseContract;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -53,20 +49,18 @@ public final class NewTaskTest {
     public void initValidString() {
         mTitleToBeTyped = "test title number ";
         mDescriptionToBeTyped = "test description number ";
-        //Empty the database
-        emptyDatabase();
     }
 
-    //Empty the database once the tests are finished.
-    @After
-    public void tearDown() {
-        emptyDatabase();
-    }
-
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
+    /**
+     *  Delete the numbers of tasks given
+     */
+    private void emptyDatabase(int size) {
+        for (int i = 0; i < size; i++) {
+            onData(anything())
+                    .inAdapterView(withId(R.id.list_view_tasks))
+                    .atPosition(0).perform(longClick());
+            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+        }
     }
 
     @Test
@@ -95,7 +89,7 @@ public final class NewTaskTest {
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
 
-        emptyDatabase();
+        emptyDatabase(3);
     }
 
 
@@ -123,8 +117,6 @@ public final class NewTaskTest {
                         .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
             }
         }
-
-        emptyDatabase();
     }
 
 
@@ -178,6 +170,7 @@ public final class NewTaskTest {
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
         pressBack();
+        emptyDatabase(1);
     }
 
     /**

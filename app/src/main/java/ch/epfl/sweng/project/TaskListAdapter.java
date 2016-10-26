@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Adapter used to display the task list
  */
-class TaskListAdapter extends ArrayAdapter<Task> {
+public class TaskListAdapter extends ArrayAdapter<Task> {
 
     /**
      * Constructor of the class

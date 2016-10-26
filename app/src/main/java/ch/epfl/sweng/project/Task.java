@@ -3,6 +3,9 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.Exclude;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,13 +47,11 @@ public class Task implements Parcelable {
     private String description;
     private Location location;
     private Date dueDate;
-    private long dueDateAttribute;
-    private long durationInMinutes;
+    private Long durationInMinutes;
     private Energy energyNeeded;
-    private long timeOfAFractionInMinutes; //to be added optionally later
+    private Long timeOfAFractionInMinutes; //to be added optionally later
     private List<String> listOfContributors;
     private DateFormat dateFormat;
-
 
     /**
      * Constructor of the class.
@@ -58,14 +59,14 @@ public class Task implements Parcelable {
      * @param name Task's name
      * @param description Task's description
      * @param location Task's location
-     * @param dueDateAttribute Task's due date attribute
+     * @param dueDate Task's due date
      * @param durationInMinutes Task's duration in minutes
      * @param energyNeeded Task's energy needed
      * @param listOfContributors Task's list of contributors
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-   public Task(String name, String description, Location location, long dueDateAttribute,
-                long durationInMinutes, Energy energyNeeded, List<String> listOfContributors) {
+   public Task(String name, String description, Location location, Date dueDate,
+                long durationInMinutes, String energyNeeded, List<String> listOfContributors) {
 
        if(location == null) {
            throw new IllegalArgumentException("Location passed to the constructor is null");
@@ -86,9 +87,8 @@ public class Task implements Parcelable {
        this.description = description;
        this.durationInMinutes = durationInMinutes;
        this.listOfContributors = new ArrayList<>(listOfContributors);
-       this.dueDateAttribute = dueDateAttribute;
-       dueDate = new Date(this.dueDateAttribute);
-       this.energyNeeded = energyNeeded;
+       this.dueDate = dueDate;
+       this.energyNeeded = Energy.valueOf(energyNeeded);
        this.location = new Location(location);
        dateFormat = DateFormat.getDateInstance();
    }
@@ -105,10 +105,10 @@ public class Task implements Parcelable {
         this(name,
                 description,
                 new Location(),
-                0,
+                new Date(0),
                 30,
-                Energy.NORMAL,
-                Arrays.asList("Me", "myself", "I"));
+                Energy.NORMAL.toString(),
+                Arrays.asList(FirebaseAuth.getInstance().getCurrentUser().getEmail()));
     }
 
     /**
@@ -128,9 +128,7 @@ public class Task implements Parcelable {
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         listOfContributors = new ArrayList<>();
-        addContributor("Me");
-        addContributor("myself");
-        addContributor("I");
+        addContributor(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -182,13 +180,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning the task's list of contributors
-     */
-    public List<String> getAuthor() {
-        return new ArrayList<>(listOfContributors);
-    }
-
-    /**
      * Setter to modify the task's name
      *
      * @param newName The new task's name
@@ -233,6 +224,7 @@ public class Task implements Parcelable {
      *
      * @param newDueDate The new task's due date
      */
+    @Exclude
     public void setDueDate(Date newDueDate) {
         if(newDueDate == null) {
             throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
