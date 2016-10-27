@@ -22,7 +22,7 @@ public interface DataExchanger {
     void retrieveAllData(User user);
 
     /**
-     *  Add a tasks to the remote storage device
+     * Add a tasks to the remote storage device
      *
      * @param task the task to add
      */
@@ -32,7 +32,7 @@ public interface DataExchanger {
      * Update the task that has seen some change locally
      *
      * @param original the task before update
-     * @param updated the updated task
+     * @param updated  the updated task
      */
     void updateTask(Task original, Task updated);
 

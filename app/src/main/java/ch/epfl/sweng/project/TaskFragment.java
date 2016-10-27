@@ -159,8 +159,8 @@ public class TaskFragment extends Fragment {
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
-     * invalid
-     * @throws SQLiteException if more that one row was changed when editing a task.
+     *                                  invalid
+     * @throws SQLiteException          if more that one row was changed when editing a task.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -169,7 +169,7 @@ public class TaskFragment extends Fragment {
             actionOnActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             boolean isTaskModified = data.getBooleanExtra(IS_MODIFIED_KEY, false);
-            if(isTaskModified)
+            if (isTaskModified)
                 actionOnActivityResult(data);
         }
     }
@@ -210,9 +210,9 @@ public class TaskFragment extends Fragment {
     /**
      * Remove a task from the database and the taskList.
      *
-     * @throws SQLiteException if an error occurred
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
+     * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;

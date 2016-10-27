@@ -52,7 +52,7 @@ class InformationListAdapter extends ArrayAdapter<InformationItem> {
         }
 
         InformationItem itemToBeDisplayed = getItem(position);
-        if(itemToBeDisplayed != null) {
+        if (itemToBeDisplayed != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.title_field_information);
             TextView bodyView = (TextView) resultView.findViewById(R.id.body_field_information);
             ImageView image = (ImageView) resultView.findViewById(R.id.image_field_information);
@@ -63,7 +63,7 @@ class InformationListAdapter extends ArrayAdapter<InformationItem> {
             if (bodyView != null) {
                 bodyView.setText(itemToBeDisplayed.getBody());
             }
-            if(image != null) {
+            if (image != null) {
                 image.setImageResource(itemToBeDisplayed.getImageSrcId());
             }
         }

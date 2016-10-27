@@ -78,7 +78,7 @@ public final class MainActivity extends AppCompatActivity {
                 if (Profile.getCurrentProfile() != null) {
                     LoginManager.getInstance().logOut(); // log out the facebook button
                 }
-                Intent intent = new  Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -96,7 +96,7 @@ public final class MainActivity extends AppCompatActivity {
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
-        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>)fragment.getTaskList());
+        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) fragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 

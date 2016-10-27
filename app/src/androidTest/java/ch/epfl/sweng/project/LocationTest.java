@@ -27,6 +27,7 @@ public final class LocationTest {
     private double longitude;
     private Location.LocationType type;
 
+
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
 

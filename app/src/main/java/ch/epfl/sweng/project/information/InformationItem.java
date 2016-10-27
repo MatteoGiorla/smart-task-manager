@@ -13,10 +13,10 @@ class InformationItem {
      * Constructor of the InformationItem class.
      *
      * @param title The item's title
-     * @param body The item's description
+     * @param body  The item's description
      */
     InformationItem(String title, String body, int imageSrcId) {
-        if(title.isEmpty()) {
+        if (title.isEmpty()) {
             throw new IllegalArgumentException("Title passed to Information Item is empty");
         }
         this.title = title;

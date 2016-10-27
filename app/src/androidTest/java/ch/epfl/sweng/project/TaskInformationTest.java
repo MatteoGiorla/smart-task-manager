@@ -22,8 +22,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
-public class TaskInformationTest extends SuperTest{
+public class TaskInformationTest extends SuperTest {
 
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
     private Task task;
 
     @Before
@@ -33,6 +36,7 @@ public class TaskInformationTest extends SuperTest{
         task = new Task(taskName, taskDescription);
         createATask(taskName, taskDescription);
     }
+
     @Before
     public void openInformationTaskActivity() {
         onData(anything())
@@ -47,10 +51,6 @@ public class TaskInformationTest extends SuperTest{
         emptyDatabase(1);
 
     }
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
 
     @Test
     public void openTaskInformationActivity() {
@@ -94,7 +94,6 @@ public class TaskInformationTest extends SuperTest{
                 .atPosition(3)
                 .check(matches(hasDescendant(withText(task.dueDateToString()))));
     }
-
 
 
     @Test

@@ -19,7 +19,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
-public class EditInformationTaskTest extends SuperTest{
+public class EditInformationTaskTest extends SuperTest {
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Before
     public void addTheTask() {
@@ -27,6 +31,7 @@ public class EditInformationTaskTest extends SuperTest{
         String taskDescription = "This task will be used to test the \"display task's information activity\"";
         createATask(taskName, taskDescription);
     }
+
     @Before
     public void openInformationTaskActivity() {
         onData(anything())
@@ -34,10 +39,6 @@ public class EditInformationTaskTest extends SuperTest{
                 .atPosition(0)
                 .perform(click());
     }
-
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
 
     @Test
     public void canEditDescription() {
