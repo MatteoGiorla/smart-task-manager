@@ -65,21 +65,18 @@ public class Task implements Parcelable {
    public Task(String name, String description, Location location, Date dueDate,
                 long durationInMinutes, String energyNeeded, List<String> listOfContributors) {
 
-       if(location == null) {
+       //Control inputs
+       if(location == null)
            throw new IllegalArgumentException("Location passed to the constructor is null");
-       }
-       if(energyNeeded == null) {
+       if(energyNeeded == null)
            throw new IllegalArgumentException("Energy passed to the constructor is null");
-       }
-       if(name == null) {
+       if(name == null)
            throw new IllegalArgumentException("Name passed to the constructor is null");
-       }
-       if(description == null) {
+       if(description == null)
            throw new IllegalArgumentException("Description passed to the constructor is null");
-       }
-       if(listOfContributors == null || listOfContributors.size() == 0) {
+       if(listOfContributors == null || listOfContributors.size() == 0)
            throw new IllegalArgumentException("List of contributors passed to the constructor is invalid");
-       }
+
        this.name = name;
        this.description = description;
        this.durationInMinutes = durationInMinutes;
@@ -115,9 +112,9 @@ public class Task implements Parcelable {
      * @param in Container of a Task
      */
     private Task(Parcel in) {
-        if(in == null) {
+        if(in == null)
             throw new IllegalArgumentException("In is null");
-        }
+
         setName(in.readString());
         setDescription(in.readString());
         setLocation(new Location());
@@ -194,11 +191,9 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
-        if (newName == null) {
+        if (newName == null)
             throw new IllegalArgumentException("newName passed to the Task's setter is null");
-        } else {
-            name = newName;
-        }
+        name = newName;
     }
 
     /**
@@ -208,11 +203,9 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if newName is null
      */
     public void setDescription(String newDescription) {
-        if (newDescription == null) {
+        if (newDescription == null)
             throw new IllegalArgumentException("newDescription passed to the Task's setter is null");
-        } else {
-            description = newDescription;
-        }
+        description = newDescription;
     }
 
     /**
@@ -222,9 +215,8 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void setLocation(Location newLocation) {
-        if(newLocation == null) {
+        if(newLocation == null)
             throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
-        }
         location = newLocation;
     }
 
@@ -235,9 +227,8 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void setDueDate(Date newDueDate) {
-        if(newDueDate == null) {
+        if(newDueDate == null)
             throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
-        }
         dueDate = newDueDate;
     }
 
@@ -257,9 +248,8 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void setEnergyNeeded(Energy newEnergyNeeded) {
-        if (newEnergyNeeded == null) {
+        if (newEnergyNeeded == null)
             throw new IllegalArgumentException("newEnergyNeeded passed to the Task's setter is null");
-        }
         energyNeeded = newEnergyNeeded;
     }
 

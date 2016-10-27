@@ -14,11 +14,15 @@ class InformationItem {
      *
      * @param title The item's title
      * @param body  The item's description
+     * @param imageSrcId the resource id of the image
+     *                   belong to R.drawable
      */
     InformationItem(String title, String body, int imageSrcId) {
-        if (title.isEmpty()) {
+        if (title.isEmpty())
             throw new IllegalArgumentException("Title passed to Information Item is empty");
-        }
+
+        if(body == null)
+            throw new IllegalArgumentException("Body passed to Information Item is null");
         this.title = title;
         this.body = body;
         this.imageId = imageSrcId;
