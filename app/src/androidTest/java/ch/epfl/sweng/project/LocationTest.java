@@ -3,8 +3,6 @@ package ch.epfl.sweng.project;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,10 +22,10 @@ import static org.junit.Assert.assertThat;
 public final class LocationTest {
     private String name;
     private Location location;
-    private Location locationEW;
-    private LatLng gpsCoordinates;
+    private Location defaultLocation;
+    private double latitude;
+    private double longitude;
     private Location.LocationType type;
-    private Location.LocationType typeEW;
 
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
@@ -36,14 +34,14 @@ public final class LocationTest {
     public void initValidLocation() {
         name = "name";
         type = Location.LocationType.HOME;
-        gpsCoordinates = new LatLng(41, 38);
-        location = new Location(name, type, gpsCoordinates);
+        latitude = 41;
+        longitude = 38;
+        location = new Location(name, type.toString(), latitude, longitude);
     }
 
     @Before
-    public void initEverywhereLocation() {
-        typeEW = Location.LocationType.EVERYWHERE;
-        locationEW = new Location(null, typeEW, null);
+    public void testDefaultConstructor() {
+        defaultLocation = new Location();
     }
 
     @Test
@@ -59,17 +57,22 @@ public final class LocationTest {
     public void testLocationGetters() {
         assertEquals(name, location.getName());
         assertEquals(type, location.getType());
-        assertEquals(gpsCoordinates, location.getGPSCoordinates());
+        assertEquals(latitude, location.getLatitude());
+        assertEquals(longitude, location.getLongitude());
     }
 
     /**
      * Test that the getters for "everywhere" location return the good value
      */
     @Test
-    public void testEverywhereLocationGetters() {
-        assertEquals("Everywhere", locationEW.getName());
-        assertEquals(typeEW, locationEW.getType());
-        assertEquals(null, locationEW.getGPSCoordinates());
+    public void testDefaultLocationGetters() {
+        String expectedName = "Everywhere";
+        double expectedLat = 0;
+        double expectedLong = 0;
+        assertEquals(expectedName, defaultLocation.getName());
+        assertEquals(Location.LocationType.EVERYWHERE, defaultLocation.getType());
+        assertEquals(expectedLat, defaultLocation.getLatitude());
+        assertEquals(expectedLong, defaultLocation.getLongitude());
     }
 
     /**
@@ -77,18 +80,22 @@ public final class LocationTest {
      */
     @Test
     public void testLocationSetters() {
+        Location newLocation = new Location();
+
         String newName = "EPFL";
-        LatLng newGPSCoordinates = new LatLng(20, 45);
+        double newLat = 20;
+        double newLong = 45;
+        Location.LocationType newLocType = Location.LocationType.HOME;
 
-        location.setName(newName);
-        locationEW.setName(null);
-        location.setGpsCoordinates(newGPSCoordinates);
-        locationEW.setGpsCoordinates(newGPSCoordinates);
+        newLocation.setName(newName);
+        newLocation.setLatitude(newLat);
+        newLocation.setLongitude(newLong);
+        newLocation.setType(newLocType);
 
-        assertEquals(newName, location.getName());
-        assertEquals("Everywhere", locationEW.getName());
-        assertEquals(newGPSCoordinates, location.getGPSCoordinates());
-        assertEquals(null, locationEW.getGPSCoordinates());
+        assertEquals(newName, newLocation.getName());
+        assertEquals(newLat, newLocation.getLatitude());
+        assertEquals(newLong, newLocation.getLongitude());
+        assertEquals(newLocType, newLocation.getType());
     }
 
     /**
@@ -101,13 +108,33 @@ public final class LocationTest {
         location.setName(null);
     }
 
-    /**
-     * Test that the public constructor throws an IllegalArgumentException
-     * when its arguments are null
-     */
     @Test
-    public void testConstructorException() {
+    public void testSetTypeException() {
         thrownException.expect(IllegalArgumentException.class);
-        new Location(null, null, null);
+        location.setType(null);
+    }
+
+    @Test
+    public void constructWithNullName() {
+        thrownException.expect(IllegalArgumentException.class);
+        new Location(null, Location.LocationType.EVERYWHERE.toString(), 0, 0);
+    }
+
+    @Test
+    public void constructWithNullType() {
+        thrownException.expect(IllegalArgumentException.class);
+        new Location("A name", null, 0, 0);
+    }
+
+    @Test
+    public void constructWithInvalidLatitude() {
+        thrownException.expect(IllegalArgumentException.class);
+        new Location(null, Location.LocationType.EVERYWHERE.toString(), -200, 0);
+    }
+
+    @Test
+    public void constructWithInvalidLongitude() {
+        thrownException.expect(IllegalArgumentException.class);
+        new Location(null, Location.LocationType.EVERYWHERE.toString(), 0, 300);
     }
 }

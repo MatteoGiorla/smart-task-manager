@@ -1,21 +1,14 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import ch.epfl.sweng.project.data.DatabaseContract;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -30,7 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.anything;
@@ -42,12 +34,9 @@ import static org.junit.Assert.assertThat;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class NewTaskTest {
+public final class NewTaskTest extends SuperTest{
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
-    private String name;
-    private String description;
-    private Task task;
 
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
@@ -60,25 +49,6 @@ public final class NewTaskTest {
     public void initValidString() {
         mTitleToBeTyped = "test title number ";
         mDescriptionToBeTyped = "test description number ";
-        name = "task";
-        description = "The first task";
-        task = new Task(name);
-        task.setDescription(description);
-
-        //Empty the database
-        emptyDatabase();
-    }
-
-    //Empty the database once the tests are finished.
-    @After
-    public void tearDown() {
-        emptyDatabase();
-    }
-
-    private void emptyDatabase() {
-        SQLiteDatabase myDb = getTargetContext()
-                .openOrCreateDatabase(DatabaseContract.DATABASE_NAME, Context.MODE_PRIVATE, null);
-        myDb.delete(DatabaseContract.TaskEntry.TABLE_NAME, null, null);
     }
 
     @Test
@@ -107,100 +77,10 @@ public final class NewTaskTest {
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
 
-        emptyDatabase();
+        emptyDatabase(3);
     }
 
-    /**
-     * Test that the getters return the good value
-     */
-    @Test
-    public void testTaskGetters() {
-        assertEquals(name, task.getName());
-        assertEquals(description, task.getDescription());
 
-
-    }
-
-    /**
-     * Test that the getters and setters work correctly with parameters
-     */
-    @Test
-    public void testParameters() {
-        Task testTask = new Task("Test with parameters");
-        assertEquals(null, testTask.getLocation());
-        assertEquals(null, testTask.getDueDate());
-        assertEquals(0, testTask.getDuration());
-        assertEquals(null, testTask.getEnergy());
-
-        Location newLocationTest = new Location("Office", Location.LocationType.WORKPLACE, null);
-        testTask.setLocation(newLocationTest);
-        testTask.setDueDate(new GregorianCalendar(2017, 10, 23));
-        testTask.setDurationInMinutes(60);
-        testTask.setEnergyNeeded(Task.Energy.HIGH);
-
-        assertEquals(newLocationTest.getName(), testTask.getLocation().getName());
-        assertEquals(newLocationTest.getGPSCoordinates(), testTask.getLocation().getGPSCoordinates());
-        assertEquals(newLocationTest.getType(), testTask.getLocation().getType());
-        assertEquals(2017, testTask.getDueDate().get(Calendar.YEAR));
-        assertEquals(60, testTask.getDuration());
-        assertEquals(Task.Energy.HIGH, testTask.getEnergy());
-    }
-
-    /**
-     * Test that the setters modify correctly the Task
-     */
-    @Test
-    public void testTaskSetters() {
-        String newName = "another name";
-        String newDescription = "This is a new description";
-
-        task.setName(newName);
-        task.setDescription(newDescription);
-
-        assertEquals(newName, task.getName());
-        assertEquals(newDescription, task.getDescription());
-    }
-
-    /**
-     * Test that the setName setter throws an IllegalArgumentException
-     * when its argument is null
-     */
-    @Test
-    public void testTaskSetNameException() {
-        thrownException.expect(IllegalArgumentException.class);
-        task.setName(null);
-    }
-
-    /**
-     * Test that the setDescription setter throws an IllegalArgumentException
-     * when its argument is null
-     */
-    @Test
-    public void testTaskSetDescriptionException() {
-        thrownException.expect(IllegalArgumentException.class);
-        task.setDescription(null);
-    }
-
-    /**
-     * Test that the public constructor throws an IllegalArgumentException
-     * when its arguments are null
-     */
-    @Test
-    public void testConstructorException() {
-        thrownException.expect(IllegalArgumentException.class);
-        new Task(null);
-    }
-
-    /**
-     * Test the describeContents method
-     */
-    @Test
-    public void testDescribeContents() {
-        assertEquals(0, task.describeContents());
-    }
-    /**
-     * Test that an added Task has been correctly deleted when clicking on Delete.
-     */
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
@@ -225,8 +105,6 @@ public final class NewTaskTest {
                         .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
             }
         }
-
-        emptyDatabase();
     }
 
 
@@ -280,18 +158,7 @@ public final class NewTaskTest {
                 .check(matches(ErrorTextInputLayoutMatcher
                 .withErrorText(containsString(errorMessage))));
         pressBack();
-    }
-
-    /**
-     *Method to add the task to enhance modularity of the tests.
-     *
-     * @param taskTitle the title of the task to add
-     * @param taskDescription the description of the task to add
-     */
-    private void createATask(String taskTitle, String taskDescription){
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskTitle));
-        onView(withId(R.id.description_task)).perform(typeText(taskDescription));
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+        pressBack();
+        emptyDatabase(1);
     }
 }

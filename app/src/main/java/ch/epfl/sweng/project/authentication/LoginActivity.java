@@ -295,7 +295,7 @@ public class LoginActivity
      * Override the signIn method.
      * Create a sign in intent.
      */
-    public void signIn() {
+    private void signIn() {
         Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
         // start the intent:
         startActivityForResult(signIn, RC_SIGN_IN);
