@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -87,9 +88,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
-        mLocation = (Spinner)findViewById(R.id.spinner);
+        mLocation = (Spinner)findViewById(R.id.locationSpinner);
 
-        mDuration = (Spinner)findViewById(R.id.spinner3);
+        mDuration = (Spinner)findViewById(R.id.durationSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
@@ -112,7 +113,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        mEnergy = (Spinner)findViewById(R.id.spinner2);
+        mEnergy = (Spinner)findViewById(R.id.energySpinner);
 
         ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
