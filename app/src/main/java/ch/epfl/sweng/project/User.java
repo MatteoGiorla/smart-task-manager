@@ -63,7 +63,7 @@ public class User {
         if(list == null) {
             throw new IllegalArgumentException("Bad list of location given in the setter of user");
         }else{
-            if(list.size() != 2)
+            if(list.size() == 2)
                 this.listLocations = new ArrayList<>(list);
         }
     }
