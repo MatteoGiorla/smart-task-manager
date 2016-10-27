@@ -10,7 +10,6 @@ import java.util.List;
 public class User {
     private String email;
     private List<Location> listLocations;
-    private static final String TAG = "User Class";
     public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
     /**

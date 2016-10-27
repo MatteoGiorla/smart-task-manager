@@ -52,8 +52,8 @@ public abstract class TaskActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     private static String buttonText;
-    private Button mButton;
-    private static DateFormat dateFormat = DateFormat.getDateInstance();
+    private static Button mButton;
+    private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
 
     @Override
@@ -86,8 +86,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
         mButton = (Button)findViewById(R.id.pick_date);
-
-        mButton.setText(buttonText);
 
         //a supprimer plus tard
         mLocation = (Spinner)findViewById(R.id.locationSpinner);
@@ -282,7 +280,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
-    public void showDatePickerDialog(View v) {
+    public void showDatePickerDialog(View  v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
@@ -310,7 +308,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
             Date dateRepresentation = cal.getTime();
-            buttonText = dateFormat.format(dateRepresentation.getTime());
+            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
             taskDay = day;
             taskMonth = month;
             taskYear = year;
