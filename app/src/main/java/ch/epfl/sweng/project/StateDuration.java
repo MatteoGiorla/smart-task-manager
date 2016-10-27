@@ -1,9 +1,9 @@
 package ch.epfl.sweng.project;
 
 
-public class StateDuration {
-    private long duration;
-    private String spinnerDuration;
+class StateDuration {
+    private final long duration;
+    private final String spinnerDuration;
 
     public StateDuration(long duration, String spinnerDuration) {
         this.duration = duration;

@@ -2,9 +2,9 @@ package ch.epfl.sweng.project;
 
 
 
-public class StateEnergy {
-    private Task.Energy energy;
-    private String spinnerEnergy;
+class StateEnergy {
+    private final Task.Energy energy;
+    private final String spinnerEnergy;
 
     public StateEnergy(Task.Energy energy, String spinnerEnergy) {
         this.energy = energy;

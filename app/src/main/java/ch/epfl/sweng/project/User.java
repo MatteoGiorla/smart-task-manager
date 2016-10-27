@@ -10,7 +10,6 @@ import java.util.List;
 public class User {
     private String email;
     private List<Location> listLocations;
-    private static final String TAG = "User Class";
     public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
     /**
@@ -79,7 +78,7 @@ public class User {
         if(list == null) {
             throw new IllegalArgumentException("Bad list of location given in the setter of user");
         }else{
-            if(list.size() != 2)
+            if(list.size() == 2)
                 this.listLocations = new ArrayList<>(list);
         }
     }
