@@ -1,17 +1,34 @@
 package ch.epfl.sweng.project;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Class which represents an activity regarding a task
@@ -19,11 +36,25 @@ import java.util.ArrayList;
 public abstract class TaskActivity extends AppCompatActivity {
     Intent intent;
     ArrayList<Task> taskList;
+    private EditText titleEditText;
+    private Spinner mLocation;
+    private Spinner mDuration;
+    private Spinner mEnergy;
     String title;
     String description;
+    static int taskDay;
+    static int taskMonth;
+    static int taskYear;
+    long duration;
+    String location;
+    Task.Energy energy;
+    List<String> listOfContributors;
     private TextInputLayout textInputLayoutTitle;
-    private EditText titleEditText;
     private ImageButton doneEditButton;
+    private static String buttonText;
+    private Button mButton;
+    private static DateFormat dateFormat = DateFormat.getDateInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +84,60 @@ public abstract class TaskActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
+
+        mButton = (Button)findViewById(R.id.pick_date);
+
+        mButton.setText(buttonText);
+
+        //a supprimer plus tard
+        mLocation = (Spinner)findViewById(R.id.locationSpinner);
+
+        mDuration = (Spinner)findViewById(R.id.durationSpinner);
+
+        /*
+         * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
+         */
+        ArrayAdapter spinnerArrayAdapter1 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item, new StateDuration[] {
+                new StateDuration(5, getString(R.string.duration5m)),
+                new StateDuration(15, getString(R.string.duration15m)),
+                new StateDuration(30, getString(R.string.duration30m)),
+                new StateDuration(60, getString(R.string.duration1h)),
+                new StateDuration(120, getString(R.string.duration2h)),
+                new StateDuration(240, getString(R.string.duration4h)),
+                new StateDuration(480, getString(R.string.duration1d)),
+                new StateDuration(960, getString(R.string.duration2d)),
+                new StateDuration(1920, getString(R.string.duration4d)),
+                new StateDuration(3360, getString(R.string.duration1w)),
+                new StateDuration(6720, getString(R.string.duration2w)),
+                new StateDuration(13440, getString(R.string.duration1m))
+        });
+
+        mDuration.setAdapter(spinnerArrayAdapter1);
+
+        mEnergy = (Spinner)findViewById(R.id.energySpinner);
+
+        ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
+                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
+                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
+        });
+
+        mEnergy.setAdapter(spinnerArrayAdapter2);
+/*
+        //A ADAPTER
+        mLocation = (Spinner)findViewById(R.id.locationSpinner);
+
+        ArrayAdapter spinnerArrayAdapter3 = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item, new StateLocation[] {
+                for (elem in listOfLocations) {
+                    new StateLocation(ID, TITRE DE LA LOCATION)
+                }
+        });
+
+        mLocation.setAdapter(spinnerArrayAdapter3);
+ */
     }
 
     /**
@@ -147,6 +232,10 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
+                location = mLocation.getSelectedItem().toString();
+                duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+                energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
+
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -168,6 +257,63 @@ public abstract class TaskActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             finish();
+        }
+    }
+
+    /*
+     * Method to hide keyboard when clicking outside the EditTextView
+     *
+     * source : http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            Date dateRepresentation = cal.getTime();
+            buttonText = dateFormat.format(dateRepresentation.getTime());
+            taskDay = day;
+            taskMonth = month;
+            taskYear = year;
         }
     }
 }

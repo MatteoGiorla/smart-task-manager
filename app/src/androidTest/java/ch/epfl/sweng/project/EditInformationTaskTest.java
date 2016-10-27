@@ -48,6 +48,7 @@ public class EditInformationTaskTest extends SuperTest {
 
         onView(withId(R.id.description_task)).perform(clearText());
         onView(withId(R.id.description_task)).perform(typeText(mEditedDescription));
+        pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         //Check that the new description is displayed in the task's information list

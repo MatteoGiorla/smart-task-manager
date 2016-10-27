@@ -16,7 +16,7 @@ public class User {
     /**
      * Constructor of the user class which
      * set listLocations to an empty list.
-     * @param mail
+     * @param mail user email
      */
     public User(String mail) {
         if (mail == null) {
@@ -67,7 +67,11 @@ public class User {
     }
 
     /**
+<<<<<<< HEAD
+     * Setter that allows to change the locations of the user
+=======
      * Setter that allors to change the locations of the user
+>>>>>>> master
      *
      * @throws NullPointerException If the argument is null
      */
