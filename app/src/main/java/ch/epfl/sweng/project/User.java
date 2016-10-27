@@ -67,7 +67,11 @@ public class User {
     }
 
     /**
+<<<<<<< HEAD
      * Setter that allows to change the locations of the user
+=======
+     * Setter that allors to change the locations of the user
+>>>>>>> master
      *
      * @throws NullPointerException If the argument is null
      */
