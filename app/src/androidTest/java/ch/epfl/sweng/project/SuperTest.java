@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -14,7 +15,9 @@ class SuperTest {
     void createATask(String taskTitle, String taskDescription){
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(taskTitle));
+        pressBack();
         onView(withId(R.id.description_task)).perform(typeText(taskDescription));
+        pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 

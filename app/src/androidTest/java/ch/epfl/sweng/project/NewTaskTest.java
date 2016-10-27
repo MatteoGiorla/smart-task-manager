@@ -114,7 +114,11 @@ public final class NewTaskTest extends SuperTest{
     @Test
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task with empty titles
-        createATask("", mDescriptionToBeTyped);
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(""));
+        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
+        pressBack();
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -141,6 +145,7 @@ public final class NewTaskTest extends SuperTest{
         //Try to create a second class with the same title as the first one
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
+        pressBack();
         onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
