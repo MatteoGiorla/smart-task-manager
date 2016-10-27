@@ -40,15 +40,12 @@ import ch.epfl.sweng.project.R;
  */
 public class LoginActivity
         extends AppCompatActivity
-        implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener
-{
-
-    private GoogleApiClient mGoogleClient;
-    private CallbackManager mFacebook;
+        implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
-
+    private GoogleApiClient mGoogleClient;
+    private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -75,9 +72,9 @@ public class LoginActivity
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail() // to request the user email
-                .build();
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail() // to request the user email
+                        .build();
 
         mGoogleClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
@@ -247,7 +244,7 @@ public class LoginActivity
                                     "exists with the same email address but different sign-in " +
                                     "credentials.")) {
                                 Toast.makeText(LoginActivity.this, "You must use the same " +
-                                        "authentication service as before.",
+                                                "authentication service as before.",
                                         Toast.LENGTH_LONG).show();
                                 LoginManager.getInstance().logOut();
                             } else {
@@ -295,7 +292,7 @@ public class LoginActivity
      * Override the signIn method.
      * Create a sign in intent.
      */
-    public void signIn() {
+    private void signIn() {
         Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
         // start the intent:
         startActivityForResult(signIn, RC_SIGN_IN);

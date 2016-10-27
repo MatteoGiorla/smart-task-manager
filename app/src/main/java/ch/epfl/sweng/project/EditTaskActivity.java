@@ -65,7 +65,7 @@ public class EditTaskActivity extends TaskActivity {
      * Check that the 'task to be edited' 's index is valid
      *
      * @throws IllegalArgumentException If there is an error with the intent passed
-     * to the activity.
+     *                                  to the activity.
      */
     private void checkTaskToBeEditedIndex() {
         if (mIndexTaskToBeEdited == -1) {

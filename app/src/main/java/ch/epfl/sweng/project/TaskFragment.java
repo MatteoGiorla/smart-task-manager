@@ -4,9 +4,7 @@ package ch.epfl.sweng.project;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -21,10 +19,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.DatabaseContract;
-import ch.epfl.sweng.project.data.DatabaseHelper;
+import ch.epfl.sweng.project.data.DataExchanger;
+import ch.epfl.sweng.project.data.FirebaseDataExchanger;
+import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
+import static ch.epfl.sweng.project.information.TaskInformationActivity.IS_MODIFIED_KEY;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -32,10 +32,12 @@ import static android.app.Activity.RESULT_OK;
 public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment._INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
+    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
+    private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private DatabaseHelper mDatabase;
+    private DataExchanger firebaseDatabase;
 
     /**
      * Method that adds a task in the taskList and in the database.
@@ -47,13 +49,7 @@ public class TaskFragment extends Fragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        boolean newTaskCorrectlyInserted = mDatabase.addData(task);
-        if (!newTaskCorrectlyInserted) {
-            throw new SQLiteException("An error occurred while inserting " +
-                    "the new task in the database");
-        }
-        taskList.add(task);
-        mTaskAdapter.notifyDataSetChanged();
+        firebaseDatabase.addNewTask(task);
     }
 
     /**
@@ -67,7 +63,6 @@ public class TaskFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         taskList = new ArrayList<>();
-        mDatabase = new DatabaseHelper(getActivity(), DatabaseContract.DATABASE_NAME);
 
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
@@ -75,7 +70,9 @@ public class TaskFragment extends Fragment {
                 taskList
         );
 
-        new FetchTask().execute();
+        firebaseDatabase = new FirebaseDataExchanger(getActivity(), mTaskAdapter, taskList);
+        User currentUser = firebaseDatabase.retrieveUserInformation();
+        firebaseDatabase.retrieveAllData(currentUser);
     }
 
     /**
@@ -98,6 +95,16 @@ public class TaskFragment extends Fragment {
         listView.setAdapter(mTaskAdapter);
 
         registerForContextMenu(listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
+                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
+                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+                startActivityForResult(intent, displayTaskRequestCode);
+            }
+        });
 
         return rootView;
     }
@@ -152,31 +159,34 @@ public class TaskFragment extends Fragment {
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
-     * invalid
-     * @throws SQLiteException if more that one row was changed when editing a task.
+     *                                  invalid
+     * @throws SQLiteException          if more that one row was changed when editing a task.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
-        if (requestCode == editTaskRequestCode) {
-            if (resultCode == RESULT_OK) {
-                // Get result from the result intent.
-                Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
-                int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
-                if (indexEditedTask == -1 || editedTask == null) {
-                    throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
-                } else {
-                    boolean correctlyEdited = mDatabase.editTask(taskList.get(indexEditedTask), editedTask);
-                    if(!correctlyEdited) {
-                        throw new SQLiteException("More that was row was edited !");
-                    }
-                    taskList.set(indexEditedTask, editedTask);
-                    mTaskAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            editedTask.getName() + " has been updated !",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
+        if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
+            actionOnActivityResult(data);
+        } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
+            boolean isTaskModified = data.getBooleanExtra(IS_MODIFIED_KEY, false);
+            if (isTaskModified)
+                actionOnActivityResult(data);
+        }
+    }
+
+    private void actionOnActivityResult(Intent data) {
+        // Get result from the result intent.
+        Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
+        int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+        if (indexEditedTask == -1 || editedTask == null) {
+            throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
+        } else {
+            firebaseDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
+            taskList.set(indexEditedTask, editedTask);
+            mTaskAdapter.notifyDataSetChanged();
+            Toast.makeText(getActivity().getApplicationContext(),
+                    editedTask.getName() + " has been updated !",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -200,25 +210,17 @@ public class TaskFragment extends Fragment {
     /**
      * Remove a task from the database and the taskList.
      *
-     * @throws SQLiteException if an error occurred
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
+     * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         Task taskToBeDeleted = taskList.get(position);
 
-        //Remove the task from the database
-        boolean taskCorrectlyRemoved = mDatabase.removeData(taskToBeDeleted);
-        if (!taskCorrectlyRemoved) {
-            throw new SQLiteException("An error occurred while deleting " +
-                    "the task from the database");
-        }
-
         String taskName = taskToBeDeleted.getName();
 
-        mTaskAdapter.remove(taskToBeDeleted);
-        mTaskAdapter.notifyDataSetChanged();
+        firebaseDatabase.deleteTask(taskToBeDeleted);
 
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE = taskName + " deleted";
@@ -233,43 +235,5 @@ public class TaskFragment extends Fragment {
      */
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
-    }
-
-    /**
-     * Fetch the tasks from the database without using the UI thread.
-     */
-    private class FetchTask extends AsyncTask<Void, Void, Cursor> {
-
-        /**
-         * Fetch the content from the database on a background thread.
-         *
-         * @param params Void parameters
-         * @return Cursor The tasks recovered from the database
-         */
-        @Override
-        protected Cursor doInBackground(Void... params) {
-            return mDatabase.getAllContents();
-        }
-
-        /**
-         * Add the recover tasks from the database to the taskList.
-         *
-         * @param data The recovered tasks from the database
-         */
-        @Override
-        protected void onPostExecute(Cursor data) {
-            if (data.getCount() == 0) {
-                Toast.makeText(getActivity(), "You don't have any tasks yet !", Toast.LENGTH_SHORT).show();
-            } else {
-                while (data.moveToNext()) {
-                    String taskTitle = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_TITLE));
-                    String taskDescription = data.getString(data.getColumnIndex(DatabaseContract.TaskEntry.COLUMN_TASK_DESCRIPTION));
-                    Task newTask = new Task(taskTitle);
-                    newTask.setDescription(taskDescription);
-                    taskList.add(newTask);
-                }
-                mTaskAdapter.notifyDataSetChanged();
-            }
-        }
     }
 }

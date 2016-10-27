@@ -19,7 +19,7 @@ final class ErrorTextInputLayoutMatcher {
      * @param stringMatcher Matcher of String with text to match.
      * @return matcher that matches TextInputLayout.
      */
-    public static Matcher<View> withErrorText(final Matcher<String> stringMatcher) {
+    static Matcher<View> withErrorText(final Matcher<String> stringMatcher) {
 
         //Return a BoundedMatcher with :
         //View : desired type for the matcher

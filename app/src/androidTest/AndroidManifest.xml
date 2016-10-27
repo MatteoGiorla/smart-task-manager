@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest 
-    package="ch.epfl.sweng.project.test"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    package="ch.epfl.sweng.project.test">
+
+    <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
+
 </manifest>
