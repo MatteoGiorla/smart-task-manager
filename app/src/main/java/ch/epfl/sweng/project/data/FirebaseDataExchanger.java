@@ -21,8 +21,11 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 
-
-//this class need to be expanded  and completed once the Firebase database will be set
+/**
+ * This class is the exchanger between firebase and the app
+ * It deals with all necessary operations that must be done
+ * on the database.
+ */
 public class FirebaseDataExchanger implements DataExchanger {
 
     private final DatabaseReference mDatabase;
@@ -40,6 +43,12 @@ public class FirebaseDataExchanger implements DataExchanger {
         mContext = context;
     }
 
+    /**
+     * Encode a given mail to be compatible with keys in firebase
+     *
+     * @param mail The user email
+     * @return The encoded email
+     */
     private String encodeMailAsFirebaseKey(String mail) {
         return mail.replace('.', ' ');
     }
@@ -139,11 +148,22 @@ public class FirebaseDataExchanger implements DataExchanger {
         addUser(user);
     }
 
+    /**
+     * Deleter a user in the database
+     *
+     * @param user The user to be deleted
+     */
     private void deleteUser(User user) {
         DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).getRef();
         userRef.removeValue();
     }
 
+    /**
+     * Recover the locations set by the user when he
+     * first sign in.
+     *
+     * @param user The user
+     */
     private void recoverUserLocations(final User user) {
         DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
         final List<Location> listLocations = new ArrayList<>();
@@ -156,7 +176,7 @@ public class FirebaseDataExchanger implements DataExchanger {
                     String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);
                     Double longitude = data.child("longitude").getValue(Double.class);
-
+                    //Create location
                     Location location = new Location(name, type, latitude, longitude);
                     listLocations.add(location);
                 }
@@ -168,6 +188,5 @@ public class FirebaseDataExchanger implements DataExchanger {
             }
         });
     }
-
 
 }

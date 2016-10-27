@@ -23,6 +23,7 @@ import static junit.framework.Assert.assertTrue;
 public class TaskTest {
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
+
     private Task testTask;
 
     @Before

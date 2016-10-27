@@ -7,10 +7,13 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Location {
 
+    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
+
     private String name;
     private LocationType type;
     private double latitude;
     private double longitude;
+
     /**
      * Constructor of the class
      *
@@ -39,11 +42,20 @@ public class Location {
         this.longitude = longitude;
     }
 
+
+    /**
+     * Constructor of the class
+     *
+     * @param location A Location
+     */
     public Location(Location location) {
         this(location.getName(), location.getType().toString(), location.getLatitude(), location.getLongitude());
     }
 
 
+    /**
+     * Default constructor initializing fields to default values
+     */
     public Location() {
         this("Everywhere", LocationType.EVERYWHERE.toString(), 0, 0);
     }
@@ -75,23 +87,12 @@ public class Location {
         return longitude;
     }
 
-    public void setLongitude(double newLongitude) {
-        if (newLongitude < -180 || newLongitude > 180)
-            throw new IllegalArgumentException("New longitude passed to Location's setter invalid");
-        longitude = newLongitude;
-    }
 
     /**
      * Getter returning the latitude of the location
      */
     public double getLatitude() {
         return latitude;
-    }
-
-    public void setLatitude(double newLatitude) {
-        if (newLatitude < -90 || newLatitude > 90)
-            throw new IllegalArgumentException("New latitude passed to Location's setter invalid");
-        latitude = newLatitude;
     }
 
     /**
@@ -102,17 +103,46 @@ public class Location {
     }
 
     /**
-     * Getter returning the type of the location
+     * Setter to modify the latitude
+     *
+     * @param newLatitude The new latitude
+     * @throws IllegalArgumentException if the argument is not between -90 and 90
      */
-    public LocationType getType() {
-        return type;
+    public void setLatitude(double newLatitude) {
+        if (newLatitude < -90 || newLatitude > 90)
+            throw new IllegalArgumentException("New latitude passed to Location's setter invalid");
+        latitude = newLatitude;
     }
 
+    /**
+     * Setter to modify the longitude
+     *
+     * @param newLongitude The new longitude
+     * @throws IllegalArgumentException if the argument is not between -180 and 180
+     */
+    public void setLongitude(double newLongitude) {
+        if (newLongitude < -180 || newLongitude > 180)
+            throw new IllegalArgumentException("New longitude passed to Location's setter invalid");
+        longitude = newLongitude;
+    }
+
+    /**
+     * Setter to modify the type of the location
+     *
+     * @param newType The new type of the location
+     * @throws IllegalArgumentException if the argument is null
+     */
     public void setType(LocationType newType) {
         if (newType == null)
             throw new IllegalArgumentException("Location type passed to the setter invalid");
         type = newType;
     }
 
-    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
+    /**
+     * Getter returning the type of the location
+     */
+    public LocationType getType() {
+        return type;
+    }
+
 }

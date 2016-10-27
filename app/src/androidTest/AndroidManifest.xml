@@ -3,4 +3,5 @@
     package="ch.epfl.sweng.project.test">
 
     <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
+
 </manifest>

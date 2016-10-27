@@ -24,9 +24,9 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
-    private static boolean isAlreadyPersistent = false;
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
+    private static boolean isAlreadyPersistent = false;
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -40,7 +40,7 @@ public final class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Make the database persistent, must be called before anything is done in the database.
-        if (!isAlreadyPersistent) {
+        if(!isAlreadyPersistent) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             isAlreadyPersistent = true;
         }

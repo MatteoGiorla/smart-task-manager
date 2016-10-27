@@ -11,7 +11,8 @@ import static org.hamcrest.Matchers.anything;
 
 class SuperTest {
 
-    void createATask(String taskTitle, String taskDescription) {
+
+    void createATask(String taskTitle, String taskDescription){
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(taskTitle));
         onView(withId(R.id.description_task)).perform(typeText(taskDescription));
@@ -19,7 +20,7 @@ class SuperTest {
     }
 
     /**
-     * Delete the numbers of tasks given
+     *  Delete the numbers of tasks given
      */
     void emptyDatabase(int size) {
         for (int i = 0; i < size; i++) {
