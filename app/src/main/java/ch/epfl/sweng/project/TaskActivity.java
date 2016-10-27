@@ -51,7 +51,8 @@ public abstract class TaskActivity extends AppCompatActivity {
     List<String> listOfContributors;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
-    private static Button mButton;
+    private static String buttonText;
+    private Button mButton;
     private static DateFormat dateFormat = DateFormat.getDateInstance();
 
 
@@ -85,6 +86,8 @@ public abstract class TaskActivity extends AppCompatActivity {
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
         mButton = (Button)findViewById(R.id.pick_date);
+
+        mButton.setText(buttonText);
 
         //a supprimer plus tard
         mLocation = (Spinner)findViewById(R.id.locationSpinner);
@@ -307,7 +310,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
             Date dateRepresentation = cal.getTime();
-            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
+            buttonText = dateFormat.format(dateRepresentation.getTime());
             taskDay = day;
             taskMonth = month;
             taskYear = year;
