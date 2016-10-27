@@ -34,13 +34,12 @@ import static org.junit.Assert.assertThat;
  * Unit tests!
  */
 @RunWith(AndroidJUnit4.class)
-public final class NewTaskTest extends SuperTest{
+public final class NewTaskTest extends SuperTest {
     private String mTitleToBeTyped;
     private String mDescriptionToBeTyped;
 
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
@@ -64,7 +63,7 @@ public final class NewTaskTest extends SuperTest{
     @Test
     public void testCanAddTask() {
         for (int i = 0; i < 3; i++) {
-            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
+            createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
@@ -85,7 +84,7 @@ public final class NewTaskTest extends SuperTest{
     public void testCanDeleteTasks() {
         //We create and add tasks
         for (int i = 0; i < 3; i++) {
-            createATask(mTitleToBeTyped+i, mDescriptionToBeTyped+i);
+            createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
         }
 
         //We delete the tasks
@@ -114,7 +113,11 @@ public final class NewTaskTest extends SuperTest{
     @Test
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task with empty titles
-        createATask("", mDescriptionToBeTyped);
+        onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(typeText(""));
+        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
+        pressBack();
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -141,6 +144,7 @@ public final class NewTaskTest extends SuperTest{
         //Try to create a second class with the same title as the first one
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
+        pressBack();
         onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
@@ -156,7 +160,7 @@ public final class NewTaskTest extends SuperTest{
         //Check that the error message is displayed
         onView(withId(R.id.title_task_layout))
                 .check(matches(ErrorTextInputLayoutMatcher
-                .withErrorText(containsString(errorMessage))));
+                        .withErrorText(containsString(errorMessage))));
         pressBack();
         pressBack();
         emptyDatabase(1);

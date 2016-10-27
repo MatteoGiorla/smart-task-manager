@@ -3,7 +3,6 @@ package ch.epfl.sweng.project;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;

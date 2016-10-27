@@ -3,6 +3,8 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,8 +15,6 @@ import java.util.List;
  * Task is the class representing a task
  */
 public class Task implements Parcelable {
-
-    public enum Energy { LOW, NORMAL, HIGH }
 
     /**
      * Used to regenerate a Task, all parcelables must have a creator
@@ -125,7 +125,14 @@ public class Task implements Parcelable {
         setDurationInMinutes(30);
         setEnergyNeeded(Energy.NORMAL);
         listOfContributors = new ArrayList<>();
-        addContributor(User.DEFAULT_EMAIL);
+        // Temporary
+        String mail;
+        try{
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
+        }
+        addContributor(mail);
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -135,7 +142,6 @@ public class Task implements Parcelable {
     public String getName() {
         return name;
     }
-
 
     /**
      * Getter returning a copy of the task's description
@@ -158,6 +164,11 @@ public class Task implements Parcelable {
         return dueDate;
     }
 
+
+    /**
+     * Transform the date as a string
+     * @return The formatted date
+     */
     public String dueDateToString() {
         return dateFormat.format(dueDate.getTime());
     }
@@ -208,6 +219,7 @@ public class Task implements Parcelable {
      * Setter to modify the task's location
      *
      * @param newLocation The new task's location
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setLocation(Location newLocation) {
         if(newLocation == null) {
@@ -220,6 +232,7 @@ public class Task implements Parcelable {
      * Setter to modify the task's due date
      *
      * @param newDueDate The new task's due date
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setDueDate(Date newDueDate) {
         if(newDueDate == null) {
@@ -234,25 +247,37 @@ public class Task implements Parcelable {
      * @param newDurationInMinutes The new task's duration
      */
     public void setDurationInMinutes(long newDurationInMinutes) {
-        durationInMinutes= newDurationInMinutes;
+        durationInMinutes = newDurationInMinutes;
     }
 
     /**
      * Setter to modify the task's energy need
      *
      * @param newEnergyNeeded The new task's energy need
+     * @throws IllegalArgumentException if the argument is null
      */
     public void setEnergyNeeded(Energy newEnergyNeeded) {
-        if(newEnergyNeeded == null) {
+        if (newEnergyNeeded == null) {
             throw new IllegalArgumentException("newEnergyNeeded passed to the Task's setter is null");
         }
-        energyNeeded= newEnergyNeeded;
+        energyNeeded = newEnergyNeeded;
     }
 
+    /**
+     * Getter returning the list of contributors of the task
+     *
+     * @return list of contributors
+     */
     public List<String> getListOfContributors() {
         return new ArrayList<>(listOfContributors);
     }
 
+    /**
+     * Getter returning the list of contributors of the task
+     * as a string.
+     *
+     * @return list of contributors formatted as a string.
+     */
     public String listOfContributorsToString() {
         if(listOfContributors.isEmpty())
             return "";
@@ -265,6 +290,11 @@ public class Task implements Parcelable {
         return contributorsToString.toString();
     }
 
+    /**
+     * Add a given contributor to the list of contributors
+     *
+     * @param contributor Email of the contributor
+     */
     public void addContributor(String contributor) {
         if(contributor == null)
             listOfContributors.add(User.DEFAULT_EMAIL);
@@ -272,6 +302,12 @@ public class Task implements Parcelable {
         listOfContributors.add(contributor);
     }
 
+    /**
+     * Delete a given contributor of the list of contributors
+     *
+     * @param contributor Email of the contributor
+     * @throws IllegalArgumentException if the argument is null
+     */
     public boolean deleteContributor(String contributor) {
         if(contributor == null || !listOfContributors.contains(contributor))
             throw new IllegalArgumentException("Contributor to be deleted invalid");
@@ -300,4 +336,6 @@ public class Task implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
     }
+
+    public enum Energy {LOW, NORMAL, HIGH}
 }

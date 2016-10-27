@@ -34,7 +34,6 @@ import java.util.List;
  * Class which represents an activity regarding a task
  */
 public abstract class TaskActivity extends AppCompatActivity {
-    private TextInputLayout textInputLayoutTitle;
     Intent intent;
     ArrayList<Task> taskList;
     private EditText titleEditText;
@@ -50,13 +49,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     String location;
     Task.Energy energy;
     List<String> listOfContributors;
+    private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     private static Button mButton;
     private static DateFormat dateFormat = DateFormat.getDateInstance();
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
 
@@ -87,9 +87,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
-        mLocation = (Spinner)findViewById(R.id.spinner);
+        mLocation = (Spinner)findViewById(R.id.locationSpinner);
 
-        mDuration = (Spinner)findViewById(R.id.spinner3);
+        mDuration = (Spinner)findViewById(R.id.durationSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
@@ -112,7 +112,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        mEnergy = (Spinner)findViewById(R.id.spinner2);
+        mEnergy = (Spinner)findViewById(R.id.energySpinner);
 
         ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
@@ -158,7 +158,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private void checkTaskList() {
-        if(taskList == null) {
+        if (taskList == null) {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
         }
     }
@@ -183,7 +183,7 @@ public abstract class TaskActivity extends AppCompatActivity {
      * This class is used to check on runtime if the inputs written by the user
      * are valid or not.
      */
-    private class TaskTextWatcher implements TextWatcher{
+    private class TaskTextWatcher implements TextWatcher {
 
         /**
          * Check the input written by the user before it is changed.

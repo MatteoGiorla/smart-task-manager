@@ -49,6 +49,15 @@
     <string name="energy_field">Energy needed</string>
     <string name="contributors_field">Contributor(s)</string>
 
+    <!-- Fields titles of new/edit task activity -->
+    <string name="locationTitle">LOCATION</string>
+    <string name="energyTitle">ENERGY</string>
+    <string name="descriptionTitle">DESCRIPTION</string>
+    <string name="durationTitle">DURATION</string>
+    <string name="enter_due_date_hint">Enter due date</string>
+    <string name="dueDateTitle">DUE DATE</string>
+    <string name="titleTitle">TITLE</string>
+
 
     <string name="title_activity_maps">Map</string>
 
@@ -63,6 +72,7 @@
         <item>Office</item>
     </string-array>
 
+    <!-- Duration description-->
     <string name="duration5m">5 minutes</string>
     <string name="duration15m">10 minutes</string>
     <string name="duration30m">30 minutes</string>
@@ -75,4 +85,5 @@
     <string name="duration1w">1 week</string>
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
+
 </resources>

@@ -77,7 +77,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     public void openEditTaskActivity(View v) {
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        if(taskList == null)
+        if (taskList == null)
             throw new IllegalArgumentException("taskList is null before been passed to the intent");
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
         int editTaskRequestCode = 1;
@@ -87,12 +87,12 @@ public class TaskInformationActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 Task editedTask = data.getParcelableExtra(RETURNED_EDITED_TASK);
                 int editedTaskIndex = data.getIntExtra(RETURNED_INDEX_EDITED_TASK, -1);
 
-                if(editedTask == null || editedTaskIndex == -1)
+                if (editedTask == null || editedTaskIndex == -1)
                     throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
 
                 taskToBeDisplayed = editedTask;
@@ -101,11 +101,6 @@ public class TaskInformationActivity extends AppCompatActivity {
                 informationItemsList.clear();
                 createInformationItemList();
                 mInformationAdapter.notifyDataSetChanged();
-
-                intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
-                intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
-                intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
-                setResult(RESULT_OK, intent);
             }
         }
     }
@@ -138,13 +133,13 @@ public class TaskInformationActivity extends AppCompatActivity {
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
                 taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.duration_field),
-                String.valueOf(taskToBeDisplayed.getDuration()) , R.drawable.minutes_needed_36dp));
+                String.valueOf(taskToBeDisplayed.getDuration()), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
     }
 
     /**
-     *  Set the tool bar with the return arrow on top left.
+     * Set the tool bar with the return arrow on top left.
      */
     private void setToolBar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.task_information_toolbar);
@@ -156,7 +151,7 @@ public class TaskInformationActivity extends AppCompatActivity {
      * Check the intent validity.
      */
     private void checkIntent() {
-        if(intent == null) {
+        if (intent == null) {
             throw new IllegalArgumentException("No intent was passed to TaskInformationActivity !");
         }
     }
@@ -165,7 +160,7 @@ public class TaskInformationActivity extends AppCompatActivity {
      * Check the intent's extras validity.
      */
     private void checkIntentExtras() {
-        if(taskList == null || position == -1) {
+        if (taskList == null || position == -1) {
             throw new IllegalArgumentException("Error on extras passed to TaskInformationActivity !");
         }
     }
@@ -182,6 +177,10 @@ public class TaskInformationActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
+            intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

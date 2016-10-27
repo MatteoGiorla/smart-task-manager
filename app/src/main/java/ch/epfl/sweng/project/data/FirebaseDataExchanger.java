@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.data;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,8 +21,11 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 
-
-//this class need to be expanded  and completed once the Firebase database will be set
+/**
+ * This class is the exchanger between firebase and the app
+ * It deals with all necessary operations that must be done
+ * on the database.
+ */
 public class FirebaseDataExchanger implements DataExchanger {
 
     private final DatabaseReference mDatabase;
@@ -39,6 +43,12 @@ public class FirebaseDataExchanger implements DataExchanger {
         mContext = context;
     }
 
+    /**
+     * Encode a given mail to be compatible with keys in firebase
+     *
+     * @param mail The user email
+     * @return The encoded email
+     */
     private String encodeMailAsFirebaseKey(String mail) {
         return mail.replace('.', ' ');
     }
@@ -51,6 +61,7 @@ public class FirebaseDataExchanger implements DataExchanger {
         } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
+        Log.e("mail id", mail);
         User user = new User(mail);
         recoverUserLocations(user);
         return user;
@@ -63,7 +74,7 @@ public class FirebaseDataExchanger implements DataExchanger {
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
+                if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
                     Toast.makeText(mContext, "You don't have any tasks !", Toast.LENGTH_SHORT).show();
                 }
                 mTaskList.clear();
@@ -101,7 +112,7 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public void addNewTask(Task task) {
-        for(String mail : task.getListOfContributors()) {
+        for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
@@ -111,7 +122,7 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public void deleteTask(Task task) {
-        for(String mail : task.getListOfContributors()) {
+        for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.removeValue();
         }
@@ -137,24 +148,35 @@ public class FirebaseDataExchanger implements DataExchanger {
         addUser(user);
     }
 
+    /**
+     * Deleter a user in the database
+     *
+     * @param user The user to be deleted
+     */
     private void deleteUser(User user) {
         DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).getRef();
         userRef.removeValue();
     }
 
+    /**
+     * Recover the locations set by the user when he
+     * first sign in.
+     *
+     * @param user The user
+     */
     private void recoverUserLocations(final User user) {
         DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
         final List<Location> listLocations = new ArrayList<>();
 
-         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     String name = (String) data.child("name").getValue();
                     String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);
                     Double longitude = data.child("longitude").getValue(Double.class);
-
+                    //Create location
                     Location location = new Location(name, type, latitude, longitude);
                     listLocations.add(location);
                 }
@@ -166,6 +188,5 @@ public class FirebaseDataExchanger implements DataExchanger {
             }
         });
     }
-
 
 }

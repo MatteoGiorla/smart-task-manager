@@ -13,6 +13,11 @@ public class User {
     private static final String TAG = "User Class";
     public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
+    /**
+     * Constructor of the user class which
+     * set listLocations to an empty list.
+     * @param mail
+     */
     public User(String mail) {
         if (mail == null) {
             this.email = DEFAULT_EMAIL;
@@ -22,6 +27,7 @@ public class User {
         // Default values:
         this.listLocations = Arrays.asList(new Location(), new Location());
     }
+
     /**
      * Constructor of the class. Implementation of the fields of the class with
      * default values.
@@ -41,7 +47,11 @@ public class User {
     }
 
     /**
+<<<<<<< HEAD
      * Getter
+=======
+     * Getter returning the email of the user
+>>>>>>> test_firebase
      *
      * @return email of the user.
      */
@@ -50,14 +60,16 @@ public class User {
     }
 
     /**
-     * Getter
+     * Getter returning the locations of the user
      */
     public List<Location> getListLocations() {
         return listLocations;
     }
 
     /**
-     * Setter
+     * Setter that allors to change the locations of the user
+     *
+     * @throws NullPointerException If the argument is null
      */
     public void setListLocations(List<Location> list) {
         if(list == null) {
@@ -68,7 +80,8 @@ public class User {
         }
     }
     /**
-     * ListLocations is always of size 2.
+     * Allow the user to update a specific location.
+     * We use the fact that listLocations is always of size 2.
      */
     public void updateLocation(Location location) {
         if(location == null || location.getType() == Location.LocationType.EVERYWHERE

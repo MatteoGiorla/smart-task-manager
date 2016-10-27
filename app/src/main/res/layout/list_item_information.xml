@@ -4,22 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
-    
+
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-        
+
         <ImageView
             android:id="@+id/image_field_information"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:contentDescription="@string/image_information_field_description"
-            android:paddingTop="10dp"
             android:paddingEnd="10dp"
-            android:tint="@color/gray"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-        
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:tint="@color/gray" />
+
     </FrameLayout>
 
     <LinearLayout
@@ -30,23 +30,23 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
+            android:id="@+id/title_field_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/title_field_information"
             android:textColor="@color/colorPrimary"
-            android:textStyle="normal"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/body_field_information"
-            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_title"
-            android:textSize="20sp"
-            android:layout_marginTop="7dp"
+            android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:layout_marginEnd="7dp"/>
+            android:layout_marginTop="7dp"
+            android:hint="@string/hint_title"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </LinearLayout>
