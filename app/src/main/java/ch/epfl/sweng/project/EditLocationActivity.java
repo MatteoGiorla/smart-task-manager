@@ -58,17 +58,11 @@ public class EditLocationActivity extends AppCompatActivity {
         }
 
 
-        textInputLayoutName = (TextInputLayout)
+        textInputLayoutName = (TextInputLayout) findViewById(R.id.location_name_layout);
 
-                findViewById(R.id.location_name_layout);
+        nameTextEdit = (EditText)findViewById(R.id.locationName);
 
-        nameTextEdit = (EditText)
-
-                findViewById(R.id.locationName);
-
-        doneLocationButton = (ImageButton)
-
-                findViewById(R.id.location_done_button_toolbar);
+        doneLocationButton = (ImageButton) findViewById(R.id.location_done_button_toolbar);
 
         //Create a listener to check that the user is writing a valid input.
         nameTextEdit.addTextChangedListener(new EditLocationActivity.LocationTextWatcher());
