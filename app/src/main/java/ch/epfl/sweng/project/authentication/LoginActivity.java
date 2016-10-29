@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import ch.epfl.sweng.project.EditLocationActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 
@@ -210,8 +211,14 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            Intent intent;
+                            if(true) { //TODO : replace by "if first connection of the user"
+                                intent = new Intent(LoginActivity.this, EditLocationActivity.class); //TODO : replace edit location activity by LocationSetting
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            } else {
+                                intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            }
                             startActivity(intent);
                             finish();
                         }
@@ -252,8 +259,14 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            Intent intent;
+                            if(true) { //TODO : replace by "if first connection of the user"
+                                intent = new Intent(LoginActivity.this, EditLocationActivity.class); //TODO : replace edit location activity by LocationSetting
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            } else {
+                                intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            }
                             startActivity(intent);
                             finish();
                         }
