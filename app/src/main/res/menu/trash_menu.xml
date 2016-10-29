@@ -5,7 +5,7 @@
         android:id="@+id/trash_menu"
         android:title="@string/trash"
         android:icon="@drawable/trash_36dp"
-        android:showAsAction="always"
-        app:showAsAction="always" />
+        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom" />
 
 </menu>
