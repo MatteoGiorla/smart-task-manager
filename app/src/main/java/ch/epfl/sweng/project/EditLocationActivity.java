@@ -13,23 +13,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 
+import static android.R.attr.name;
 import static ch.epfl.sweng.project.R.id.locationName;
 
 public class EditLocationActivity extends AppCompatActivity {
 
-    private Spinner mLocationType;
+    public static final int REQUEST_PLACE_PICKER = 1;
+
     private ImageButton doneLocationButton;
     private EditText nameTextEdit;
     private TextInputLayout textInputLayoutName;
     String name;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,28 +41,39 @@ public class EditLocationActivity extends AppCompatActivity {
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
         PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
         try {
-            Intent intent = intentBuilder.build(this);
+            final Intent intent = intentBuilder.build(this);
+            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
+                }
+            });
 
         } catch (GooglePlayServicesRepairableException e) {
             e.printStackTrace();
-            // TODO
+            // TODO handle exception!
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
-            // TODO
+            // TODO handle exception!
         }
 
-        textInputLayoutName = (TextInputLayout) findViewById(R.id.location_name_layout);
-        nameTextEdit = (EditText) findViewById(R.id.locationName);
 
-        doneLocationButton = (ImageButton) findViewById(R.id.location_done_button_toolbar);
+        textInputLayoutName = (TextInputLayout)
+
+                findViewById(R.id.location_name_layout);
+
+        nameTextEdit = (EditText)
+
+                findViewById(R.id.locationName);
+
+        doneLocationButton = (ImageButton)
+
+                findViewById(R.id.location_done_button_toolbar);
 
         //Create a listener to check that the user is writing a valid input.
         nameTextEdit.addTextChangedListener(new EditLocationActivity.LocationTextWatcher());
 
         doneLocationButton.setOnClickListener(new EditLocationActivity.OnDoneButtonClickListener());
-
-
-
     }
 
     /**
@@ -133,6 +147,16 @@ public class EditLocationActivity extends AppCompatActivity {
                 textInputLayoutName.setErrorEnabled(false);
             }
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PLACE_PICKER) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String toast = String.format("Place: %s", place.getName());
+                Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
