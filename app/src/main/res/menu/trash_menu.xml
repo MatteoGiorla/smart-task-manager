@@ -6,6 +6,6 @@
         android:title="@string/trash"
         android:icon="@drawable/trash_36dp"
         android:showAsAction="ifRoom"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>
