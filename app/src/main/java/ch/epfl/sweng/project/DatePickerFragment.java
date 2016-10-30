@@ -5,12 +5,14 @@ import android.app.Dialog;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    @NonNull
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

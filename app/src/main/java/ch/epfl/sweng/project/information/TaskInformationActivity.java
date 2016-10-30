@@ -29,6 +29,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     public static final String TASK_TO_BE_DELETED_INDEX = "ch.epfl.sweng.information.TASK_TO_BE_DELETED_INDEX";
     public static final int TASK_IS_MODIFIED = 1;
     public static final int TASK_IS_DELETED = 2;
+    private final int editTaskRequestCode = 1;
     private ArrayList<Task> taskList;
     private int position;
     private Task taskToBeDisplayed;
@@ -37,7 +38,6 @@ public class TaskInformationActivity extends AppCompatActivity {
     private TextView taskTitleTextView;
     private InformationListAdapter mInformationAdapter;
     private int taskStatus;
-    private int editTaskRequestCode = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
