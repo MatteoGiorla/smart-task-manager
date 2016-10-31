@@ -46,11 +46,7 @@ public class User {
     }
 
     /**
-<<<<<<< HEAD
-     * Getter
-=======
      * Getter returning the email of the user
->>>>>>> test_firebase
      *
      * @return email of the user.
      */

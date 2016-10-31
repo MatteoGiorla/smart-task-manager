@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.data.DataExchanger;
-import ch.epfl.sweng.project.data.FirebaseDataExchanger;
+import ch.epfl.sweng.project.data.DataProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -39,7 +39,7 @@ public class TaskFragment extends Fragment {
     private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private DataExchanger firebaseDatabase;
+    private DataExchanger mDatabase;
 
     /**
      * Method that adds a task in the taskList and in the database.
@@ -51,7 +51,7 @@ public class TaskFragment extends Fragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        firebaseDatabase.addNewTask(task);
+        mDatabase.addNewTask(task);
     }
 
     /**
@@ -72,9 +72,10 @@ public class TaskFragment extends Fragment {
                 taskList
         );
 
-        firebaseDatabase = new FirebaseDataExchanger(getActivity(), mTaskAdapter, taskList);
-        User currentUser = firebaseDatabase.retrieveUserInformation();
-        firebaseDatabase.retrieveAllData(currentUser);
+        DataProvider provider = new DataProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getProvider();
+        User currentUser = mDatabase.retrieveUserInformation();
+        mDatabase.retrieveAllData(currentUser);
     }
 
     /**
@@ -194,8 +195,8 @@ public class TaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            firebaseDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
-            taskList.set(indexEditedTask, editedTask);
+            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
+            //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
                     editedTask.getName() + " has been updated !",
@@ -238,7 +239,7 @@ public class TaskFragment extends Fragment {
 
         String taskName = taskToBeDeleted.getName();
 
-        firebaseDatabase.deleteTask(taskToBeDeleted);
+        mDatabase.deleteTask(taskToBeDeleted);
 
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE = taskName + " deleted";

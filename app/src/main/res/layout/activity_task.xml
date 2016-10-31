@@ -108,6 +108,7 @@
                 android:onClick="showDatePickerDialog"
                 android:text="@string/enter_due_date_hint" />
 
+
         </LinearLayout>
 
         <View
