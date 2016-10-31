@@ -141,10 +141,34 @@ public class Task implements Parcelable {
     }
 
     /**
+     * Setter to modify the task's name
+     *
+     * @param newName The new task's name
+     * @throws IllegalArgumentException if newName is null
+     */
+    public void setName(String newName) {
+        if (newName == null)
+            throw new IllegalArgumentException("newName passed to the Task's setter is null");
+        name = newName;
+    }
+
+    /**
      * Getter returning a copy of the task's description
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Setter to modify the task's description
+     *
+     * @param newDescription The new task's description
+     * @throws IllegalArgumentException if newName is null
+     */
+    public void setDescription(String newDescription) {
+        if (newDescription == null)
+            throw new IllegalArgumentException("newDescription passed to the Task's setter is null");
+        description = newDescription;
     }
 
     /**
@@ -155,12 +179,35 @@ public class Task implements Parcelable {
     }
 
     /**
+     * Setter to modify the task's location
+     *
+     * @param newLocation The new task's location
+     * @throws IllegalArgumentException if the argument is null
+     */
+    public void setLocation(Location newLocation) {
+        if(newLocation == null)
+            throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
+        location = newLocation;
+    }
+
+    /**
      * Getter returning a copy of the task's due date
      */
     public Date getDueDate() {
         return dueDate;
     }
 
+    /**
+     * Setter to modify the task's due date
+     *
+     * @param newDueDate The new task's due date
+     * @throws IllegalArgumentException if the argument is null
+     */
+    public void setDueDate(Date newDueDate) {
+        if(newDueDate == null)
+            throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
+        dueDate = newDueDate;
+    }
 
     /**
      * Transform the date as a string
@@ -182,54 +229,6 @@ public class Task implements Parcelable {
      */
     public Energy getEnergy() {
         return energyNeeded;
-    }
-
-    /**
-     * Setter to modify the task's name
-     *
-     * @param newName The new task's name
-     * @throws IllegalArgumentException if newName is null
-     */
-    public void setName(String newName) {
-        if (newName == null)
-            throw new IllegalArgumentException("newName passed to the Task's setter is null");
-        name = newName;
-    }
-
-    /**
-     * Setter to modify the task's description
-     *
-     * @param newDescription The new task's description
-     * @throws IllegalArgumentException if newName is null
-     */
-    public void setDescription(String newDescription) {
-        if (newDescription == null)
-            throw new IllegalArgumentException("newDescription passed to the Task's setter is null");
-        description = newDescription;
-    }
-
-    /**
-     * Setter to modify the task's location
-     *
-     * @param newLocation The new task's location
-     * @throws IllegalArgumentException if the argument is null
-     */
-    public void setLocation(Location newLocation) {
-        if(newLocation == null)
-            throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
-        location = newLocation;
-    }
-
-    /**
-     * Setter to modify the task's due date
-     *
-     * @param newDueDate The new task's due date
-     * @throws IllegalArgumentException if the argument is null
-     */
-    public void setDueDate(Date newDueDate) {
-        if(newDueDate == null)
-            throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
-        dueDate = newDueDate;
     }
 
     /**

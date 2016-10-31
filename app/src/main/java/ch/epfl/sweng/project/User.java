@@ -8,9 +8,9 @@ import java.util.List;
  * Class representing a user
  */
 public class User {
+    public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
     private String email;
     private List<Location> listLocations;
-    public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
     /**
      * Constructor of the user class which

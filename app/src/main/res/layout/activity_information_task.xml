@@ -16,7 +16,7 @@
                 android:id="@+id/task_information_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ActionBar"/>
+                android:theme="@style/ActionBar" />
         </FrameLayout>
 
         <FrameLayout

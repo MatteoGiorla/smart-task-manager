@@ -24,9 +24,9 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
+    private static boolean isAlreadyPersistent = false;
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
-    private static boolean isAlreadyPersistent = false;
 
     /**
      * Override the onCreate method to create a TaskFragment

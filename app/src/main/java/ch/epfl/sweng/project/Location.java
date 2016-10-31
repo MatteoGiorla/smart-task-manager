@@ -7,13 +7,10 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class Location {
 
-    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
-
     private String name;
     private LocationType type;
     private double latitude;
     private double longitude;
-
     /**
      * Constructor of the class
      *
@@ -41,7 +38,6 @@ public class Location {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
 
     /**
      * Constructor of the class
@@ -87,19 +83,23 @@ public class Location {
         return longitude;
     }
 
+    /**
+     * Setter to modify the longitude
+     *
+     * @param newLongitude The new longitude
+     * @throws IllegalArgumentException if the argument is not between -180 and 180
+     */
+    public void setLongitude(double newLongitude) {
+        if (newLongitude < -180 || newLongitude > 180)
+            throw new IllegalArgumentException("New longitude passed to Location's setter invalid");
+        longitude = newLongitude;
+    }
 
     /**
      * Getter returning the latitude of the location
      */
     public double getLatitude() {
         return latitude;
-    }
-
-    /**
-     * Getter returning the gps coordinates of the location
-     */
-    public LatLng getGPSCoordinates() {
-        return new LatLng(latitude, longitude);
     }
 
     /**
@@ -115,15 +115,17 @@ public class Location {
     }
 
     /**
-     * Setter to modify the longitude
-     *
-     * @param newLongitude The new longitude
-     * @throws IllegalArgumentException if the argument is not between -180 and 180
+     * Getter returning the gps coordinates of the location
      */
-    public void setLongitude(double newLongitude) {
-        if (newLongitude < -180 || newLongitude > 180)
-            throw new IllegalArgumentException("New longitude passed to Location's setter invalid");
-        longitude = newLongitude;
+    public LatLng getGPSCoordinates() {
+        return new LatLng(latitude, longitude);
+    }
+
+    /**
+     * Getter returning the type of the location
+     */
+    public LocationType getType() {
+        return type;
     }
 
     /**
@@ -138,11 +140,6 @@ public class Location {
         type = newType;
     }
 
-    /**
-     * Getter returning the type of the location
-     */
-    public LocationType getType() {
-        return type;
-    }
+    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
 
 }

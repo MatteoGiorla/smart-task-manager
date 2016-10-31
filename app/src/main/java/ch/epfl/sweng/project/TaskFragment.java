@@ -24,7 +24,9 @@ import ch.epfl.sweng.project.data.DataProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.IS_MODIFIED_KEY;
+import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
+import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_MODIFIED;
+import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -169,9 +171,20 @@ public class TaskFragment extends Fragment {
         if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
             actionOnActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
-            boolean isTaskModified = data.getBooleanExtra(IS_MODIFIED_KEY, false);
-            if (isTaskModified)
-                actionOnActivityResult(data);
+            int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
+            if(taskStatus == -1)
+                throw new IllegalArgumentException("Error with the intent form TaskInformationActivity");
+
+            switch (taskStatus) {
+                case TASK_IS_MODIFIED :
+                    actionOnActivityResult(data);
+                    break;
+                case TASK_IS_DELETED :
+                    int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
+                    if(taskIndex == -1)
+                        throw new IllegalArgumentException("Error with the task to be deleted index");
+                    removeTaskAction(taskIndex);
+            }
         }
     }
 
@@ -217,6 +230,11 @@ public class TaskFragment extends Fragment {
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
+        removeTaskAction(position);
+
+    }
+
+    private void removeTaskAction(int position) {
         Task taskToBeDeleted = taskList.get(position);
 
         String taskName = taskToBeDeleted.getName();
