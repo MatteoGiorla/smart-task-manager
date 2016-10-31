@@ -59,12 +59,12 @@ public class UserTest {
     @Test
     public void testSecondConstructor() {
         String email = "trixyfinger@gmail.com";
-        String locationNameTest1 = "location test workplace";
+        String locationNameTest1 = "locationName test workplace";
         Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
         Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
-        String locationNameTest2 = "location test home";
+        String locationNameTest2 = "locationName test home";
         Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;
@@ -86,12 +86,12 @@ public class UserTest {
      */
     @Test
     public void testSetterListLocations() {
-        String locationNameTest1 = "location test workplace";
+        String locationNameTest1 = "locationName test workplace";
         Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
         Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
-        String locationNameTest2 = "location test home";
+        String locationNameTest2 = "locationName test home";
         Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;

@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -42,17 +43,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     private Spinner mEnergy;
     String title;
     String description;
-    static int taskDay;
-    static int taskMonth;
-    static int taskYear;
     long duration;
-    String location;
+    String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
-    private static String buttonText;
     private static Button mButton;
+    static Date date;
     private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
 
@@ -85,6 +83,8 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
+        date = new Date();
+
         mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
@@ -95,32 +95,15 @@ public abstract class TaskActivity extends AppCompatActivity {
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
-        ArrayAdapter spinnerArrayAdapter1 = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateDuration[] {
-                new StateDuration(5, getString(R.string.duration5m)),
-                new StateDuration(15, getString(R.string.duration15m)),
-                new StateDuration(30, getString(R.string.duration30m)),
-                new StateDuration(60, getString(R.string.duration1h)),
-                new StateDuration(120, getString(R.string.duration2h)),
-                new StateDuration(240, getString(R.string.duration4h)),
-                new StateDuration(480, getString(R.string.duration1d)),
-                new StateDuration(960, getString(R.string.duration2d)),
-                new StateDuration(1920, getString(R.string.duration4d)),
-                new StateDuration(3360, getString(R.string.duration1w)),
-                new StateDuration(6720, getString(R.string.duration2w)),
-                new StateDuration(13440, getString(R.string.duration1m))
-        });
+        ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
         mEnergy = (Spinner)findViewById(R.id.energySpinner);
 
-        ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateEnergy[] {
-                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
-                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
-                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
-        });
+        ArrayAdapter<StateEnergy> spinnerArrayAdapter2 = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
 
         mEnergy.setAdapter(spinnerArrayAdapter2);
 /*
@@ -162,6 +145,31 @@ public abstract class TaskActivity extends AppCompatActivity {
         if (taskList == null) {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
         }
+    }
+
+    private StateDuration[] createStateDurationTable() {
+        return new StateDuration[] {
+                new StateDuration(5, getString(R.string.duration5m)),
+                new StateDuration(10, getString(R.string.duration15m)),
+                new StateDuration(30, getString(R.string.duration30m)),
+                new StateDuration(60, getString(R.string.duration1h)),
+                new StateDuration(120, getString(R.string.duration2h)),
+                new StateDuration(240, getString(R.string.duration4h)),
+                new StateDuration(1440, getString(R.string.duration1d)),
+                new StateDuration(2880, getString(R.string.duration2d)),
+                new StateDuration(5760, getString(R.string.duration4d)),
+                new StateDuration(10080, getString(R.string.duration1w)),
+                new StateDuration(20160, getString(R.string.duration2w)),
+                new StateDuration(43800, getString(R.string.duration1m))
+        };
+    }
+
+    private StateEnergy[] createStateEnergyTable() {
+        return new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
+                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
+                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
+        };
     }
 
 
@@ -230,7 +238,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
-                location = mLocation.getSelectedItem().toString();
+                locationName = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
                 energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
 
@@ -281,13 +289,13 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     public void showDatePickerDialog(View  v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        DialogFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
+        @NonNull
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -307,11 +315,10 @@ public abstract class TaskActivity extends AppCompatActivity {
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
-            Date dateRepresentation = cal.getTime();
-            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
-            taskDay = day;
-            taskMonth = month;
-            taskYear = year;
+            date = cal.getTime();
+            mButton.setText(dateFormat.format(date.getTime()));
+
         }
+
     }
 }

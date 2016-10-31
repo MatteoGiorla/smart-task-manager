@@ -87,17 +87,12 @@ public class FirebaseDataExchanger implements DataExchanger {
                         List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
 
                         //Construct Location object
-                        String name = (String) task.child("location").child("name").getValue();
-                        String type = (String) task.child("location").child("type").getValue();
-                        Double latitude = task.child("location").child("latitude").getValue(Double.class);
-                        Double longitude = task.child("location").child("longitude").getValue(Double.class);
-                        Location location = new Location(name, type, latitude, longitude);
-
+                        String locationName = (String) task.child("locationName").getValue();
                         //Construct the date
                         Long date = (Long) task.child("dueDate").child("date").getValue();
                         Date dueDate = new Date(date);
 
-                        Task newTask = new Task(title, description, location, dueDate, durationInMinutes, energy, contributors);
+                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
                         mTaskList.add(newTask);
                     }
                 }

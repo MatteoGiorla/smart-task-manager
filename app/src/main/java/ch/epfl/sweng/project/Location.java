@@ -3,7 +3,7 @@ package ch.epfl.sweng.project;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Class representing a location
+ * Class representing a locationName
  */
 public class Location {
 
@@ -19,8 +19,8 @@ public class Location {
      *
      * @param name       Location name
      * @param typeString Location type in String format
-     * @param latitude   Latitude of the location
-     * @param longitude  Longitude of the location
+     * @param latitude   Latitude of the locationName
+     * @param longitude  Longitude of the locationName
      * @throws IllegalArgumentException if the parameter is null
      */
     public Location(String name, String typeString, double latitude, double longitude) {
@@ -61,16 +61,16 @@ public class Location {
     }
 
     /**
-     * Getter returning the name of the location
+     * Getter returning the name of the locationName
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Setter to modify the location name
+     * Setter to modify the locationName name
      *
-     * @param newName The new location name
+     * @param newName The new locationName name
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
@@ -81,7 +81,7 @@ public class Location {
     }
 
     /**
-     * Getter returning the longitude of the location
+     * Getter returning the longitude of the locationName
      */
     public double getLongitude() {
         return longitude;
@@ -89,14 +89,14 @@ public class Location {
 
 
     /**
-     * Getter returning the latitude of the location
+     * Getter returning the latitude of the locationName
      */
     public double getLatitude() {
         return latitude;
     }
 
     /**
-     * Getter returning the gps coordinates of the location
+     * Getter returning the gps coordinates of the locationName
      */
     public LatLng getGPSCoordinates() {
         return new LatLng(latitude, longitude);
@@ -127,9 +127,9 @@ public class Location {
     }
 
     /**
-     * Setter to modify the type of the location
+     * Setter to modify the type of the locationName
      *
-     * @param newType The new type of the location
+     * @param newType The new type of the locationName
      * @throws IllegalArgumentException if the argument is null
      */
     public void setType(LocationType newType) {
@@ -139,7 +139,7 @@ public class Location {
     }
 
     /**
-     * Getter returning the type of the location
+     * Getter returning the type of the locationName
      */
     public LocationType getType() {
         return type;

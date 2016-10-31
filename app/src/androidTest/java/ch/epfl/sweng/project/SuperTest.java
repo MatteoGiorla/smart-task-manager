@@ -11,7 +11,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
 class SuperTest {
-
+    final int createdTask = 2;
 
     void createATask(String taskTitle, String taskDescription){
         onView(withId(R.id.add_task_button)).perform(click());
