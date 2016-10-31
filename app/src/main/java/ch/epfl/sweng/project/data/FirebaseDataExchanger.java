@@ -1,7 +1,6 @@
 package ch.epfl.sweng.project.data;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +60,6 @@ public class FirebaseDataExchanger implements DataExchanger {
         } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
-        Log.e("mail id", mail);
         User user = new User(mail);
         recoverUserLocations(user);
         return user;
