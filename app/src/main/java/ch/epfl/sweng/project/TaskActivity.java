@@ -35,18 +35,12 @@ import java.util.List;
  * Class which represents an activity regarding a task
  */
 public abstract class TaskActivity extends AppCompatActivity {
-    private static final DateFormat dateFormat = DateFormat.getDateInstance();
-    static int taskDay;
-    static int taskMonth;
-    static int taskYear;
-    private static String buttonText;
-    private static Button mButton;
     Intent intent;
     ArrayList<Task> taskList;
     String title;
     String description;
     long duration;
-    String location;
+    String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
     private EditText titleEditText;
@@ -55,6 +49,9 @@ public abstract class TaskActivity extends AppCompatActivity {
     private Spinner mEnergy;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
+    private static Button mButton;
+    static Date date;
+    private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +82,9 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        mButton = (Button) findViewById(R.id.pick_date);
+        date = new Date();
+
+        mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
@@ -96,31 +95,14 @@ public abstract class TaskActivity extends AppCompatActivity {
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateDuration[]{
-                new StateDuration(5, getString(R.string.duration5m)),
-                new StateDuration(15, getString(R.string.duration15m)),
-                new StateDuration(30, getString(R.string.duration30m)),
-                new StateDuration(60, getString(R.string.duration1h)),
-                new StateDuration(120, getString(R.string.duration2h)),
-                new StateDuration(240, getString(R.string.duration4h)),
-                new StateDuration(480, getString(R.string.duration1d)),
-                new StateDuration(960, getString(R.string.duration2d)),
-                new StateDuration(1920, getString(R.string.duration4d)),
-                new StateDuration(3360, getString(R.string.duration1w)),
-                new StateDuration(6720, getString(R.string.duration2w)),
-                new StateDuration(13440, getString(R.string.duration1m))
-        });
+            android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
         mEnergy = (Spinner) findViewById(R.id.energySpinner);
 
         ArrayAdapter<StateEnergy> spinnerArrayAdapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateEnergy[]{
-                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
-                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
-                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
-        });
+                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
 
         mEnergy.setAdapter(spinnerArrayAdapter2);
 /*
@@ -164,6 +146,31 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    private StateDuration[] createStateDurationTable() {
+        return new StateDuration[] {
+                new StateDuration(5, getString(R.string.duration5m)),
+                new StateDuration(10, getString(R.string.duration15m)),
+                new StateDuration(30, getString(R.string.duration30m)),
+                new StateDuration(60, getString(R.string.duration1h)),
+                new StateDuration(120, getString(R.string.duration2h)),
+                new StateDuration(240, getString(R.string.duration4h)),
+                new StateDuration(1440, getString(R.string.duration1d)),
+                new StateDuration(2880, getString(R.string.duration2d)),
+                new StateDuration(5760, getString(R.string.duration4d)),
+                new StateDuration(10080, getString(R.string.duration1w)),
+                new StateDuration(20160, getString(R.string.duration2w)),
+                new StateDuration(43800, getString(R.string.duration1m))
+        };
+    }
+
+    private StateEnergy[] createStateEnergyTable() {
+        return new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
+                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
+                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
+        };
+    }
+
 
     /**
      * Start the toolbar and enable that back button on the toolbar.
@@ -176,63 +183,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-    }
-
-    /*
-     * Method to hide keyboard when clicking outside the EditTextView
-     *
-     * source : http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
-
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month);
-            cal.set(Calendar.DAY_OF_MONTH, day);
-            Date dateRepresentation = cal.getTime();
-            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
-            taskDay = day;
-            taskMonth = month;
-            taskYear = year;
         }
     }
 
@@ -287,9 +237,9 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
-                location = mLocation.getSelectedItem().toString();
-                duration = ((StateDuration) mDuration.getSelectedItem()).getDuration();
-                energy = ((StateEnergy) mEnergy.getSelectedItem()).getEnergy();
+                locationName = mLocation.getSelectedItem().toString();
+                duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+                energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
 
                 resultActivity();
                 setResult(RESULT_OK, intent);
@@ -313,5 +263,61 @@ public abstract class TaskActivity extends AppCompatActivity {
         public void onClick(View v) {
             finish();
         }
+    }
+
+    /*
+     * Method to hide keyboard when clicking outside the EditTextView
+     *
+     * source : http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+    public void showDatePickerDialog(View  v) {
+        DialogFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            date = cal.getTime();
+            mButton.setText(dateFormat.format(date.getTime()));
+
+        }
+
     }
 }

@@ -68,20 +68,20 @@ public class User {
      */
     public void setListLocations(List<Location> list) {
         if(list == null) {
-            throw new IllegalArgumentException("Bad list of location given in the setter of user");
+            throw new IllegalArgumentException("Bad list of locationName given in the setter of user");
         }else{
             if(list.size() == 2)
                 this.listLocations = new ArrayList<>(list);
         }
     }
     /**
-     * Allow the user to update a specific location.
+     * Allow the user to update a specific locationName.
      * We use the fact that listLocations is always of size 2.
      */
     public void updateLocation(Location location) {
         if(location == null || location.getType() == Location.LocationType.EVERYWHERE
                 && (location.getType() != Location.LocationType.HOME || location.getType() != Location.LocationType.WORKPLACE)) {
-            throw new IllegalArgumentException("Bad location update !");
+            throw new IllegalArgumentException("Bad locationName update !");
         }
         if(location.getType() == Location.LocationType.HOME) {
             if(listLocations.get(0).getType() == Location.LocationType.HOME) {

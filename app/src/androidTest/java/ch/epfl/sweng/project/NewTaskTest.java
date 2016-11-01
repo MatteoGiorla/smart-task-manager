@@ -61,7 +61,7 @@ public final class NewTaskTest extends SuperTest {
      */
     @Test
     public void testCanAddTask() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < createdTask; i++) {
             createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
             onData(anything())
@@ -75,26 +75,26 @@ public final class NewTaskTest extends SuperTest {
                     .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
 
-        emptyDatabase(3);
+        emptyDatabase(createdTask);
     }
 
 
     @Test
     public void testCanDeleteTasks() {
         //We create and add tasks
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < createdTask; i++) {
             createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
         }
 
         //We delete the tasks
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < createdTask; i++) {
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(0).perform(longClick());
             onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
             //Test if the tasks are correctly deleted
-            if (i != 2) {
+            if (i != createdTask-1) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));

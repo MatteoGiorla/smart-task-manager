@@ -61,7 +61,7 @@ public final class LocationTest {
     }
 
     /**
-     * Test that the getters for "everywhere" location return the good value
+     * Test that the getters for "everywhere" locationName return the good value
      */
     @Test
     public void testDefaultLocationGetters() {
@@ -75,7 +75,7 @@ public final class LocationTest {
     }
 
     /**
-     * Test that the setters modify correctly the location
+     * Test that the setters modify correctly the locationName
      */
     @Test
     public void testLocationSetters() {

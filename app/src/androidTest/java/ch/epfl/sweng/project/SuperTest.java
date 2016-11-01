@@ -15,6 +15,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
 class SuperTest {
+    final int createdTask = 2;
 
     @BeforeClass
     public static void setUpProvider() {
