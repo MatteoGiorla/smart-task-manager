@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +55,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
             TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+            TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
@@ -59,7 +63,44 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
             }
+            if (remainingDays != null) {
+                Calendar c = Calendar.getInstance();
+                int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
+                if (days != 0) {
+                    remainingDays.setText("-"+ Integer.toString(days));
+                } else {
+                    remainingDays.setText(Integer.toString(days));
+                }
+                if (days < 10)
+                remainingDays.setTextColor(Color.RED);
+            }
         }
         return resultView;
+    }
+
+    /*
+    * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
+     */
+    private Calendar getDatePart(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal;                                  
+    }
+
+    private long daysBetween(Date startDate, Date endDate) {
+        Calendar sDate = getDatePart(startDate);
+        Calendar eDate = getDatePart(endDate);
+
+        long daysBetween = 0;
+        while (sDate.before(eDate)) {
+            sDate.add(Calendar.DAY_OF_MONTH, 1);
+            daysBetween++;
+        }
+        return daysBetween;
     }
 }
