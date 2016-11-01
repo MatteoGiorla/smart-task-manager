@@ -2,6 +2,9 @@ package ch.epfl.sweng.project;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -34,7 +37,16 @@ public class NewTaskActivity extends TaskActivity {
 
         //prepare contributors
         listOfContributors = new ArrayList<>();
-        listOfContributors.add(User.DEFAULT_EMAIL);
+        String contributor;
+
+        try {
+            contributor = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            contributor = User.DEFAULT_EMAIL;
+        }
+
+        listOfContributors.add(contributor);
+        Log.e("date", String.valueOf(date));
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
 
         intent.putExtra(RETURNED_TASK, newTask);

@@ -160,6 +160,7 @@ public class TaskInformationActivity extends AppCompatActivity {
                 String.valueOf(taskToBeDisplayed.getDurationInMinutes()), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
+
         for(String contributor : taskToBeDisplayed.getListOfContributors()) {
             informationItemsList.add(new InformationItem(getString(R.string.contributors_field),
                     contributor, R.drawable.author_36dp));

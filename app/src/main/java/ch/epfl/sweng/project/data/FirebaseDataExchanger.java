@@ -1,7 +1,6 @@
 package ch.epfl.sweng.project.data;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +60,6 @@ public class FirebaseDataExchanger implements DataExchanger {
         } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
-        Log.e("mail id", mail);
         User user = new User(mail);
         recoverUserLocations(user);
         return user;
@@ -82,14 +80,14 @@ public class FirebaseDataExchanger implements DataExchanger {
                     if (task != null) {
                         String title = (String) task.child("name").getValue();
                         String description = (String) task.child("description").getValue();
-                        Long durationInMinutes = (Long) task.child("duration").getValue();
+                        Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
                         String energy = (String) task.child("energy").getValue();
                         List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
 
                         //Construct Location object
                         String locationName = (String) task.child("locationName").getValue();
                         //Construct the date
-                        Long date = (Long) task.child("dueDate").child("date").getValue();
+                        Long date = (Long) task.child("dueDate").child("time").getValue();
                         Date dueDate = new Date(date);
 
                         Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);

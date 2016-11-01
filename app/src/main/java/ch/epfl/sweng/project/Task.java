@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class Task implements Parcelable {
     private Task(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
-                (ArrayList<String>) in.readArrayList(String.class.getClassLoader()));
+                in.createStringArrayList());
     }
 
     /**
@@ -118,6 +119,7 @@ public class Task implements Parcelable {
      * @return The formatted date
      */
     public String dueDateToString() {
+        Log.e("date in Task", String.valueOf(dueDate));
         return dateFormat.format(dueDate.getTime());
     }
 
@@ -262,7 +264,7 @@ public class Task implements Parcelable {
         dest.writeLong(dueDate.getTime());
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
-        dest.writeList(listOfContributors);
+        dest.writeStringList(listOfContributors);
 
     }
 
