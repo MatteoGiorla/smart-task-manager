@@ -23,6 +23,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import java.util.ArrayList;
 
 import static android.R.attr.name;
+import static android.app.Activity.RESULT_OK;
 import static ch.epfl.sweng.project.R.id.locationName;
 
 public class EditLocationActivity extends AppCompatActivity {
