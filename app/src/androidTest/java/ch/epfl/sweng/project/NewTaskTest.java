@@ -35,14 +35,13 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public final class NewTaskTest extends SuperTest {
-    private String mTitleToBeTyped;
-    private String mDescriptionToBeTyped;
-
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
+    private String mTitleToBeTyped;
+    private String mDescriptionToBeTyped;
 
     @Before
     public void initValidString() {

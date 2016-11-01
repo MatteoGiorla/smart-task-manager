@@ -37,22 +37,21 @@ import java.util.List;
 public abstract class TaskActivity extends AppCompatActivity {
     Intent intent;
     ArrayList<Task> taskList;
-    private EditText titleEditText;
-    private Spinner mLocation;
-    private Spinner mDuration;
-    private Spinner mEnergy;
     String title;
     String description;
     long duration;
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
+    private EditText titleEditText;
+    private Spinner mLocation;
+    private Spinner mDuration;
+    private Spinner mEnergy;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     private static Button mButton;
     static Date date;
     private static final DateFormat dateFormat = DateFormat.getDateInstance();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,19 +87,19 @@ public abstract class TaskActivity extends AppCompatActivity {
         mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
-        mLocation = (Spinner)findViewById(R.id.locationSpinner);
+        mLocation = (Spinner) findViewById(R.id.locationSpinner);
 
-        mDuration = (Spinner)findViewById(R.id.durationSpinner);
+        mDuration = (Spinner) findViewById(R.id.durationSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
+            android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        mEnergy = (Spinner)findViewById(R.id.energySpinner);
+        mEnergy = (Spinner) findViewById(R.id.energySpinner);
 
         ArrayAdapter<StateEnergy> spinnerArrayAdapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());

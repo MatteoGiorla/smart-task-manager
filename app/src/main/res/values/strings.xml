@@ -8,6 +8,7 @@
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
     <string name="logout_menu">Log Out</string>
+    <string name="trash">Trash</string>
 
     <!-- Hint strings-->
     <string name="hint_title">Enter title</string>

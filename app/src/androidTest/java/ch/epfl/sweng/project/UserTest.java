@@ -19,6 +19,8 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class UserTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
     private User testUser1; // with first constructor
     private User testUser2; // with second constructor
 
@@ -33,9 +35,6 @@ public class UserTest {
         testUser1 = new User(email);
         testUser2 = new User(email, listLocations);
     }
-
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
 
     @Test
     public void testFirstConstructor() {
@@ -147,10 +146,8 @@ public class UserTest {
     public void testSecondConstructorException() {
         String email = "trixyfinger@gmail.com";
 
-        List<Location> listLocations = null;
-
         thrownException.expect(NullPointerException.class);
-        User userTest = new User(email, listLocations);
+        new User(email, null);
     }
 }
 

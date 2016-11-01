@@ -3,7 +3,6 @@ package ch.epfl.sweng.project;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -45,8 +44,7 @@ public class Task implements Parcelable {
     private Date dueDate;
     private Long durationInMinutes;
     private Energy energyNeeded;
-    private Long timeOfAFractionInMinutes; //to be added optionally later
-    private List<String> listOfContributors;
+    private final List<String> listOfContributors;
     private final DateFormat dateFormat;
 
     /**
@@ -107,34 +105,10 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning a copy of the task's due date
-     */
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    /**
-     * Transform the date as a string
-     *
-     * @return The formatted date
-     */
-    public String dueDateToString() {
-        Log.e("date in Task", String.valueOf(dueDate));
-        return dateFormat.format(dueDate.getTime());
-    }
-
-    /**
      * Getter returning the task's durationInMinutes
      */
     public long getDurationInMinutes() {
         return durationInMinutes;
-    }
-
-    /**
-     * Getter returning the task's energy need
-     */
-    public Energy getEnergy() {
-        return energyNeeded;
     }
 
     /**
@@ -162,7 +136,7 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Setter to modify the task's locationName
+     * Setter to modify the task's location
      *
      * @param newLocationName The new task's locationName
      * @throws IllegalArgumentException if the argument is null
@@ -171,6 +145,13 @@ public class Task implements Parcelable {
         if (newLocationName == null)
             throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
         locationName = newLocationName;
+    }
+
+    /**
+     * Getter returning a copy of the task's due date
+     */
+    public Date getDueDate() {
+        return dueDate;
     }
 
     /**
@@ -186,7 +167,29 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Setter to modify the task's durationInMinutes
+     * Transform the date as a string
+     * @return The formatted date
+     */
+    public String dueDateToString() {
+        return dateFormat.format(dueDate.getTime());
+    }
+
+    /**
+     * Getter returning the task's duration
+     */
+    public long getDuration() {
+        return durationInMinutes;
+    }
+
+    /**
+     * Getter returning the task's energy need
+     */
+    public Energy getEnergy() {
+        return energyNeeded;
+    }
+
+    /**
+     * Setter to modify the task's duration
      *
      * @param newDurationInMinutes The new task's durationInMinutes
      */
@@ -220,7 +223,7 @@ public class Task implements Parcelable {
      *
      * @param contributor Email of the contributor
      */
-    public void addContributor(String contributor) {
+    void addContributor(String contributor) {
         if (contributor == null)
             listOfContributors.add(User.DEFAULT_EMAIL);
         else

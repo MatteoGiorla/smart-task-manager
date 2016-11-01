@@ -29,16 +29,15 @@ import static org.hamcrest.Matchers.anything;
  */
 @RunWith(AndroidJUnit4.class)
 public final class EditTaskTest extends SuperTest {
-    private String mEditedTitle;
-    private String mEditedDescription;
-    private String mOldTitle;
-    private String mOldDescription;
-
     @Rule
     public final ExpectedException thrownException = ExpectedException.none();
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
+    private String mEditedTitle;
+    private String mEditedDescription;
+    private String mOldTitle;
+    private String mOldDescription;
 
     @Before
     public void init() {

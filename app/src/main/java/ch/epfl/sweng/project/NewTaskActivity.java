@@ -2,7 +2,6 @@ package ch.epfl.sweng.project;
 
 import android.os.Build;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -46,7 +45,6 @@ public class NewTaskActivity extends TaskActivity {
         }
 
         listOfContributors.add(contributor);
-        Log.e("date", String.valueOf(date));
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
 
         intent.putExtra(RETURNED_TASK, newTask);

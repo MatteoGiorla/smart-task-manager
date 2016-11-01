@@ -38,6 +38,7 @@ public class TaskInformationTest extends SuperTest {
     public void addTheTask() {
         String taskName = "Task to be displayed";
         String taskDescription = "Description to be displayed";
+
         createATask(taskName, taskDescription);
         String defaultLocation = "Everywhere";
         Date defaultDueDate = new Date();

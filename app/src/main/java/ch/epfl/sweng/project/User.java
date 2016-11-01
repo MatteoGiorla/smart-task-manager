@@ -8,9 +8,9 @@ import java.util.List;
  * Class representing a user
  */
 public class User {
+    public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
     private String email;
     private List<Location> listLocations;
-    public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
 
     /**
      * Constructor of the user class which
@@ -46,11 +46,7 @@ public class User {
     }
 
     /**
-<<<<<<< HEAD
-     * Getter
-=======
      * Getter returning the email of the user
->>>>>>> test_firebase
      *
      * @return email of the user.
      */
@@ -66,11 +62,7 @@ public class User {
     }
 
     /**
-<<<<<<< HEAD
      * Setter that allows to change the locations of the user
-=======
-     * Setter that allors to change the locations of the user
->>>>>>> master
      *
      * @throws NullPointerException If the argument is null
      */
