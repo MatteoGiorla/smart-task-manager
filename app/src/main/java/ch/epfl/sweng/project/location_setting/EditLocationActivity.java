@@ -1,27 +1,24 @@
 package ch.epfl.sweng.project.location_setting;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.widget.EditText;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.location_setting.LocationActivity;
 
 /**
- * Class that represents the inflated activity_task under the edit case
+ * Class that represents the inflated activity_location_settings under the edit case
  */
 public class EditLocationActivity extends LocationActivity {
-    public static final String RETURNED_EDITED_LOCATION = "ch.epfl.sweng.EditTaskActivity.EDITED_LOCATION";
-    public static final String RETURNED_INDEX_EDITED_LOCATION = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_LOCATION";
+    public static final String RETURNED_EDITED_LOCATION = "ch.epfl.sweng.EditLocationActivity.EDITED_LOCATION";
+    public static final String RETURNED_INDEX_EDITED_LOCATION = "ch.epfl.sweng.EditLocationActivity.RETURNED_INDEX_EDITED_LOCATION";
     private Location mLocationToBeEdited;
     private int mIndexLocationToBeEdited;
 
     /**
      * Override the onCreate method
-     * Recover the task to be edited and update it, then it puts the
-     * edited task in the intent.
+     * Recover the location to be edited and update it, then it puts the
+     * edited location in the intent.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously
      *                           being shut down then this Bundle contains the data it
@@ -35,10 +32,10 @@ public class EditLocationActivity extends LocationActivity {
         mIndexLocationToBeEdited = intent.getIntExtra(LocationFragment.INDEX_LOCATION_TO_BE_EDITED_KEY, -1);
         checkLocationToBeEditedIndex();
 
-        //Get the task to be edited
+        //Get the location to be edited
         mLocationToBeEdited = locationList.get(mIndexLocationToBeEdited);
 
-        //Populate the layout activity_task
+        //Populate the layout activity_location_settings
         populateLayout();
     }
 
@@ -52,7 +49,7 @@ public class EditLocationActivity extends LocationActivity {
     }
 
     /**
-     * Check that the 'task to be edited' 's index is valid
+     * Check that the 'location to be edited' 's index is valid
      *
      * @throws IllegalArgumentException If there is an error with the intent passed
      *                                  to the activity.
@@ -64,7 +61,7 @@ public class EditLocationActivity extends LocationActivity {
     }
 
     /**
-     * Fill the layout with the old values of the task to be edited.
+     * Fill the layout with the old values of the location to be edited.
      */
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.locationName);

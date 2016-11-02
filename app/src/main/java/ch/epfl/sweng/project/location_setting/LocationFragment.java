@@ -21,8 +21,6 @@ import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.data.DataExchanger;
-import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -32,18 +30,17 @@ import static android.app.Activity.RESULT_OK;
 public class LocationFragment extends Fragment {
     public static final String INDEX_LOCATION_TO_BE_EDITED_KEY = "ch.epfl.sweng.LocationFragment._INDEX_LOCATION_TO_BE_EDITED";
     public static final String LOCATIONS_LIST_KEY = "ch.epfl.sweng.LocationFragment.LOCATIONS_LIST";
-    public static final String INDEX_LOCATION_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
+    public static final String INDEX_LOCATION_TO_BE_DISPLAYED = "ch.epfl.sweng.LocationFragment.INDEX_LOCATION_TO_BE_DISPLAYED";
     private final int editLocationRequestCode = 2;
     private final int displayLocationRequestCode = 3;
     private LocationListAdapter mLocationAdapter;
     private ArrayList<Location> locationList;
-    private DataExchanger mDatabase;
 
     /**
-     * Method that adds a task in the taskList and in the database.
+     * Method that adds a location in the locationList and in the database.
      *
      * @param location The location to be added
-     * @throws IllegalArgumentException If the task to be added is null
+     * @throws IllegalArgumentException If the location to be added is null
      */
     public void addLocation(Location location) {
         if (location == null) {
@@ -54,7 +51,7 @@ public class LocationFragment extends Fragment {
     }
 
     /**
-     * Override the onCreate method. It initialize the database, the list of task
+     * Override the onCreate method. It initialize the database, the list of location
      * and the custom made adapter.
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
@@ -137,7 +134,7 @@ public class LocationFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_delete:
-                removeTask(itemInfo);
+                removeLocation(itemInfo);
                 return true;
             case R.id.floating_edit:
                 startEditLocationActivity(itemInfo);
@@ -156,13 +153,13 @@ public class LocationFragment extends Fragment {
      *                    used as an identifier.
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
-     * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
+     * @throws IllegalArgumentException if the returned extras from EditLocationActivity are
      *                                  invalid
-     * @throws SQLiteException          if more that one row was changed when editing a task.
+     * @throws SQLiteException          if more that one row was changed when editing a location.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Case when we returned from the EditTaskActivity
+        //Case when we returned from the EditLocationActivity
         if (requestCode == editLocationRequestCode && resultCode == RESULT_OK) {
             actionOnActivityResult(data);
         } /*else if (requestCode == displayLocationRequestCode && resultCode == RESULT_OK) {
@@ -188,7 +185,7 @@ public class LocationFragment extends Fragment {
         Location editedLocation = data.getParcelableExtra(EditLocationActivity.RETURNED_EDITED_LOCATION);
         int indexEditedLocation = data.getIntExtra(EditLocationActivity.RETURNED_INDEX_EDITED_LOCATION, -1);
         if (indexEditedLocation == -1 || editedLocation == null) {
-            throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
+            throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
             /*
             mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
@@ -218,13 +215,13 @@ public class LocationFragment extends Fragment {
     }
 
     /**
-     * Remove a task from the database and the taskList.
+     * Remove a location and the locationList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
      * @throws SQLiteException if an error occurred
      */
-    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    private void removeLocation(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         removeLocationAction(position);
 
@@ -244,9 +241,9 @@ public class LocationFragment extends Fragment {
     }
 
     /**
-     * Getter for the taskList
+     * Getter for the locationList
      *
-     * @return an immutable copy of taskList
+     * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
         return new ArrayList<>(locationList);

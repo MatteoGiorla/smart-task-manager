@@ -36,11 +36,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.epfl.sweng.project.location_setting.EditLocationActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
 
 /**
@@ -56,8 +55,6 @@ public class LoginActivity
     private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private static boolean userExists;
-
 
     /**
      * Override the onCreate method

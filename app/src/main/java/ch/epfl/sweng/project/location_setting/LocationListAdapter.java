@@ -14,7 +14,7 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
 
 /**
- * Adapter used to display the task list
+ * Adapter used to display the location list
  */
 public class LocationListAdapter extends ArrayAdapter<Location> {
 

@@ -1,17 +1,13 @@
 package ch.epfl.sweng.project.location_setting;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -26,9 +22,6 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.TaskFragment;
-
-import static android.app.Activity.RESULT_OK;
 
 public abstract class LocationActivity extends AppCompatActivity {
     public static final int REQUEST_PLACE_PICKER = 1;
@@ -86,7 +79,7 @@ public abstract class LocationActivity extends AppCompatActivity {
     /**
      * Check if the location name written is unique or not.
      *
-     * @param name The new name of the task
+     * @param name The new name of the location
      * @return true if the name is already used or false otherwise.
      */
     boolean nameIsNotUnique(String name) {
@@ -130,7 +123,7 @@ public abstract class LocationActivity extends AppCompatActivity {
 
     private void checkLocationList() {
         if (locationList == null) {
-            throw new IllegalArgumentException("Error on taskList passed with the intent");
+            throw new IllegalArgumentException("Error on loctionList passed with the intent");
         }
     }
 
