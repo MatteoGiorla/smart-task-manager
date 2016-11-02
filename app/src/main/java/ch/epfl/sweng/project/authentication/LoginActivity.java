@@ -31,9 +31,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import ch.epfl.sweng.project.EditLocationActivity;
+import ch.epfl.sweng.project.location_setting.EditLocationActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
 
 /**
@@ -213,7 +214,7 @@ public class LoginActivity
                         } else {
                             Intent intent;
                             if(true) { //TODO : replace by "if first connection of the user"
-                                intent = new Intent(LoginActivity.this, EditLocationActivity.class); //TODO : replace edit location activity by LocationSetting
+                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class); //TODO : replace edit location activity by LocationSetting
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             } else {
                                 intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -261,7 +262,7 @@ public class LoginActivity
                         } else {
                             Intent intent;
                             if(true) { //TODO : replace by "if first connection of the user"
-                                intent = new Intent(LoginActivity.this, EditLocationActivity.class); //TODO : replace edit location activity by LocationSetting
+                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class); //TODO : replace edit location activity by LocationSetting
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             } else {
                                 intent = new Intent(LoginActivity.this, MainActivity.class);

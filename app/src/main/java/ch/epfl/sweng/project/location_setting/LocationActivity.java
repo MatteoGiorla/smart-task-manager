@@ -1,18 +1,20 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.location_setting;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -22,18 +24,23 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 
-import static android.R.attr.name;
+import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.TaskFragment;
+
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.R.id.locationName;
 
-public class EditLocationActivity extends AppCompatActivity {
-
+public abstract class LocationActivity extends AppCompatActivity {
     public static final int REQUEST_PLACE_PICKER = 1;
 
-    private ImageButton doneLocationButton;
+    Intent intent;
+    ImageButton doneLocationButton;
     private EditText nameTextEdit;
-    private TextInputLayout textInputLayoutName;
+    TextInputLayout textInputLayoutName;
+    ArrayList<Location> locationList;
     String name;
+    double longitude;
+    double latitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,11 @@ public class EditLocationActivity extends AppCompatActivity {
             // TODO handle exception!
         }
 
+        //Check the validity of the intent
+        intent = getIntent();
+        checkIntent();
+        locationList = intent.getParcelableArrayListExtra(LocationFragment.LOCATIONS_LIST_KEY);
+        checkLocationList();
 
         textInputLayoutName = (TextInputLayout) findViewById(R.id.location_name_layout);
 
@@ -66,9 +78,9 @@ public class EditLocationActivity extends AppCompatActivity {
         doneLocationButton = (ImageButton) findViewById(R.id.location_done_button_toolbar);
 
         //Create a listener to check that the user is writing a valid input.
-        nameTextEdit.addTextChangedListener(new EditLocationActivity.LocationTextWatcher());
+        nameTextEdit.addTextChangedListener(new LocationActivity.LocationTextWatcher());
 
-        doneLocationButton.setOnClickListener(new EditLocationActivity.OnDoneButtonClickListener());
+        doneLocationButton.setOnClickListener(new LocationActivity.OnDoneButtonClickListener());
     }
 
     /**
@@ -79,8 +91,6 @@ public class EditLocationActivity extends AppCompatActivity {
      */
     boolean nameIsNotUnique(String name) {
         boolean result = false;
-        ArrayList<String> locationList = new ArrayList<>(); // TODO : get list from user
-        locationList.add("Everywhere");
         for (int i = 0; i < locationList.size(); i++) {
             if (locationList.get(i).equals(name)) {
                 result = true;
@@ -98,10 +108,28 @@ public class EditLocationActivity extends AppCompatActivity {
                 textInputLayoutName.setErrorEnabled(true);
                 textInputLayoutName.setError(getResources().getText(R.string.error_location_name_empty));
             } else if (!name.isEmpty() && !nameIsNotUnique(name)) {
-                //resultActivity();
-                //setResult(RESULT_OK, intent);
+                resultActivity();
+                setResult(RESULT_OK, intent);
                 finish();
             }
+        }
+    }
+
+    protected abstract void resultActivity();
+
+    /**
+     * Check that the intent is valid
+     */
+    private void checkIntent() {
+        if (intent == null) {
+            throw new IllegalArgumentException("No intent was passed to LocationActivity !");
+
+        }
+    }
+
+    private void checkLocationList() {
+        if (locationList == null) {
+            throw new IllegalArgumentException("Error on taskList passed with the intent");
         }
     }
 
@@ -110,7 +138,7 @@ public class EditLocationActivity extends AppCompatActivity {
      * This class is used to check on runtime if the inputs written by the user
      * are valid or not.
      */
-    private class LocationTextWatcher implements TextWatcher {
+    class LocationTextWatcher implements TextWatcher {
 
         /**
          * Check the input written by the user before it is changed.
@@ -150,6 +178,8 @@ public class EditLocationActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
                 String toast = String.format("Place: %s", place.getName());
+                longitude = place.getLatLng().longitude;
+                latitude = place.getLatLng().latitude;
                 Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
             }
         }

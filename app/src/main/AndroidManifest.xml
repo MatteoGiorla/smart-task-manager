@@ -64,7 +64,7 @@
             android:theme="@style/AppThemeNoActionBar"/>
 
         <activity
-            android:name=".EditLocationActivity"
+            android:name=".location_setting.EditLocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
 
@@ -84,7 +84,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".LocationSettingActivity"></activity>
+        <activity android:name=".location_setting.LocationSettingActivity"></activity>
     </application>
 
 </manifest>
