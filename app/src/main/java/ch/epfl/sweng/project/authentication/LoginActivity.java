@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import ch.epfl.sweng.project.LocationSettingActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.Utils;
 
 
 /**
@@ -217,16 +218,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent;
-                            if(isFirstConnection(mAuth.getCurrentUser().getEmail())) {
-                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            } else {
-                                intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            }
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -265,16 +257,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent;
-                            if(false/*isFirstConnection(mAuth.getCurrentUser().getEmail())*/) {
-                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            } else {
-                                intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            }
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -318,29 +301,38 @@ public class LoginActivity
     }
 
 
-    /**
+
+   /**
      * Checks wether the user has already been signed in
-     * on the Firebase Database.
+     * on the Firebase Database, and then launch the corresponding
+     * activity
      *
      * @param email is the ID to check in the FirebaseDatabase
      *
-     * @return true if the email is already in the "users" table,
-     *          false otherwise.
      */
-    private boolean isFirstConnection(String email){
+    private void getToNextActivity(String email){
         DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
-        firebaseRef.child("users").child(email).
-            addListenerForSingleValueEvent(new ValueEventListener() {
-               @Override
-               public void onDataChange(DataSnapshot dataSnapshot) {
-                   userExists = dataSnapshot.exists();
-               }
+        firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Intent intent;
+                        if(dataSnapshot.exists()){
+                            intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        }else{
+                            intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
 
-               @Override
-               public void onCancelled(DatabaseError databaseError) {}
-           });
-        return userExists;
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {}
+                });
     }
+
                 /**
                  * Not used method for the moment but maybe useful in the future.
                  */
