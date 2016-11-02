@@ -45,6 +45,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
+            android:name=".location_setting.NewLocationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
             android:name=".authentication.LoginActivity"
             android:label="@string/login_label"
             android:screenOrientation="portrait" />
