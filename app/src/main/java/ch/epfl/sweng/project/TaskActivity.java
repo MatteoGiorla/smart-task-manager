@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
@@ -113,6 +114,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
+        /*
         mEnergy = (Spinner)findViewById(R.id.energySpinner);
 
         ArrayAdapter spinnerArrayAdapter2 = new ArrayAdapter(this,
@@ -123,6 +125,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         });
 
         mEnergy.setAdapter(spinnerArrayAdapter2);
+        */
 /*
         //A ADAPTER
         mLocation = (Spinner)findViewById(R.id.locationSpinner);
@@ -283,6 +286,27 @@ public abstract class TaskActivity extends AppCompatActivity {
     public void showDatePickerDialog(View  v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.energy_low:
+                if (checked)
+                    energy = Task.Energy.LOW;
+                break;
+            case R.id.energy_normal:
+                if (checked)
+                    energy = Task.Energy.NORMAL;
+                break;
+            case R.id.energy_high:
+                if (checked)
+                    energy = Task.Energy.HIGH;
+                break;
+            default:
+                energy = Task.Energy.NORMAL;
+        }
     }
 
 
