@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -54,15 +56,19 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-            TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+            //TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
+            ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
+            ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
+            ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            ImageView placeToken = (ImageView) resultView.findViewById(R.id.list_place_token);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
             }
-            if (descriptionView != null) {
+            /*if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
-            }
+            }*/
             if (remainingDays != null) {
                 Calendar c = Calendar.getInstance();
                 int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
@@ -73,6 +79,20 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 }
                 if (days < 10)
                 remainingDays.setTextColor(Color.RED);
+            }
+            if (placeToken != null) {
+                if (taskInTheView.getLocation() == null) {
+                    placeToken.setVisibility(View.INVISIBLE);
+                }
+            }
+            if (energyIconLow != null) {
+                Task.Energy e = taskInTheView.getEnergy();
+                if (e == Task.Energy.LOW) {
+                    energyIconNormal.setVisibility(View.INVISIBLE);
+                    energyIconHigh.setVisibility(View.INVISIBLE);
+                } else if (e == Task.Energy.NORMAL) {
+                    energyIconHigh.setVisibility(View.INVISIBLE);
+                }
             }
         }
         return resultView;
@@ -88,8 +108,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-
-        return cal;                                  
+        return cal;
     }
 
     private long daysBetween(Date startDate, Date endDate) {
