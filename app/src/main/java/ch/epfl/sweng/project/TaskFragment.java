@@ -52,6 +52,8 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
+        taskList.add(task);
+        mTaskAdapter.notifyDataSetChanged();
     }
 
     /**
