@@ -54,6 +54,7 @@ public class LoginActivity
     private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static boolean userExists;
 
 
     /**
@@ -265,7 +266,7 @@ public class LoginActivity
                             }
                         } else {
                             Intent intent;
-                            if(isFirstConnection(mAuth.getCurrentUser().getEmail())) {
+                            if(false/*isFirstConnection(mAuth.getCurrentUser().getEmail())*/) {
                                 intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             } else {
@@ -328,50 +329,21 @@ public class LoginActivity
      */
     private boolean isFirstConnection(String email){
         DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
-        myBoolean userExists = new myBoolean(false);
-        firebaseRef.child("users").child(email).addListenerForSingleValueEvent(
-                new ExistenceValueEventListener().getValueExistence(userExists));
-        return userExists.getBool();
+        firebaseRef.child("users").child(email).
+            addListenerForSingleValueEvent(new ValueEventListener() {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                   userExists = dataSnapshot.exists();
+               }
+
+               @Override
+               public void onCancelled(DatabaseError databaseError) {}
+           });
+        return userExists;
     }
-
-    private class ExistenceValueEventListener implements ValueEventListener{
-        private boolean exists;
-        public ExistenceValueEventListener(){}
-
-        @Override
-        public void onDataChange(DataSnapshot snapshot) {
-            exists = snapshot.exists();
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-
-        public ExistenceValueEventListener getValueExistence(myBoolean toAssign){
-            toAssign.setBool(exists);
-            return this;
-        }
-    }
-
-    private class myBoolean{
-        private boolean mValue;
-        public myBoolean(boolean b){
-            mValue = b;
-        }
-
-        public void setBool(boolean b){
-            mValue = b;
-        }
-
-        public boolean getBool(){
-            return mValue;
-        }
-    }
-
-    /**
-     * Not used method for the moment but maybe useful in the future.
-     */
+                /**
+                 * Not used method for the moment but maybe useful in the future.
+                 */
     /*private void signOut() {
         // Firebase sign out
         //mAuth.signOut();
@@ -394,4 +366,4 @@ public class LoginActivity
         FirebaseAuth.getInstance().signOut();
 
     }*/
-}
+    }
