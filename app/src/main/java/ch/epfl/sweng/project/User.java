@@ -46,11 +46,7 @@ public class User {
     }
 
     /**
-<<<<<<< HEAD
      * Getter
-=======
-     * Getter returning the email of the user
->>>>>>> test_firebase
      *
      * @return email of the user.
      */
@@ -59,18 +55,16 @@ public class User {
     }
 
     /**
-     * Getter returning the locations of the user
+     * Getter
+     *
+     * @return list of Locations of the user.
      */
     public List<Location> getListLocations() {
         return listLocations;
     }
 
     /**
-<<<<<<< HEAD
      * Setter that allows to change the locations of the user
-=======
-     * Setter that allors to change the locations of the user
->>>>>>> master
      *
      * @throws NullPointerException If the argument is null
      */

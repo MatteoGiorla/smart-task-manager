@@ -31,6 +31,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     private TextView taskTitleTextView;
     private InformationListAdapter mInformationAdapter;
     private boolean isTaskModified = false;
+    private int editTaskRequestCode = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,14 +81,20 @@ public class TaskInformationActivity extends AppCompatActivity {
         if (taskList == null)
             throw new IllegalArgumentException("taskList is null before been passed to the intent");
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-        int editTaskRequestCode = 1;
         startActivityForResult(intent, editTaskRequestCode);
         isTaskModified = true;
     }
 
+    /**
+     * Called after editing a task for task information activity.
+     *
+     * @param requestCode the code of the request
+     * @param resultCode the result code
+     * @param data the intent with the modified task
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
+        if (requestCode == editTaskRequestCode) {
             if (resultCode == RESULT_OK) {
                 Task editedTask = data.getParcelableExtra(RETURNED_EDITED_TASK);
                 int editedTaskIndex = data.getIntExtra(RETURNED_INDEX_EDITED_TASK, -1);
@@ -103,6 +110,25 @@ public class TaskInformationActivity extends AppCompatActivity {
                 mInformationAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    /**
+     * Called when the press back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+        setResultIntent();
+        super.onBackPressed();
+    }
+
+    /**
+     * Set the result intent.
+     */
+    private void setResultIntent() {
+        intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
+        intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
+        intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
+        setResult(RESULT_OK, intent);
     }
 
     /**
@@ -177,10 +203,7 @@ public class TaskInformationActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-            intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
-            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
-            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
-            setResult(RESULT_OK, intent);
+            setResultIntent();
             finish();
         }
     }
