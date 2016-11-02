@@ -307,30 +307,29 @@ public class LoginActivity
      * on the Firebase Database, and then launch the corresponding
      * activity
      *
-     * @param email is the ID to check in the FirebaseDatabase
-     *
+     * @param email is the ID to check in the FirebaseDatabas
      */
     private void getToNextActivity(String email){
         DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
-        firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).
-                addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Intent intent;
-                        if(dataSnapshot.exists()){
-                            intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        }else{
-                            intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        }
-                        startActivity(intent);
-                        finish();
-                    }
+        DatabaseReference userRef = firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).getRef();
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent;
+                if(dataSnapshot.exists()){
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }else{
+                    intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                startActivity(intent);
+                finish();
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {}
-                });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
                 /**
