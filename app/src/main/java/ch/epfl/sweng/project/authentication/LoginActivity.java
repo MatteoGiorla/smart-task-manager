@@ -30,6 +30,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.LocationSettingActivity;
 import ch.epfl.sweng.project.MainActivity;
@@ -212,7 +217,7 @@ public class LoginActivity
                             }
                         } else {
                             Intent intent;
-                            if(true) { //TODO : replace by "if first connection of the user"
+                            if(isFirstConnection(mAuth.getCurrentUser().getEmail())) {
                                 intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             } else {
@@ -260,7 +265,7 @@ public class LoginActivity
                             }
                         } else {
                             Intent intent;
-                            if(true) { //TODO : replace by "if first connection of the user"
+                            if(isFirstConnection(mAuth.getCurrentUser().getEmail())) {
                                 intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             } else {
@@ -309,6 +314,59 @@ public class LoginActivity
         Intent signIn = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
         // start the intent:
         startActivityForResult(signIn, RC_SIGN_IN);
+    }
+
+
+    /**
+     * Checks wether the user has already been signed in
+     * on the Firebase Database.
+     *
+     * @param email is the ID to check in the FirebaseDatabase
+     *
+     * @return true if the email is already in the "users" table,
+     *          false otherwise.
+     */
+    private boolean isFirstConnection(String email){
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
+        myBoolean userExists = new myBoolean(false);
+        firebaseRef.child("users").child(email).addListenerForSingleValueEvent(
+                new ExistenceValueEventListener().getValueExistence(userExists));
+        return userExists.getBool();
+    }
+
+    private class ExistenceValueEventListener implements ValueEventListener{
+        private boolean exists;
+        public ExistenceValueEventListener(){}
+
+        @Override
+        public void onDataChange(DataSnapshot snapshot) {
+            exists = snapshot.exists();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+
+        public ExistenceValueEventListener getValueExistence(myBoolean toAssign){
+            toAssign.setBool(exists);
+            return this;
+        }
+    }
+
+    private class myBoolean{
+        private boolean mValue;
+        public myBoolean(boolean b){
+            mValue = b;
+        }
+
+        public void setBool(boolean b){
+            mValue = b;
+        }
+
+        public boolean getBool(){
+            return mValue;
+        }
     }
 
     /**
