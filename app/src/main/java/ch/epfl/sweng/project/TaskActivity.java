@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -113,6 +114,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         });
 
         mDuration.setAdapter(spinnerArrayAdapter1);
+
+        energy = Task.Energy.NORMAL;
+        Log.d("test", ": " + energy.toString());
 
         /*
         mEnergy = (Spinner)findViewById(R.id.energySpinner);
@@ -235,8 +239,8 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 location = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
-                energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
-
+                //energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
+                Log.d("test", "onclick: " + energy.toString());
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -307,6 +311,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             default:
                 energy = Task.Energy.NORMAL;
         }
+        Log.d("test", "onRadioButtonClicked: " + energy.toString());
     }
 
 
