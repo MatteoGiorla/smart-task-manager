@@ -30,11 +30,17 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.location_setting.EditLocationActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
+import ch.epfl.sweng.project.Utils;
 
 
 /**
@@ -50,6 +56,7 @@ public class LoginActivity
     private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private static boolean userExists;
 
 
     /**
@@ -212,16 +219,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent;
-                            if(true) { //TODO : replace by "if first connection of the user"
-                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class); //TODO : replace edit location activity by LocationSetting
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            } else {
-                                intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            }
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -260,16 +258,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent;
-                            if(true) { //TODO : replace by "if first connection of the user"
-                                intent = new Intent(LoginActivity.this, LocationSettingActivity.class); //TODO : replace edit location activity by LocationSetting
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            } else {
-                                intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            }
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -312,9 +301,41 @@ public class LoginActivity
         startActivityForResult(signIn, RC_SIGN_IN);
     }
 
-    /**
-     * Not used method for the moment but maybe useful in the future.
+
+
+   /**
+     * Checks wether the user has already been signed in
+     * on the Firebase Database, and then launch the corresponding
+     * activity
+     *
+     * @param email is the ID to check in the FirebaseDatabas
      */
+    private void getToNextActivity(String email){
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).getRef();
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent;
+                if(dataSnapshot.exists()){
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }else{
+                    intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+                /**
+                 * Not used method for the moment but maybe useful in the future.
+                 */
     /*private void signOut() {
         // Firebase sign out
         //mAuth.signOut();
@@ -337,4 +358,4 @@ public class LoginActivity
         FirebaseAuth.getInstance().signOut();
 
     }*/
-}
+    }
