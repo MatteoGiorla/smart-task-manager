@@ -14,7 +14,7 @@ public class LocationSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationSettingActivity";
     // List<Location> locationsList = new ArrayList<>();
-    private final int newLocationRequestCode = 2;
+    private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
 
     @Override
