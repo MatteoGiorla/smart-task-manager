@@ -43,7 +43,7 @@ public abstract class LocationActivity extends AppCompatActivity {
     double latitude;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_location);
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
@@ -109,6 +109,7 @@ public abstract class LocationActivity extends AppCompatActivity {
                 textInputLayoutName.setError(getResources().getText(R.string.error_location_name_empty));
             } else if (!name.isEmpty() && !nameIsNotUnique(name)) {
                 resultActivity();
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 setResult(RESULT_OK, intent);
                 finish();
             }

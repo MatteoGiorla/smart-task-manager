@@ -6,6 +6,7 @@ import android.support.annotation.RequiresApi;
 import android.widget.EditText;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.location_setting.LocationActivity;
 
 /**

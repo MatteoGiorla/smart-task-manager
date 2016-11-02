@@ -22,11 +22,6 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/locations_container">
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/locations_list_view" />
-
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

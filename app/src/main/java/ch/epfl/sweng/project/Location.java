@@ -1,11 +1,42 @@
 package ch.epfl.sweng.project;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Date;
 
 /**
  * Class representing a locationName
  */
-public class Location {
+public class Location implements Parcelable{
+
+    /**
+     * Used to regenerate a Task, all parcelables must have a creator
+     */
+    public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {
+        /**
+         * Create a new instance of the Task with the data previously
+         * written by writeToParcel().
+         *
+         * @param in The Parcel to read the object's data from
+         * @return New instance of Task
+         */
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        /**
+         * Create a new array of Task
+         * @param size Size of the array
+         * @return An array of Task
+         */
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
 
     private String name;
     private double latitude;
@@ -31,6 +62,16 @@ public class Location {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    /**
+     * Private constructor used to recreate a Task when
+     * it was put inside an Intent.
+     *
+     * @param in Container of a Task
+     */
+    private Location(@NonNull Parcel in) {
+        this(in.readString(), in.readDouble(), in.readDouble());
     }
 
     /**
@@ -103,5 +144,29 @@ public class Location {
      */
     public LatLng getGPSCoordinates() {
         return new LatLng(latitude, longitude);
+    }
+
+    /**
+     * Override the describeContents method from
+     * Parcelable interface.
+     *
+     * @return 0
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten the Task in to a Parcel
+     *
+     * @param dest  The parcel in which the Task should be written
+     * @param flags Flags about how the object should be written
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

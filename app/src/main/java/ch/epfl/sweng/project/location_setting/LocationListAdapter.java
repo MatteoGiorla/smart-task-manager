@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.location_setting;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.R;
 
 /**
  * Adapter used to display the task list
@@ -44,26 +47,16 @@ public class LocationListAdapter extends ArrayAdapter<Location> {
         //There is no recycled view, we need to create a new one
         if (resultView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            resultView = inflater.inflate(/*R.layout.list_item_layout*/, parent, false);
+            resultView = inflater.inflate(R.layout.list_item_location, parent, false);
         }
 
-        //We get the task to be displayed
+        //We get the location to be displayed
         Location locationInTheView = getItem(position);
         if (locationInTheView != null) {
-            TextView titleView = (TextView) resultView.findViewById(/*R.id.list_entry_title*/);
-            TextView longitudeView = (TextView) resultView.findViewById(/*???*/);
-            TextView latitudeView = (TextView) resultView.findViewById(/*???*/);
+            TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_name);
 
             if (titleView != null) {
                 titleView.setText(locationInTheView.getName());
-            }
-
-            if (longitudeView != null) {
-                //must set the the longitude in the view ???
-            }
-
-            if (titleView != null) {
-                //must set the the longitude in the view ???
             }
         }
         return resultView;

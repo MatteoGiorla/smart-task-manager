@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.location_setting;
 
 
 import android.app.Fragment;
@@ -19,14 +19,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.data.DataExchanger;
-import ch.epfl.sweng.project.data.DataProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_MODIFIED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -51,6 +49,7 @@ public class LocationFragment extends Fragment {
         if (location == null) {
             throw new IllegalArgumentException();
         }
+        locationList.add(location);
         //TODO: add the location effectivelly
     }
 
@@ -88,7 +87,7 @@ public class LocationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_location_list, container, false);
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_locations);
         listView.setAdapter(mLocationAdapter);
@@ -98,7 +97,7 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
+                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
                 intent.putExtra(INDEX_LOCATION_TO_BE_DISPLAYED, position);
                 intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
                 startActivityForResult(intent, displayLocationRequestCode);
@@ -141,7 +140,7 @@ public class LocationFragment extends Fragment {
                 removeTask(itemInfo);
                 return true;
             case R.id.floating_edit:
-                startEditTLocationActivity(itemInfo);
+                startEditLocationActivity(itemInfo);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -166,7 +165,7 @@ public class LocationFragment extends Fragment {
         //Case when we returned from the EditTaskActivity
         if (requestCode == editLocationRequestCode && resultCode == RESULT_OK) {
             actionOnActivityResult(data);
-        } else if (requestCode == displayLocationRequestCode && resultCode == RESULT_OK) {
+        } /*else if (requestCode == displayLocationRequestCode && resultCode == RESULT_OK) {
             int locationStatus = data.getIntExtra(LOCATION_STATUS_KEY, -1);
             if(locationStatus == -1)
                 throw new IllegalArgumentException("Error with the intent form LocationInformationActivity");
@@ -181,7 +180,7 @@ public class LocationFragment extends Fragment {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     removeLocationAction(taskIndex);
             }
-        }
+        }*/
     }
 
     private void actionOnActivityResult(Intent data) {
