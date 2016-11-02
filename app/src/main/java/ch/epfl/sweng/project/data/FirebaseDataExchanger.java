@@ -166,11 +166,10 @@ public class FirebaseDataExchanger implements DataExchanger {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     String name = (String) data.child("name").getValue();
-                    String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);
                     Double longitude = data.child("longitude").getValue(Double.class);
                     //Create location
-                    Location location = new Location(name, type, latitude, longitude);
+                    Location location = new Location(name, latitude, longitude);
                     listLocations.add(location);
                 }
                 user.setListLocations(listLocations);
