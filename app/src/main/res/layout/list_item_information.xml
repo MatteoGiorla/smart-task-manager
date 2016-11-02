@@ -44,7 +44,6 @@
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
             android:layout_marginTop="7dp"
-            android:hint="@string/hint_title"
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>

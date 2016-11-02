@@ -3,24 +3,21 @@ package ch.epfl.sweng.project;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Class representing a location
+ * Class representing a locationName
  */
 public class Location {
-
-    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
 
     private String name;
     private LocationType type;
     private double latitude;
     private double longitude;
-
     /**
      * Constructor of the class
      *
      * @param name       Location name
      * @param typeString Location type in String format
-     * @param latitude   Latitude of the location
-     * @param longitude  Longitude of the location
+     * @param latitude   Latitude of the locationName
+     * @param longitude  Longitude of the locationName
      * @throws IllegalArgumentException if the parameter is null
      */
     public Location(String name, String typeString, double latitude, double longitude) {
@@ -42,17 +39,6 @@ public class Location {
         this.longitude = longitude;
     }
 
-
-    /**
-     * Constructor of the class
-     *
-     * @param location A Location
-     */
-    public Location(Location location) {
-        this(location.getName(), location.getType().toString(), location.getLatitude(), location.getLongitude());
-    }
-
-
     /**
      * Default constructor initializing fields to default values
      */
@@ -61,16 +47,16 @@ public class Location {
     }
 
     /**
-     * Getter returning the name of the location
+     * Getter returning the name of the locationName
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Setter to modify the location name
+     * Setter to modify the locationName name
      *
-     * @param newName The new location name
+     * @param newName The new locationName name
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
@@ -81,37 +67,10 @@ public class Location {
     }
 
     /**
-     * Getter returning the longitude of the location
+     * Getter returning the longitude of the locationName
      */
     public double getLongitude() {
         return longitude;
-    }
-
-
-    /**
-     * Getter returning the latitude of the location
-     */
-    public double getLatitude() {
-        return latitude;
-    }
-
-    /**
-     * Getter returning the gps coordinates of the location
-     */
-    public LatLng getGPSCoordinates() {
-        return new LatLng(latitude, longitude);
-    }
-
-    /**
-     * Setter to modify the latitude
-     *
-     * @param newLatitude The new latitude
-     * @throws IllegalArgumentException if the argument is not between -90 and 90
-     */
-    public void setLatitude(double newLatitude) {
-        if (newLatitude < -90 || newLatitude > 90)
-            throw new IllegalArgumentException("New latitude passed to Location's setter invalid");
-        latitude = newLatitude;
     }
 
     /**
@@ -127,9 +86,35 @@ public class Location {
     }
 
     /**
-     * Setter to modify the type of the location
+     * Getter returning the latitude of the location
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Setter to modify the latitude
      *
-     * @param newType The new type of the location
+     * @param newLatitude The new latitude
+     * @throws IllegalArgumentException if the argument is not between -90 and 90
+     */
+    public void setLatitude(double newLatitude) {
+        if (newLatitude < -90 || newLatitude > 90)
+            throw new IllegalArgumentException("New latitude passed to Location's setter invalid");
+        latitude = newLatitude;
+    }
+
+    /**
+     * Getter returning the gps coordinates of the location
+     */
+    public LatLng getGPSCoordinates() {
+        return new LatLng(latitude, longitude);
+    }
+
+    /**
+     * Setter to modify the type of the locationName
+     *
+     * @param newType The new type of the locationName
      * @throws IllegalArgumentException if the argument is null
      */
     public void setType(LocationType newType) {
@@ -139,10 +124,12 @@ public class Location {
     }
 
     /**
-     * Getter returning the type of the location
+     * Getter returning the type of the locationName
      */
     public LocationType getType() {
         return type;
     }
+
+    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
 
 }

@@ -1,5 +1,9 @@
 package ch.epfl.sweng.project;
 
+import org.junit.BeforeClass;
+
+import ch.epfl.sweng.project.data.DataProvider;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -11,7 +15,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
 class SuperTest {
+    final int createdTask = 2;
 
+    @BeforeClass
+    public static void setUpProvider() {
+        DataProvider.setProvider(DataProvider.TEST_PROVIDER);
+    }
 
     void createATask(String taskTitle, String taskDescription){
         onView(withId(R.id.add_task_button)).perform(click());

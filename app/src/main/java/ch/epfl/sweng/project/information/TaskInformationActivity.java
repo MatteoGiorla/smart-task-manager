@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,7 +25,11 @@ import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
 import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
 
 public class TaskInformationActivity extends AppCompatActivity {
-    public static final String IS_MODIFIED_KEY = "ch.epfl.sweng.information.IS_MODIFIED_KEY";
+    public static final String TASK_STATUS_KEY = "ch.epfl.sweng.information.TASK_STATUS_KEY";
+    public static final String TASK_TO_BE_DELETED_INDEX = "ch.epfl.sweng.information.TASK_TO_BE_DELETED_INDEX";
+    public static final int TASK_IS_MODIFIED = 1;
+    public static final int TASK_IS_DELETED = 2;
+    private final int editTaskRequestCode = 1;
     private ArrayList<Task> taskList;
     private int position;
     private Task taskToBeDisplayed;
@@ -30,8 +37,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     private Intent intent;
     private TextView taskTitleTextView;
     private InformationListAdapter mInformationAdapter;
-    private boolean isTaskModified = false;
-    private int editTaskRequestCode = 1;
+    private int taskStatus;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,7 +88,21 @@ public class TaskInformationActivity extends AppCompatActivity {
             throw new IllegalArgumentException("taskList is null before been passed to the intent");
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
         startActivityForResult(intent, editTaskRequestCode);
-        isTaskModified = true;
+        taskStatus = TASK_IS_MODIFIED;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.trash_menu :
+                taskStatus = TASK_IS_DELETED;
+                setResultIntent();
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -121,14 +141,27 @@ public class TaskInformationActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.trash_menu, menu);
+        return true;
+    }
+
     /**
      * Set the result intent.
      */
     private void setResultIntent() {
-        intent.putExtra(IS_MODIFIED_KEY, isTaskModified);
-        intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
-        intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
-        setResult(RESULT_OK, intent);
+        if(taskStatus == TASK_IS_MODIFIED) {
+            intent.putExtra(TASK_STATUS_KEY, taskStatus);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, taskToBeDisplayed);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, position);
+            setResult(RESULT_OK, intent);
+        } else if(taskStatus == TASK_IS_DELETED) {
+            intent.putExtra(TASK_STATUS_KEY, taskStatus);
+            intent.putExtra(TASK_TO_BE_DELETED_INDEX, position);
+            setResult(RESULT_OK, intent);
+        }
     }
 
     /**
@@ -152,16 +185,19 @@ public class TaskInformationActivity extends AppCompatActivity {
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.contributors_field),
-                taskToBeDisplayed.listOfContributorsToString(), R.drawable.author_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
-                taskToBeDisplayed.getLocation().getName(), R.drawable.task_location_36dp));
+                taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
                 taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.duration_field),
-                String.valueOf(taskToBeDisplayed.getDuration()), R.drawable.minutes_needed_36dp));
+                String.valueOf(taskToBeDisplayed.getDurationInMinutes()), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
+
+        for(String contributor : taskToBeDisplayed.getListOfContributors()) {
+            informationItemsList.add(new InformationItem(getString(R.string.contributors_field),
+                    contributor, R.drawable.author_36dp));
+        }
     }
 
     /**
