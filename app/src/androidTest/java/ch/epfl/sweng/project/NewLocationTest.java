@@ -63,7 +63,7 @@ public final class NewLocationTest extends SuperTest {
     }
 
     @Test
-    public void SomeDefautlLocationsCanBeDeletedOtherNot{
+    public void someDefaultLocationsCanBeDeletedOtherNot(){
         //TODO: write the test suite.
     }
 
