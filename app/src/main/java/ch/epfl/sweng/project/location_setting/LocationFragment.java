@@ -2,11 +2,14 @@ package ch.epfl.sweng.project.location_setting;
 
 
 import android.app.Fragment;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.RequiresApi;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,9 +25,9 @@ import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.Task;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -39,6 +42,7 @@ public class LocationFragment extends Fragment {
     private ArrayList<Location> locationList;
     public static final int defaultLocationsSize = 5;
     public static final Location[] defaultLocations = new Location[defaultLocationsSize];
+    private SharedPreferences prefs;
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -72,6 +76,7 @@ public class LocationFragment extends Fragment {
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +87,10 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 locationList
         );
-
-        addDefaultLocations();
+        prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        if(prefs.getBoolean("FIRST_LOGIN", true)){
+            addDefaultLocations();
+        }
         //TODO: Probably get a way to retrieve the user.
     }
 

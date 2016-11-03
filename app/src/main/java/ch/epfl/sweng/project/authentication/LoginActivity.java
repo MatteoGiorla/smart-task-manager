@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.authentication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -55,6 +56,7 @@ public class LoginActivity
     private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private SharedPreferences prefs;
 
     /**
      * Override the onCreate method
@@ -74,6 +76,9 @@ public class LoginActivity
         // Sign In Buttons:
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
         findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
+
+        //initialize the preferences.
+        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
 
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn =
@@ -315,9 +320,15 @@ public class LoginActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent;
                 if(dataSnapshot.exists()){
+
+                    //precising the user has already been logged in before
+                    prefs.edit().putBoolean("FIRST_LOGIN", false).commit();
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }else{
+                    //setting the flag for first login of the user.
+                    prefs.edit().putBoolean("FIRST_LOGIN", true).commit();
+
                     intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
