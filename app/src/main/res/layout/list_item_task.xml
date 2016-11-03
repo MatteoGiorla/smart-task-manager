@@ -60,17 +60,6 @@
             android:src="@drawable/vitality"
             android:tint="@color/yellow" />
 
-        <ImageView
-            android:id="@+id/list_place_token"
-            android:src="@drawable/place_black"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:contentDescription="Icon which appears if the task has a location."
-            android:background="@null"
-            android:layout_weight="1.00" />
     </LinearLayout>
 
 </LinearLayout>

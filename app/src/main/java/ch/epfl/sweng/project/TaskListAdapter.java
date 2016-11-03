@@ -61,7 +61,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
             ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
             ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
-            ImageView placeToken = (ImageView) resultView.findViewById(R.id.list_place_token);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
@@ -79,11 +78,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 }
                 if (days < 10)
                 remainingDays.setTextColor(Color.RED);
-            }
-            if (placeToken != null) {
-                if (taskInTheView.getLocation() == null) {
-                    placeToken.setVisibility(View.INVISIBLE);
-                }
             }
             if (energyIconLow != null) {
                 Task.Energy e = taskInTheView.getEnergy();
