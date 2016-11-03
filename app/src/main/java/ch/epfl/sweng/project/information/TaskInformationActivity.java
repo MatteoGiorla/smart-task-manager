@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.EditTaskActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.StateDuration;
+import ch.epfl.sweng.project.StateEnergy;
 import ch.epfl.sweng.project.Task;
 
 import static ch.epfl.sweng.project.EditTaskActivity.RETURNED_EDITED_TASK;
@@ -190,8 +191,9 @@ public class TaskInformationActivity extends AppCompatActivity {
                 String.valueOf(duration_text), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
                 taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
+        String energy_text = new StateEnergy(taskToBeDisplayed.getEnergy(), getApplicationContext()).toString();
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
-                taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
+                energy_text, R.drawable.thunder_36dp));
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));

@@ -164,10 +164,11 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private StateEnergy[] createStateEnergyTable() {
+        Context current_context = getApplicationContext();
         return new StateEnergy[] {
-                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
-                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
-                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
+                new StateEnergy(Task.Energy.LOW, current_context),
+                new StateEnergy(Task.Energy.NORMAL, current_context),
+                new StateEnergy(Task.Energy.HIGH, current_context)
         };
     }
 
