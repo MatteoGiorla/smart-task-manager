@@ -185,7 +185,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     private void createInformationItemList() {
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
                 taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
-        String duration_text = new StateDuration(taskToBeDisplayed.getDurationInMinutes()).toString();
+        String duration_text = new StateDuration(taskToBeDisplayed.getDurationInMinutes(), getApplicationContext()).toString();
         informationItemsList.add(new InformationItem(getString(R.string.duration_field),
                 String.valueOf(duration_text), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),

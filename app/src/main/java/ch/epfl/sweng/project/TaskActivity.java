@@ -146,19 +146,20 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private StateDuration[] createStateDurationTable() {
+        Context current_context = getApplicationContext();
         return new StateDuration[] {
-                new StateDuration(5),
-                new StateDuration(10),
-                new StateDuration(30),
-                new StateDuration(60),
-                new StateDuration(120),
-                new StateDuration(240),
-                new StateDuration(1440),
-                new StateDuration(2880),
-                new StateDuration(5760),
-                new StateDuration(10080),
-                new StateDuration(20160),
-                new StateDuration(43800)
+                new StateDuration(5, current_context),
+                new StateDuration(10, current_context),
+                new StateDuration(30, current_context),
+                new StateDuration(60, current_context),
+                new StateDuration(120, current_context),
+                new StateDuration(240, current_context),
+                new StateDuration(1440, current_context),
+                new StateDuration(2880, current_context),
+                new StateDuration(5760, current_context),
+                new StateDuration(10080, current_context),
+                new StateDuration(20160, current_context),
+                new StateDuration(43800, current_context)
         };
     }
 
