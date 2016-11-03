@@ -30,7 +30,7 @@ public class TaskTest {
     public void initValidValues() {
         String taskName = "test task";
         String taskDescription = "Task built with all parameters";
-        Location location = new Location("Office", Location.LocationType.WORKPLACE.toString(), 80, 89);
+        String location = "Office";
         Date dueDate = new Date(3);
         String author = "Arthur Rimbaud";
         Task.Energy energy = Task.Energy.HIGH;
@@ -48,11 +48,7 @@ public class TaskTest {
         String nameTest = "new name Test";
         String descriptionTest = "new description test";
 
-        String locationNameTest = "location test workplace";
-        Location.LocationType locationTypeTest = Location.LocationType.WORKPLACE;
-        double latTest = 32;
-        double longTest = 55;
-        Location locationTest = new Location(locationNameTest, locationTypeTest.toString(), latTest, longTest);
+        String locationNameTest = "locationName test workplace";
         Date dueDateTest = new Date(0);
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
@@ -60,34 +56,14 @@ public class TaskTest {
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
-        assertEquals(locationTest.getName(), newTaskTest.getLocation().getName());
-        assertEquals(longTest, newTaskTest.getLocation().getLongitude());
-        assertEquals(latTest, newTaskTest.getLocation().getLatitude());
-        assertEquals(locationTest.getType(), newTaskTest.getLocation().getType());
+        assertEquals(locationNameTest, newTaskTest.getLocationName());
         assertEquals(dueDateTest.getTime(), newTaskTest.getDueDate().getTime());
-        assertEquals(durationTest, newTaskTest.getDuration());
+        assertEquals(durationTest, newTaskTest.getDurationInMinutes());
         assertEquals(energyTest, newTaskTest.getEnergy());
-    }
-
-    @Test
-    public void testConstructorWithTwoParameters() {
-        String name = "task";
-        String description = "The first task";
-        Task task = new Task(name, description);
-
-        assertEquals(name, task.getName());
-        assertEquals(description, task.getDescription());
-        assertEquals(new Location().getName(), task.getLocation().getName());
-        assertEquals(new Location().getGPSCoordinates().longitude, task.getLocation().getGPSCoordinates().longitude);
-        assertEquals(new Location().getGPSCoordinates().latitude, task.getLocation().getGPSCoordinates().latitude);
-        assertEquals(new Location().getType(), task.getLocation().getType());
-        assertEquals(0, task.getDueDate().getTime());
-        assertEquals(30, task.getDuration());
-        assertEquals(Task.Energy.NORMAL, task.getEnergy());
     }
 
     /**
@@ -108,19 +84,12 @@ public class TaskTest {
     }
 
     @Test
-    public void testTaskSetLocation() {
+    public void testTaskSetLocationName() {
         String newLocationName = "Home";
-        Location.LocationType newLocationType = Location.LocationType.HOME;
-        double newLat = 12;
-        double newLong = 17;
-        Location newLocation = new Location(newLocationName, newLocationType.toString(), newLat, newLong);
 
-        testTask.setLocation(newLocation);
+        testTask.setLocationName(newLocationName);
 
-        assertEquals(newLocationName, newLocation.getName());
-        assertEquals(newLocationType, newLocation.getType());
-        assertEquals(newLat, newLocation.getLatitude());
-        assertEquals(newLong, newLocation.getLongitude());
+        assertEquals(newLocationName, testTask.getLocationName());
     }
 
     @Test
@@ -139,7 +108,7 @@ public class TaskTest {
     @Test
     public void testTaskSetDuration() {
         testTask.setDurationInMinutes(23);
-        assertEquals(23, testTask.getDuration());
+        assertEquals(23, testTask.getDurationInMinutes());
     }
 
     @Test
@@ -168,16 +137,6 @@ public class TaskTest {
         testTask.setDescription(null);
     }
 
-    /**
-     * Test that the public constructor throws an IllegalArgumentException
-     * when its arguments are null
-     */
-    @Test
-    public void testConstructorException() {
-        thrownException.expect(IllegalArgumentException.class);
-        new Task(null, null);
-    }
-
     @Test
     public void testTaskSetDueDateException() {
         thrownException.expect(IllegalArgumentException.class);
@@ -189,6 +148,14 @@ public class TaskTest {
     public void testTaskSetEnergyException() {
         thrownException.expect(IllegalArgumentException.class);
         testTask.setEnergyNeeded(null);
+    }
+
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testTaskConstructorException() {
+        thrownException.expect(NullPointerException.class);
+        new Task(null, null, null, null, 0, null, null);
     }
 
     /**

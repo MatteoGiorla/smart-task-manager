@@ -11,15 +11,15 @@
         android:theme="@style/ActionBar">
 
         <ImageButton
-            android:src="@drawable/ic_done_white_36dp"
-            android:contentDescription="@string/done_task_description"
             android:id="@+id/edit_done_button_toolbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="@null"
+            android:contentDescription="@string/done_task_description"
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
+            android:src="@drawable/ic_done_white_36dp"
             tools:ignore="RtlSymmetry" />
 
     </android.support.v7.widget.Toolbar>
@@ -44,9 +44,9 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <android.support.design.widget.TextInputLayout
@@ -54,14 +54,22 @@
                 android:layout_width="match_parent"
                 android:layout_marginRight="10dp"
                 android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/titleTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.14"
+                android:gravity="center_vertical"
+                android:text="@string/titleTitle"
+                android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/title_task"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_title"
-                    android:maxLength="@string/max_length_title"
-                    android:inputType="textPersonName|textCapSentences" />
+                    android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="@string/max_length_title" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
@@ -69,129 +77,124 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <TextView
-                android:text="@string/dueDateTitle"
+                android:id="@+id/dueDateTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:id="@+id/dueDateTitleTextView"
-                android:textColor="@color/black"
                 android:layout_weight="1.14"
-                android:textStyle="bold"/>
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="@string/dueDateTitle"/>
+
             <Button
-                android:text="@string/enter_due_date_hint"
+                android:id="@+id/pick_date"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/pick_date"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical"
-                android:onClick="showDatePickerDialog"/>
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:onClick="showDatePickerDialog"
+                android:text="@string/enter_due_date_hint" />
+
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <TextView
-                android:text="@string/durationTitle"
+                android:id="@+id/durationTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1.14"
                 android:gravity="center_vertical"
                 android:id="@+id/durationTitleTextView"
                 android:textColor="@color/black"
                 android:layout_weight="1.14"
+                android:text="@string/durationTitle"
                 android:textStyle="bold" />
 
             <Spinner
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/durationSpinner"
-                android:gravity="end"
-                android:layout_marginTop="10dp"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:spinnerMode="dialog"/>
+                android:layout_marginTop="10dp"
+                android:gravity="end"
+                android:spinnerMode="dialog" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <TextView
-                android:text="@string/locationTitle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
                 android:id="@+id/locationTitleTextView"
-                android:textColor="@color/black"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1.14"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:text="@string/locationTitle"
                 android:textStyle="bold" />
-
             <Spinner
+                android:id="@+id/locationSpinner"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/locationSpinner"
-                android:gravity="end"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:spinnerMode="dialog"
-                android:entries="@array/location_array"/>
+                android:layout_marginTop="10dp"
+                android:entries="@array/location_array"
+                android:gravity="end"
+                android:spinnerMode="dialog" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <TextView
-                android:text="@string/energyTitle"
+                android:id="@+id/energyTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:id="@+id/energyTitleTextView"
-                android:textColor="@color/black"
                 android:layout_weight="1.14"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
-            <!--<Spinner
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/energySpinner"
-                android:gravity="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:spinnerMode="dialog"/>-->
             <RadioGroup
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
@@ -213,17 +216,18 @@
                     android:text="@string/high_energy"
                     android:onClick="onRadioButtonClicked"/>
             </RadioGroup>
+
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <android.support.design.widget.TextInputLayout
@@ -232,7 +236,10 @@
                 android:layout_marginRight="10dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:text="@string/descriptionTitle"
+                android:textColor="@color/black" />
 
                 <EditText
                     android:id="@+id/description_task"

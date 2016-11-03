@@ -28,7 +28,7 @@ public class EditInformationTaskTest extends SuperTest {
     @Before
     public void addTheTask() {
         String taskName = "Task to be displayed";
-        String taskDescription = "This task will be used to test the \"display task's information activity\"";
+        String taskDescription = "Description to be displayed";
         createATask(taskName, taskDescription);
     }
 

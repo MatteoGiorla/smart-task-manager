@@ -19,6 +19,8 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class UserTest {
+    @Rule
+    public final ExpectedException thrownException = ExpectedException.none();
     private User testUser1; // with first constructor
     private User testUser2; // with second constructor
 
@@ -33,9 +35,6 @@ public class UserTest {
         testUser1 = new User(email);
         testUser2 = new User(email, listLocations);
     }
-
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
 
     @Test
     public void testFirstConstructor() {
@@ -59,12 +58,12 @@ public class UserTest {
     @Test
     public void testSecondConstructor() {
         String email = "trixyfinger@gmail.com";
-        String locationNameTest1 = "location test workplace";
+        String locationNameTest1 = "locationName test workplace";
         Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
         Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
-        String locationNameTest2 = "location test home";
+        String locationNameTest2 = "locationName test home";
         Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;
@@ -86,12 +85,12 @@ public class UserTest {
      */
     @Test
     public void testSetterListLocations() {
-        String locationNameTest1 = "location test workplace";
+        String locationNameTest1 = "locationName test workplace";
         Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
         Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
-        String locationNameTest2 = "location test home";
+        String locationNameTest2 = "locationName test home";
         Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;
@@ -147,10 +146,8 @@ public class UserTest {
     public void testSecondConstructorException() {
         String email = "trixyfinger@gmail.com";
 
-        List<Location> listLocations = null;
-
         thrownException.expect(NullPointerException.class);
-        User userTest = new User(email, listLocations);
+        new User(email, null);
     }
 }
 
