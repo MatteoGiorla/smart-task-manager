@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +25,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
@@ -99,12 +102,10 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        mEnergy = (Spinner) findViewById(R.id.energySpinner);
+        energy = Task.Energy.NORMAL;
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+        radioGroup.check(R.id.energy_normal);
 
-        ArrayAdapter<StateEnergy> spinnerArrayAdapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
-
-        mEnergy.setAdapter(spinnerArrayAdapter2);
 /*
         //A ADAPTER
         mLocation = (Spinner)findViewById(R.id.locationSpinner);
@@ -239,8 +240,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
-                energy = ((StateEnergy)mEnergy.getSelectedItem()).getEnergy();
-
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -290,6 +289,27 @@ public abstract class TaskActivity extends AppCompatActivity {
     public void showDatePickerDialog(View  v) {
         DialogFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.energy_low:
+                if (checked)
+                    energy = Task.Energy.LOW;
+                break;
+            case R.id.energy_normal:
+                if (checked)
+                    energy = Task.Energy.NORMAL;
+                break;
+            case R.id.energy_high:
+                if (checked)
+                    energy = Task.Energy.HIGH;
+                break;
+            default:
+                energy = Task.Energy.NORMAL;
+        }
     }
 
 

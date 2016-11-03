@@ -43,7 +43,7 @@ public class TaskInformationTest extends SuperTest {
         String defaultLocation = "Everywhere";
         Date defaultDueDate = new Date();
         long defaultDuration = 5;
-        String defaultEnergy = Task.Energy.LOW.toString();
+        String defaultEnergy = Task.Energy.NORMAL.toString();
         String contributor = User.DEFAULT_EMAIL;
         task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor));
     }

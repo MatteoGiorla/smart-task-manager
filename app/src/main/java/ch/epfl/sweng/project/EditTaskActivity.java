@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -89,5 +90,22 @@ public class EditTaskActivity extends TaskActivity {
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+
+        // check the right radio button for the energy
+        switch(mTaskToBeEdited.getEnergy()) {
+            case LOW:
+                radioGroup.check(R.id.energy_low);
+                break;
+            case NORMAL:
+                radioGroup.check(R.id.energy_normal);
+                break;
+            case HIGH:
+                radioGroup.check(R.id.energy_high  );
+                break;
+            default:
+                radioGroup.check(R.id.energy_normal);
+                break;
+        }
     }
 }
