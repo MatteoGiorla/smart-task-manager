@@ -195,6 +195,7 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/radio_energy"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -208,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/normal_energy"
                     android:onClick="onRadioButtonClicked"
-                    android:checked="true" />
+                    android:checked="false" />
                 <RadioButton android:id="@+id/energy_high"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

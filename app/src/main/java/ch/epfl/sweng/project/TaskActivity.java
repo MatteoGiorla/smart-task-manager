@@ -26,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
@@ -102,6 +103,8 @@ public abstract class TaskActivity extends AppCompatActivity {
         mDuration.setAdapter(spinnerArrayAdapter1);
 
         energy = Task.Energy.NORMAL;
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+        radioGroup.check(R.id.energy_normal);
 
 /*
         //A ADAPTER
