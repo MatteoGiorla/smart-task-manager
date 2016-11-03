@@ -88,7 +88,11 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".location_setting.LocationSettingActivity"></activity>
+
+        <activity
+            android:name=".location_setting.LocationSettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>
