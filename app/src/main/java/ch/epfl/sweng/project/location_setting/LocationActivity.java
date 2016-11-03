@@ -32,8 +32,8 @@ public abstract class LocationActivity extends AppCompatActivity {
     TextInputLayout textInputLayoutName;
     ArrayList<Location> locationList;
     String name;
-    double longitude;
-    double latitude;
+    double longitude = 0;
+    double latitude = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

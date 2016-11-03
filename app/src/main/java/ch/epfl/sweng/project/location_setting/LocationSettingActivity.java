@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
@@ -13,7 +14,7 @@ import ch.epfl.sweng.project.R;
 public class LocationSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationSettingActivity";
-    // List<Location> locationsList = new ArrayList<>();
+    //private List<Location> locationsList = new ArrayList<>();
     private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
 
@@ -66,6 +67,12 @@ public class LocationSettingActivity extends AppCompatActivity {
             }
         }
     }
+/*
+    public void addElementToLocationList(Location location){
+        locationsList.add(location); //TODO : copy ??
+    }
+*/
+
 
 /*
     private void populateListView() {

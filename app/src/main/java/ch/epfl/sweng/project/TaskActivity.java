@@ -147,18 +147,18 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     private StateDuration[] createStateDurationTable() {
         return new StateDuration[] {
-                new StateDuration(5, getString(R.string.duration5m)),
-                new StateDuration(10, getString(R.string.duration15m)),
-                new StateDuration(30, getString(R.string.duration30m)),
-                new StateDuration(60, getString(R.string.duration1h)),
-                new StateDuration(120, getString(R.string.duration2h)),
-                new StateDuration(240, getString(R.string.duration4h)),
-                new StateDuration(1440, getString(R.string.duration1d)),
-                new StateDuration(2880, getString(R.string.duration2d)),
-                new StateDuration(5760, getString(R.string.duration4d)),
-                new StateDuration(10080, getString(R.string.duration1w)),
-                new StateDuration(20160, getString(R.string.duration2w)),
-                new StateDuration(43800, getString(R.string.duration1m))
+                new StateDuration(5),
+                new StateDuration(10),
+                new StateDuration(30),
+                new StateDuration(60),
+                new StateDuration(120),
+                new StateDuration(240),
+                new StateDuration(1440),
+                new StateDuration(2880),
+                new StateDuration(5760),
+                new StateDuration(10080),
+                new StateDuration(20160),
+                new StateDuration(43800)
         };
     }
 
