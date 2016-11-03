@@ -4,19 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.authentication.LoginActivity;
 
 public class LocationSettingActivity extends AppCompatActivity {
 
     private static final String TAG = "LocationSettingActivity";
-    //private List<Location> locationsList = new ArrayList<>();
     private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
+    Intent intent;
+    ImageButton doneLocationSettingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +39,10 @@ public class LocationSettingActivity extends AppCompatActivity {
                     .commit();
         }
 
-       // populateListView();
+        doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
+
+        doneLocationSettingButton.setOnClickListener(new LocationSettingActivity.OnDoneButtonClickListener());
+
     }
 
     /**
@@ -67,34 +78,26 @@ public class LocationSettingActivity extends AppCompatActivity {
             }
         }
     }
-/*
-    public void addElementToLocationList(Location location){
-        locationsList.add(location); //TODO : copy ??
+
+    void resultActivity() {
+        //Creer user et le mettre sur firebase
+
+
+
+        //TODO : stocker user en local cf Mikael
     }
-*/
 
+    private class OnDoneButtonClickListener implements View.OnClickListener {
 
-/*
-    private void populateListView() {
-        if (true) { //TODO : New user
-            locationsList.add(0, new Location("Home", 0, 0));
-            locationsList.add(1, new Location("Office", 0, 0));
-            locationsList.add(2, new Location("School", 0, 0));
-
-            List<String> listOfLocationNames = new ArrayList<>();
-
-            for (int i = 0; i < locationsList.size(); i++) {
-                listOfLocationNames.add(locationsList.get(i).getName());
-            }
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item_location, R.id.list_entry_name, listOfLocationNames);
-
-            ListView list = (ListView) findViewById(R.id.locations_list_view);
-            list.setAdapter(adapter);
-        } else {
-
+        @Override
+        public void onClick(View v) {
+            resultActivity();
+            intent = new Intent(LocationSettingActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
-    }*/
+    }
 }
 
 

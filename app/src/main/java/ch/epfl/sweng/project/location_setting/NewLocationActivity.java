@@ -19,4 +19,21 @@ public class NewLocationActivity extends LocationActivity {
 
         intent.putExtra(RETURNED_LOCATION, newLocation);
     }
+
+    /**
+     * Check if the location name written is unique or not.
+     *
+     * @param name The new name of the location
+     * @return true if the name is already used or false otherwise.
+     */
+    @Override
+    boolean nameIsNotUnique(String name) {
+        boolean result = false;
+        for (int i = 0; i < locationList.size(); i++) {
+            if (locationList.get(i).getName().equals(name)) {
+                result = true;
+            }
+        }
+        return result;
+    }
 }

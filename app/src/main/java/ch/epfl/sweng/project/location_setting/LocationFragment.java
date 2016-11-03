@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.Task;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -53,11 +55,11 @@ public class LocationFragment extends Fragment {
     }
 
     private void addDefaultLocations(){
-        defaultLocations[0] = new Location("Everywhere",0,0);
-        defaultLocations[1] = new Location("Downtown",0,0);
-        defaultLocations[2] = new Location("At work",0,0);
-        defaultLocations[3] = new Location("At school",0,0);
-        defaultLocations[4] = new Location("At home",0,0);
+        defaultLocations[0] = new Location(getString(R.string.everywhere_location),0,0);
+        defaultLocations[1] = new Location(getString(R.string.downtown_location),0,0);
+        defaultLocations[2] = new Location(getString(R.string.home_location),0,0);
+        defaultLocations[3] = new Location(getString(R.string.office_location),0,0);
+        defaultLocations[4] = new Location(getString(R.string.school_location),0,0);
         for(Location l: defaultLocations){
             addLocation(l);
         }
@@ -110,9 +112,9 @@ public class LocationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-                intent.putExtra(INDEX_LOCATION_TO_BE_DISPLAYED, position);
+                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
                 intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-                startActivityForResult(intent, displayLocationRequestCode);
+                startActivityForResult(intent, editLocationRequestCode);
             }
         });
 
@@ -160,7 +162,7 @@ public class LocationFragment extends Fragment {
     }
 
     /**
-     * Method called when an activity launch inside MainActivity,
+     * Method called when an activity launch inside LocationSettingActivity,
      * is finished. This method is triggered only if we use
      * startActivityForResult.
      *
@@ -202,13 +204,11 @@ public class LocationFragment extends Fragment {
         if (indexEditedLocation == -1 || editedLocation == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
-            /*
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
-            //taskList.set(indexEditedTask, editedTask);
-            mTaskAdapter.notifyDataSetChanged();
+            locationList.set(indexEditedLocation, editedLocation);
+            mLocationAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + " has been updated !",
-                    Toast.LENGTH_SHORT).show();*/
+                    editedLocation.getName() + " has been updated !",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -244,10 +244,10 @@ public class LocationFragment extends Fragment {
 
     private void removeLocationAction(int position) {
         Location locationToBeDeleted = locationList.get(position);
-
         String locationName = locationToBeDeleted.getName();
 
-        /*mDatabase.deleteTask(taskToBeDeleted);*/
+        locationList.remove(locationToBeDeleted);
+        mLocationAdapter.notifyDataSetChanged();
 
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE = locationName + " deleted";

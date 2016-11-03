@@ -72,16 +72,6 @@
     <string name="normal_energy">Normal</string>
     <string name="high_energy">High</string>
 
-    <!-- Location type description-->
-    <string name="home">HOME</string>
-    <string name="workplace">WORKPLACE</string>
-
-    <string-array name="location_array">
-        <item>Everywhere</item>
-        <item>Home</item>
-        <item>Office</item>
-    </string-array>
-
     <!-- Duration description-->
     <string name="duration5m">5 minutes</string>
     <string name="duration15m">10 minutes</string>
@@ -95,5 +85,19 @@
     <string name="duration1w">1 week</string>
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
+
+    <!-- Default locations titles-->
+    <string name="everywhere_location">Everywhere</string>
+    <string name="downtown_location">Downtown</string>
+    <string name="home_location">Home</string>
+    <string name="office_location">Office</string>
+    <string name="school_location">School</string>
+
+    <!-- To delete -->
+    <string-array name="location_array">
+        <item>Everywhere</item>
+        <item>Home</item>
+        <item>Office</item>
+    </string-array>
 
 </resources>

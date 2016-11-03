@@ -82,15 +82,7 @@ public abstract class LocationActivity extends AppCompatActivity {
      * @param name The new name of the location
      * @return true if the name is already used or false otherwise.
      */
-    boolean nameIsNotUnique(String name) {
-        boolean result = false;
-        for (int i = 0; i < locationList.size(); i++) {
-            if (locationList.get(i).equals(name)) {
-                result = true;
-            }
-        }
-        return result;
-    }
+    abstract boolean nameIsNotUnique(String name);
 
     private class OnDoneButtonClickListener implements View.OnClickListener {
 
