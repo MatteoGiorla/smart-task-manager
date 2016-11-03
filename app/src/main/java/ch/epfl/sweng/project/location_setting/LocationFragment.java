@@ -35,6 +35,8 @@ public class LocationFragment extends Fragment {
     private final int displayLocationRequestCode = 3;
     private LocationListAdapter mLocationAdapter;
     private ArrayList<Location> locationList;
+    public static final int defaultLocationsSize = 5;
+    public static final Location[] defaultLocations = new Location[defaultLocationsSize];
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -47,7 +49,18 @@ public class LocationFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         locationList.add(location);
-        //TODO: add the location effectivelly
+        mLocationAdapter.notifyDataSetChanged();
+    }
+
+    private void addDefaultLocations(){
+        defaultLocations[0] = new Location("Everywhere",0,0);
+        defaultLocations[1] = new Location("Downtown",0,0);
+        defaultLocations[2] = new Location("At work",0,0);
+        defaultLocations[3] = new Location("At school",0,0);
+        defaultLocations[4] = new Location("At home",0,0);
+        for(Location l: defaultLocations){
+            addLocation(l);
+        }
     }
 
     /**
@@ -67,6 +80,8 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 locationList
         );
+
+        addDefaultLocations();
         //TODO: Probably get a way to retrieve the user.
     }
 

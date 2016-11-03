@@ -123,7 +123,7 @@ public abstract class LocationActivity extends AppCompatActivity {
 
     private void checkLocationList() {
         if (locationList == null) {
-            throw new IllegalArgumentException("Error on loctionList passed with the intent");
+            throw new IllegalArgumentException("Error on locationList passed with the intent");
         }
     }
 
