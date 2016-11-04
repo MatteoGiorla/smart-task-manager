@@ -16,7 +16,7 @@ import ch.epfl.sweng.project.R;
 /**
  * Adapter used to display the location list
  */
-public class LocationListAdapter extends ArrayAdapter<Location> {
+class LocationListAdapter extends ArrayAdapter<Location> {
 
     /**
      * Constructor of the class

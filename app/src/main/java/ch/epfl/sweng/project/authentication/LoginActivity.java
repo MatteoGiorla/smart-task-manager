@@ -308,11 +308,11 @@ public class LoginActivity
 
 
    /**
-     * Checks wether the user has already been signed in
+     * Checks whether the user has already been signed in
      * on the Firebase Database, and then launch the corresponding
      * activity
      *
-     * @param email is the ID to check in the FirebaseDatabas
+     * @param email is the ID to check in the FirebaseDatabase
      */
     private void getToNextActivity(String email){
         DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();

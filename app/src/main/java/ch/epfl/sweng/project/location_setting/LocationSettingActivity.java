@@ -21,8 +21,8 @@ public class LocationSettingActivity extends AppCompatActivity {
     private static final String TAG = "LocationSettingActivity";
     private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
-    Intent intent;
-    ImageButton doneLocationSettingButton;
+    private Intent intent;
+    private ImageButton doneLocationSettingButton;
     private SharedPreferences prefs;
 
     @Override
@@ -78,19 +78,19 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
     }
 
-    void resultActivity() {
+    private void resultActivity() {
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             Bundle extras = getIntent().getExtras();
             User user = new User(extras.getString(LoginActivity.USER_EMAIL_KEY), fragment.getLocationList());
             Utils.addUser(user);
             prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
         }else{
-            //TODO Update the user when acessing Location Settings from the MainActivity
+            //TODO Update the user when accessing Location Settings from the MainActivity
         }
 
 
 
-        //TODO : stocker user en local cf Mikael
+        //TODO : store user locally cf Mikael
     }
 
     private class OnDoneButtonClickListener implements View.OnClickListener {

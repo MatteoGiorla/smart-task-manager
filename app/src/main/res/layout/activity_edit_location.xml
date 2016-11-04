@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,7 +9,6 @@
         android:id="@+id/locationToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
         android:theme="@style/ActionBar">
 
         <ImageButton
@@ -28,7 +26,7 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:text="NAME"
+        android:text="@string/location_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/locationNameTextView" />
@@ -41,14 +39,14 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter name"
+            android:hint="@string/location_enter_name"
             android:id="@+id/locationName"
             android:maxLength="@string/max_length_title"/>
 
     </android.support.design.widget.TextInputLayout>
 
     <TextView
-        android:text="MAP"
+        android:text="@string/location_place_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addressTitleTextView"
@@ -56,13 +54,13 @@
         android:textColor="@color/black" />
 
     <Button
-        android:text="Enter address"
+        android:text="@string/location_enter_address_button_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/choose_location" />
 
     <TextView
-        android:text="Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates"
+        android:text="@string/location_gps_coordinates_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/chooseLocationExplanation"

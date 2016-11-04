@@ -5,11 +5,10 @@ import android.content.Context;
 public class StateDuration {
     private final long duration;
     private final String spinnerDuration;
-    private final Context context;
 
     public StateDuration(long duration, Context context){
         this.duration = duration;
-        this.context = context;
+        Context context1 = context;
         switch ((int)duration) {
             case 5:
                 this.spinnerDuration = context.getString(R.string.duration5m);
