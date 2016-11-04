@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.Date;
-
 /**
  * Class representing a locationName
  */

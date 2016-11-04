@@ -114,10 +114,14 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-                startActivityForResult(intent, editLocationRequestCode);
+                if(id != 0 && id != 1) { //prevent default locations from edit or delete
+                    Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+                    intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+                    intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
+                    startActivityForResult(intent, editLocationRequestCode);
+                } else {
+                    //TODO : optionally display a toast "You can't edit or delete the default locations"
+                }
             }
         });
 
@@ -136,8 +140,14 @@ public class LocationFragment extends Fragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.floating_context_menu, menu);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        long selectedId = info.id;
+
+        if(selectedId != 0 && selectedId != 1) { //prevent default locations from edit or delete
+            MenuInflater menuInflater = getActivity().getMenuInflater();
+            menuInflater.inflate(R.menu.floating_context_menu, menu);
+        }
     }
 
     /**
