@@ -149,7 +149,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         Context current_context = getApplicationContext();
         return new StateDuration[] {
                 new StateDuration(5, current_context),
-                new StateDuration(10, current_context),
+                new StateDuration(15, current_context),
                 new StateDuration(30, current_context),
                 new StateDuration(60, current_context),
                 new StateDuration(120, current_context),

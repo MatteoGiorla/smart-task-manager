@@ -24,12 +24,12 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
 
 public abstract class LocationActivity extends AppCompatActivity {
-    public static final int REQUEST_PLACE_PICKER = 1;
+    private static final int REQUEST_PLACE_PICKER = 1;
 
     Intent intent;
-    ImageButton doneLocationButton;
+    private ImageButton doneLocationButton;
     private EditText nameTextEdit;
-    TextInputLayout textInputLayoutName;
+    private TextInputLayout textInputLayoutName;
     ArrayList<Location> locationList;
     String name;
     double longitude = 0;

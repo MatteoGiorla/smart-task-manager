@@ -6,11 +6,10 @@ import android.content.Context;
 public class StateEnergy {
     private final Task.Energy energy;
     private final String spinnerEnergy;
-    private final Context context;
 
     public StateEnergy(Task.Energy energy, Context context) {
         this.energy = energy;
-        this.context = context;
+        Context context1 = context;
         switch (energy) {
             case LOW:
                 this.spinnerEnergy = context.getString(R.string.low_energy);

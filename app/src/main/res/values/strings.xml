@@ -74,7 +74,7 @@
 
     <!-- Duration description-->
     <string name="duration5m">5 minutes</string>
-    <string name="duration15m">10 minutes</string>
+    <string name="duration15m">15 minutes</string>
     <string name="duration30m">30 minutes</string>
     <string name="duration1h">1 hour</string>
     <string name="duration2h">2 hours</string>
@@ -92,6 +92,11 @@
     <string name="home_location">Home</string>
     <string name="office_location">Office</string>
     <string name="school_location">School</string>
+    <string name="location_name">NAME</string>
+    <string name="location_enter_name">Enter the location name</string>
+    <string name="location_place_picker">LOCATION (Optional)</string>
+    <string name="location_enter_address_button_text">Pick a place or enter address</string>
+    <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
 
     <!-- To delete -->
     <string-array name="location_array">
