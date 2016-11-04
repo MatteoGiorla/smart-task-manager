@@ -41,7 +41,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
 
         //Initialize the toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
         initializeToolbar(mToolbar);
 
         doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
