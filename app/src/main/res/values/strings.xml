@@ -13,8 +13,8 @@
     <string name="trash">Trash</string>
 
     <!-- Hint strings-->
-    <string name="hint_title">Enter title</string>
-    <string name="hint_description">Enter description</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google or Facebook account.</string>
