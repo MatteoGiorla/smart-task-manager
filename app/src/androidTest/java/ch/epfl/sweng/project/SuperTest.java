@@ -48,6 +48,13 @@ class SuperTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 
+    void deleteALocation(int position){
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_locations))
+                .atPosition(position).perform(longClick());
+        onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+    }
+
     /**
      *  Delete the numbers of tasks given
      */
