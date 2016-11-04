@@ -42,7 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter name"
-            android:id="@+id/locationName" />
+            android:id="@+id/locationName"
+            android:maxLength="@string/max_length_title"/>
 
     </android.support.design.widget.TextInputLayout>
 
