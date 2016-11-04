@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -28,6 +29,7 @@ public class LocationSettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_location_setting);
         prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
         fragment = new LocationFragment();
@@ -81,7 +83,9 @@ public class LocationSettingActivity extends AppCompatActivity {
     void resultActivity() {
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             Bundle extras = getIntent().getExtras();
-            User user = new User(extras.getString(LoginActivity.USER_EMAIL_KEY), fragment.getLocationList());
+            final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
+            Log.d("LocationSettingActivity", userEmail);
+            User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
             prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
         }else{

@@ -64,7 +64,7 @@ public final class LocationSettingTest extends SuperTest {
         for(int i = 2; i < LocationFragment.defaultLocationsSize; ++i){
             deleteALocation(2);
             onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
+                    .inAdapterView(withId(R.id.list_view_locations))
                     .atPosition(0)
                     .check(matches(hasDescendant(withText(LocationFragment.defaultLocations[i].getName()))));
         }

@@ -39,7 +39,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
@@ -315,6 +314,8 @@ public class LoginActivity
      * @param email is the ID to check in the FirebaseDatabas
      */
     private void getToNextActivity(String email){
+        final String currentEmail = email;
+        Log.d(TAG, email);
         DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userRef = firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).getRef();
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -332,13 +333,6 @@ public class LoginActivity
                     prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
 
                     intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
-                    String currentEmail;
-                    try{
-                        currentEmail = mAuth.getCurrentUser().getEmail();
-                    }catch(NullPointerException e){
-                        //to use test case
-                        currentEmail = User.DEFAULT_EMAIL;
-                    }
                     intent.putExtra(USER_EMAIL_KEY, currentEmail);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
