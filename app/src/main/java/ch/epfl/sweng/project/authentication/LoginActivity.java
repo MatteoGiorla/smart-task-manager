@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project.authentication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -30,9 +31,16 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
 
 /**
@@ -42,13 +50,14 @@ public class LoginActivity
         extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
+    public static final String USER_EMAIL_KEY = "ch.epfl.sweng.LoginActivity.USER_EMAIL";
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleClient;
     private CallbackManager mFacebook;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    private SharedPreferences prefs;
 
     /**
      * Override the onCreate method
@@ -68,6 +77,9 @@ public class LoginActivity
         // Sign In Buttons:
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
         findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
+
+        //initialize the preferences.
+        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
 
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn =
@@ -210,10 +222,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -252,10 +261,7 @@ public class LoginActivity
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-                            finish();
+                            getToNextActivity(mAuth.getCurrentUser().getEmail());
                         }
                     }
                 });
@@ -298,9 +304,50 @@ public class LoginActivity
         startActivityForResult(signIn, RC_SIGN_IN);
     }
 
-    /**
-     * Not used method for the moment but maybe useful in the future.
+
+
+   /**
+     * Checks whether the user has already been signed in
+     * on the Firebase Database, and then launch the corresponding
+     * activity
+     *
+     * @param email is the ID to check in the FirebaseDatabase
      */
+    private void getToNextActivity(String email){
+        final String currentEmail = email;
+        Log.d(TAG, email);
+        DatabaseReference firebaseRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = firebaseRef.child("users").child(Utils.encodeMailAsFirebaseKey(email)).getRef();
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Intent intent;
+                if(dataSnapshot.exists()){
+
+                    //precising the user has already been logged in before
+                    prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }else{
+                    //setting the flag for first login of the user.
+                    prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
+
+                    intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
+                    intent.putExtra(USER_EMAIL_KEY, currentEmail);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                }
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+    }
+
+                /**
+                 * Not used method for the moment but maybe useful in the future.
+                 */
     /*private void signOut() {
         // Firebase sign out
         //mAuth.signOut();
@@ -323,4 +370,4 @@ public class LoginActivity
         FirebaseAuth.getInstance().signOut();
 
     }*/
-}
+    }

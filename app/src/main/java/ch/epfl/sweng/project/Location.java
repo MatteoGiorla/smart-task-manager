@@ -1,31 +1,55 @@
 package ch.epfl.sweng.project;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Class representing a location
+ * Class representing a locationName
  */
-public class Location {
+public class Location implements Parcelable{
+
+    /**
+     * Used to regenerate a Task, all parcelables must have a creator
+     */
+    public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {
+        /**
+         * Create a new instance of the Task with the data previously
+         * written by writeToParcel().
+         *
+         * @param in The Parcel to read the object's data from
+         * @return New instance of Task
+         */
+        public Location createFromParcel(Parcel in) {
+            return new Location(in);
+        }
+
+        /**
+         * Create a new array of Task
+         * @param size Size of the array
+         * @return An array of Task
+         */
+        public Location[] newArray(int size) {
+            return new Location[size];
+        }
+    };
 
     private String name;
-    private LocationType type;
     private double latitude;
     private double longitude;
     /**
      * Constructor of the class
      *
      * @param name       Location name
-     * @param typeString Location type in String format
-     * @param latitude   Latitude of the location
-     * @param longitude  Longitude of the location
+     * @param latitude   Latitude of the locationName
+     * @param longitude  Longitude of the locationName
      * @throws IllegalArgumentException if the parameter is null
      */
-    public Location(String name, String typeString, double latitude, double longitude) {
+    public Location(String name, double latitude, double longitude) {
         if (name == null)
             throw new IllegalArgumentException("Name passed to the Location's constructor is null");
-
-        if (typeString == null)
-            throw new IllegalArgumentException("typeString passed to the Location's constructor is null");
 
         if (latitude < -90 || latitude > 90)
             throw new IllegalArgumentException("Latitude is out of range");
@@ -34,39 +58,38 @@ public class Location {
             throw new IllegalArgumentException("Longitude is out of range");
 
         this.name = name;
-        this.type = LocationType.valueOf(typeString);
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
     /**
-     * Constructor of the class
+     * Private constructor used to recreate a Task when
+     * it was put inside an Intent.
      *
-     * @param location A Location
+     * @param in Container of a Task
      */
-    public Location(Location location) {
-        this(location.getName(), location.getType().toString(), location.getLatitude(), location.getLongitude());
+    private Location(@NonNull Parcel in) {
+        this(in.readString(), in.readDouble(), in.readDouble());
     }
-
 
     /**
      * Default constructor initializing fields to default values
      */
     public Location() {
-        this("Everywhere", LocationType.EVERYWHERE.toString(), 0, 0);
+        this("Everywhere", 0, 0);
     }
 
     /**
-     * Getter returning the name of the location
+     * Getter returning the name of the locationName
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Setter to modify the location name
+     * Setter to modify the locationName name
      *
-     * @param newName The new location name
+     * @param newName The new locationName name
      * @throws IllegalArgumentException if newName is null
      */
     public void setName(String newName) {
@@ -77,7 +100,7 @@ public class Location {
     }
 
     /**
-     * Getter returning the longitude of the location
+     * Getter returning the longitude of the locationName
      */
     public double getLongitude() {
         return longitude;
@@ -122,24 +145,26 @@ public class Location {
     }
 
     /**
-     * Getter returning the type of the location
+     * Override the describeContents method from
+     * Parcelable interface.
+     *
+     * @return 0
      */
-    public LocationType getType() {
-        return type;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     /**
-     * Setter to modify the type of the location
+     * Flatten the Task in to a Parcel
      *
-     * @param newType The new type of the location
-     * @throws IllegalArgumentException if the argument is null
+     * @param dest  The parcel in which the Task should be written
+     * @param flags Flags about how the object should be written
      */
-    public void setType(LocationType newType) {
-        if (newType == null)
-            throw new IllegalArgumentException("Location type passed to the setter invalid");
-        type = newType;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
-
-    public enum LocationType {HOME, WORKPLACE, EVERYWHERE}
-
 }

@@ -66,9 +66,11 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
+    compile 'com.google.android.gms:play-services-places:9.6.1'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.6.1'
 }
 
 // Do not change the below code unless you're sure you know what you're doing

@@ -1,9 +1,11 @@
 <resources>
     <!-- Activity name strings-->
     <string name="app_name">TaskIt</string>
-    <string name="new_task">Create a new task</string>
+    <string name="new_task">New task</string>
     <string name="login_label">Log In</string>
-    <string name="edit_task">Edit a task</string>
+    <string name="edit_task">Edit task</string>
+    <string name="location_settings">Location Settings</string>
+    <string name="edit_location">Edit location</string>
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
@@ -11,8 +13,8 @@
     <string name="trash">Trash</string>
 
     <!-- Hint strings-->
-    <string name="hint_title">Enter title</string>
-    <string name="hint_description">Enter description</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
     <string name="welcome_text">You can log in using your Google or Facebook account.</string>
@@ -20,6 +22,9 @@
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
+
+    <!-- Google Place Key -->
+    <string name="google_maps_key">AIzaSyDYvTEtbvm8JXF7LJqBBubvf2e1dBomXfQ</string>
 
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
@@ -32,12 +37,15 @@
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
     <string name="error_title_duplicated">This title is already taken !</string>
+    <string name="error_location_name_empty">The location name can not be empty !</string>
+    <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
 
     <!-- Buttons description-->
     <string name="button_location_description">Select your Location</string>
     <string name="button_vitality_description">Select your vitality</string>
     <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_task_description">Done !</string>
+    <string name="done_location_description">Done !</string>
 
 
     <string name="image_information_field_description">Image</string>
@@ -46,7 +54,7 @@
     <string name="description_field">Description</string>
     <string name="location_field">Task\'s location</string>
     <string name="due_date_field">Deadline</string>
-    <string name="duration_field">Duration (in minutes)</string>
+    <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
     <string name="contributors_field">Contributor(s)</string>
 
@@ -66,15 +74,9 @@
     <string name="normal_energy">Normal</string>
     <string name="high_energy">High</string>
 
-    <string-array name="location_array">
-        <item>Everywhere</item>
-        <item>Home</item>
-        <item>Office</item>
-    </string-array>
-
     <!-- Duration description-->
     <string name="duration5m">5 minutes</string>
-    <string name="duration15m">10 minutes</string>
+    <string name="duration15m">15 minutes</string>
     <string name="duration30m">30 minutes</string>
     <string name="duration1h">1 hour</string>
     <string name="duration2h">2 hours</string>
@@ -85,5 +87,24 @@
     <string name="duration1w">1 week</string>
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
+
+    <!-- Default locations titles-->
+    <string name="everywhere_location">Everywhere</string>
+    <string name="downtown_location">Downtown</string>
+    <string name="home_location">Home</string>
+    <string name="office_location">Office</string>
+    <string name="school_location">School</string>
+    <string name="location_name">NAME</string>
+    <string name="location_enter_name">Enter the location name</string>
+    <string name="location_place_picker">LOCATION (Optional)</string>
+    <string name="location_enter_address_button_text">Pick a place or enter address</string>
+    <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
+
+    <!-- To delete -->
+    <string-array name="location_array">
+        <item>Everywhere</item>
+        <item>Home</item>
+        <item>Office</item>
+    </string-array>
 
 </resources>

@@ -28,7 +28,7 @@ public class EditInformationTaskTest extends SuperTest {
     @Before
     public void addTheTask() {
         String taskName = "Task to be displayed";
-        String taskDescription = "This task will be used to test the \"display task's information activity\"";
+        String taskDescription = "Description to be displayed";
         createATask(taskName, taskDescription);
     }
 
@@ -54,7 +54,7 @@ public class EditInformationTaskTest extends SuperTest {
         //Check that the new description is displayed in the task's information list
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(0)
+                .atPosition(4)
                 .check(matches(hasDescendant(withText(mEditedDescription))));
 
         pressBack();

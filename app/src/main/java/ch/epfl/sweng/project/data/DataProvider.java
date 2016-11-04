@@ -2,9 +2,6 @@ package ch.epfl.sweng.project.data;
 
 import android.content.Context;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Task;
@@ -20,7 +17,6 @@ public class DataProvider {
     private final Context mContext;
 
     public DataProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mAdapter = adapter;
         mTaskList = taskList;
         mContext = context;

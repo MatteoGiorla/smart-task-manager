@@ -1,12 +1,10 @@
 package ch.epfl.sweng.project;
 
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.widget.EditText;
-
-import java.util.Date;
+import android.widget.RadioGroup;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -63,17 +61,9 @@ public class EditTaskActivity extends TaskActivity {
     void resultActivity() {
         mTaskToBeEdited.setName(title);
         mTaskToBeEdited.setDescription(description);
-
-        //prepare date
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, taskYear);
-        cal.set(Calendar.MONTH, taskMonth);
-        cal.set(Calendar.DAY_OF_MONTH, taskDay);
-        Date dateRepresentation = cal.getTime();
-
-        mTaskToBeEdited.setDueDate(dateRepresentation);
+        mTaskToBeEdited.setDueDate(date);
         mTaskToBeEdited.setDurationInMinutes(duration);
-        mTaskToBeEdited.setLocation(new Location(location, Location.LocationType.HOME.toString(), 0, 0));
+        mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
         intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
@@ -100,5 +90,22 @@ public class EditTaskActivity extends TaskActivity {
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+
+        // check the right radio button for the energy
+        switch(mTaskToBeEdited.getEnergy()) {
+            case LOW:
+                radioGroup.check(R.id.energy_low);
+                break;
+            case NORMAL:
+                radioGroup.check(R.id.energy_normal);
+                break;
+            case HIGH:
+                radioGroup.check(R.id.energy_high  );
+                break;
+            default:
+                radioGroup.check(R.id.energy_normal);
+                break;
+        }
     }
 }

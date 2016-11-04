@@ -54,7 +54,7 @@ public final class EditTaskTest extends SuperTest {
     public void testCannotEditTaskWithAlreadyExistingTitle() {
 
         //Create two tasks
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < createdTask; i++) {
             createATask(mOldTitle + i, mOldDescription + i);
         }
 
@@ -84,7 +84,7 @@ public final class EditTaskTest extends SuperTest {
         pressBack();
         pressBack();
 
-        emptyDatabase(3);
+        emptyDatabase(createdTask);
     }
 
     /**

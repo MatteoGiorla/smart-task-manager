@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +25,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import java.text.DateFormat;
@@ -35,18 +38,12 @@ import java.util.List;
  * Class which represents an activity regarding a task
  */
 public abstract class TaskActivity extends AppCompatActivity {
-    private static final DateFormat dateFormat = DateFormat.getDateInstance();
-    static int taskDay;
-    static int taskMonth;
-    static int taskYear;
-    private static String buttonText;
-    private static Button mButton;
     Intent intent;
     ArrayList<Task> taskList;
     String title;
     String description;
     long duration;
-    String location;
+    String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
     private EditText titleEditText;
@@ -55,6 +52,9 @@ public abstract class TaskActivity extends AppCompatActivity {
     private Spinner mEnergy;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
+    private static Button mButton;
+    static Date date;
+    private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +70,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Check the validity of the intent
         intent = getIntent();
         checkIntent();
-        taskList = intent
-                .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+        taskList = intent.getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
         checkTaskList();
 
         titleEditText = (EditText) findViewById(R.id.title_task);
@@ -85,7 +84,9 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        mButton = (Button) findViewById(R.id.pick_date);
+        date = new Date();
+
+        mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
@@ -96,33 +97,14 @@ public abstract class TaskActivity extends AppCompatActivity {
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateDuration[]{
-                new StateDuration(5, getString(R.string.duration5m)),
-                new StateDuration(15, getString(R.string.duration15m)),
-                new StateDuration(30, getString(R.string.duration30m)),
-                new StateDuration(60, getString(R.string.duration1h)),
-                new StateDuration(120, getString(R.string.duration2h)),
-                new StateDuration(240, getString(R.string.duration4h)),
-                new StateDuration(480, getString(R.string.duration1d)),
-                new StateDuration(960, getString(R.string.duration2d)),
-                new StateDuration(1920, getString(R.string.duration4d)),
-                new StateDuration(3360, getString(R.string.duration1w)),
-                new StateDuration(6720, getString(R.string.duration2w)),
-                new StateDuration(13440, getString(R.string.duration1m))
-        });
+            android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        mEnergy = (Spinner) findViewById(R.id.energySpinner);
+        energy = Task.Energy.NORMAL;
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+        radioGroup.check(R.id.energy_normal);
 
-        ArrayAdapter<StateEnergy> spinnerArrayAdapter2 = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateEnergy[]{
-                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
-                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
-                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
-        });
-
-        mEnergy.setAdapter(spinnerArrayAdapter2);
 /*
         //A ADAPTER
         mLocation = (Spinner)findViewById(R.id.locationSpinner);
@@ -164,6 +146,33 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    private StateDuration[] createStateDurationTable() {
+        Context current_context = getApplicationContext();
+        return new StateDuration[] {
+                new StateDuration(5, current_context),
+                new StateDuration(15, current_context),
+                new StateDuration(30, current_context),
+                new StateDuration(60, current_context),
+                new StateDuration(120, current_context),
+                new StateDuration(240, current_context),
+                new StateDuration(1440, current_context),
+                new StateDuration(2880, current_context),
+                new StateDuration(5760, current_context),
+                new StateDuration(10080, current_context),
+                new StateDuration(20160, current_context),
+                new StateDuration(43800, current_context)
+        };
+    }
+
+    private StateEnergy[] createStateEnergyTable() {
+        Context current_context = getApplicationContext();
+        return new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, current_context),
+                new StateEnergy(Task.Energy.NORMAL, current_context),
+                new StateEnergy(Task.Energy.HIGH, current_context)
+        };
+    }
+
 
     /**
      * Start the toolbar and enable that back button on the toolbar.
@@ -176,63 +185,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-    }
-
-    /*
-     * Method to hide keyboard when clicking outside the EditTextView
-     *
-     * source : http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
-    }
-
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.YEAR, year);
-            cal.set(Calendar.MONTH, month);
-            cal.set(Calendar.DAY_OF_MONTH, day);
-            Date dateRepresentation = cal.getTime();
-            mButton.setText(dateFormat.format(dateRepresentation.getTime()));
-            taskDay = day;
-            taskMonth = month;
-            taskYear = year;
         }
     }
 
@@ -287,10 +239,8 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
-                location = mLocation.getSelectedItem().toString();
-                duration = ((StateDuration) mDuration.getSelectedItem()).getDuration();
-                energy = ((StateEnergy) mEnergy.getSelectedItem()).getEnergy();
-
+                locationName = mLocation.getSelectedItem().toString();
+                duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -313,5 +263,82 @@ public abstract class TaskActivity extends AppCompatActivity {
         public void onClick(View v) {
             finish();
         }
+    }
+
+    /*
+     * Method to hide keyboard when clicking outside the EditTextView
+     *
+     * source : http://stackoverflow.com/questions/4828636/edittext-clear-focus-on-touch-outside
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+    public void showDatePickerDialog(View  v) {
+        DialogFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch(view.getId()) {
+            case R.id.energy_low:
+                if (checked)
+                    energy = Task.Energy.LOW;
+                break;
+            case R.id.energy_normal:
+                if (checked)
+                    energy = Task.Energy.NORMAL;
+                break;
+            case R.id.energy_high:
+                if (checked)
+                    energy = Task.Energy.HIGH;
+                break;
+            default:
+                energy = Task.Energy.NORMAL;
+        }
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        @NonNull
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, year);
+            cal.set(Calendar.MONTH, month);
+            cal.set(Calendar.DAY_OF_MONTH, day);
+            date = cal.getTime();
+            mButton.setText(dateFormat.format(date.getTime()));
+
+        }
+
     }
 }

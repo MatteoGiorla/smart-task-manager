@@ -12,7 +12,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,6 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
-    private static boolean isAlreadyPersistent = false;
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
 
@@ -39,11 +37,6 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Make the database persistent, must be called before anything is done in the database.
-        if(!isAlreadyPersistent) {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            isAlreadyPersistent = true;
-        }
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 

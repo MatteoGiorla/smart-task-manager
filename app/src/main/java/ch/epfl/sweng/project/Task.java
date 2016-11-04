@@ -2,12 +2,10 @@ package ch.epfl.sweng.project;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.firebase.auth.FirebaseAuth;
+import android.support.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,67 +40,35 @@ public class Task implements Parcelable {
     };
     private String name;
     private String description;
-    private Location location;
+    private String locationName;
     private Date dueDate;
     private Long durationInMinutes;
     private Energy energyNeeded;
-    private Long timeOfAFractionInMinutes; //to be added optionally later
-    private List<String> listOfContributors;
-    private DateFormat dateFormat;
+    private final List<String> listOfContributors;
+    private final DateFormat dateFormat;
 
     /**
-     * Constructor of the class.
+     * Constructor of the class
      *
-     * @param name Task's name
-     * @param description Task's description
-     * @param location Task's location
-     * @param dueDate Task's due date
-     * @param durationInMinutes Task's duration in minutes
-     * @param energyNeeded Task's energy needed
+     * @param name               Task's name
+     * @param description        Task's description
+     * @param locationName       Task's locationName
+     * @param dueDate            Task's due date
+     * @param durationInMinutes           Task's durationInMinutes in minutes
+     * @param energyNeeded       Task's energy needed
      * @param listOfContributors Task's list of contributors
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-   public Task(String name, String description, Location location, Date dueDate,
-                long durationInMinutes, String energyNeeded, List<String> listOfContributors) {
-
-       //Control inputs
-       if(location == null)
-           throw new IllegalArgumentException("Location passed to the constructor is null");
-       if(energyNeeded == null)
-           throw new IllegalArgumentException("Energy passed to the constructor is null");
-       if(name == null)
-           throw new IllegalArgumentException("Name passed to the constructor is null");
-       if(description == null)
-           throw new IllegalArgumentException("Description passed to the constructor is null");
-       if(listOfContributors == null || listOfContributors.size() == 0)
-           throw new IllegalArgumentException("List of contributors passed to the constructor is invalid");
-
-       this.name = name;
-       this.description = description;
-       this.durationInMinutes = durationInMinutes;
-       this.listOfContributors = new ArrayList<>(listOfContributors);
-       this.dueDate = dueDate;
-       this.energyNeeded = Energy.valueOf(energyNeeded);
-       this.location = new Location(location);
-       dateFormat = DateFormat.getDateInstance();
-   }
-
-    /**
-     * Constructor of the class.
-     * Take only name and description as parameters, and initialise the other attributes
-     * with default values.
-     *
-     * @param name Task's name
-     * @param description Task's description
-     */
-    public Task(String name, String description) {
-        this(name,
-                description,
-                new Location(),
-                new Date(0),
-                30,
-                Energy.NORMAL.toString(),
-                Collections.singletonList(User.DEFAULT_EMAIL));
+    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors) {
+        this.name = name;
+        this.description = description;
+        this.durationInMinutes = durationInMinutes;
+        this.listOfContributors = new ArrayList<>(listOfContributors);
+        this.dueDate = dueDate;
+        this.energyNeeded = Energy.valueOf(energyNeeded);
+        this.locationName = locationName;
+        dateFormat = DateFormat.getDateInstance();
     }
 
     /**
@@ -111,26 +77,10 @@ public class Task implements Parcelable {
      *
      * @param in Container of a Task
      */
-    private Task(Parcel in) {
-        if(in == null)
-            throw new IllegalArgumentException("In is null");
-
-        setName(in.readString());
-        setDescription(in.readString());
-        setLocation(new Location());
-        setDueDate(new Date(0));
-        setDurationInMinutes(30);
-        setEnergyNeeded(Energy.NORMAL);
-        listOfContributors = new ArrayList<>();
-        // Temporary
-        String mail;
-        try{
-            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        }catch (NullPointerException e) {
-            mail = User.DEFAULT_EMAIL;
-        }
-        addContributor(mail);
-        dateFormat = DateFormat.getDateInstance();
+    private Task(@NonNull Parcel in) {
+        this(in.readString(), in.readString(), in.readString(),
+                new Date(in.readLong()), in.readLong(), in.readString(),
+                in.createStringArrayList());
     }
 
     /**
@@ -138,6 +88,27 @@ public class Task implements Parcelable {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Getter returning a copy of the task's description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Getter returning a copy of the task's locationName name
+     */
+    public String getLocationName() {
+        return locationName;
+    }
+
+    /**
+     * Getter returning the task's durationInMinutes
+     */
+    public long getDurationInMinutes() {
+        return durationInMinutes;
     }
 
     /**
@@ -153,13 +124,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning a copy of the task's description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
      * Setter to modify the task's description
      *
      * @param newDescription The new task's description
@@ -172,22 +136,15 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning a copy of the task's location
-     */
-    public Location getLocation() {
-        return new Location(location);
-    }
-
-    /**
      * Setter to modify the task's location
      *
-     * @param newLocation The new task's location
+     * @param newLocationName The new task's locationName
      * @throws IllegalArgumentException if the argument is null
      */
-    public void setLocation(Location newLocation) {
-        if(newLocation == null)
+    public void setLocationName(String newLocationName) {
+        if (newLocationName == null)
             throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
-        location = newLocation;
+        locationName = newLocationName;
     }
 
     /**
@@ -204,7 +161,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void setDueDate(Date newDueDate) {
-        if(newDueDate == null)
+        if (newDueDate == null)
             throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
         dueDate = newDueDate;
     }
@@ -234,7 +191,7 @@ public class Task implements Parcelable {
     /**
      * Setter to modify the task's duration
      *
-     * @param newDurationInMinutes The new task's duration
+     * @param newDurationInMinutes The new task's durationInMinutes
      */
     public void setDurationInMinutes(long newDurationInMinutes) {
         durationInMinutes = newDurationInMinutes;
@@ -262,33 +219,15 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning the list of contributors of the task
-     * as a string.
-     *
-     * @return list of contributors formatted as a string.
-     */
-    public String listOfContributorsToString() {
-        if(listOfContributors.isEmpty())
-            return "";
-
-       StringBuilder contributorsToString = new StringBuilder();
-        for(String contributor: listOfContributors) {
-            contributorsToString.append(contributor).append(", ");
-        }
-        contributorsToString.delete(contributorsToString.length()-2, contributorsToString.length()); //remove the last ", "
-        return contributorsToString.toString();
-    }
-
-    /**
      * Add a given contributor to the list of contributors
      *
      * @param contributor Email of the contributor
      */
-    public void addContributor(String contributor) {
-        if(contributor == null)
+    void addContributor(String contributor) {
+        if (contributor == null)
             listOfContributors.add(User.DEFAULT_EMAIL);
         else
-        listOfContributors.add(contributor);
+            listOfContributors.add(contributor);
     }
 
     /**
@@ -298,7 +237,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if the argument is null
      */
     public boolean deleteContributor(String contributor) {
-        if(contributor == null || !listOfContributors.contains(contributor))
+        if (contributor == null || !listOfContributors.contains(contributor))
             throw new IllegalArgumentException("Contributor to be deleted invalid");
         return listOfContributors.remove(contributor);
     }
@@ -324,6 +263,12 @@ public class Task implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(description);
+        dest.writeString(locationName);
+        dest.writeLong(dueDate.getTime());
+        dest.writeLong(durationInMinutes);
+        dest.writeString(energyNeeded.toString());
+        dest.writeStringList(listOfContributors);
+
     }
 
     public enum Energy {LOW, NORMAL, HIGH}

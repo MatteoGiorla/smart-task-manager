@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/locationToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ActionBar">
+
+        <ImageButton
+            android:src="@drawable/ic_done_white_36dp"
+            android:contentDescription="@string/done_location_description"
+            android:id="@+id/location_done_button_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            tools:ignore="RtlSymmetry" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:text="@string/location_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationNameTextView" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:id="@+id/location_name_layout">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/location_enter_name"
+            android:id="@+id/locationName"
+            android:maxLength="@string/max_length_title"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:text="@string/location_place_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addressTitleTextView"
+        android:textSize="14sp"
+        android:textColor="@color/black" />
+
+    <Button
+        android:text="@string/location_enter_address_button_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/choose_location" />
+
+    <TextView
+        android:text="@string/location_gps_coordinates_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chooseLocationExplanation"
+        android:textColor="@color/black" />
+
+</LinearLayout>
