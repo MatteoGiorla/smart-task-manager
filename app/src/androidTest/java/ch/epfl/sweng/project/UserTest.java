@@ -27,8 +27,8 @@ public class UserTest {
     @Before
     public void initValidValues() {
         String email = "trixyfinger@gmail.com";
-        Location location1 = new Location("Office", Location.LocationType.WORKPLACE.toString(), 80, 89);
-        Location location2 = new Location("Home", Location.LocationType.HOME.toString(), 80, 89);
+        Location location1 = new Location("Office", 80, 89);
+        Location location2 = new Location("Home", 80, 89);
         List<Location> listLocations = new ArrayList<>();
         listLocations.add(location2);
         listLocations.add(location1);
@@ -59,15 +59,13 @@ public class UserTest {
     public void testSecondConstructor() {
         String email = "trixyfinger@gmail.com";
         String locationNameTest1 = "locationName test workplace";
-        Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
-        Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
+        Location locationTest1 = new Location(locationNameTest1, latTest1, longTest1);
         String locationNameTest2 = "locationName test home";
-        Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;
-        Location locationTest2 = new Location(locationNameTest2, locationTypeTest2.toString(), latTest2, longTest2);
+        Location locationTest2 = new Location(locationNameTest2, latTest2, longTest2);
 
         List<Location> listLocations = new ArrayList<>();
         listLocations.add(locationTest1);
@@ -86,15 +84,13 @@ public class UserTest {
     @Test
     public void testSetterListLocations() {
         String locationNameTest1 = "locationName test workplace";
-        Location.LocationType locationTypeTest1 = Location.LocationType.WORKPLACE;
         double latTest1 = 32;
         double longTest1 = 55;
-        Location locationTest1 = new Location(locationNameTest1, locationTypeTest1.toString(), latTest1, longTest1);
+        Location locationTest1 = new Location(locationNameTest1, latTest1, longTest1);
         String locationNameTest2 = "locationName test home";
-        Location.LocationType locationTypeTest2 = Location.LocationType.HOME;
         double latTest2 = 43;
         double longTest2 = 90;
-        Location locationTest2 = new Location(locationNameTest2, locationTypeTest2.toString(), latTest2, longTest2);
+        Location locationTest2 = new Location(locationNameTest2, latTest2, longTest2);
 
         List<Location> listLocations = new ArrayList<>();
         listLocations.add(locationTest1);
@@ -111,7 +107,7 @@ public class UserTest {
      */
     @Test
     public void testUpdateListLocation() {
-        Location newTestLocation = new Location("School", Location.LocationType.WORKPLACE.toString(), 34, 43);
+        Location newTestLocation = new Location("Office", 34, 43);
         testUser2.updateLocation(newTestLocation);
 
         assertEquals(newTestLocation.getName(), testUser2.getListLocations().get(1).getName());
@@ -134,7 +130,7 @@ public class UserTest {
         thrownException.expect(IllegalArgumentException.class);
         testUser2.updateLocation(null);
 
-        Location newTestLocation = new Location("Everywhere", Location.LocationType.EVERYWHERE.toString(), 43, 43);
+        Location newTestLocation = new Location("Everywhere", 43, 43);
         thrownException.expect(IllegalArgumentException.class);
         testUser2.updateLocation(newTestLocation);
     }

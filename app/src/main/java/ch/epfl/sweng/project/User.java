@@ -37,10 +37,12 @@ public class User {
         if (listLocations == null) {
             throw new NullPointerException();
         } else {
-            if(email == null)
+            if(mail == null) {
                 this.email = DEFAULT_EMAIL;
-            else
+            }
+            else {
                 this.email = mail;
+            }
             this.listLocations = new ArrayList<>(listLocations);
         }
     }
@@ -55,7 +57,9 @@ public class User {
     }
 
     /**
-     * Getter returning the locations of the user
+     * Getter
+     *
+     * @return list of Locations of the user.
      */
     public List<Location> getListLocations() {
         return listLocations;
@@ -70,31 +74,35 @@ public class User {
         if(list == null) {
             throw new IllegalArgumentException("Bad list of locationName given in the setter of user");
         }else{
-            if(list.size() == 2)
+            if(list.size() == 2) {
                 this.listLocations = new ArrayList<>(list);
+            }
         }
     }
     /**
      * Allow the user to update a specific locationName.
-     * We use the fact that listLocations is always of size 2.
+     * @param location The new Location
      */
     public void updateLocation(Location location) {
-        if(location == null || location.getType() == Location.LocationType.EVERYWHERE
-                && (location.getType() != Location.LocationType.HOME || location.getType() != Location.LocationType.WORKPLACE)) {
+        if(location == null) {
             throw new IllegalArgumentException("Bad locationName update !");
         }
-        if(location.getType() == Location.LocationType.HOME) {
-            if(listLocations.get(0).getType() == Location.LocationType.HOME) {
-                listLocations.set(0, location);
-            }else{
-                listLocations.set(1, location);
-            }
-        }else{
-            if(listLocations.get(0).getType() == Location.LocationType.WORKPLACE) {
-                listLocations.set(0, location);
-            }else{
-                listLocations.set(1, location);
+
+        for(int i=0; i < listLocations.size(); i++) {
+            if(listLocations.get(i).getName().equals(location.getName())) {
+                listLocations.set(i,location);
             }
         }
+    }
+
+    /**
+     * Allow the user to add a new location
+     * @param location The new Location
+     */
+    public void addLocation(Location location) {
+        if(location == null) {
+            throw new IllegalArgumentException("Bad locationName update !");
+        }
+        listLocations.add(location);
     }
 }

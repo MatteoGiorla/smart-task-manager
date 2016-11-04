@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
@@ -18,9 +19,17 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public class EntryActivity extends Activity {
 
+    public static boolean isAlreadyPersistent = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Make the database persistent, must be called before anything is done in the database.
+        if(!isAlreadyPersistent) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            isAlreadyPersistent = true;
+        }
 
         // launch a different activity
         Intent launchIntent = new Intent();

@@ -42,18 +42,4 @@ public interface DataExchanger {
      * @param task the task to be deleted
      */
     void deleteTask(Task task);
-
-    /**
-     * Add user in the database
-     *
-     * @param user The user to be added
-     */
-    void addUser(User user);
-
-    /**
-     * Update user in the database
-     *
-     * @param user the user to be updated
-     */
-    void updateUser(User user);
 }

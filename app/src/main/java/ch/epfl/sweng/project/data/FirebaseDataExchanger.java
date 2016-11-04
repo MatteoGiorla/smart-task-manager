@@ -19,6 +19,7 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 
 /**
  * This class is the exchanger between firebase and the app
@@ -27,7 +28,7 @@ import ch.epfl.sweng.project.User;
  */
 public class FirebaseDataExchanger implements DataExchanger {
 
-    private final DatabaseReference mDatabase;
+    private static final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
@@ -36,20 +37,9 @@ public class FirebaseDataExchanger implements DataExchanger {
      * Only constructor of FirebaseDataExchanger for the moment*
      */
     public FirebaseDataExchanger(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAdapter = adapter;
         mTaskList = taskList;
         mContext = context;
-    }
-
-    /**
-     * Encode a given mail to be compatible with keys in firebase
-     *
-     * @param mail The user email
-     * @return The encoded email
-     */
-    private String encodeMailAsFirebaseKey(String mail) {
-        return mail.replace('.', ' ');
     }
 
     @Override
@@ -67,7 +57,7 @@ public class FirebaseDataExchanger implements DataExchanger {
 
     @Override
     public void retrieveAllData(User user) {
-        Query myTasks = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
 
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
@@ -106,7 +96,7 @@ public class FirebaseDataExchanger implements DataExchanger {
     @Override
     public void addNewTask(Task task) {
         for (String mail : task.getListOfContributors()) {
-            DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
         mTaskList.add(task);
@@ -116,7 +106,7 @@ public class FirebaseDataExchanger implements DataExchanger {
     @Override
     public void deleteTask(Task task) {
         for (String mail : task.getListOfContributors()) {
-            DatabaseReference taskRef = mDatabase.child("tasks").child(encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.removeValue();
         }
         mAdapter.remove(task);
@@ -129,28 +119,6 @@ public class FirebaseDataExchanger implements DataExchanger {
         addNewTask(updated);
     }
 
-    @Override
-    public void addUser(final User user) {
-        DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).getRef();
-        userRef.setValue(user);
-    }
-
-    @Override
-    public void updateUser(User user) {
-        deleteUser(user);
-        addUser(user);
-    }
-
-    /**
-     * Deleter a user in the database
-     *
-     * @param user The user to be deleted
-     */
-    private void deleteUser(User user) {
-        DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).getRef();
-        userRef.removeValue();
-    }
-
     /**
      * Recover the locations set by the user when he
      * first sign in.
@@ -158,7 +126,7 @@ public class FirebaseDataExchanger implements DataExchanger {
      * @param user The user
      */
     private void recoverUserLocations(final User user) {
-        DatabaseReference userRef = mDatabase.child("users").child(encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
+        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
         final List<Location> listLocations = new ArrayList<>();
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -166,11 +134,10 @@ public class FirebaseDataExchanger implements DataExchanger {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     String name = (String) data.child("name").getValue();
-                    String type = (String) data.child("type").getValue();
                     Double latitude = data.child("latitude").getValue(Double.class);
                     Double longitude = data.child("longitude").getValue(Double.class);
                     //Create location
-                    Location location = new Location(name, type, latitude, longitude);
+                    Location location = new Location(name, latitude, longitude);
                     listLocations.add(location);
                 }
                 user.setListLocations(listLocations);
@@ -181,5 +148,4 @@ public class FirebaseDataExchanger implements DataExchanger {
             }
         });
     }
-
 }

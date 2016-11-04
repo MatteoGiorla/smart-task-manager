@@ -22,6 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
@@ -78,7 +79,7 @@ public class TaskInformationTest extends SuperTest {
     public void testDescriptionIsDisplayed() {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(0)
+                .atPosition(4)
                 .check(matches(hasDescendant(withText(task.getDescription()))));
     }
 
@@ -86,7 +87,7 @@ public class TaskInformationTest extends SuperTest {
     public void testLocationIsDisplayed() {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(1)
+                .atPosition(2)
                 .check(matches(hasDescendant(withText(task.getLocationName()))));
     }
 
@@ -94,24 +95,26 @@ public class TaskInformationTest extends SuperTest {
     public void testDueDateIsDisplayed() {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(2)
+                .atPosition(0)
                 .check(matches(hasDescendant(withText(task.dueDateToString()))));
     }*/
 
 
     @Test
     public void testDurationIsDisplayed() {
+        String duration_text = new StateDuration(task.getDurationInMinutes(), getApplicationContext()).toString();
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(3)
-                .check(matches(hasDescendant(withText(String.valueOf(task.getDurationInMinutes())))));
+                .atPosition(1)
+                .check(matches(hasDescendant(withText(duration_text))));
     }
 
     @Test
     public void testEnergyIsDisplayed() {
+        String energy_text = new StateEnergy(task.getEnergy(), getApplicationContext()).toString();
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(4)
-                .check(matches(hasDescendant(withText(String.valueOf(task.getEnergy())))));
+                .atPosition(3)
+                .check(matches(hasDescendant(withText(energy_text))));
     }
 }

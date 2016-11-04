@@ -25,6 +25,7 @@ public class LocalDataExchanger implements DataExchanger {
 
     @Override
     public User retrieveUserInformation() {
+        mUser = new User(User.DEFAULT_EMAIL);
         return mUser;
     }
 
@@ -44,15 +45,5 @@ public class LocalDataExchanger implements DataExchanger {
     public void deleteTask(Task task) {
         mAdapter.remove(task);
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void addUser(User user) {
-        mUser = user;
-    }
-
-    @Override
-    public void updateUser(User user) {
-        mUser = user;
     }
 }

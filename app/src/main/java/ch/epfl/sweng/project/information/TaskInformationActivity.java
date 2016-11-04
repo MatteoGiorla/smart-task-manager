@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.EditTaskActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.StateDuration;
+import ch.epfl.sweng.project.StateEnergy;
 import ch.epfl.sweng.project.Task;
 
 import static ch.epfl.sweng.project.EditTaskActivity.RETURNED_EDITED_TASK;
@@ -175,6 +177,7 @@ public class TaskInformationActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
     }
 
@@ -182,17 +185,20 @@ public class TaskInformationActivity extends AppCompatActivity {
      * Initialise and fill the informationItemsList.
      */
     private void createInformationItemList() {
+        informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
+                taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
+        String duration_text = new StateDuration(taskToBeDisplayed.getDurationInMinutes(), getApplicationContext()).toString();
+        informationItemsList.add(new InformationItem(getString(R.string.duration_field),
+                String.valueOf(duration_text), R.drawable.minutes_needed_36dp));
+        informationItemsList.add(new InformationItem(getString(R.string.location_field),
+                taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
+        String energy_text = new StateEnergy(taskToBeDisplayed.getEnergy(), getApplicationContext()).toString();
+        informationItemsList.add(new InformationItem(getString(R.string.energy_field),
+                energy_text, R.drawable.thunder_36dp));
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.location_field),
-                taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
-                taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.duration_field),
-                String.valueOf(taskToBeDisplayed.getDurationInMinutes()), R.drawable.minutes_needed_36dp));
-        informationItemsList.add(new InformationItem(getString(R.string.energy_field),
-                taskToBeDisplayed.getEnergy().toString(), R.drawable.thunder_36dp));
+
 
         for(String contributor : taskToBeDisplayed.getListOfContributors()) {
             informationItemsList.add(new InformationItem(getString(R.string.contributors_field),

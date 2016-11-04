@@ -70,8 +70,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Check the validity of the intent
         intent = getIntent();
         checkIntent();
-        taskList = intent
-                .getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+        taskList = intent.getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
         checkTaskList();
 
         titleEditText = (EditText) findViewById(R.id.title_task);
@@ -148,27 +147,29 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     private StateDuration[] createStateDurationTable() {
+        Context current_context = getApplicationContext();
         return new StateDuration[] {
-                new StateDuration(5, getString(R.string.duration5m)),
-                new StateDuration(10, getString(R.string.duration15m)),
-                new StateDuration(30, getString(R.string.duration30m)),
-                new StateDuration(60, getString(R.string.duration1h)),
-                new StateDuration(120, getString(R.string.duration2h)),
-                new StateDuration(240, getString(R.string.duration4h)),
-                new StateDuration(1440, getString(R.string.duration1d)),
-                new StateDuration(2880, getString(R.string.duration2d)),
-                new StateDuration(5760, getString(R.string.duration4d)),
-                new StateDuration(10080, getString(R.string.duration1w)),
-                new StateDuration(20160, getString(R.string.duration2w)),
-                new StateDuration(43800, getString(R.string.duration1m))
+                new StateDuration(5, current_context),
+                new StateDuration(15, current_context),
+                new StateDuration(30, current_context),
+                new StateDuration(60, current_context),
+                new StateDuration(120, current_context),
+                new StateDuration(240, current_context),
+                new StateDuration(1440, current_context),
+                new StateDuration(2880, current_context),
+                new StateDuration(5760, current_context),
+                new StateDuration(10080, current_context),
+                new StateDuration(20160, current_context),
+                new StateDuration(43800, current_context)
         };
     }
 
     private StateEnergy[] createStateEnergyTable() {
+        Context current_context = getApplicationContext();
         return new StateEnergy[] {
-                new StateEnergy(Task.Energy.LOW, getString(R.string.low_energy)),
-                new StateEnergy(Task.Energy.NORMAL, getString(R.string.normal_energy)),
-                new StateEnergy(Task.Energy.HIGH, getString(R.string.high_energy))
+                new StateEnergy(Task.Energy.LOW, current_context),
+                new StateEnergy(Task.Energy.NORMAL, current_context),
+                new StateEnergy(Task.Energy.HIGH, current_context)
         };
     }
 
