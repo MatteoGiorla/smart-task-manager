@@ -1,7 +1,6 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 public class StateDuration {
     private final long duration;

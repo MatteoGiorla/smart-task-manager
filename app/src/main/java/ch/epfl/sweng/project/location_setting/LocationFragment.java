@@ -116,14 +116,14 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(id != 0 && id != 1) { //prevent default locations from edit or delete
-                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-                startActivityForResult(intent, editLocationRequestCode);
-            } else {
-                //TODO : optionally display a toast "You can't edit or delete the default locations"
-            }
+                if(id != 0 && id != 1) { //prevent default locations from edit or delete
+                    Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+                    intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+                    intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
+                    startActivityForResult(intent, editLocationRequestCode);
+                } else {
+                    //TODO : optionally display a toast "You can't edit or delete the default locations"
+                }
             }
         });
 
