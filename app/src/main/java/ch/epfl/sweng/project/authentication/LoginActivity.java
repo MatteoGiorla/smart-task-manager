@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
@@ -50,6 +51,7 @@ public class LoginActivity
         extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
 
+    public static final String USER_EMAIL_KEY = "ch.epfl.sweng.LoginActivity.USER_EMAIL";
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleApiClient mGoogleClient;
@@ -322,14 +324,22 @@ public class LoginActivity
                 if(dataSnapshot.exists()){
 
                     //precising the user has already been logged in before
-                    prefs.edit().putBoolean("FIRST_LOGIN", false).commit();
+                    prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
                     intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }else{
                     //setting the flag for first login of the user.
-                    prefs.edit().putBoolean("FIRST_LOGIN", true).commit();
+                    prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
 
                     intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
+                    String currentEmail;
+                    try{
+                        currentEmail = mAuth.getCurrentUser().getEmail();
+                    }catch(NullPointerException e){
+                        //to use test case
+                        currentEmail = User.DEFAULT_EMAIL;
+                    }
+                    intent.putExtra(USER_EMAIL_KEY, currentEmail);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }
                 startActivity(intent);
