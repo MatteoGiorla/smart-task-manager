@@ -37,8 +37,8 @@ public class LocationFragment extends Fragment {
     private final int editLocationRequestCode = 2;
     private LocationListAdapter mLocationAdapter;
     private ArrayList<Location> locationList;
-    private static final int defaultLocationsSize = 5;
-    private static final Location[] defaultLocations = new Location[defaultLocationsSize];
+    public static final int defaultLocationsSize = 5;
+    public static final Location[] defaultLocations = new Location[defaultLocationsSize];
     private SharedPreferences prefs;
 
     /**

@@ -36,7 +36,7 @@ class SuperTest {
         onView(withId(R.id.add_location_button)).perform(click());
         onView(withId(R.id.locationName)).perform(typeText(locationTitle));
         pressBack();
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+        onView(withId(R.id.location_done_button_toolbar)).perform(click());
     }
 
     void createATask(String taskTitle, String taskDescription){
@@ -45,7 +45,7 @@ class SuperTest {
         pressBack();
         onView(withId(R.id.description_task)).perform(typeText(taskDescription));
         pressBack();
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+        onView(withId(R.id.location_done_button_toolbar)).perform(click());
     }
 
     void deleteALocation(int position){

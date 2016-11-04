@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -84,7 +83,6 @@ public class LocationSettingActivity extends AppCompatActivity {
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             Bundle extras = getIntent().getExtras();
             final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
-            Log.d("LocationSettingActivity", userEmail);
             User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
             prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
