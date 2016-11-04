@@ -107,7 +107,7 @@ public class UserTest {
      */
     @Test
     public void testUpdateListLocation() {
-        Location newTestLocation = new Location("School",  34, 43);
+        Location newTestLocation = new Location("Office", 34, 43);
         testUser2.updateLocation(newTestLocation);
 
         assertEquals(newTestLocation.getName(), testUser2.getListLocations().get(1).getName());

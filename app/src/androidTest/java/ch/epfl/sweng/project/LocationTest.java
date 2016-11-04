@@ -100,10 +100,6 @@ public final class LocationTest {
         location.setName(null);
     }
 
-    @Test
-    public void testSetTypeException() {
-        thrownException.expect(IllegalArgumentException.class);
-    }
 
     @Test
     public void constructWithNullName() {
@@ -111,11 +107,6 @@ public final class LocationTest {
         new Location(null, 0, 0);
     }
 
-    @Test
-    public void constructWithNullType() {
-        thrownException.expect(IllegalArgumentException.class);
-        new Location("A name", 0, 0);
-    }
 
     @Test
     public void constructWithInvalidLatitude() {
