@@ -1,21 +1,19 @@
 package ch.epfl.sweng.project.location_setting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
 public class LocationSettingActivity extends AppCompatActivity {
@@ -25,12 +23,13 @@ public class LocationSettingActivity extends AppCompatActivity {
     private LocationFragment fragment;
     Intent intent;
     ImageButton doneLocationSettingButton;
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_setting);
-
+        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
         fragment = new LocationFragment();
 
         if (savedInstanceState == null) {
@@ -80,7 +79,14 @@ public class LocationSettingActivity extends AppCompatActivity {
     }
 
     void resultActivity() {
-        //Creer user et le mettre sur firebase
+        if(prefs.getBoolean("FIRST_LOGIN", true)){
+            Bundle extras = getIntent().getExtras();
+            User user = new User(extras.getString(LoginActivity.USER_EMAIL_KEY), fragment.getLocationList());
+            Utils.addUser(user);
+            prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+        }else{
+            //TODO Update the user when acessing Location Settings frome the MainActivity
+        }
 
 
 

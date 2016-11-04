@@ -2,7 +2,6 @@ package ch.epfl.sweng.project.location_setting;
 
 
 import android.app.Fragment;
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -91,7 +90,6 @@ public class LocationFragment extends Fragment {
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             addDefaultLocations();
         }
-        //TODO: Probably get a way to retrieve the user.
     }
 
     /**
@@ -186,22 +184,7 @@ public class LocationFragment extends Fragment {
         //Case when we returned from the EditLocationActivity
         if (requestCode == editLocationRequestCode && resultCode == RESULT_OK) {
             actionOnActivityResult(data);
-        } /*else if (requestCode == displayLocationRequestCode && resultCode == RESULT_OK) {
-            int locationStatus = data.getIntExtra(LOCATION_STATUS_KEY, -1);
-            if(locationStatus == -1)
-                throw new IllegalArgumentException("Error with the intent form LocationInformationActivity");
-
-            switch (locationStatus) {
-                case LOCATION_IS_MODIFIED :
-                    actionOnActivityResult(data);
-                    break;
-                case LOCATION_IS_DELETED :
-                    int taskIndex = data.getIntExtra(TaskInformationActivity.LOCATION_TO_BE_DELETED_INDEX, -1);
-                    if(taskIndex == -1)
-                        throw new IllegalArgumentException("Error with the task to be deleted index");
-                    removeLocationAction(taskIndex);
-            }
-        }*/
+        }
     }
 
     private void actionOnActivityResult(Intent data) {
