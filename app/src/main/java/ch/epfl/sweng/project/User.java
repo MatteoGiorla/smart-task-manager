@@ -37,7 +37,7 @@ public class User {
         if (listLocations == null) {
             throw new NullPointerException();
         } else {
-            if(email == null) {
+            if(mail == null) {
                 this.email = DEFAULT_EMAIL;
             }
             else {
