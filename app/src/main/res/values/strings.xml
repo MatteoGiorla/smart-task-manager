@@ -1,9 +1,11 @@
 <resources>
     <!-- Activity name strings-->
     <string name="app_name">TaskIt</string>
-    <string name="new_task">Create a new task</string>
+    <string name="new_task">New task</string>
     <string name="login_label">Log In</string>
-    <string name="edit_task">Edit a task</string>
+    <string name="edit_task">Edit task</string>
+    <string name="location_settings">Location Settings</string>
+    <string name="edit_location">Edit location</string>
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>

@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +60,11 @@ public abstract class LocationActivity extends AppCompatActivity {
             // TODO handle exception!
         }
 
+        //Initialize the toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
+        initializeToolbar(mToolbar);
+
+
         //Check the validity of the intent
         intent = getIntent();
         checkIntent();
@@ -72,6 +79,9 @@ public abstract class LocationActivity extends AppCompatActivity {
 
         //Create a listener to check that the user is writing a valid input.
         nameTextEdit.addTextChangedListener(new LocationTextWatcher());
+
+        mToolbar.setNavigationOnClickListener(new LocationActivity.ReturnArrowListener());
+
 
         doneLocationButton.setOnClickListener(new OnDoneButtonClickListener() {
 
@@ -100,6 +110,37 @@ public abstract class LocationActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
+        }
+    }
+
+    /**
+     * Start the toolbar and enable that back button on the toolbar.
+     *
+     * @param mToolbar the toolbar of the activity
+     */
+    private void initializeToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    /**
+     * Class that implements OnClickListener.
+     * It represents a OnClickListener on the return arrow.
+     */
+    private class ReturnArrowListener implements View.OnClickListener {
+
+        /**
+         * Called when the return arrow has been clicked.
+         *
+         * @param v The view that was clicked, the return arrow.
+         */
+        @Override
+        public void onClick(View v) {
+            finish();
         }
     }
 

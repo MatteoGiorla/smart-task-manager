@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -38,6 +39,10 @@ public class LocationSettingActivity extends AppCompatActivity {
                     .add(R.id.locations_container, fragment)
                     .commit();
         }
+
+        //Initialize the toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
+        initializeToolbar(mToolbar);
 
         doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
 
@@ -76,6 +81,20 @@ public class LocationSettingActivity extends AppCompatActivity {
                 // Add element to the listLocation
                 fragment.addLocation(newLocation);
             }
+        }
+    }
+
+    /**
+     * Start the toolbar and enable that back button on the toolbar.
+     *
+     * @param mToolbar the toolbar of the activity
+     */
+    private void initializeToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
     }
 
