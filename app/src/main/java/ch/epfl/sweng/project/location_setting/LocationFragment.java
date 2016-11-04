@@ -34,9 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class LocationFragment extends Fragment {
     public static final String INDEX_LOCATION_TO_BE_EDITED_KEY = "ch.epfl.sweng.LocationFragment._INDEX_LOCATION_TO_BE_EDITED";
     public static final String LOCATIONS_LIST_KEY = "ch.epfl.sweng.LocationFragment.LOCATIONS_LIST";
-    public static final String INDEX_LOCATION_TO_BE_DISPLAYED = "ch.epfl.sweng.LocationFragment.INDEX_LOCATION_TO_BE_DISPLAYED";
     private final int editLocationRequestCode = 2;
-    private final int displayLocationRequestCode = 3;
     private LocationListAdapter mLocationAdapter;
     private ArrayList<Location> locationList;
     public static final int defaultLocationsSize = 5;
