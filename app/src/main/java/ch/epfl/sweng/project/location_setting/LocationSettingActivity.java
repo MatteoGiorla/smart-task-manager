@@ -85,7 +85,7 @@ public class LocationSettingActivity extends AppCompatActivity {
             Utils.addUser(user);
             prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
         }else{
-            //TODO Update the user when acessing Location Settings frome the MainActivity
+            //TODO Update the user when acessing Location Settings from the MainActivity
         }
 
 

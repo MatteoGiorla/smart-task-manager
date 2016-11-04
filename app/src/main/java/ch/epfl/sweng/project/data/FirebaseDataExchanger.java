@@ -148,26 +148,4 @@ public class FirebaseDataExchanger implements DataExchanger {
             }
         });
     }
-
-    //    public void addUser(User user) {
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
-//        userRef.setValue(user);
-//    }
-//
-//    public void updateUser(User user) {
-//        deleteUser(user);
-//        addUser(user);
-//    }
-//
-//    /**
-//     * Deleter a user in the database
-//     *
-//     * @param user The user to be deleted
-//     */
-//    private void deleteUser(User user) {
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
-//        userRef.removeValue();
-//    }
 }
