@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,40 +56,46 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         //We get the task to be displayed
         Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
-            TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-           // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
-            TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-            ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
-            ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
-            ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            // TODO pour l'instant je mets ici l'implémentation de CheckBox
+            //CheckBox checkBox = (CheckBox) resultView.findViewById(R.id.checkBox);
+            /*if (checkBox.isChecked()) {
+                resultView.setVisibility(View.INVISIBLE);
+            } else {*/
+                TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
+                // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+                TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
+                ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
+                ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
+                ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
 
-            if (titleView != null) {
-                titleView.setText(taskInTheView.getName());
-            }
+                if (titleView != null) {
+                    titleView.setText(taskInTheView.getName());
+                }
            /* if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
             }*/
-            if (remainingDays != null) {
-                Calendar c = Calendar.getInstance();
-                int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
-                if (days != 0) {
-                    remainingDays.setText("-"+ Integer.toString(days));
-                } else {
-                    remainingDays.setText(Integer.toString(days));
+                if (remainingDays != null) {
+                    Calendar c = Calendar.getInstance();
+                    int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
+                    if (days != 0) {
+                        remainingDays.setText(Integer.toString(days));
+                    } else {
+                        remainingDays.setText(Integer.toString(days));
+                    }
+                    if (days < 10)
+                        remainingDays.setTextColor(Color.RED);
                 }
-                if (days < 10)
-                remainingDays.setTextColor(Color.RED);
-            }
-            if (energyIconLow != null) {
-                Task.Energy e = taskInTheView.getEnergy();
-                if (e == Task.Energy.LOW) {
-                    energyIconNormal.setVisibility(View.INVISIBLE);
-                    energyIconHigh.setVisibility(View.INVISIBLE);
-                } else if (e == Task.Energy.NORMAL) {
-                    energyIconHigh.setVisibility(View.INVISIBLE);
+                if (energyIconLow != null) {
+                    Task.Energy e = taskInTheView.getEnergy();
+                    if (e == Task.Energy.LOW) {
+                        energyIconNormal.setVisibility(View.INVISIBLE);
+                        energyIconHigh.setVisibility(View.INVISIBLE);
+                    } else if (e == Task.Energy.NORMAL) {
+                        energyIconHigh.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
-        }
+        //}
         return resultView;
     }
 
