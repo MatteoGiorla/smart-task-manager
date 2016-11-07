@@ -17,7 +17,7 @@
     <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">You can log in using your Google or Facebook account.</string>
+    <string name="welcome_text">Sign in with Google or Facebook</string>
     <string name="welcome_title">Welcome !</string>
 
     <!-- Facebook App ID -->
