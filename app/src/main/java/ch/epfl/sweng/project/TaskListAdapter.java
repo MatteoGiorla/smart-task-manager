@@ -56,7 +56,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-            TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+           // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
             ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
             ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
@@ -65,9 +65,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
             }
-            if (descriptionView != null) {
+           /* if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
-            }
+            }*/
             if (remainingDays != null) {
                 Calendar c = Calendar.getInstance();
                 int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
@@ -93,6 +93,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
     }
 
     /*
+    * Helper functions to calculate the number of remaining days
     * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
      */
     private Calendar getDatePart(Date date){
