@@ -80,7 +80,7 @@
         android:layout_height="97dp"
         android:id="@+id/checkBox"
         android:checked="false"
-        android:contentDescription="Check box of the task." />
+        android:contentDescription="@string/description_checkbox" />
 
     <!--
         android:button="@null"

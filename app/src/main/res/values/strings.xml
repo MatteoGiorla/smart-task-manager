@@ -100,6 +100,9 @@
     <string name="location_enter_address_button_text">Pick a place or enter address</string>
     <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
 
+    <!-- CheckBox description -->
+    <string name="description_checkbox">Check box of the task.</string>
+
     <!-- To delete -->
     <string-array name="location_array">
         <item>Everywhere</item>
