@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import ch.epfl.sweng.project.data.DataProvider;
 
 /**
  * Adapter used to display the task list
@@ -44,7 +47,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
 
         //There is no recycled view, we need to create a new one
@@ -54,13 +57,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         //We get the task to be displayed
-        Task taskInTheView = getItem(position);
+        final Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
-            // TODO pour l'instant je mets ici l'implémentation de CheckBox
-            //CheckBox checkBox = (CheckBox) resultView.findViewById(R.id.checkBox);
-            /*if (checkBox.isChecked()) {
-                resultView.setVisibility(View.INVISIBLE);
-            } else {*/
                 TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
                 // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
                 TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
@@ -77,11 +75,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 if (remainingDays != null) {
                     Calendar c = Calendar.getInstance();
                     int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
-                    if (days != 0) {
-                        remainingDays.setText(Integer.toString(days));
-                    } else {
-                        remainingDays.setText(Integer.toString(days));
-                    }
+                    remainingDays.setText(Integer.toString(days));
                     if (days < 10)
                         remainingDays.setTextColor(Color.RED);
                 }
@@ -94,9 +88,37 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                         energyIconHigh.setVisibility(View.INVISIBLE);
                     }
                 }
+            // TODO try it here:
+            final View taskView = resultView;
+            final CheckBox checkBox = (CheckBox) resultView.findViewById(R.id.checkBox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (checkBox.isChecked()) {
+                        taskView.setAlpha(0.4f);
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        if (checkBox.isChecked()) {
+                                            remove(taskInTheView);
+                                        } else {
+                                            taskView.setAlpha(1.0f);
+                                        }
+                                    }
+                                },
+                                5000);
+                    }
+                }
+            });
             }
-        //}
         return resultView;
+    }
+
+    @Override
+    public void remove(Task object) {
+        super.remove(object);
+        // TODO demander à Mikael comment on s'occupe pour supprimer de Firebase!!
+        //DataProvider d  = new DataProvider(getContext(), this, );
     }
 
     /*
