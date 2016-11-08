@@ -181,8 +181,9 @@ public class TaskFragment extends Fragment {
                     break;
                 case TASK_IS_DELETED :
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
-                    if(taskIndex == -1)
+                    if(taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
+                    }
                     removeTaskAction(taskIndex);
             }
         }

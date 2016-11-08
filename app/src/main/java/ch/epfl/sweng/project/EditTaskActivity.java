@@ -35,6 +35,10 @@ public class EditTaskActivity extends TaskActivity {
         //Get the task to be edited
         mTaskToBeEdited = taskList.get(mIndexTaskToBeEdited);
 
+        date = mTaskToBeEdited.getDueDate();
+        energy = mTaskToBeEdited.getEnergy();
+        duration = mTaskToBeEdited.getDuration();
+
         //Populate the layout activity_task
         populateLayout();
     }

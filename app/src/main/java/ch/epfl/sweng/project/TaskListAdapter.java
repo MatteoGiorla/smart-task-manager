@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -71,11 +70,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (remainingDays != null) {
                 Calendar c = Calendar.getInstance();
                 int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
-                if (days != 0) {
-                    remainingDays.setText("-"+ Integer.toString(days));
-                } else {
-                    remainingDays.setText(Integer.toString(days));
-                }
+                
+                remainingDays.setText(Integer.toString(days));
+
                 if (days < 10)
                 remainingDays.setTextColor(Color.RED);
             }

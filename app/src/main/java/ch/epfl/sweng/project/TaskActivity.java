@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -48,13 +47,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     List<String> listOfContributors;
     private EditText titleEditText;
     private Spinner mLocation;
-    private Spinner mDuration;
+    Spinner mDuration;
     private Spinner mEnergy;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     private static Button mButton;
     static Date date;
     private static final DateFormat dateFormat = DateFormat.getDateInstance();
+    StateDuration[] stateDurationTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +84,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        date = new Date();
-
         mButton = (Button)findViewById(R.id.pick_date);
 
         //a supprimer plus tard
@@ -93,15 +91,16 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
 
+        stateDurationTable = createStateDurationTable();
+
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
         ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
-            android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
+            android.R.layout.simple_spinner_dropdown_item, stateDurationTable);
 
         mDuration.setAdapter(spinnerArrayAdapter1);
 
-        energy = Task.Energy.NORMAL;
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
         radioGroup.check(R.id.energy_normal);
 

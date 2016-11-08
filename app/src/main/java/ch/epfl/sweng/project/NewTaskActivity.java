@@ -1,17 +1,27 @@
 package ch.epfl.sweng.project;
 
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Class that represents the inflated activity_new_task
  */
 public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        date = new Date();
+        energy = Task.Energy.NORMAL;
+
+    }
 
     /**
      * Check if the title written is unique or not.
