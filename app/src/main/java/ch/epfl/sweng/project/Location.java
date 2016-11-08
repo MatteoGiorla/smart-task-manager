@@ -139,6 +139,8 @@ public class Location implements Parcelable{
 
     /**
      * Getter returning the gps coordinates of the location
+     *
+     * @return GPSCoordinates of the location
      */
     public LatLng getGPSCoordinates() {
         return new LatLng(latitude, longitude);

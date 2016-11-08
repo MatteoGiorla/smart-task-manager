@@ -19,6 +19,7 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/location_button"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@null"
@@ -26,7 +27,17 @@
             android:src="@drawable/location"
             android:tint="@color/green" />
 
+        <Spinner
+            android:id="@+id/location_user"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:spinnerMode="dialog" />
+
         <ImageButton
+            android:id="@+id/time_button"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentEnd="true"
@@ -37,7 +48,17 @@
             android:src="@drawable/time"
             android:tint="@color/blue" />
 
+        <Spinner
+            android:id="@+id/time_user"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:spinnerMode="dialog" />
+
         <ImageButton
+            android:id="@+id/vitality_button"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
@@ -47,6 +68,14 @@
             android:src="@drawable/vitality"
             android:tint="@color/yellow" />
 
+        <Spinner
+            android:id="@+id/vitality_user"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:spinnerMode="dialog" />
     </RelativeLayout>
 
     <View

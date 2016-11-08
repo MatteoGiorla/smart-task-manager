@@ -24,8 +24,8 @@ public class LocalDataExchanger implements DataExchanger {
     }
 
     @Override
-    public User retrieveUserInformation() {
-        mUser = new User(User.DEFAULT_EMAIL);
+    public User retrieveUserInformation(User user) {
+        mUser = user;
         return mUser;
     }
 

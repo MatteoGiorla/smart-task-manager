@@ -9,9 +9,11 @@ public interface DataExchanger {
      * Recover the information from the user in the
      * database and return it.
      *
+     * @param user The user we want to retrieve information from.
+     *
      * @return the User recovered from the database
      */
-    User retrieveUserInformation();
+    User retrieveUserInformation(User user);
 
     /**
      * Take care of retrieving all user data if there is no

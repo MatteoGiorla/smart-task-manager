@@ -66,6 +66,19 @@ public class User {
     }
 
     /**
+     * Getter returning the name of the locations
+     *
+     * @return List of the names of the locations
+     */
+    public List<String> getListNamesLocations() {
+        List<String> names = new ArrayList<>();
+        for (Location loc : getListLocations()) {
+            names.add(loc.getName());
+        }
+        return names;
+    }
+
+    /**
      * Setter that allows to change the locations of the user
      *
      * @throws NullPointerException If the argument is null

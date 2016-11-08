@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,23 +42,20 @@ public class TaskFragment extends Fragment {
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private DataExchanger mDatabase;
+    private User currentUser;
 
-    /**
-     * Method that adds a task in the taskList and in the database.
-     *
-     * @param task The task to be added
-     * @throws IllegalArgumentException If the task to be added is null
-     */
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException();
+    public TaskFragment() {
+        String mail;
+        try {
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
         }
-        mDatabase.addNewTask(task);
+        currentUser = new User(mail);
     }
 
     /**
-     * Override the onCreate method. It initialize the database, the list of task
-     * and the custom made adapter.
+     * Override the onCreate method. It retrieves all the task of the user
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
@@ -64,6 +63,7 @@ public class TaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         taskList = new ArrayList<>();
 
         mTaskAdapter = new TaskListAdapter(
@@ -74,7 +74,7 @@ public class TaskFragment extends Fragment {
 
         DataProvider provider = new DataProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getProvider();
-        User currentUser = mDatabase.retrieveUserInformation();
+        currentUser = mDatabase.retrieveUserInformation(currentUser);
         mDatabase.retrieveAllData(currentUser);
     }
 
@@ -205,6 +205,19 @@ public class TaskFragment extends Fragment {
     }
 
     /**
+     * Method that adds a task in the taskList and in the database.
+     *
+     * @param task The task to be added
+     * @throws IllegalArgumentException If the task to be added is null
+     */
+    public void addTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException();
+        }
+        mDatabase.addNewTask(task);
+    }
+
+    /**
      * Start the EditTaskActivity for result when the user press the edit button.
      * The task index and the taskList are passed as extras to the intent.
      *
@@ -226,12 +239,10 @@ public class TaskFragment extends Fragment {
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         removeTaskAction(position);
-
     }
 
     private void removeTaskAction(int position) {
@@ -254,5 +265,14 @@ public class TaskFragment extends Fragment {
      */
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
+    }
+
+    /**
+     * Getter for the user
+     *
+     * @return A copy of the user
+     */
+    public User getCurrentUser() {
+        return currentUser;
     }
 }

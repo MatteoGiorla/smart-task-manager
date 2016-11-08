@@ -3,7 +3,6 @@ package ch.epfl.sweng.project.data;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,14 +42,7 @@ public class FirebaseDataExchanger implements DataExchanger {
     }
 
     @Override
-    public User retrieveUserInformation() {
-        String mail;
-        try {
-            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        } catch (NullPointerException e) {
-            mail = User.DEFAULT_EMAIL;
-        }
-        User user = new User(mail);
+    public User retrieveUserInformation(User user) {
         recoverUserLocations(user);
         return user;
     }

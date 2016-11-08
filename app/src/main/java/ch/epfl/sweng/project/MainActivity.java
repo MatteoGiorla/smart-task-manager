@@ -1,12 +1,17 @@
 package ch.epfl.sweng.project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -25,6 +30,13 @@ public final class MainActivity extends AppCompatActivity {
 
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
+    private static Context mContext;
+    private static User currentUser;
+
+    private Task.Energy userEnergy;
+    private String userLocation;
+    private String userTimeAtDisposal;
+
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -41,6 +53,8 @@ public final class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+
+        mContext = getApplicationContext();
         fragment = new TaskFragment();
 
         if (savedInstanceState == null) {
@@ -48,6 +62,63 @@ public final class MainActivity extends AppCompatActivity {
                     .add(R.id.tasks_container, fragment)
                     .commit();
         }
+
+        currentUser = fragment.getCurrentUser();
+
+        //Default values
+        userEnergy = Task.Energy.NORMAL;
+        userLocation = getResources().getString(R.string.everywhere_location);
+        userTimeAtDisposal = getResources().getString(R.string.duration1h);
+
+        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
+        Spinner mVitality = (Spinner) findViewById(R.id.vitality_user);
+
+        final ArrayAdapter<String> spinnerLocation = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getLocationTable());
+
+        final ArrayAdapter<StateDuration> spinnerDuration = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getStateDurationTable());
+
+        final ArrayAdapter<StateEnergy> spinnerVitality = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
+
+
+        mLocation.setAdapter(spinnerLocation);
+        mDuration.setAdapter(spinnerDuration);
+        mVitality.setAdapter(spinnerVitality);
+
+        mLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userLocation = spinnerLocation.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        mDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userTimeAtDisposal = spinnerDuration.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        mVitality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String energy = spinnerVitality.getItem(position).toString();
+                Log.d("TEST", energy);
+                //userEnergy = Task.Energy.valueOf(energy);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     /**
@@ -113,5 +184,33 @@ public final class MainActivity extends AppCompatActivity {
                 fragment.addTask(newTask);
             }
         }
+    }
+
+    public static StateDuration[] getStateDurationTable() {
+        return new StateDuration[] {
+                new StateDuration(5, mContext),
+                new StateDuration(15, mContext),
+                new StateDuration(30, mContext),
+                new StateDuration(60, mContext),
+                new StateDuration(120, mContext),
+                new StateDuration(240, mContext),
+                new StateDuration(1440, mContext),
+                new StateDuration(2880, mContext),
+                new StateDuration(5760, mContext),
+                new StateDuration(10080, mContext),
+                new StateDuration(20160, mContext),
+                new StateDuration(43800, mContext)
+        };
+    }
+
+    public static String[] getLocationTable() {
+        return currentUser.getListNamesLocations().toArray(new String[currentUser.getListLocations().size()]);
+    }
+    private StateEnergy[] createStateEnergyTable() {
+        return new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, mContext),
+                new StateEnergy(Task.Energy.NORMAL, mContext),
+                new StateEnergy(Task.Energy.HIGH, mContext)
+        };
     }
 }
