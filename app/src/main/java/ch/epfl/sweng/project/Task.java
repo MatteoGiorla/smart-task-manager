@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
+    private final int fraction;
+    private final int staticSortValue;
 
     /**
      * Constructor of the class
@@ -69,6 +72,8 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
+        fraction = 1;
+        staticSortValue = computeStaticSortValue();
     }
 
     /**
@@ -81,6 +86,10 @@ public class Task implements Parcelable {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
                 in.createStringArrayList());
+    }
+
+    public int getStaticSortValue() {
+        return staticSortValue;
     }
 
     /**
@@ -272,4 +281,33 @@ public class Task implements Parcelable {
     }
 
     public enum Energy {LOW, NORMAL, HIGH}
+
+    private int computeStaticSortValue() {
+        Calendar c = Calendar.getInstance();
+        int delay = (int)daysBetween(c.getTime(), dueDate);
+        int staticSortValue = (120 * durationInMinutes.intValue() + 55 * (energyNeeded.ordinal() + 1)) / (75 * delay + 100 * fraction);
+        return staticSortValue;
+    }
+
+    private Calendar getDatePart(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
+
+    private long daysBetween(Date startDate, Date endDate) {
+        Calendar sDate = getDatePart(startDate);
+        Calendar eDate = getDatePart(endDate);
+
+        long daysBetween = 0;
+        while (sDate.before(eDate)) {
+            sDate.add(Calendar.DAY_OF_MONTH, 1);
+            daysBetween++;
+        }
+        return daysBetween;
+    }
 }

@@ -5,7 +5,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -17,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.project.data.DataExchanger;
@@ -61,6 +65,7 @@ public class TaskFragment extends Fragment {
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +81,22 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getProvider();
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
+
+        taskList.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                Log.e("static value", o1.getName() + " : " + o1.getStaticSortValue());
+                Log.e("static value", o2.getName() + " : " + o2.getStaticSortValue());
+                if(o1.getStaticSortValue() > o2.getStaticSortValue()) {
+                    return 1;
+                } else if(o1.getStaticSortValue() < o2.getStaticSortValue()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        mTaskAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -165,6 +186,7 @@ public class TaskFragment extends Fragment {
      *                                  invalid
      * @throws SQLiteException          if more that one row was changed when editing a task.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
@@ -187,6 +209,21 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex);
             }
         }
+        taskList.sort(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                Log.e("static value", o1.getName() + " : " + o1.getStaticSortValue());
+                Log.e("static value", o2.getName() + " : " + o2.getStaticSortValue());
+                if(o1.getStaticSortValue() > o2.getStaticSortValue()) {
+                    return 1;
+                } else if(o1.getStaticSortValue() < o2.getStaticSortValue()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        mTaskAdapter.notifyDataSetChanged();
     }
 
     private void actionOnActivityResult(Intent data) {
