@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -51,11 +50,19 @@ public class TaskFragment extends Fragment {
      * @param task The task to be added
      * @throws IllegalArgumentException If the task to be added is null
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addTask(Task task) {
         if (task == null) {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
+        mTaskAdapter.sort(new Comparator<Task>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+            @Override
+            public int compare(Task o1, Task o2) {
+                return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
+            }
+        }.reversed());
     }
 
     /**
@@ -82,21 +89,13 @@ public class TaskFragment extends Fragment {
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
 
-        taskList.sort(new Comparator<Task>() {
+        mTaskAdapter.sort(new Comparator<Task>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public int compare(Task o1, Task o2) {
-                Log.e("static value", o1.getName() + " : " + o1.getStaticSortValue());
-                Log.e("static value", o2.getName() + " : " + o2.getStaticSortValue());
-                if(o1.getStaticSortValue() > o2.getStaticSortValue()) {
-                    return 1;
-                } else if(o1.getStaticSortValue() < o2.getStaticSortValue()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+                return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
             }
-        });
-        mTaskAdapter.notifyDataSetChanged();
+        }.reversed());
     }
 
     /**
@@ -209,21 +208,15 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex);
             }
         }
-        taskList.sort(new Comparator<Task>() {
+
+        mTaskAdapter.sort(new Comparator<Task>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public int compare(Task o1, Task o2) {
-                Log.e("static value", o1.getName() + " : " + o1.getStaticSortValue());
-                Log.e("static value", o2.getName() + " : " + o2.getStaticSortValue());
-                if(o1.getStaticSortValue() > o2.getStaticSortValue()) {
-                    return 1;
-                } else if(o1.getStaticSortValue() < o2.getStaticSortValue()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+                return Integer.compare(o1.getStaticSortValue(), o2.getStaticSortValue());
             }
-        });
-        mTaskAdapter.notifyDataSetChanged();
+        }.reversed());
+
     }
 
     private void actionOnActivityResult(Intent data) {

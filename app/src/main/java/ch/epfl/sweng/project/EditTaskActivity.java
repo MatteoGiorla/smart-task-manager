@@ -1,8 +1,6 @@
 package ch.epfl.sweng.project;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -60,7 +58,6 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
         mTaskToBeEdited.setName(title);

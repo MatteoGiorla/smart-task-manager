@@ -1,8 +1,10 @@
 package ch.epfl.sweng.project;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
 /**
  * Task is the class representing a task
  */
-public class Task implements Parcelable {
+public class Task implements Parcelable, Comparable<Task> {
 
     /**
      * Used to regenerate a Task, all parcelables must have a creator
@@ -278,6 +280,12 @@ public class Task implements Parcelable {
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int compareTo(Task o) {
+        return Integer.compare(o.getStaticSortValue(), staticSortValue);
     }
 
     public enum Energy {LOW, NORMAL, HIGH}
