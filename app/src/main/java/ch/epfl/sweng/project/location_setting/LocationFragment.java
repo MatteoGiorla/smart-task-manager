@@ -36,7 +36,9 @@ public class LocationFragment extends Fragment {
     public static final String LOCATIONS_LIST_KEY = "ch.epfl.sweng.LocationFragment.LOCATIONS_LIST";
     private final int editLocationRequestCode = 2;
     private LocationListAdapter mLocationAdapter;
+    private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
+    private ArrayList<Location> defaultLocationList;
     public static final int defaultLocationsSize = 5;
     public static final Location[] defaultLocations = new Location[defaultLocationsSize];
     private SharedPreferences prefs;
@@ -55,15 +57,31 @@ public class LocationFragment extends Fragment {
         mLocationAdapter.notifyDataSetChanged();
     }
 
+    public void addDefaultLocation(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+        defaultLocationList.add(location);
+        mDefaultLocationAdapter.notifyDataSetChanged();
+    }
+
     private void addDefaultLocations(){
         defaultLocations[0] = new Location(getString(R.string.everywhere_location),0,0);
         defaultLocations[1] = new Location(getString(R.string.downtown_location),0,0);
         defaultLocations[2] = new Location(getString(R.string.home_location),0,0);
         defaultLocations[3] = new Location(getString(R.string.office_location),0,0);
         defaultLocations[4] = new Location(getString(R.string.school_location),0,0);
+        /*
         for(Location l: defaultLocations){
-            addLocation(l);
+            addDefaultLocation(l);
         }
+        */
+        addDefaultLocation(defaultLocations[0]);
+        addDefaultLocation(defaultLocations[1]);
+
+        addLocation(defaultLocations[2]);
+        addLocation(defaultLocations[3]);
+        addLocation(defaultLocations[4]);
     }
 
     /**
@@ -78,11 +96,18 @@ public class LocationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         locationList = new ArrayList<>();
+        defaultLocationList = new ArrayList<>();
 
         mLocationAdapter = new LocationListAdapter(
                 getActivity(),
                 R.layout.list_item_location,
                 locationList
+        );
+
+        mDefaultLocationAdapter = new LocationListAdapter(
+                getActivity(),
+                R.layout.list_item_location,
+                defaultLocationList
         );
         prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
         if(prefs.getBoolean("FIRST_LOGIN", true)){
@@ -109,19 +134,25 @@ public class LocationFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_locations);
         listView.setAdapter(mLocationAdapter);
 
+        View rootViewDfault = inflater.inflate(R.layout.fragment_location_list, container, false);
+
+        ListView listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
+        listViewDefault.setAdapter(mDefaultLocationAdapter);
+
         registerForContextMenu(listView);
+        registerForContextMenu(listViewDefault);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(id != 0 && id != 1) { //prevent default locations from edit or delete
+                //if(id != 0 && id != 1) { //prevent default locations from edit or delete
                     Intent intent = new Intent(getActivity(), EditLocationActivity.class);
                     intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
                     intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
                     startActivityForResult(intent, editLocationRequestCode);
-                } else {
+                //} else {
                     //TODO : optionally display a toast "You can't edit or delete the default locations"
-                }
+                //}
             }
         });
 
