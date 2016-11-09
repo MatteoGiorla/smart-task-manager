@@ -155,20 +155,24 @@ public class AuthenticationTest {
         UiObject UiAppTray = mUiDevice.findObject(new UiSelector().descriptionContains("Apps"));
         UiAppTray.click();
         UiObject UiSettingsIcon = mUiDevice.findObject(new UiSelector().text("Settings"));
-        UiSettingsIcon.click();
+        UiSettingsIcon.clickAndWaitForNewWindow();
 
         //scroll the settings
         UiScrollable settingsView = new UiScrollable(new UiSelector().scrollable(true));
+        //put the scroller on the upmost position to scrollForward correctly after.
+        settingsView.flingBackward();
         settingsView.scrollForward();
+        settingsView.scrollForward();
+
         UiObject UiAccount = mUiDevice.findObject(new UiSelector().text("Accounts"));
         UiAccount.click();
-        UiObject GoogleAccount = mUiDevice.findObject(new UiSelector().text("Accounts"));
+        UiObject GoogleAccount = mUiDevice.findObject(new UiSelector().text("Google"));
         GoogleAccount.click();
-        UiObject threeDots = mUiDevice.findObject(new UiSelector().className("android.widget.ImageButton"));
+        UiObject threeDots = mUiDevice.findObject(new UiSelector().descriptionContains("More options"));
         threeDots.click();
 
         UiObject deleteAccountOption = mUiDevice.findObject(new UiSelector().text("Remove account"));
-        deleteAccountOption.clickAndWaitForNewWindow(untilTimeout);
+        deleteAccountOption.click();
 
         UiObject removeCurrAccount = mUiDevice.findObject(new UiSelector().text("REMOVE ACCOUNT"));
         removeCurrAccount.click();
