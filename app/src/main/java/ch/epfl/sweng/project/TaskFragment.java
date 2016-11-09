@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -46,27 +47,6 @@ public class TaskFragment extends Fragment {
     private DataExchanger mDatabase;
 
     /**
-     * Method that adds a task in the taskList and in the database.
-     *
-     * @param task The task to be added
-     * @throws IllegalArgumentException If the task to be added is null
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException();
-        }
-        mDatabase.addNewTask(task);
-        /*mTaskAdapter.sort(new Comparator<Task>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public int compare(Task o1, Task o2) {
-                return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
-            }
-        }.reversed());*/
-    }
-
-    /**
      * Override the onCreate method. It initialize the database, the list of task
      * and the custom made adapter.
      *
@@ -89,14 +69,15 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getProvider();
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
-/*
-        mTaskAdapter.sort(new Comparator<Task>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public int compare(Task o1, Task o2) {
-                return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
-            }
-        }.reversed());*/
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sortTasks("", 0, 0, false);
+        for (Task task : taskList) {
+            Log.e( "onResume ", task.getName());
+        }
     }
 
     /**
@@ -209,15 +190,6 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex);
             }
         }
-
-        mTaskAdapter.sort(new Comparator<Task>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public int compare(Task o1, Task o2) {
-                return Integer.compare(o1.getStaticSortValue(), o2.getStaticSortValue());
-            }
-        }.reversed());
-
     }
 
     private void actionOnActivityResult(Intent data) {
@@ -254,6 +226,20 @@ public class TaskFragment extends Fragment {
     }
 
     /**
+     * Method that adds a task in the taskList and in the database.
+     *
+     * @param task The task to be added
+     * @throws IllegalArgumentException If the task to be added is null
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void addTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException();
+        }
+        mDatabase.addNewTask(task);
+    }
+
+    /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
@@ -281,14 +267,15 @@ public class TaskFragment extends Fragment {
 
     public void sortTasks(String currentLocation, int currentTimeDisposal, int currentEnergy, boolean dynamic){
         sortTasksList(currentLocation, currentTimeDisposal, currentEnergy, dynamic, taskList);
+        mTaskAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<Task> sortTasksList(String currentLocation, int currentTimeDisposal, int currentEnergy,
+    private void sortTasksList(String currentLocation, int currentTimeDisposal, int currentEnergy,
                                           boolean dynamic, ArrayList<Task> listToBeSorted){
-        ArrayList<Task> sortedList = new ArrayList<Task>();
-
         if (!dynamic){
-            sortedList = sortByStaticValue(listToBeSorted);
+            ArrayList<Task> staticSort = sortByStaticValue(listToBeSorted);
+            listToBeSorted.clear();
+            listToBeSorted.addAll(staticSort);
         } else {
             ArrayList<Task> topList = new ArrayList<Task>();
             ArrayList<Task> otherLocationsList = new ArrayList<Task>();
@@ -302,7 +289,9 @@ public class TaskFragment extends Fragment {
                     if (time <= currentTimeDisposal){
                         if (energy <= currentEnergy){
                             topList.add(task);
-                            sortedList = sortByStaticValue(topList);
+                            ArrayList<Task> staticSort = sortByStaticValue(topList);
+                            listToBeSorted.clear();
+                            listToBeSorted.addAll(staticSort);
                         } else {
                             otherEnergiesList.add(task);
                             otherEnergiesList = sortByStaticValue(otherEnergiesList);
@@ -316,28 +305,22 @@ public class TaskFragment extends Fragment {
                     otherLocationsList = sortByStaticValue(otherLocationsList);
                 }
             }
-            sortedList.addAll(otherEnergiesList);
-            sortedList.addAll(otherTimesList);
-            sortedList.addAll(otherLocationsList);
+            listToBeSorted.addAll(otherEnergiesList);
+            listToBeSorted.addAll(otherTimesList);
+            listToBeSorted.addAll(otherLocationsList);
         }
-        return sortedList;
     }
 
     private ArrayList<Task> sortByStaticValue(ArrayList<Task> list){
         Collections.sort(list, new Comparator<Task>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public int compare(Task task1, Task task2)
             {
-                if(task1.getStaticSortValue() < (task2.getStaticSortValue())){
-                    return -1;
-                } else if(task1.getStaticSortValue() > (task2.getStaticSortValue())) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return task1.compareTo(task2);
             }
         });
-        return list;
+        return new ArrayList<>(list);
     }
 
     /**
