@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,13 +57,13 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
-        mTaskAdapter.sort(new Comparator<Task>() {
+        /*mTaskAdapter.sort(new Comparator<Task>() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public int compare(Task o1, Task o2) {
                 return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
             }
-        }.reversed());
+        }.reversed());*/
     }
 
     /**
@@ -88,14 +89,14 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getProvider();
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
-
+/*
         mTaskAdapter.sort(new Comparator<Task>() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public int compare(Task o1, Task o2) {
                 return Integer.compare(o2.getStaticSortValue(), o1.getStaticSortValue());
             }
-        }.reversed());
+        }.reversed());*/
     }
 
     /**
@@ -276,6 +277,67 @@ public class TaskFragment extends Fragment {
         String TOAST_MESSAGE = taskName + " deleted";
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
+    }
+
+    public void sortTasks(String currentLocation, int currentTimeDisposal, int currentEnergy, boolean dynamic){
+        sortTasksList(currentLocation, currentTimeDisposal, currentEnergy, dynamic, taskList);
+    }
+
+    private ArrayList<Task> sortTasksList(String currentLocation, int currentTimeDisposal, int currentEnergy,
+                                          boolean dynamic, ArrayList<Task> listToBeSorted){
+        ArrayList<Task> sortedList = new ArrayList<Task>();
+
+        if (!dynamic){
+            sortedList = sortByStaticValue(listToBeSorted);
+        } else {
+            ArrayList<Task> topList = new ArrayList<Task>();
+            ArrayList<Task> otherLocationsList = new ArrayList<Task>();
+            ArrayList<Task> otherTimesList = new ArrayList<Task>();
+            ArrayList<Task> otherEnergiesList = new ArrayList<Task>();
+            for(Task task : listToBeSorted){
+                String location = task.getLocationName();
+                long time = task.getDurationInMinutes();
+                int energy = task.getEnergy().ordinal();
+                if (location.equals(currentLocation) || location.equals(getString(R.string.everywhere_location))){
+                    if (time <= currentTimeDisposal){
+                        if (energy <= currentEnergy){
+                            topList.add(task);
+                            sortedList = sortByStaticValue(topList);
+                        } else {
+                            otherEnergiesList.add(task);
+                            otherEnergiesList = sortByStaticValue(otherEnergiesList);
+                        }
+                    } else {
+                        otherTimesList.add(task);
+                        otherTimesList = sortByStaticValue(otherTimesList);
+                    }
+                } else {
+                    otherLocationsList.add(task);
+                    otherLocationsList = sortByStaticValue(otherLocationsList);
+                }
+            }
+            sortedList.addAll(otherEnergiesList);
+            sortedList.addAll(otherTimesList);
+            sortedList.addAll(otherLocationsList);
+        }
+        return sortedList;
+    }
+
+    private ArrayList<Task> sortByStaticValue(ArrayList<Task> list){
+        Collections.sort(list, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2)
+            {
+                if(task1.getStaticSortValue() < (task2.getStaticSortValue())){
+                    return -1;
+                } else if(task1.getStaticSortValue() > (task2.getStaticSortValue())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        return list;
     }
 
     /**
