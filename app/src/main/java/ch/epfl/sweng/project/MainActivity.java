@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.facebook.FacebookSdk;
@@ -21,6 +19,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.UserHelper;
+import ch.epfl.sweng.project.data.UserProvider;
 
 
 /**
@@ -28,12 +28,15 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
+    public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
+
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
     private static Context mContext;
     private static User currentUser;
 
-    private Task.Energy userEnergy;
+    // Will be used later on
+    private String userEnergy;
     private String userLocation;
     private String userTimeAtDisposal;
 
@@ -54,8 +57,17 @@ public final class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        //Define the currentUser
+        UserHelper userProvider = new UserProvider().getUserProvider();
+        currentUser = userProvider.retrieveUserInformation();
+
         mContext = getApplicationContext();
+
+        //Add the user to TaskFragment
         fragment = new TaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_KEY, currentUser);
+        fragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -63,62 +75,11 @@ public final class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        currentUser = fragment.getCurrentUser();
-
         //Default values
-        userEnergy = Task.Energy.NORMAL;
+        userEnergy = getResources().getString(R.string.normal_energy);
         userLocation = getResources().getString(R.string.everywhere_location);
         userTimeAtDisposal = getResources().getString(R.string.duration1h);
-
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
-        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
-        Spinner mVitality = (Spinner) findViewById(R.id.vitality_user);
-
-        final ArrayAdapter<String> spinnerLocation = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getLocationTable());
-
-        final ArrayAdapter<StateDuration> spinnerDuration = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getStateDurationTable());
-
-        final ArrayAdapter<StateEnergy> spinnerVitality = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
-
-
-        mLocation.setAdapter(spinnerLocation);
-        mDuration.setAdapter(spinnerDuration);
-        mVitality.setAdapter(spinnerVitality);
-
-        mLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userLocation = spinnerLocation.getItem(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        mDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userTimeAtDisposal = spinnerDuration.getItem(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        mVitality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String energy = spinnerVitality.getItem(position).toString();
-                Log.d("TEST", energy);
-                //userEnergy = Task.Energy.valueOf(energy);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        initializeAdapters();
     }
 
     /**
@@ -184,6 +145,64 @@ public final class MainActivity extends AppCompatActivity {
                 fragment.addTask(newTask);
             }
         }
+    }
+
+    private void initializeAdapters() {
+        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
+        Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
+
+        CustomSpinnerAdapter<String> locationAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getLocationTable());
+
+        CustomSpinnerAdapter<StateDuration> durationAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getStateDurationTable());
+
+        CustomSpinnerAdapter<StateEnergy> energyAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
+
+
+        mLocation.setAdapter(locationAdapter);
+        mDuration.setAdapter(durationAdapter);
+        mEnergy.setAdapter(energyAdapter);
+
+        setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
+    }
+
+    private void setListeners(Spinner location, Spinner duration, Spinner energy,
+                              final CustomSpinnerAdapter<String> locationAdapter,
+                              final CustomSpinnerAdapter<StateDuration> durationAdapter,
+                              final CustomSpinnerAdapter<StateEnergy> energyAdapter)
+    {
+        location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userLocation = locationAdapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userTimeAtDisposal = durationAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userEnergy = energyAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
     }
 
     public static StateDuration[] getStateDurationTable() {

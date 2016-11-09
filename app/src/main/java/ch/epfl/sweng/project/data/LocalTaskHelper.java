@@ -7,13 +7,12 @@ import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 
 
-public class LocalDataExchanger implements DataExchanger {
+public class LocalTaskHelper implements TaskHelper {
 
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
-    private User mUser;
 
-    public LocalDataExchanger(TaskListAdapter adapter, ArrayList<Task> taskList) {
+    public LocalTaskHelper(TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
     }
@@ -21,12 +20,6 @@ public class LocalDataExchanger implements DataExchanger {
     @Override
     public void retrieveAllData(User user) {
         //Nothing to retrieve when doing tests
-    }
-
-    @Override
-    public User retrieveUserInformation(User user) {
-        mUser = user;
-        return mUser;
     }
 
     @Override

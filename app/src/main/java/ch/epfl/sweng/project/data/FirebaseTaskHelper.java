@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
@@ -25,26 +24,20 @@ import ch.epfl.sweng.project.Utils;
  * It deals with all necessary operations that must be done
  * on the database.
  */
-public class FirebaseDataExchanger implements DataExchanger {
+public class FirebaseTaskHelper implements TaskHelper {
 
-    private static final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
 
     /**
-     * Only constructor of FirebaseDataExchanger for the moment*
+     * Only constructor of FirebaseTaskHelper for the moment*
      */
-    public FirebaseDataExchanger(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
+    public FirebaseTaskHelper(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
         mContext = context;
-    }
-
-    @Override
-    public User retrieveUserInformation(User user) {
-        recoverUserLocations(user);
-        return user;
     }
 
     @Override
@@ -109,35 +102,5 @@ public class FirebaseDataExchanger implements DataExchanger {
     public void updateTask(Task original, Task updated) {
         deleteTask(original);
         addNewTask(updated);
-    }
-
-    /**
-     * Recover the locations set by the user when he
-     * first sign in.
-     *
-     * @param user The user
-     */
-    private void recoverUserLocations(final User user) {
-        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
-        final List<Location> listLocations = new ArrayList<>();
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    String name = (String) data.child("name").getValue();
-                    Double latitude = data.child("latitude").getValue(Double.class);
-                    Double longitude = data.child("longitude").getValue(Double.class);
-                    //Create location
-                    Location location = new Location(name, latitude, longitude);
-                    listLocations.add(location);
-                }
-                user.setListLocations(listLocations);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
     }
 }

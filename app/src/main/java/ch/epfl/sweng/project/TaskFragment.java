@@ -16,13 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.DataExchanger;
-import ch.epfl.sweng.project.data.DataProvider;
+import ch.epfl.sweng.project.data.TaskProvider;
+import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -41,18 +39,8 @@ public class TaskFragment extends Fragment {
     private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private DataExchanger mDatabase;
+    private TaskHelper mDatabase;
     private User currentUser;
-
-    public TaskFragment() {
-        String mail;
-        try {
-            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        } catch (NullPointerException e) {
-            mail = User.DEFAULT_EMAIL;
-        }
-        currentUser = new User(mail);
-    }
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -64,17 +52,22 @@ public class TaskFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        taskList = new ArrayList<>();
+        Bundle bundle = this.getArguments();
+        if(bundle != null) {
+            currentUser = bundle.getParcelable(MainActivity.USER_KEY);
+        }else{
+            throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
+        }
 
+        taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
                 R.layout.list_item_task,
                 taskList
         );
 
-        DataProvider provider = new DataProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getProvider();
-        currentUser = mDatabase.retrieveUserInformation(currentUser);
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
     }
 
@@ -267,12 +260,4 @@ public class TaskFragment extends Fragment {
         return new ArrayList<>(taskList);
     }
 
-    /**
-     * Getter for the user
-     *
-     * @return A copy of the user
-     */
-    public User getCurrentUser() {
-        return currentUser;
-    }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 
-public class DataProvider {
+public class TaskProvider {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
 
@@ -16,18 +16,18 @@ public class DataProvider {
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
 
-    public DataProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
+    public TaskProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
         mContext = context;
     }
 
-    public DataExchanger getProvider() {
+    public TaskHelper getTaskProvider() {
         switch (mProvider) {
             case FIREBASE_PROVIDER:
-                return new FirebaseDataExchanger(mContext, mAdapter, mTaskList);
+                return new FirebaseTaskHelper(mContext, mAdapter, mTaskList);
             case TEST_PROVIDER:
-                return new LocalDataExchanger(mAdapter, mTaskList);
+                return new LocalTaskHelper(mAdapter, mTaskList);
             default:
                 throw new IllegalArgumentException("This provider does not exists !");
         }
