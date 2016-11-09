@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,12 @@ public class TaskFragment extends Fragment {
     private ArrayList<Task> taskList;
     private DataExchanger mDatabase;
 
+    //sorting parameters
+    static String locationParameter;
+    static int timeParameter;
+    static int energyParameter;
+    static boolean dynamic;
+
     /**
      * Override the onCreate method. It initialize the database, the list of task
      * and the custom made adapter.
@@ -69,12 +76,14 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getProvider();
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
+
+        sortTasks(locationParameter, timeParameter, energyParameter, dynamic);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        sortTasks("", 0, 0, false);
+        sortTasks(locationParameter, timeParameter, energyParameter, dynamic);
         for (Task task : taskList) {
             Log.e( "onResume ", task.getName());
         }
@@ -263,6 +272,18 @@ public class TaskFragment extends Fragment {
         String TOAST_MESSAGE = taskName + " deleted";
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
+    }
+
+    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam){
+        locationParameter = "";
+        timeParameter = 0;
+        energyParameter = 0;
+        dynamic = false;
+        /*
+        locationParameter = locationParam;
+        timeParameter = timeParam;
+        energyParameter = energyParam;
+        dynamic = dynamicParam;*/
     }
 
     public void sortTasks(String currentLocation, int currentTimeDisposal, int currentEnergy, boolean dynamic){
