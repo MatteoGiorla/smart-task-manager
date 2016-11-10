@@ -29,6 +29,7 @@
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
     <string name="flt_ctx_menu_edit">Edit</string>
+    <string name="flt_ctx_menu_done">Done</string>
 
     <!-- Maximum lengths -->
     <string name="max_length_title">20</string>

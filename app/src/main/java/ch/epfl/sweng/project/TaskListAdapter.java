@@ -96,7 +96,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     }
                 }
             // TODO try it here:
-            final View taskView = resultView;
+            /*final View taskView = resultView;
             final CheckBox checkBox = (CheckBox) resultView.findViewById(R.id.checkBox);
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,11 +116,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                                 5000);
                     }
                 }
-            });
+            });*/
             }
         return resultView;
     }
-
+/*
     @Override
     public void remove(Task object) {
         // TODO don't forget to clean the imports
@@ -131,7 +131,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         d.getProvider().deleteTask(object);
         super.remove(object);
 
-    }
+    }*/
 
     /*
     * Helper functions to calculate the number of remaining days
