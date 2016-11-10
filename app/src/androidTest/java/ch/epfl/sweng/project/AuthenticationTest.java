@@ -71,7 +71,7 @@ public class AuthenticationTest {
         untilTimeout = 20000;
     }
 
-    @Test
+    //@Test
     public void ApriorRemoveAccount(){
         removeAccount();
         mUiDevice.pressHome();
