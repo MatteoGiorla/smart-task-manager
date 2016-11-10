@@ -72,6 +72,12 @@ public class AuthenticationTest {
     }
 
     @Test
+    public void ApriorRemoveAccount(){
+        removeAccount();
+        mUiDevice.pressHome();
+    }
+
+    @Test
     public void authenticationFacebookCancelsIfInterrupted(){
         onView(withId(R.id.facebook_sign_in_button)).perform(click());
         mUiDevice.pressBack();
@@ -84,7 +90,7 @@ public class AuthenticationTest {
     @Test
     public void authenticationGoogleFailsIfInterrupted() throws java.lang.InterruptedException {
         onView(withId(R.id.google_sign_in_button)).perform(click());
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         mUiDevice.pressBack();
         onView(withText(R.string.error_authentication_failed))
                 .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
