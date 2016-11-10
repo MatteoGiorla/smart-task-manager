@@ -6,6 +6,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Utils {
 
+    private Utils() {}
+
     /**
      * Encode a given mail to be compatible with keys in firebase
      *

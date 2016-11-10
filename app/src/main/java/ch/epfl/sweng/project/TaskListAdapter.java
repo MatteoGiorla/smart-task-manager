@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -73,8 +74,10 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             }*/
             if (remainingDays != null) {
                 Calendar c = Calendar.getInstance();
-                int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
+
+                int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
                 remainingDays.setText(Integer.toString(days));
+
                 if (days < 10)
                     remainingDays.setTextColor(Color.RED);
             }
@@ -112,11 +115,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         Calendar sDate = getDatePart(startDate);
         Calendar eDate = getDatePart(endDate);
 
-        long daysBetween = 0;
-        while (sDate.before(eDate)) {
-            sDate.add(Calendar.DAY_OF_MONTH, 1);
-            daysBetween++;
-        }
-        return daysBetween;
+        Long millisDifference = eDate.getTimeInMillis() - sDate.getTimeInMillis();
+        Long daysDifference =  TimeUnit.MILLISECONDS.toDays(millisDifference);
+        return daysDifference.intValue();
     }
 }

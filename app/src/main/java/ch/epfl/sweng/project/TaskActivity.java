@@ -82,8 +82,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        date = new Date();
-
         mButton = (Button)findViewById(R.id.pick_date);
 
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
@@ -97,7 +95,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mDuration.setAdapter(spinnerDuration);
 
-        energy = Task.Energy.NORMAL;
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
         radioGroup.check(R.id.energy_normal);
 

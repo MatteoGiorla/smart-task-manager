@@ -2,7 +2,9 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -135,6 +137,7 @@ public final class MainActivity extends AppCompatActivity {
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == newTaskRequestCode) {

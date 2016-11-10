@@ -5,7 +5,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -40,7 +42,12 @@ public class TaskFragment extends Fragment {
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
-    private User currentUser;
+
+    //sorting parameters
+    static String locationParameter;
+    static int timeParameter;
+    static int energyParameter;
+    static boolean dynamic;
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -48,11 +55,13 @@ public class TaskFragment extends Fragment {
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
+        User currentUser;
         if(bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
         }else{
@@ -69,7 +78,14 @@ public class TaskFragment extends Fragment {
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
+        sortTaskStatically();
     }
+
+   /* @Override
+    public void onResume() {
+        super.onResume();
+        sortTasksDynamically(locationParameter, timeParameter, energyParameter);
+    }*/
 
     /**
      * Override the onCreateView method to initialize the adapter of
@@ -160,6 +176,7 @@ public class TaskFragment extends Fragment {
      *                                  invalid
      * @throws SQLiteException          if more that one row was changed when editing a task.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
@@ -176,11 +193,13 @@ public class TaskFragment extends Fragment {
                     break;
                 case TASK_IS_DELETED :
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
-                    if(taskIndex == -1)
+                    if(taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
+                    }
                     removeTaskAction(taskIndex, false);
             }
         }
+        sortTaskStatically();
     }
 
     /**
@@ -254,6 +273,13 @@ public class TaskFragment extends Fragment {
         removeTaskAction(position, isDone);
     }
 
+    /**
+     * Private method executing the actions needed to remove the task.
+     * It removes the task from the database.
+     *
+     * @param position Position of the task to be removed.
+     * @param isDone Boolean indicating if the task is done.
+     */
     private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
 
@@ -271,6 +297,36 @@ public class TaskFragment extends Fragment {
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
 
+    }
+
+    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam){
+        locationParameter = "";
+        timeParameter = 0;
+        energyParameter = 0;
+        dynamic = false;
+        /*
+        locationParameter = locationParam;
+        timeParameter = timeParam;
+        energyParameter = energyParam;
+        dynamic = dynamicParam;*/
+    }
+
+    /**
+     * Method that launch the dynamic sort on the tasks.
+     *
+     * @param currentLocation User's current location
+     * @param currentTimeDisposal User's current disposal time
+     * @param currentEnergy User's current energy
+     */
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
+    }
+
+    /**
+     * Method that launch the static sort on the tasks.
+     */
+    public void sortTaskStatically() {
+        mTaskAdapter.sort(Task.getStaticComparator());
     }
 
     /**
