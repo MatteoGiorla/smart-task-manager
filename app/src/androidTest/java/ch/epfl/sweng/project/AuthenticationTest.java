@@ -69,7 +69,7 @@ public class AuthenticationTest {
      * check if the facebook login is launched upon it,
      * or if it grants immediately access to the mainActivity.
      */
-    //@Test
+    @Test
     public void facebookSignInGetLaunch() {
         onView(withId(R.id.facebook_sign_in_button)).perform(click());
         //the android.webkit.WebView launched by facebook should be the only to have those properties
@@ -88,11 +88,17 @@ public class AuthenticationTest {
      * perform user like actions on the phone to authenticate
      * oneself into a google account (even if it is already memorized).
      */
-    //Test
+    @Test
     public void googleLoginWorks() {
         onView(withId(R.id.google_sign_in_button)).perform(click());
+        try{
+            Thread.sleep(20000);
+            associateNewGoogleAccount();
+        }catch(java.lang.InterruptedException i){
+            fail(i.getMessage());
+        }
         //first check if the user is already registered, if so just proceed to login.
-        UiObject mEmailText = mUiDevice.findObject(new UiSelector().text(mGoogleEmail));
+        /*UiObject mEmailText = mUiDevice.findObject(new UiSelector().text(mGoogleEmail));
         try{
             mEmailText.click();
             checkIfMainActivity();
@@ -105,13 +111,11 @@ public class AuthenticationTest {
             }catch(UiObjectNotFoundException u2){
                 checkIfMainActivity();
             }
-        }
+        }*/
     }
 
-
-
     /**
-     * method that proceeds to go through all the authentification process
+     * method that proceeds to go through all the authentication process
      * when it is the first time we try to connect a google account with the app.
      *
      * The test might takes some time after clicking on the sign in button,
@@ -120,17 +124,17 @@ public class AuthenticationTest {
      */
     private void associateNewGoogleAccount() {
         try{
-            UiObject emailHint = mUiDevice.findObject(new UiSelector().text("Enter your email"));
+            UiObject emailHint = mUiDevice.findObject(new UiSelector().resourceId("identifierId"));
             emailHint.setText(mGoogleEmail);
 
             UiObject nextAction = mUiDevice.findObject(new UiSelector().resourceId(NEXT_BUTTON_ID));
-            nextAction.clickAndWaitForNewWindow(untilTimeout);
+            nextAction.clickAndWaitForNewWindow();
 
             UiObject passwordHint = mUiDevice.findObject(new UiSelector().resourceId("password"));
             passwordHint.setText(mGooglePassword);
 
             nextAction = mUiDevice.findObject(new UiSelector().resourceId(PASSWORD_NEXT_ID));
-            nextAction.clickAndWaitForNewWindow(untilTimeout);
+            nextAction.clickAndWaitForNewWindow();
 
             UiObject acceptAction = mUiDevice.findObject(new UiSelector().resourceId(ACCEPT_ID));
             acceptAction.clickAndWaitForNewWindow();
@@ -138,7 +142,7 @@ public class AuthenticationTest {
             UiScrollable googServices = new UiScrollable(new UiSelector().scrollable(true));
             googServices.scrollForward();
 
-            UiObject nextGoogleServer = mUiDevice.findObject(new UiSelector().text("Next"));
+            UiObject nextGoogleServer = mUiDevice.findObject(new UiSelector().text("NEXT"));
             nextGoogleServer.clickAndWaitForNewWindow();
 
         }catch (UiObjectNotFoundException u ){
@@ -149,6 +153,7 @@ public class AuthenticationTest {
 
     @Test
     public void removeAccount() throws UiObjectNotFoundException {
+        mUiDevice.pressHome();
         mUiDevice.pressHome();
         //click on main button
         //index : 2, package : com.android.launcher3, content_description: Apps
@@ -166,16 +171,21 @@ public class AuthenticationTest {
 
         UiObject UiAccount = mUiDevice.findObject(new UiSelector().text("Accounts"));
         UiAccount.click();
+
         UiObject GoogleAccount = mUiDevice.findObject(new UiSelector().text("Google"));
-        GoogleAccount.click();
-        UiObject threeDots = mUiDevice.findObject(new UiSelector().descriptionContains("More options"));
-        threeDots.click();
+        try{
+            GoogleAccount.click();
+            UiObject threeDots = mUiDevice.findObject(new UiSelector().descriptionContains("More options"));
+            threeDots.click();
 
-        UiObject deleteAccountOption = mUiDevice.findObject(new UiSelector().text("Remove account"));
-        deleteAccountOption.click();
+            UiObject deleteAccountOption = mUiDevice.findObject(new UiSelector().text("Remove account"));
+            deleteAccountOption.click();
 
-        UiObject removeCurrAccount = mUiDevice.findObject(new UiSelector().text("REMOVE ACCOUNT"));
-        removeCurrAccount.click();
+            UiObject removeCurrAccount = mUiDevice.findObject(new UiSelector().text("REMOVE ACCOUNT"));
+            removeCurrAccount.click();
+        }catch(UiObjectNotFoundException u){
+            //the account does not exist.
+        }
 
     }
 
@@ -187,6 +197,7 @@ public class AuthenticationTest {
         onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 
+    //TODO: check toast "Authentication failed is launched upon missed login (Press back on enter email "google activity" )
 
     /**
      * check if we reached location_settings activity upon first launch
