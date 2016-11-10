@@ -1,9 +1,12 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -13,16 +16,19 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.project.data.DataProvider;
 
+
 /**
  * Adapter used to display the task list
  */
 public class TaskListAdapter extends ArrayAdapter<Task> {
+    private List<Task> taskList;
 
     /**
      * Constructor of the class
@@ -34,6 +40,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
+        taskList = objects;
     }
 
     /**
@@ -116,9 +123,14 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
 
     @Override
     public void remove(Task object) {
+        // TODO don't forget to clean the imports
+        //TaskFragment taskFragment = new TaskFragment();
+        //taskFragment.newInstance(3);
+        //taskFragment.removeTaskByTask(object);
+        DataProvider d = new DataProvider(getContext(), this, (ArrayList) taskList);
+        d.getProvider().deleteTask(object);
         super.remove(object);
-        // TODO demander à Mikael comment on s'occupe pour supprimer de Firebase!!
-        //DataProvider d  = new DataProvider(getContext(), this, );
+
     }
 
     /*

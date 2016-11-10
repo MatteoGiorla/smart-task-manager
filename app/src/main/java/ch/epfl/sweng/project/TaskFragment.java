@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -147,6 +148,8 @@ public class TaskFragment extends Fragment {
             case R.id.floating_edit:
                 startEditTaskActivity(itemInfo);
                 return true;
+            case R.id.floating_done:
+                removeTask(itemInfo);
             default:
                 return super.onContextItemSelected(item);
         }
@@ -219,6 +222,12 @@ public class TaskFragment extends Fragment {
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
 
         startActivityForResult(intent, editTaskRequestCode);
+    }
+
+    public void removeTaskByTask(Task task) {
+        if (taskList.contains(task)) {
+            removeTaskAction(taskList.indexOf(task));
+        }
     }
 
     /**
