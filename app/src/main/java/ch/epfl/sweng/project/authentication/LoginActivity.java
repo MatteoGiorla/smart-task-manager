@@ -322,8 +322,8 @@ public class LoginActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Intent intent;
-                if(dataSnapshot.exists()){
-                //if(false){
+                //if(dataSnapshot.exists()){
+                if(false){
 
                     //precising the user has already been logged in before
                     prefs.edit().putBoolean("FIRST_LOGIN", false).apply();

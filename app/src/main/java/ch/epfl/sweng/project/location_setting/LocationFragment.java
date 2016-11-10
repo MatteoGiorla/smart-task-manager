@@ -134,13 +134,11 @@ public class LocationFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_locations);
         listView.setAdapter(mLocationAdapter);
 
-        View rootViewDfault = inflater.inflate(R.layout.fragment_location_list, container, false);
-
         ListView listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
         listViewDefault.setAdapter(mDefaultLocationAdapter);
 
         registerForContextMenu(listView);
-        registerForContextMenu(listViewDefault);
+        //registerForContextMenu(listViewDefault);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -153,6 +151,20 @@ public class LocationFragment extends Fragment {
                 //} else {
                     //TODO : optionally display a toast "You can't edit or delete the default locations"
                 //}
+            }
+        });
+
+        listViewDefault.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if(id != 0 && id != 1) { //prevent default locations from edit or delete
+                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, defaultLocationList);
+                startActivityForResult(intent, editLocationRequestCode);
+            } else {
+                //TODO : optionally display a toast "You can't edit or delete the default locations"
+            }
             }
         });
 
@@ -175,10 +187,13 @@ public class LocationFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         long selectedId = info.id;
 
-        if(selectedId != 0 && selectedId != 1) { //prevent default locations from edit or delete
+
+
+        //if(selectedId != 0 && selectedId != 1) { //prevent default locations from edit or delete
             MenuInflater menuInflater = getActivity().getMenuInflater();
             menuInflater.inflate(R.menu.floating_context_menu, menu);
-        }
+        //}
+
     }
 
     /**
@@ -290,6 +305,9 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
-        return new ArrayList<>(locationList);
+        //return new ArrayList<>(locationList);
+        ArrayList<Location> tmp = defaultLocationList;
+        tmp.addAll(locationList);
+        return tmp;
     }
 }

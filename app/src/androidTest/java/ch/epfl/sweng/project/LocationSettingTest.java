@@ -72,8 +72,8 @@ public final class LocationSettingTest extends SuperTest {
      */
     @Test
     public void defaultLocationsArePresent(){
-        for(int i = 0; i < LocationFragment.defaultLocationsSize; ++i){
-            checkALocation(LocationFragment.defaultLocations[i].getName(), i);
+        for(int i = 2; i < LocationFragment.defaultLocationsSize; ++i){
+            checkALocation(LocationFragment.defaultLocations[i].getName(), i-2);
         }
     }
 
@@ -81,10 +81,11 @@ public final class LocationSettingTest extends SuperTest {
     public void someDefaultLocationsCanBeDeletedOtherNot(){
         //deleting the "optional" default locations and testing they are not there.
         for(int i = 2; i < LocationFragment.defaultLocationsSize - 1;  ++i){
-            deleteALocation(2);
-            checkALocation(LocationFragment.defaultLocations[i+1].getName(), 2);
+            deleteALocation(0);
+            checkALocation(LocationFragment.defaultLocations[i+1].getName(), 0);
         }
         //now checking longclick and simple click doesn't get us to another activity
+        /*
         for(int i = 0; i < 2; ++i){
             onData(anything())
                     .inAdapterView(withId(R.id.list_view_locations))
@@ -95,7 +96,7 @@ public final class LocationSettingTest extends SuperTest {
                     .atPosition(0).perform(click());
             checkALocation(LocationFragment.defaultLocations[0].getName(), 0);
         }
-
+        */
     }
 
     /**
@@ -107,7 +108,7 @@ public final class LocationSettingTest extends SuperTest {
         for (int i = 0; i < createdLocations; i++) {
             createALocation(mTitleToBeTyped + i);
             //Check title name inside listView
-            checkALocation(mTitleToBeTyped + i, i + LocationFragment.defaultLocationsSize);
+            checkALocation(mTitleToBeTyped + i, i + LocationFragment.defaultLocationsSize-2);
         }
     }
 
@@ -139,7 +140,7 @@ public final class LocationSettingTest extends SuperTest {
 
     @Test
     public void testCanEditLocation() {
-        final int locationPosition = LocationFragment.defaultLocationsSize;
+        final int locationPosition = LocationFragment.defaultLocationsSize-2;
         //Create a location
         createALocation(mOldTitle);
 
@@ -169,7 +170,7 @@ public final class LocationSettingTest extends SuperTest {
      */
     @Test
     public void testCannotEditLocationWithAlreadyExistingTitle() {
-        final int locationPosition = LocationFragment.defaultLocationsSize;
+        final int locationPosition = LocationFragment.defaultLocationsSize-2;
         //Create a location
         createALocation(mOldTitle);
 
@@ -180,7 +181,7 @@ public final class LocationSettingTest extends SuperTest {
         onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
         //Update the title and the description
         onView(withId(R.id.locationName)).perform(clearText());
-        onView(withId(R.id.locationName)).perform(typeText(LocationFragment.defaultLocations[0].getName()));
+        onView(withId(R.id.locationName)).perform(typeText(LocationFragment.defaultLocations[2].getName()));
         pressBack();
 
 
