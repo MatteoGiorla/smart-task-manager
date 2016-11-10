@@ -25,6 +25,7 @@ public class Task implements Parcelable {
          * @param in The Parcel to read the object's data from
          * @return New instance of Task
          */
+        @Override
         public Task createFromParcel(Parcel in) {
             return new Task(in);
         }
@@ -34,10 +35,12 @@ public class Task implements Parcelable {
          * @param size Size of the array
          * @return An array of Task
          */
+        @Override
         public Task[] newArray(int size) {
             return new Task[size];
         }
     };
+
     private String name;
     private String description;
     private String locationName;
