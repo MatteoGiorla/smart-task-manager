@@ -19,8 +19,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.data.TaskHelper;
+import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;

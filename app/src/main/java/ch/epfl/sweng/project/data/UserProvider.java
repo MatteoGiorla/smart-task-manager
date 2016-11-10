@@ -29,12 +29,8 @@ public class UserProvider {
      * Setter that allow to switch between Providers
      * @param provider should be UserProvider.FIREBASE_PROVIDER or
      *                 UserProvider.TEST_PROVIDER
-     * @throws IllegalArgumentException if the given provider is unknown
      */
     public static void setProvider(String provider) {
-        if(!provider.equals(TEST_PROVIDER) || !provider.equals(FIREBASE_PROVIDER)) {
-            throw new IllegalArgumentException("Unexpected provider !");
-        }
         mProvider = provider;
     }
 }

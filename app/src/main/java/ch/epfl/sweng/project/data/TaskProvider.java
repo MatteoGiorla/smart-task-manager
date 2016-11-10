@@ -54,12 +54,8 @@ public class TaskProvider {
      * Setter that allow to switch between Providers
      * @param provider should be TaskProvider.FIREBASE_PROVIDER or
      *                 TaskProvider.TEST_PROVIDER
-     * @throws IllegalArgumentException if the given provider is unknown
      */
     public static void setProvider(String provider) {
-        if(!provider.equals(TEST_PROVIDER) || !provider.equals(FIREBASE_PROVIDER)) {
-            throw new IllegalArgumentException("Unexpected provider !");
-        }
         mProvider = provider;
     }
 }

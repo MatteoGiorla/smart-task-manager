@@ -22,8 +22,12 @@ class SuperTest {
     final int createdLocations = 2;
 
     @BeforeClass
-    public static void setUpProviders() {
+    public static void setTaskProvider() {
         TaskProvider.setProvider(TaskProvider.TEST_PROVIDER);
+    }
+
+    @BeforeClass
+    public static void setUserProvider() {
         UserProvider.setProvider(UserProvider.TEST_PROVIDER);
     }
 
