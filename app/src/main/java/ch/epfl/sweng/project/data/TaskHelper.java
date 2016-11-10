@@ -3,15 +3,10 @@ package ch.epfl.sweng.project.data;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
-public interface DataExchanger {
-
-    /**
-     * Recover the information from the user in the
-     * database and return it.
-     *
-     * @return the User recovered from the database
-     */
-    User retrieveUserInformation();
+/**
+ * Interface that behave as a Proxy to a database
+ */
+public interface TaskHelper {
 
     /**
      * Take care of retrieving all user data if there is no

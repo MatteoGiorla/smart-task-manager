@@ -2,7 +2,8 @@ package ch.epfl.sweng.project;
 
 import org.junit.BeforeClass;
 
-import ch.epfl.sweng.project.data.DataProvider;
+import ch.epfl.sweng.project.data.TaskProvider;
+import ch.epfl.sweng.project.data.UserProvider;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -21,8 +22,13 @@ class SuperTest {
     final int createdLocations = 2;
 
     @BeforeClass
-    public static void setUpProvider() {
-        DataProvider.setProvider(DataProvider.TEST_PROVIDER);
+    public static void setTaskProvider() {
+        TaskProvider.setProvider(TaskProvider.TEST_PROVIDER);
+    }
+
+    @BeforeClass
+    public static void setUserProvider() {
+        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
     }
 
     void checkALocation(String locationTitle, int locationPos){
