@@ -41,9 +41,6 @@
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
 
     <!-- Buttons description-->
-    <string name="button_location_description">Select your Location</string>
-    <string name="button_vitality_description">Select your vitality</string>
-    <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_task_description">Done !</string>
     <string name="done_location_description">Done !</string>
 
