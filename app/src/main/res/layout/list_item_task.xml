@@ -10,8 +10,8 @@
 
         <LinearLayout
         android:orientation="vertical"
-        android:layout_marginLeft="12dp"
-        android:layout_width="344dp"
+        android:layout_marginStart="12dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
 
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="@dimen/task_title_size"
+        android:paddingBottom="@dimen/padding_between_tasks"
         android:textStyle="bold"/>
     <!--
         <TextView
@@ -53,12 +54,14 @@
                 android:layout_width="28dp"
                 android:layout_height="29dp"
                 android:src="@drawable/vitality"
+                android:contentDescription="@string/description_energy"
                 android:tint="@color/yellow" />
 
             <ImageView
                 android:id="@+id/list_energy_normal"
                 android:layout_width="28dp"
                 android:layout_height="29dp"
+                android:contentDescription="@string/description_energy"
                 android:src="@drawable/vitality"
                 android:tint="@color/yellow" />
 
@@ -66,6 +69,7 @@
                 android:id="@+id/list_energy_high"
                 android:layout_width="28dp"
                 android:layout_height="29dp"
+                android:contentDescription="@string/description_energy"
                 android:src="@drawable/vitality"
                 android:tint="@color/yellow" />
 

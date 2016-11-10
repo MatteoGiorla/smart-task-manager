@@ -6,5 +6,5 @@
 
     <dimen name="task_title_size">23sp</dimen>
     <dimen name="task_description_size">20sp</dimen>
-    <dimen name="padding_between_tasks">5dp</dimen>
+    <dimen name="padding_between_tasks">3dp</dimen>
 </resources>
