@@ -246,15 +246,16 @@ public class TaskFragment extends Fragment {
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-<<<<<<< HEAD
      * @param isDone true if the task is done, otherwise false.
      * @throws SQLiteException if an error occurred
-=======
->>>>>>> master
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
         int position = itemInfo.position;
+<<<<<<< HEAD
         removeTaskAction(position, isDone);
+=======
+        removeTaskAction(position);
+>>>>>>> master
     }
 
     private void removeTaskAction(int position, Boolean isDone) {
