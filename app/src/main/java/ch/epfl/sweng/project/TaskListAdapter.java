@@ -1,27 +1,18 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import ch.epfl.sweng.project.data.DataProvider;
 
 
 /**
@@ -66,76 +57,46 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         //We get the task to be displayed
         final Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
-                TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-                // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
-                TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-                ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
-                ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
-                ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
+            // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+            TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
+            ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
+            ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
+            ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
 
-                if (titleView != null) {
-                    titleView.setText(taskInTheView.getName());
-                }
+            if (titleView != null) {
+                titleView.setText(taskInTheView.getName());
+            }
            /* if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
             }*/
-                if (remainingDays != null) {
-                    Calendar c = Calendar.getInstance();
-                    int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
-                    remainingDays.setText(Integer.toString(days));
-                    if (days < 10)
-                        remainingDays.setTextColor(Color.RED);
-                }
-                if (energyIconLow != null) {
-                    Task.Energy e = taskInTheView.getEnergy();
-                    if (e == Task.Energy.LOW) {
-                        energyIconNormal.setVisibility(View.INVISIBLE);
-                        energyIconHigh.setVisibility(View.INVISIBLE);
-                    } else if (e == Task.Energy.NORMAL) {
-                        energyIconHigh.setVisibility(View.INVISIBLE);
-                    }
-                }
-            // TODO try it here:
-            /*final View taskView = resultView;
-            final CheckBox checkBox = (CheckBox) resultView.findViewById(R.id.checkBox);
-            checkBox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (checkBox.isChecked()) {
-                        taskView.setAlpha(0.4f);
-                        new android.os.Handler().postDelayed(
-                                new Runnable() {
-                                    public void run() {
-                                        if (checkBox.isChecked()) {
-                                            remove(taskInTheView);
-                                        } else {
-                                            taskView.setAlpha(1.0f);
-                                        }
-                                    }
-                                },
-                                5000);
-                    }
-                }
-            });*/
+            if (remainingDays != null) {
+                Calendar c = Calendar.getInstance();
+                int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
+                remainingDays.setText(Integer.toString(days));
+                if (days < 10)
+                    remainingDays.setTextColor(Color.RED);
             }
+            if (energyIconLow != null) {
+                Task.Energy e = taskInTheView.getEnergy();
+                if (e == Task.Energy.LOW) {
+                    energyIconNormal.setVisibility(View.INVISIBLE);
+                    energyIconHigh.setVisibility(View.INVISIBLE);
+                } else if (e == Task.Energy.NORMAL) {
+                    energyIconHigh.setVisibility(View.INVISIBLE);
+                }
+            }
+            /*if (coloredIndicator != null) {
+
+            }*/
+        }
         return resultView;
     }
-/*
-    @Override
-    public void remove(Task object) {
-        // TODO don't forget to clean the imports
-        //TaskFragment taskFragment = new TaskFragment();
-        //taskFragment.newInstance(3);
-        //taskFragment.removeTaskByTask(object);
-        DataProvider d = new DataProvider(getContext(), this, (ArrayList) taskList);
-        d.getProvider().deleteTask(object);
-        super.remove(object);
 
-    }*/
-
-    /*
-    * Helper functions to calculate the number of remaining days
-    * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
+    /**
+     * Helper functions to calculate the number of remaining days
+     * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
      */
     private Calendar getDatePart(Date date){
         Calendar cal = Calendar.getInstance();
