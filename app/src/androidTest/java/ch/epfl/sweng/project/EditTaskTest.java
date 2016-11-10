@@ -147,12 +147,6 @@ public final class EditTaskTest extends SuperTest {
                 .atPosition(0)
                 .check(matches(hasDescendant(withText(mEditedTitle))));
 
-        //Check that the description has been updated.
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
-                .check(matches(hasDescendant(withText(mEditedDescription))));
-
         //empty the database for the next test
         emptyDatabase(1);
     }
