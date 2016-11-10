@@ -87,7 +87,7 @@ public class AuthenticationTest {
 
     }
 
-    @Test
+   // @Test
     public void authenticationGoogleFailsIfInterrupted() throws java.lang.InterruptedException {
         onView(withId(R.id.google_sign_in_button)).perform(click());
         Thread.sleep(10000);
@@ -125,7 +125,7 @@ public class AuthenticationTest {
      * perform user like actions on the phone to authenticate
      * oneself into a google account
      */
-    @Test
+    //@Test
     public void googleLoginWorks() {
         onView(withId(R.id.google_sign_in_button)).perform(click());
         try{
@@ -140,7 +140,7 @@ public class AuthenticationTest {
 
     }
 
-    @Test
+    //@Test
     public void googleRemoveAccount(){
         removeAccount();
     }
