@@ -8,7 +8,6 @@ public class StateDuration {
 
     public StateDuration(long duration, Context context){
         this.duration = duration;
-        Context context1 = context;
         switch ((int)duration) {
             case 5:
                 this.spinnerDuration = context.getString(R.string.duration5m);

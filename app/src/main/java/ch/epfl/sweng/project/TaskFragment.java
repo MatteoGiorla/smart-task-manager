@@ -21,8 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.DataExchanger;
-import ch.epfl.sweng.project.data.DataProvider;
+import ch.epfl.sweng.project.data.TaskHelper;
+import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
@@ -41,7 +41,8 @@ public class TaskFragment extends Fragment {
     private final int displayTaskRequestCode = 3;
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
-    private DataExchanger mDatabase;
+    private TaskHelper mDatabase;
+    private User currentUser;
 
     //sorting parameters
     static String locationParameter;
@@ -50,8 +51,7 @@ public class TaskFragment extends Fragment {
     static boolean dynamic;
 
     /**
-     * Override the onCreate method. It initialize the database, the list of task
-     * and the custom made adapter.
+     * Override the onCreate method. It retrieves all the task of the user
      *
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
@@ -60,17 +60,23 @@ public class TaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        taskList = new ArrayList<>();
 
+        Bundle bundle = this.getArguments();
+        if(bundle != null) {
+            currentUser = bundle.getParcelable(MainActivity.USER_KEY);
+        }else{
+            throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
+        }
+
+        taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
                 R.layout.list_item_task,
                 taskList
         );
 
-        DataProvider provider = new DataProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getProvider();
-        User currentUser = mDatabase.retrieveUserInformation();
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
         sortTaskStatically();
     }
@@ -173,7 +179,7 @@ public class TaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
         if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
-            actionOnActivityResult(data);
+            onEditTaskActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
             if(taskStatus == -1)
@@ -181,7 +187,7 @@ public class TaskFragment extends Fragment {
 
             switch (taskStatus) {
                 case TASK_IS_MODIFIED :
-                    actionOnActivityResult(data);
+                    onEditTaskActivityResult(data);
                     break;
                 case TASK_IS_DELETED :
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
@@ -194,7 +200,12 @@ public class TaskFragment extends Fragment {
         sortTaskStatically();
     }
 
-    private void actionOnActivityResult(Intent data) {
+    /**
+     * Method called when we return from editing a task inside EditTaskActivity.
+     *
+     * @param data The returned Intent of EditTaskActivity.
+     */
+    private void onEditTaskActivityResult(Intent data) {
         // Get result from the result intent.
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
@@ -208,6 +219,19 @@ public class TaskFragment extends Fragment {
                     editedTask.getName() + " has been updated !",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Method that adds a task in the taskList and in the database.
+     *
+     * @param task The task to be added
+     * @throws IllegalArgumentException If the task to be added is null
+     */
+    public void addTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException();
+        }
+        mDatabase.addNewTask(task);
     }
 
     /**
@@ -228,30 +252,14 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-     * Method that adds a task in the taskList and in the database.
-     *
-     * @param task The task to be added
-     * @throws IllegalArgumentException If the task to be added is null
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException();
-        }
-        mDatabase.addNewTask(task);
-    }
-
-    /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
         int position = itemInfo.position;
         removeTaskAction(position);
-
     }
 
     private void removeTaskAction(int position) {
@@ -295,4 +303,5 @@ public class TaskFragment extends Fragment {
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
     }
+
 }

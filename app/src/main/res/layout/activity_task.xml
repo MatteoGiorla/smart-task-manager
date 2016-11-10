@@ -169,7 +169,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:entries="@array/location_array"
                 android:gravity="end"
                 android:spinnerMode="dialog" />
         </LinearLayout>

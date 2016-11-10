@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -18,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.UserHelper;
+import ch.epfl.sweng.project.data.UserProvider;
 
 
 /**
@@ -25,8 +30,18 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
  */
 public final class MainActivity extends AppCompatActivity {
 
+    public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
+
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
+    private static Context mContext;
+    private static User currentUser;
+
+    // Will be used later on
+    private String userEnergy;
+    private String userLocation;
+    private String userTimeAtDisposal;
+
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -43,13 +58,30 @@ public final class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+
+        //Define the currentUser
+        UserHelper userProvider = new UserProvider().getUserProvider();
+        currentUser = userProvider.retrieveUserInformation();
+
+        mContext = getApplicationContext();
+
+        //Add the user to TaskFragment
         fragment = new TaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_KEY, currentUser);
+        fragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.tasks_container, fragment)
                     .commit();
         }
+
+        //Default values
+        userEnergy = getResources().getString(R.string.normal_energy);
+        userLocation = getResources().getString(R.string.everywhere_location);
+        userTimeAtDisposal = getResources().getString(R.string.duration1h);
+        initializeAdapters();
     }
 
     /**
@@ -116,5 +148,129 @@ public final class MainActivity extends AppCompatActivity {
                 fragment.addTask(newTask);
             }
         }
+    }
+
+    /**
+     * Set the adapter for the images button inside MainActivity layout,
+     * so the spinners attach to them dropdown when we click
+     * on the image.
+     */
+    private void initializeAdapters() {
+        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
+        Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
+
+        CustomSpinnerAdapter<String> locationAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getLocationTable());
+
+        CustomSpinnerAdapter<StateDuration> durationAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getStateDurationTable());
+
+        CustomSpinnerAdapter<StateEnergy> energyAdapter = new CustomSpinnerAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, createStateEnergyTable());
+
+
+        mLocation.setAdapter(locationAdapter);
+        mDuration.setAdapter(durationAdapter);
+        mEnergy.setAdapter(energyAdapter);
+
+        setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
+    }
+
+    /**
+     * Set the Listeners in order to have the spinners dropdown when we click
+     * on an image button inside the MainActivity layout.
+     * @param location Spinner for the user locations
+     * @param duration Spinner for the time at disposal of the user
+     * @param energy Spinner for the current energy of the user
+     * @param locationAdapter The adapter of location
+     * @param durationAdapter The adapter of duration
+     * @param energyAdapter The adapter of energy
+     */
+    private void setListeners(Spinner location, Spinner duration, Spinner energy,
+                              final CustomSpinnerAdapter<String> locationAdapter,
+                              final CustomSpinnerAdapter<StateDuration> durationAdapter,
+                              final CustomSpinnerAdapter<StateEnergy> energyAdapter)
+    {
+        location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userLocation = locationAdapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userTimeAtDisposal = durationAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                userEnergy = energyAdapter.getItem(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    /**
+     * Construct the table from which the user can set the time
+     * available/required to do a task.
+     * It is also used to know the time at disposal of the user
+     * in order to sort the list accordingly.
+     *
+     * @return StateDuration[] The array containing the durations
+     */
+    public static StateDuration[] getStateDurationTable() {
+        return new StateDuration[] {
+                new StateDuration(5, mContext),
+                new StateDuration(15, mContext),
+                new StateDuration(30, mContext),
+                new StateDuration(60, mContext),
+                new StateDuration(120, mContext),
+                new StateDuration(240, mContext),
+                new StateDuration(1440, mContext),
+                new StateDuration(2880, mContext),
+                new StateDuration(5760, mContext),
+                new StateDuration(10080, mContext),
+                new StateDuration(20160, mContext),
+                new StateDuration(43800, mContext)
+        };
+    }
+
+    /**
+     * Construct the table with the favorite locations of the
+     * currentUser.
+     *
+     * @return String[] The array containing the locations of the current user.
+     */
+    public static String[] getLocationTable() {
+        return currentUser.getListNamesLocations().toArray(new String[currentUser.getListLocations().size()]);
+    }
+
+    /**
+     * Construct the table from which the user can set the energy
+     * available/required to do a task.
+     * It is also used to know the energy of the user
+     * in order to sort the list accordingly.
+     *
+     * @return StateEnergy[] The array containing the energy
+     */
+    private StateEnergy[] createStateEnergyTable() {
+        return new StateEnergy[] {
+                new StateEnergy(Task.Energy.LOW, mContext),
+                new StateEnergy(Task.Energy.NORMAL, mContext),
+                new StateEnergy(Task.Energy.HIGH, mContext)
+        };
     }
 }
