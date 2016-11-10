@@ -124,14 +124,14 @@ public class LoginActivity
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
-                Toast.makeText(LoginActivity.this, "Authentication canceled.",
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_canceled,
                         Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,7 +185,7 @@ public class LoginActivity
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed:
-                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -218,7 +218,7 @@ public class LoginActivity
                                                 "authentication service as before.",
                                         Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -257,7 +257,7 @@ public class LoginActivity
                                         Toast.LENGTH_LONG).show();
                                 LoginManager.getInstance().logOut();
                             } else {
-                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {

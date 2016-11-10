@@ -39,6 +39,10 @@
     <string name="error_title_duplicated">This title is already taken !</string>
     <string name="error_location_name_empty">The location name can not be empty !</string>
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
+    <string name="error_authentication_failed"> Authentication failed.</string>
+    <string name="error_authentication_canceled"> Authentication canceled.</string>
+
+
 
     <!-- Buttons description-->
     <string name="button_location_description">Select your Location</string>
