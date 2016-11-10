@@ -102,7 +102,7 @@
     <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
 
     <!-- Energy description -->
-    <string name="description_energy">Lightyear representing one point of energy</string>
+    <string name="description_energy">Lightning representing one point of energy</string>
 
     <!-- To delete -->
     <string-array name="location_array">
