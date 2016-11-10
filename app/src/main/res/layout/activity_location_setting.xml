@@ -10,27 +10,41 @@
         tools:context="ch.epfl.sweng.project.location_setting.LocationSettingActivity"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/location_setting_toolbar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/location_setting_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ActionBar">
+
+        <ImageButton
+            android:id="@+id/location_setting_done_button_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:contentDescription="@string/done_location_description"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_done_white_36dp"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/default_location"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ActionBar">
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:textColor="@android:color/background_dark"
+            android:textSize="20sp"
+            android:text="@string/location_set_text"
+            android:textStyle="normal"
+            tools:textStyle="bold"></TextView>
 
-            <ImageButton
-                android:id="@+id/location_setting_done_button_toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:background="@null"
-                android:contentDescription="@string/done_location_description"
-                android:paddingEnd="10dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_done_white_36dp"
-                tools:ignore="RtlSymmetry" />
+    </android.support.v7.widget.Toolbar>
 
-        </android.support.v7.widget.Toolbar>
 
-        <View
+    <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:background="@drawable/toolbar_shadow" />
@@ -38,7 +52,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/locations_container">
+            android:id="@+id/locations_container"
+            >
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"

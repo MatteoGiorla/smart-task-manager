@@ -197,6 +197,25 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+
+                // to set correctly the energy from the radio button
+                RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+                int index = radioGroup.indexOfChild(findViewById(radioGroup.getCheckedRadioButtonId()));
+                switch(index) {
+                    case 0:
+                        energy = Task.Energy.LOW;
+                        break;
+                    case 1:
+                        energy = Task.Energy.NORMAL;
+                        break;
+                    case 2:
+                        energy = Task.Energy.HIGH;
+                        break;
+                    default:
+                        energy = Task.Energy.NORMAL;
+                        break;
+                }
+
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();
