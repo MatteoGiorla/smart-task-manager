@@ -50,8 +50,8 @@ public class EditTaskActivity extends TaskActivity {
     @Override
     boolean titleIsNotUnique(String title) {
         boolean result = false;
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getName().equals(title) && i != mIndexTaskToBeEdited) {
+        for (Task task : taskList) {
+            if (task.getName().equals(title) && task.getName() != mTaskToBeEdited.getName()) {
                 result = true;
             }
         }

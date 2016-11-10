@@ -298,7 +298,7 @@ public class Task implements Parcelable {
 
     private int computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
-        int delay = (int)daysBetween(c.getTime(), dueDate);
+        int delay = daysBetween(c.getTime(), dueDate);
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
                 / (75 * delay + 100 * fraction);
     }
@@ -313,11 +313,11 @@ public class Task implements Parcelable {
         return cal;
     }
 
-    private long daysBetween(Date startDate, Date endDate) {
+    private int daysBetween(Date startDate, Date endDate) {
         Calendar sDate = getDatePart(startDate);
         Calendar eDate = getDatePart(endDate);
 
-        long daysBetween = 0;
+        int daysBetween = 0;
         while (sDate.before(eDate)) {
             sDate.add(Calendar.DAY_OF_MONTH, 1);
             daysBetween++;
@@ -342,7 +342,7 @@ public class Task implements Parcelable {
         private int currentTimeDisposal;
         private int currentEnergy;
 
-        DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
             this.currentEnergy = currentEnergy;
@@ -356,8 +356,8 @@ public class Task implements Parcelable {
 
         private int computeDynamicSortValue(Task task) {
             int dynamicSortValue = task.computeStaticSortValue();
-            if(currentLocation.equals(task.getLocationName()) ||
-                    currentLocation.equals(Resources.getSystem().getString(R.string.everywhere_location))) {
+            if(task.getLocationName().equals(currentLocation) ||
+                    Resources.getSystem().getString(R.string.everywhere_location).equals(currentLocation)) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
                 if(task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;
