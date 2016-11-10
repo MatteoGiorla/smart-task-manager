@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -68,33 +69,7 @@ public class AuthenticationTest {
         mGoogleEmail = "trixyfinger@gmail.com";
         mGooglePassword = "sweng1234TaskIt";
         untilTimeout = 20000;
-        /*try{
-            removeAccount();
-        }catch(UiObjectNotFoundException i){
-
-        }*/
     }
-
-    /*@After
-    public void tearDown() {
-        goBack();
-    }
-
-    private void goBack() {
-        mUiDevice.pressBack();
-        mUiDevice.pressBack();
-    }*/
-
-    //@Test
-    public void authenticationGoogleFailsIfInterrupted(){
-        onView(withId(R.id.google_sign_in_button)).perform(click());
-        mUiDevice.pressBack();
-        onView(withText(R.string.error_authentication_failed))
-                .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-    }
-
-
 
     @Test
     public void authenticationFacebookCancelsIfInterrupted(){
@@ -106,12 +81,23 @@ public class AuthenticationTest {
 
     }
 
+    @Test
+    public void authenticationGoogleFailsIfInterrupted() throws java.lang.InterruptedException {
+        onView(withId(R.id.google_sign_in_button)).perform(click());
+        Thread.sleep(5000);
+        mUiDevice.pressBack();
+        onView(withText(R.string.error_authentication_failed))
+                .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+    }
+
+
     /**
      * Click on the facebook sign in button,
      * check if the facebook login is launched upon it,
      * or if it grants immediately access to the mainActivity.
      */
-    //@Test
+    @Test
     public void facebookSignInGetLaunch() {
         try {
 
@@ -133,20 +119,22 @@ public class AuthenticationTest {
      * perform user like actions on the phone to authenticate
      * oneself into a google account
      */
-    //@Test
+    @Test
     public void googleLoginWorks() {
         onView(withId(R.id.google_sign_in_button)).perform(click());
         try{
             Thread.sleep(untilTimeout);
             associateNewGoogleAccount();
             checkIfActivity(R.id.add_task_button);
+            mUiDevice.pressBack();
+            mUiDevice.pressBack();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
         }
-        removeAccount();
+
     }
 
-    //@Test
+    @Test
     public void googleRemoveAccount(){
         removeAccount();
     }
@@ -157,7 +145,7 @@ public class AuthenticationTest {
      * on the Firebase Database so lhe locationSettingActivity
      * gets launch.
      */
-    //@Test
+    @Test
     public void loginForTheFirstTimeLaunchLocationSettingsActivity() {
 
         mGoogleEmail = "cirdec3961@gmail.com";
@@ -170,10 +158,9 @@ public class AuthenticationTest {
             fail(i.getMessage());
         }
         checkIfActivity(R.id.add_location_button);
-        removeAccount();
     }
 
-   // @Test
+    @Test
     public void removingPreviousAccount(){
         removeAccount();
     }
