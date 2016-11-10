@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -355,7 +356,8 @@ public class Task implements Parcelable {
 
         private int computeDynamicSortValue(Task task) {
             int dynamicSortValue = task.computeStaticSortValue();
-            if(currentLocation.equals(task.getLocationName())) {
+            if(currentLocation.equals(task.getLocationName()) ||
+                    currentLocation.equals(Resources.getSystem().getString(R.string.everywhere_location))) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
                 if(task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;
