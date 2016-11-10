@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Task is the class representing a task
@@ -55,6 +56,12 @@ public class Task implements Parcelable {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private final int fraction;
+
+    /**
+     * Enum representing the values of energy needed.
+     */
+    enum Energy {LOW, NORMAL, HIGH}
+
 
     /**
      * Constructor of the class
@@ -281,20 +288,35 @@ public class Task implements Parcelable {
 
     }
 
+    /**
+     * Method returning a static comparator on Task.
+     *
+     * @return Static Comparator
+     */
     static Comparator<Task> getStaticComparator() {
         return new StaticComparator();
     }
 
+    /**
+     * Method returning a dynamic comparator on Task.
+     *
+     * @param currentLocation The user's current location
+     * @param currentTimeDisposal The user's current disposal time
+     * @param currentEnergy The user's current energy
+     * @return Dynamic Comparator
+     */
     static Comparator<Task> getDynamicComparator(String currentLocation,
                                                         int currentTimeDisposal,
                                                         int currentEnergy) {
         return new DynamicComparator(currentLocation, currentTimeDisposal, currentEnergy);
     }
 
-
-
-    enum Energy {LOW, NORMAL, HIGH}
-
+    /**
+     * Convert the energy to int. It's to compute the number of point of each task
+     * used for sorting them.
+     *
+     * @return integer representing the energy needed
+     */
     private int getEnergyToInt() {
         return energyNeeded.ordinal() + 1;
     }
@@ -306,6 +328,12 @@ public class Task implements Parcelable {
                 / (75 * delay + 100 * fraction);
     }
 
+    /**
+     * Method returning a calendar for the specified Date.
+     *
+     * @param date the date
+     * @return Calendar
+     */
     private Calendar getDatePart(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -316,20 +344,36 @@ public class Task implements Parcelable {
         return cal;
     }
 
+    /**
+     * Method returning the number of day between two days.
+     *
+      * @param startDate the first day
+     * @param endDate the last day
+     * @return number of days between startDate and endDate
+     */
     private int daysBetween(Date startDate, Date endDate) {
         Calendar sDate = getDatePart(startDate);
         Calendar eDate = getDatePart(endDate);
 
-        int daysBetween = 0;
-        while (sDate.before(eDate)) {
-            sDate.add(Calendar.DAY_OF_MONTH, 1);
-            daysBetween++;
-        }
-        return daysBetween;
+        Long millisDifference = eDate.getTimeInMillis() - sDate.getTimeInMillis();
+        Long daysDifference =  TimeUnit.MILLISECONDS.toDays(millisDifference);
+        return daysDifference.intValue();
     }
 
+    /**
+     * Private static inner class representing the static comparator.
+     */
     private static class StaticComparator implements Comparator<Task> {
 
+        /**
+         * compare method of the Comparator.
+         *
+         * @param o1 the first task to compare
+         * @param o2 the second task to compare
+         * @return 0 if o1 == o2,
+         *           a value less than 0 if o1 < o2
+         *           a value greater than 0 if o1 > o2
+         */
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public int compare(Task o1, Task o2) {
@@ -337,6 +381,9 @@ public class Task implements Parcelable {
         }
     }
 
+    /**
+     * Private static inner class representing the dynamic comparator.
+     */
     private static class DynamicComparator implements Comparator<Task> {
         private static final int ENERGY_COEFFICIENT = 10000000;
         private static final int TIME_COEFFICIENT = 100000000;
@@ -345,18 +392,39 @@ public class Task implements Parcelable {
         private int currentTimeDisposal;
         private int currentEnergy;
 
+        /**
+         * Private constructor of the class.
+         * @param currentLocation User's current location
+         * @param currentTimeDisposal User's current disposal time
+         * @param currentEnergy User's current energy
+         */
         private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
             this.currentEnergy = currentEnergy;
         }
 
+        /**
+         * compare method of the Comparator.
+         *
+         * @param o1 the first task to compare
+         * @param o2 the second task to compare
+         * @return 0 if o1 == o2,
+         *           a value less than 0 if o1 < o2
+         *           a value greater than 0 if o1 > o2
+         */
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public int compare(Task o1, Task o2) {
             return Integer.compare(computeDynamicSortValue(o2), computeDynamicSortValue(o1));
         }
 
+        /**
+         * Compute the number of point of a task, used to sort it.
+         *
+         * @param task for which we compute the number of points
+         * @return number of point of the task
+         */
         private int computeDynamicSortValue(Task task) {
             int dynamicSortValue = task.computeStaticSortValue();
             if(task.getLocationName().equals(currentLocation) ||

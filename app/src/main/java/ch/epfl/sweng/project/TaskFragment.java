@@ -262,6 +262,12 @@ public class TaskFragment extends Fragment {
         removeTaskAction(position);
     }
 
+    /**
+     * Private method executing the actions needed to remove the task.
+     * It removes the task from the database.
+     *
+     * @param position Position of the task to be removed.
+     */
     private void removeTaskAction(int position) {
         Task taskToBeDeleted = taskList.get(position);
 
@@ -287,10 +293,20 @@ public class TaskFragment extends Fragment {
         dynamic = dynamicParam;*/
     }
 
+    /**
+     * Method that launch the dynamic sort on the tasks.
+     *
+     * @param currentLocation User's current location
+     * @param currentTimeDisposal User's current disposal time
+     * @param currentEnergy User's current energy
+     */
     public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
         mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
     }
 
+    /**
+     * Method that launch the static sort on the tasks.
+     */
     public void sortTaskStatically() {
         mTaskAdapter.sort(Task.getStaticComparator());
     }
