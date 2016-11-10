@@ -341,7 +341,7 @@ public class Task implements Parcelable {
         private int currentTimeDisposal;
         private int currentEnergy;
 
-        DynamicComparator(String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
             this.currentEnergy = currentEnergy;
