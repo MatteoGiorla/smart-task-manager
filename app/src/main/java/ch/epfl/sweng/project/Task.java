@@ -9,13 +9,14 @@ import android.support.annotation.RequiresApi;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Task is the class representing a task
  */
-public class Task implements Parcelable, Comparable<Task> {
+public class Task implements Parcelable {
 
     /**
      * Used to regenerate a Task, all parcelables must have a creator
@@ -50,7 +51,6 @@ public class Task implements Parcelable, Comparable<Task> {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private final int fraction;
-    private final int staticSortValue;
 
     /**
      * Constructor of the class
@@ -75,7 +75,6 @@ public class Task implements Parcelable, Comparable<Task> {
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
         fraction = 1;
-        staticSortValue = computeStaticSortValue();
     }
 
     /**
@@ -88,10 +87,6 @@ public class Task implements Parcelable, Comparable<Task> {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
                 in.createStringArrayList());
-    }
-
-    public int getStaticSortValue() {
-        return staticSortValue;
     }
 
     /**
@@ -161,7 +156,7 @@ public class Task implements Parcelable, Comparable<Task> {
     /**
      * Getter returning a copy of the task's due date
      */
-    public Date getDueDate() {
+    Date getDueDate() {
         return dueDate;
     }
 
@@ -171,7 +166,7 @@ public class Task implements Parcelable, Comparable<Task> {
      * @param newDueDate The new task's due date
      * @throws IllegalArgumentException if the argument is null
      */
-    public void setDueDate(Date newDueDate) {
+    void setDueDate(Date newDueDate) {
         if (newDueDate == null)
             throw new IllegalArgumentException("newDueDate passed to the Task's setter is null");
         dueDate = newDueDate;
@@ -188,7 +183,7 @@ public class Task implements Parcelable, Comparable<Task> {
     /**
      * Getter returning the task's duration
      */
-    public long getDuration() {
+    long getDuration() {
         return durationInMinutes;
     }
 
@@ -204,7 +199,7 @@ public class Task implements Parcelable, Comparable<Task> {
      *
      * @param newDurationInMinutes The new task's durationInMinutes
      */
-    public void setDurationInMinutes(long newDurationInMinutes) {
+    void setDurationInMinutes(long newDurationInMinutes) {
         durationInMinutes = newDurationInMinutes;
     }
 
@@ -214,7 +209,7 @@ public class Task implements Parcelable, Comparable<Task> {
      * @param newEnergyNeeded The new task's energy need
      * @throws IllegalArgumentException if the argument is null
      */
-    public void setEnergyNeeded(Energy newEnergyNeeded) {
+    void setEnergyNeeded(Energy newEnergyNeeded) {
         if (newEnergyNeeded == null)
             throw new IllegalArgumentException("newEnergyNeeded passed to the Task's setter is null");
         energyNeeded = newEnergyNeeded;
@@ -282,19 +277,29 @@ public class Task implements Parcelable, Comparable<Task> {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public int compareTo(Task o) {
-        return Integer.compare(o.getStaticSortValue(), staticSortValue);
+    static Comparator<Task> getStaticComparator() {
+        return new StaticComparator();
     }
 
-    public enum Energy {LOW, NORMAL, HIGH}
+    static Comparator<Task> getDynamicComparator(String currentLocation,
+                                                        int currentTimeDisposal,
+                                                        int currentEnergy) {
+        return new DynamicComparator(currentLocation, currentTimeDisposal, currentEnergy);
+    }
+
+
+
+    enum Energy {LOW, NORMAL, HIGH}
+
+    private int getEnergyToInt() {
+        return energyNeeded.ordinal() + 1;
+    }
 
     private int computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = (int)daysBetween(c.getTime(), dueDate);
-        int staticSortValue = (120 * durationInMinutes.intValue() + 55 * (energyNeeded.ordinal() + 1)) / (75 * delay + 100 * fraction);
-        return staticSortValue;
+        return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
+                / (75 * delay + 100 * fraction);
     }
 
     private Calendar getDatePart(Date date){
@@ -317,5 +322,49 @@ public class Task implements Parcelable, Comparable<Task> {
             daysBetween++;
         }
         return daysBetween;
+    }
+
+    private static class StaticComparator implements Comparator<Task> {
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        public int compare(Task o1, Task o2) {
+            return Integer.compare(o2.computeStaticSortValue(), o1.computeStaticSortValue());
+        }
+    }
+
+    private static class DynamicComparator implements Comparator<Task> {
+        private static final int ENERGY_COEFFICIENT = 10000000;
+        private static final int TIME_COEFFICIENT = 100000000;
+        private static final int LOCATION_COEFFICIENT = 1000000000;
+        private String currentLocation;
+        private int currentTimeDisposal;
+        private int currentEnergy;
+
+        DynamicComparator(String currentLocation, int currentTimeDisposal, int currentEnergy) {
+            this.currentLocation = currentLocation;
+            this.currentTimeDisposal = currentTimeDisposal;
+            this.currentEnergy = currentEnergy;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        public int compare(Task o1, Task o2) {
+            return Integer.compare(computeDynamicSortValue(o2), computeDynamicSortValue(o1));
+        }
+
+        private int computeDynamicSortValue(Task task) {
+            int dynamicSortValue = task.computeStaticSortValue();
+            if(currentLocation.equals(task.getLocationName())) {
+                dynamicSortValue += LOCATION_COEFFICIENT;
+                if(task.getDurationInMinutes() <= currentTimeDisposal) {
+                    dynamicSortValue += TIME_COEFFICIENT;
+                    if(task.getEnergyToInt() <= currentEnergy) {
+                        dynamicSortValue += ENERGY_COEFFICIENT;
+                    }
+                }
+            }
+            return dynamicSortValue;
+        }
     }
 }

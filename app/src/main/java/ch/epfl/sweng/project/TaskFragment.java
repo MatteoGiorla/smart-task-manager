@@ -1,7 +1,6 @@
 package ch.epfl.sweng.project;
 
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -21,8 +19,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.project.data.DataExchanger;
@@ -76,18 +72,14 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getProvider();
         User currentUser = mDatabase.retrieveUserInformation();
         mDatabase.retrieveAllData(currentUser);
-
-        sortTasks(locationParameter, timeParameter, energyParameter, dynamic);
+        sortTaskStatically();
     }
 
-    @Override
+   /* @Override
     public void onResume() {
         super.onResume();
-        sortTasks(locationParameter, timeParameter, energyParameter, dynamic);
-        for (Task task : taskList) {
-            Log.e( "onResume ", task.getName());
-        }
-    }
+        sortTasksDynamically(locationParameter, timeParameter, energyParameter);
+    }*/
 
     /**
      * Override the onCreateView method to initialize the adapter of
@@ -199,6 +191,7 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex);
             }
         }
+        sortTaskStatically();
     }
 
     private void actionOnActivityResult(Intent data) {
@@ -286,62 +279,12 @@ public class TaskFragment extends Fragment {
         dynamic = dynamicParam;*/
     }
 
-    public void sortTasks(String currentLocation, int currentTimeDisposal, int currentEnergy, boolean dynamic){
-        sortTasksList(currentLocation, currentTimeDisposal, currentEnergy, dynamic, taskList);
-        mTaskAdapter.notifyDataSetChanged();
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
     }
 
-    private void sortTasksList(String currentLocation, int currentTimeDisposal, int currentEnergy,
-                                          boolean dynamic, ArrayList<Task> listToBeSorted){
-        if (!dynamic){
-            ArrayList<Task> staticSort = sortByStaticValue(listToBeSorted);
-            listToBeSorted.clear();
-            listToBeSorted.addAll(staticSort);
-        } else {
-            ArrayList<Task> topList = new ArrayList<Task>();
-            ArrayList<Task> otherLocationsList = new ArrayList<Task>();
-            ArrayList<Task> otherTimesList = new ArrayList<Task>();
-            ArrayList<Task> otherEnergiesList = new ArrayList<Task>();
-            for(Task task : listToBeSorted){
-                String location = task.getLocationName();
-                long time = task.getDurationInMinutes();
-                int energy = task.getEnergy().ordinal();
-                if (location.equals(currentLocation) || location.equals(getString(R.string.everywhere_location))){
-                    if (time <= currentTimeDisposal){
-                        if (energy <= currentEnergy){
-                            topList.add(task);
-                            ArrayList<Task> staticSort = sortByStaticValue(topList);
-                            listToBeSorted.clear();
-                            listToBeSorted.addAll(staticSort);
-                        } else {
-                            otherEnergiesList.add(task);
-                            otherEnergiesList = sortByStaticValue(otherEnergiesList);
-                        }
-                    } else {
-                        otherTimesList.add(task);
-                        otherTimesList = sortByStaticValue(otherTimesList);
-                    }
-                } else {
-                    otherLocationsList.add(task);
-                    otherLocationsList = sortByStaticValue(otherLocationsList);
-                }
-            }
-            listToBeSorted.addAll(otherEnergiesList);
-            listToBeSorted.addAll(otherTimesList);
-            listToBeSorted.addAll(otherLocationsList);
-        }
-    }
-
-    private ArrayList<Task> sortByStaticValue(ArrayList<Task> list){
-        Collections.sort(list, new Comparator<Task>() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public int compare(Task task1, Task task2)
-            {
-                return task1.compareTo(task2);
-            }
-        });
-        return new ArrayList<>(list);
+    public void sortTaskStatically() {
+        mTaskAdapter.sort(Task.getStaticComparator());
     }
 
     /**
