@@ -7,27 +7,41 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
+import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
+import static android.app.PendingIntent.getActivity;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.core.deps.guava.base.CharMatcher.is;
+import static android.support.test.espresso.core.deps.guava.base.Predicates.not;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class AuthenticationTest {
+
+    /**
+     * WARNING: Do not change the name of the test, or if you do so,
+     * be sure to keep the alphabetic order, some tests need to be executed before.
+     */
 
     private final static String NEXT_BUTTON_ID = "identifierNext";
     private final static String PASSWORD_NEXT_ID = "passwordNext";
@@ -35,33 +49,76 @@ public class AuthenticationTest {
     private static String mGoogleEmail;
     private static String mGooglePassword;
     private static long untilTimeout;
+    private static String TAG = "AuthenticationTest";
+    private UiDevice mUiDevice;
 
     @Rule
     public ActivityTestRule<LoginActivity> mActivityRule =
             new ActivityTestRule<>(LoginActivity.class);
-    private UiDevice mUiDevice;
 
     @Before
     public void setup() {
         mUiDevice = getInstance(getInstrumentation());
         mGoogleEmail = "trixyfinger@gmail.com";
         mGooglePassword = "sweng1234TaskIt";
-        untilTimeout = 5000;
+        untilTimeout = 20000;
+        try{
+            removeAccount();
+        }catch(UiObjectNotFoundException i){
+
+        }
     }
 
     @After
     public void tearDown() {
         goBack();
-        /*try{
+        try{
             removeAccount();
         }catch (UiObjectNotFoundException e){
-            Log.d("Authentication test", "Error something not found.");
-        }*/
+            Log.d(TAG, "Error, something UI related not found.");
+        }
     }
 
     private void goBack() {
         mUiDevice.pressBack();
         mUiDevice.pressBack();
+    }
+
+    @Test
+    public void authenticationGoogleFailsIfInterrupted(){
+        onView(withId(R.id.google_sign_in_button)).perform(click());
+        mUiDevice.pressBack();
+
+        //Get the error message
+        /*String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.error_authentication_failed)
+                .toString();*/
+
+        //Check that the error message is displayed
+        onView(withText(R.string.error_authentication_failed))
+                .inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+    }
+
+
+    @Test
+    public void authenticationFacebookCancelsIfInterrupted(){
+        onView(withId(R.id.google_sign_in_button)).perform(click());
+        mUiDevice.pressBack();
+
+        //Get the error message
+        /*String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.error_authentication_canceled)
+                .toString();*/
+
+        //Check that the error message is displayed
+        onView(withText(R.string.error_authentication_canceled)
+                .inRoot(withDecorView(not(is(getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
     }
 
     /**
@@ -71,47 +128,63 @@ public class AuthenticationTest {
      */
     @Test
     public void facebookSignInGetLaunch() {
-        onView(withId(R.id.facebook_sign_in_button)).perform(click());
-        //the android.webkit.WebView launched by facebook should be the only to have those properties
-        UiObject facebookWebLaunched = mUiDevice.findObject(new UiSelector().className("android.webkit.WebView"));
         try {
+
+            onView(withId(R.id.facebook_sign_in_button)).perform(click());
+            Thread.sleep(untilTimeout);
+            //the android.webkit.WebView launched by facebook should be the only to have those properties
+            UiObject facebookWebLaunched = mUiDevice.findObject(new UiSelector().className("android.webkit.WebView"));
             facebookWebLaunched.click();
             assertTrue("Facebook login web window correctly launched", true);
         } catch (UiObjectNotFoundException u) {
-//            onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
+            fail("Facebook window wasn't launched");
+        } catch (java.lang.InterruptedException i){
+            fail("There was an unexpected interruption during the launch");
         }
     }
 
 
-
     /**
      * perform user like actions on the phone to authenticate
-     * oneself into a google account (even if it is already memorized).
+     * oneself into a google account
      */
     @Test
     public void googleLoginWorks() {
         onView(withId(R.id.google_sign_in_button)).perform(click());
         try{
-            Thread.sleep(20000);
+            Thread.sleep(untilTimeout);
+            associateNewGoogleAccount();
+            checkIfActivity(R.id.add_task_button);
+        }catch(java.lang.InterruptedException i){
+            fail(i.getMessage());
+        }
+    }
+
+
+    /**
+     * perform user like actions on the phone to authenticate
+     * oneself into a google account with a email non present
+     * on the Firebase Database so lhe locationSettingActivity
+     * gets launch.
+     */
+    @Test
+    public void loginForTheFirstTimeLaunchLocationSettingsActivity() {
+        try{
+            removeAccount();
+        }catch(UiObjectNotFoundException u){
+            fail("could not remove Previous google account");
+        }
+
+        mGoogleEmail = "cirdec3961@gmail.com";
+        mGooglePassword = "Kristel99";
+        onView(withId(R.id.google_sign_in_button)).perform(click());
+        try{
+            Thread.sleep(untilTimeout);
             associateNewGoogleAccount();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
         }
-        //first check if the user is already registered, if so just proceed to login.
-        /*UiObject mEmailText = mUiDevice.findObject(new UiSelector().text(mGoogleEmail));
-        try{
-            mEmailText.click();
-            checkIfMainActivity();
-        } catch(UiObjectNotFoundException u1){
-            //if not, check if we are on the popup with
-            UiObject addAcount = mUiDevice.findObject(new UiSelector().text("Add account"));
-            try{
-                addAcount.click();
-                associateNewGoogleAccount();
-            }catch(UiObjectNotFoundException u2){
-                checkIfMainActivity();
-            }
-        }*/
+        checkIfActivity(R.id.add_location_button);
     }
 
     /**
@@ -148,10 +221,8 @@ public class AuthenticationTest {
         }catch (UiObjectNotFoundException u ){
             fail("There was an error while trying to associate new Google account with the app.");
         }
-        checkIfMainActivity();
     }
 
-    @Test
     public void removeAccount() throws UiObjectNotFoundException {
         mUiDevice.pressHome();
         mUiDevice.pressHome();
@@ -176,13 +247,18 @@ public class AuthenticationTest {
         try{
             GoogleAccount.click();
             UiObject threeDots = mUiDevice.findObject(new UiSelector().descriptionContains("More options"));
-            threeDots.click();
+            try{
 
-            UiObject deleteAccountOption = mUiDevice.findObject(new UiSelector().text("Remove account"));
-            deleteAccountOption.click();
+                threeDots.click();
 
-            UiObject removeCurrAccount = mUiDevice.findObject(new UiSelector().text("REMOVE ACCOUNT"));
-            removeCurrAccount.click();
+                UiObject deleteAccountOption = mUiDevice.findObject(new UiSelector().text("Remove account"));
+                deleteAccountOption.click();
+
+                UiObject removeCurrAccount = mUiDevice.findObject(new UiSelector().text("REMOVE ACCOUNT"));
+                removeCurrAccount.click();
+            }catch(UiObjectNotFoundException unattended){
+                Log.d(TAG, "For some reason, could not remove the account, please do it manually");
+            }
         }catch(UiObjectNotFoundException u){
             //the account does not exist.
         }
@@ -190,19 +266,14 @@ public class AuthenticationTest {
     }
 
     /**
-     * serves as only checking if the add button is displayed,
+     * serves as only checking if the add button  of the activity
+     * we want to check is displayed,
      * which is equivalent as checking if we reached mainActivity
+     *
+     * @param id the id of the button to check
      */
-    private void checkIfMainActivity(){
-        onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
+    private void checkIfActivity(int id){
+        onView(withId(id).check(matches(isDisplayed()));
     }
 
-    //TODO: check toast "Authentication failed is launched upon missed login (Press back on enter email "google activity" )
-
-    /**
-     * check if we reached location_settings activity upon first launch
-     */
-    private void checkIfLocationSettingsActivity(){
-        onView(withId(R.id.add_location_button)).check(matches(isDisplayed()));
-    }
 }
