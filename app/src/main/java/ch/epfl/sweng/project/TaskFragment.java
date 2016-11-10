@@ -162,7 +162,7 @@ public class TaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
         if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
-            actionOnActivityResult(data);
+            onEditTaskActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
             if(taskStatus == -1)
@@ -170,7 +170,7 @@ public class TaskFragment extends Fragment {
 
             switch (taskStatus) {
                 case TASK_IS_MODIFIED :
-                    actionOnActivityResult(data);
+                    onEditTaskActivityResult(data);
                     break;
                 case TASK_IS_DELETED :
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
@@ -181,7 +181,12 @@ public class TaskFragment extends Fragment {
         }
     }
 
-    private void actionOnActivityResult(Intent data) {
+    /**
+     * Method called when we return from editing a task inside EditTaskActivity.
+     *
+     * @param data The returned Intent of EditTaskActivity.
+     */
+    private void onEditTaskActivityResult(Intent data) {
         // Get result from the result intent.
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);

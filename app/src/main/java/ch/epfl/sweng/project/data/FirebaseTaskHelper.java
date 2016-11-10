@@ -20,9 +20,11 @@ import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 
 /**
- * This class is the exchanger between firebase and the app
- * It deals with all necessary operations that must be done
- * on the database.
+ * Proxy that does all the work between the app and the firebase real time database.
+ * It allows the user to fetch task from the database, he can also remove/edit or
+ * add tasks in the database through this interface.
+ *
+ * Note: The queries are done asynchronously
  */
 public class FirebaseTaskHelper implements TaskHelper {
 
@@ -31,9 +33,7 @@ public class FirebaseTaskHelper implements TaskHelper {
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
 
-    /**
-     * Only constructor of FirebaseTaskHelper for the moment*
-     */
+
     public FirebaseTaskHelper(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;

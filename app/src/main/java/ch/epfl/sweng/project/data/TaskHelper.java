@@ -3,6 +3,9 @@ package ch.epfl.sweng.project.data;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
+/**
+ * Interface that behave as a Proxy to a database
+ */
 public interface TaskHelper {
 
     /**

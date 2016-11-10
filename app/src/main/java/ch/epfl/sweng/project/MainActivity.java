@@ -147,6 +147,11 @@ public final class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Set the adapter for the images button inside MainActivity layout,
+     * so the spinners attach to them dropdown when we click
+     * on the image.
+     */
     private void initializeAdapters() {
         Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
@@ -169,6 +174,16 @@ public final class MainActivity extends AppCompatActivity {
         setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
     }
 
+    /**
+     * Set the Listeners in order to have the spinners dropdown when we click
+     * on an image button inside the MainActivity layout.
+     * @param location Spinner for the user locations
+     * @param duration Spinner for the time at disposal of the user
+     * @param energy Spinner for the current energy of the user
+     * @param locationAdapter The adapter of location
+     * @param durationAdapter The adapter of duration
+     * @param energyAdapter The adapter of energy
+     */
     private void setListeners(Spinner location, Spinner duration, Spinner energy,
                               final CustomSpinnerAdapter<String> locationAdapter,
                               final CustomSpinnerAdapter<StateDuration> durationAdapter,
@@ -205,6 +220,14 @@ public final class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Construct the table from which the user can set the time
+     * available/required to do a task.
+     * It is also used to know the time at disposal of the user
+     * in order to sort the list accordingly.
+     *
+     * @return StateDuration[] The array containing the durations
+     */
     public static StateDuration[] getStateDurationTable() {
         return new StateDuration[] {
                 new StateDuration(5, mContext),
@@ -222,9 +245,24 @@ public final class MainActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Construct the table with the favorite locations of the
+     * currentUser.
+     *
+     * @return String[] The array containing the locations of the current user.
+     */
     public static String[] getLocationTable() {
         return currentUser.getListNamesLocations().toArray(new String[currentUser.getListLocations().size()]);
     }
+
+    /**
+     * Construct the table from which the user can set the energy
+     * available/required to do a task.
+     * It is also used to know the energy of the user
+     * in order to sort the list accordingly.
+     *
+     * @return StateEnergy[] The array containing the energy
+     */
     private StateEnergy[] createStateEnergyTable() {
         return new StateEnergy[] {
                 new StateEnergy(Task.Energy.LOW, mContext),

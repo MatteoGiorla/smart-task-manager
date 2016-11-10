@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 
+/**
+ * Class that decide which provider the app use in
+ * order to manipulate tasks in the database
+ */
 public class TaskProvider {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
@@ -16,12 +20,24 @@ public class TaskProvider {
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
 
+    /**
+     * Constructor of the TaskProvider.
+     *
+     * @param context The context in which the taskList is.
+     * @param adapter The Adapater of the taskList
+     * @param taskList The list of tasks
+     */
     public TaskProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
         mContext = context;
     }
 
+    /**
+     * Getter that return the Proxy to reach
+     * the database
+     * @return TaskHelper, the proxy
+     */
     public TaskHelper getTaskProvider() {
         switch (mProvider) {
             case FIREBASE_PROVIDER:
@@ -33,7 +49,17 @@ public class TaskProvider {
         }
     }
 
+
+    /**
+     * Setter that allow to switch between Providers
+     * @param provider should be TaskProvider.FIREBASE_PROVIDER or
+     *                 TaskProvider.TEST_PROVIDER
+     * @throws IllegalArgumentException if the given provider is unknown
+     */
     public static void setProvider(String provider) {
+        if(!provider.equals(TEST_PROVIDER) || !provider.equals(FIREBASE_PROVIDER)) {
+            throw new IllegalArgumentException("Unexpected provider !");
+        }
         mProvider = provider;
     }
 }

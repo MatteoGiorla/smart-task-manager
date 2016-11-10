@@ -6,7 +6,11 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 
-
+/**
+ * Local proxy that behave as firebase but does not require
+ * any internet connection.
+ * Mostly use to mock firebase in order to run tests faster.
+ */
 public class LocalTaskHelper implements TaskHelper {
 
     private final TaskListAdapter mAdapter;

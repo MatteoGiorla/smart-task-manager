@@ -14,6 +14,13 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 
+/**
+ * Proxy that does all the work between the app and the firebase real time database.
+ * It allows the user to fetch his predefined favorite locations from the
+ * database.
+ *
+ * Note: The queries are done asynchronously
+ */
 public class FirebaseUserHelper implements UserHelper{
 
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -33,9 +40,9 @@ public class FirebaseUserHelper implements UserHelper{
 
     /**
      * Recover the locations set by the user when he
-     * first sign in.
+     * first log in.
      *
-     * @param user The user
+     * @param user The current user of the app
      */
     private void recoverUserLocations(final User user) {
         DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child("listLocations").getRef();
