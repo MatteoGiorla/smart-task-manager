@@ -14,10 +14,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+
 /**
  * Adapter used to display the task list
  */
 public class TaskListAdapter extends ArrayAdapter<Task> {
+    private List<Task> taskList;
 
     /**
      * Constructor of the class
@@ -29,6 +31,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
+        taskList = objects;
     }
 
     /**
@@ -42,7 +45,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
 
         //There is no recycled view, we need to create a new one
@@ -52,31 +55,28 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
 
         //We get the task to be displayed
-        Task taskInTheView = getItem(position);
+        final Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-            TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
+            // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
             ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
             ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
             ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
             }
-            if (descriptionView != null) {
+           /* if (descriptionView != null) {
                 descriptionView.setText(taskInTheView.getDescription());
-            }
+            }*/
             if (remainingDays != null) {
                 Calendar c = Calendar.getInstance();
-                int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
-                if (days != 0) {
-                    remainingDays.setText("-"+ Integer.toString(days));
-                } else {
-                    remainingDays.setText(Integer.toString(days));
-                }
+                int days = (int) daysBetween(c.getTime(), taskInTheView.getDueDate());
+                remainingDays.setText(Integer.toString(days));
                 if (days < 10)
-                remainingDays.setTextColor(Color.RED);
+                    remainingDays.setTextColor(Color.RED);
             }
             if (energyIconLow != null) {
                 Task.Energy e = taskInTheView.getEnergy();
@@ -87,12 +87,16 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     energyIconHigh.setVisibility(View.INVISIBLE);
                 }
             }
+            /*if (coloredIndicator != null) {
+
+            }*/
         }
         return resultView;
     }
 
-    /*
-    * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
+    /**
+     * Helper functions to calculate the number of remaining days
+     * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
      */
     private Calendar getDatePart(Date date){
         Calendar cal = Calendar.getInstance();

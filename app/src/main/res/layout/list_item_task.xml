@@ -1,65 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1">
+<!-- TODO test the design on different devices -->
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
     <TextView
         android:id="@+id/list_entry_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="@dimen/task_title_size"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/list_entry_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:paddingBottom="@dimen/padding_between_tasks"
-        android:textColor="@color/black"
-        android:textSize="@dimen/task_description_size" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="42dp">
-
+        android:textStyle="bold"/>
+    <!--
         <TextView
-            android:id="@+id/list_remaining_days"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColor="@color/green"
+            android:id="@+id/list_entry_description"
+            android:layout_width="match_parent"
+            android:layout_height="11dp"
             android:ellipsize="end"
-            android:paddingBottom="5dp"
-            android:textSize="30sp"
-            android:layout_weight="0.78" />
+            android:maxLines="1"
+            android:paddingBottom="@dimen/padding_between_tasks"
+            android:textColor="@color/black"
+            android:textSize="@dimen/task_description_size" /> -->
 
-        <ImageView
-            android:id="@+id/list_energy_low"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
-            android:src="@drawable/vitality"
-            android:tint="@color/yellow" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/list_energy_normal"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
-            android:src="@drawable/vitality"
-            android:tint="@color/yellow" />
+            <TextView
+                android:id="@+id/list_remaining_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                android:ellipsize="end"
+                android:paddingBottom="5dp"
+                android:textSize="23sp"
+                android:layout_weight="0.78" />
 
-        <ImageView
-            android:id="@+id/list_energy_high"
-            android:layout_width="28dp"
-            android:layout_height="29dp"
-            android:src="@drawable/vitality"
-            android:tint="@color/yellow" />
+            <ImageView
+                android:id="@+id/list_energy_low"
+                android:layout_width="28dp"
+                android:layout_height="29dp"
+                android:src="@drawable/vitality"
+                android:contentDescription="@string/description_energy"
+                android:tint="@color/yellow" />
+
+            <ImageView
+                android:id="@+id/list_energy_normal"
+                android:layout_width="28dp"
+                android:layout_height="29dp"
+                android:contentDescription="@string/description_energy"
+                android:src="@drawable/vitality"
+                android:tint="@color/yellow" />
+
+            <ImageView
+                android:id="@+id/list_energy_high"
+                android:layout_width="28dp"
+                android:layout_height="29dp"
+                android:contentDescription="@string/description_energy"
+                android:src="@drawable/vitality"
+                android:tint="@color/yellow" />
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.45" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <View
+        android:id="@+id/list_colored_indicator"
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        android:background="#33ff4f" />
+
+    </LinearLayout>
