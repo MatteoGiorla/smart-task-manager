@@ -42,7 +42,6 @@ public class TaskFragment extends Fragment {
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
-    private User currentUser;
 
     //sorting parameters
     static String locationParameter;
@@ -62,6 +61,7 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
+        User currentUser;
         if(bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
         }else{
@@ -151,11 +151,13 @@ public class TaskFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_delete:
-                removeTask(itemInfo);
+                removeTask(itemInfo, false);
                 return true;
             case R.id.floating_edit:
                 startEditTaskActivity(itemInfo);
                 return true;
+            case R.id.floating_done:
+                removeTask(itemInfo, true);
             default:
                 return super.onContextItemSelected(item);
         }
@@ -194,7 +196,7 @@ public class TaskFragment extends Fragment {
                     if(taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    removeTaskAction(taskIndex);
+                    removeTaskAction(taskIndex, false);
             }
         }
         sortTaskStatically();
@@ -251,15 +253,24 @@ public class TaskFragment extends Fragment {
         startActivityForResult(intent, editTaskRequestCode);
     }
 
+    /*
+    public void removeTaskByTask(Task task) {
+        if (taskList.contains(task)) {
+            removeTaskAction(taskList.indexOf(task));
+        }
+    }*/
+
     /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
+     * @param isDone true if the task is done, otherwise false.
+     * @throws SQLiteException if an error occurred
      */
-    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo) {
+    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
         int position = itemInfo.position;
-        removeTaskAction(position);
+        removeTaskAction(position, isDone);
     }
 
     /**
@@ -267,8 +278,9 @@ public class TaskFragment extends Fragment {
      * It removes the task from the database.
      *
      * @param position Position of the task to be removed.
+     * @param isDone Boolean indicating if the task is done.
      */
-    private void removeTaskAction(int position) {
+    private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
 
         String taskName = taskToBeDeleted.getName();
@@ -276,9 +288,15 @@ public class TaskFragment extends Fragment {
         mDatabase.deleteTask(taskToBeDeleted);
 
         Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE = taskName + " deleted";
+        String TOAST_MESSAGE;
+        if (isDone) {
+            TOAST_MESSAGE = taskName + " is done";
+        } else {
+            TOAST_MESSAGE = taskName + " deleted";
+        }
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
+
     }
 
     public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam){

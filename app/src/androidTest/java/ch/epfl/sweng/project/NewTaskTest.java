@@ -68,11 +68,6 @@ public final class NewTaskTest extends SuperTest {
                     .inAdapterView(withId(R.id.list_view_tasks))
                     .atPosition(i)
                     .check(matches(hasDescendant(withText(mTitleToBeTyped + i))));
-            //Check description inside listView
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(i)
-                    .check(matches(hasDescendant(withText(mDescriptionToBeTyped + i))));
         }
 
         emptyDatabase(createdTask);
@@ -98,9 +93,29 @@ public final class NewTaskTest extends SuperTest {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
                         .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
+            }
+        }
+    }
+
+    @Test
+    public void testCanDoneTasks() {
+        //We create and add tasks
+        for (int i = 0; i < createdTask; i++) {
+            createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
+        }
+
+        //We mark done the task
+        for (int i = 0; i < createdTask; i++) {
+            onData(anything())
+                    .inAdapterView(withId(R.id.list_view_tasks))
+                    .atPosition(0).perform(longClick());
+            onView(withText(R.string.flt_ctx_menu_done)).perform(click());
+
+            //Test if the tasks are correctly removed
+            if (i != createdTask-1) {
                 onData(anything())
                         .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(mDescriptionToBeTyped + (i + 1)))));
+                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
             }
         }
     }
