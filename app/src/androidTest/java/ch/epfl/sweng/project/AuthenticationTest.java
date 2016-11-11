@@ -131,12 +131,15 @@ public class AuthenticationTest {
         try{
             Thread.sleep(untilTimeout);
             associateNewGoogleAccount();
-            checkIfActivity(R.id.add_task_button);
-            mUiDevice.pressBack();
-            mUiDevice.pressBack();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
+        }catch(UiObjectNotFoundException u){
+
         }
+
+        checkIfActivity(R.id.add_task_button);
+        mUiDevice.pressBack();
+        mUiDevice.pressBack();
 
     }
 
@@ -162,11 +165,15 @@ public class AuthenticationTest {
             associateNewGoogleAccount();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
+        }catch(UiObjectNotFoundException u){
+
         }
         checkIfActivity(R.id.add_location_button);
+        mUiDevice.pressBack();
+        mUiDevice.pressBack();
     }
 
-    @Test
+    //@Test
     public void removingPreviousAccount(){
         removeAccount();
     }
@@ -179,10 +186,12 @@ public class AuthenticationTest {
      * the transition between espresso and uiautomator might be responsible
      * for that.
      */
-    private void associateNewGoogleAccount() {
+    private void associateNewGoogleAccount() throws UiObjectNotFoundException {
+
+        UiObject emailHint = mUiDevice.findObject(new UiSelector().resourceId("identifierId"));
+        emailHint.setText(mGoogleEmail);
+
         try{
-            UiObject emailHint = mUiDevice.findObject(new UiSelector().resourceId("identifierId"));
-            emailHint.setText(mGoogleEmail);
 
             UiObject nextAction = mUiDevice.findObject(new UiSelector().resourceId(NEXT_BUTTON_ID));
             nextAction.clickAndWaitForNewWindow();
