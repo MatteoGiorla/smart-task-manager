@@ -82,16 +82,6 @@ public class AuthenticationTest {
 
     }
 
-    @Test
-    public void authenticationGoogleFailsIfInterrupted() throws java.lang.InterruptedException {
-        onView(withId(R.id.google_sign_in_button)).perform(click());
-        Thread.sleep(untilTimeout);
-        mUiDevice.pressBack();
-        onView(withText(R.string.error_authentication_failed))
-                .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-    }
-
 
     /**
      * Click on the facebook sign in button,
