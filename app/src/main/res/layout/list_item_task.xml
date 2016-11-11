@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/green"
                 android:ellipsize="end"
+                android:contentDescription="@string/description_remaining_days"
                 android:paddingBottom="5dp"
                 android:textSize="23sp"
                 android:layout_weight="0.78" />
