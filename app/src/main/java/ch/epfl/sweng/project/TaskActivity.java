@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -49,7 +48,6 @@ public abstract class TaskActivity extends AppCompatActivity {
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
-    private Spinner mEnergy;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     private static Button mButton;
@@ -84,40 +82,26 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        date = new Date();
-
         mButton = (Button)findViewById(R.id.pick_date);
 
-        //a supprimer plus tard
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
-
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
-        ArrayAdapter<StateDuration> spinnerArrayAdapter1 = new ArrayAdapter<>(this,
-            android.R.layout.simple_spinner_dropdown_item, createStateDurationTable());
+        ArrayAdapter<StateDuration> spinnerDuration = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_dropdown_item, MainActivity.getStateDurationTable());
 
-        mDuration.setAdapter(spinnerArrayAdapter1);
+        mDuration.setAdapter(spinnerDuration);
 
-        energy = Task.Energy.NORMAL;
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
         radioGroup.check(R.id.energy_normal);
 
-/*
-        //A ADAPTER
-        mLocation = (Spinner)findViewById(R.id.locationSpinner);
+        ArrayAdapter<String> spinnerLocation = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
-        ArrayAdapter spinnerArrayAdapter3 = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_dropdown_item, new StateLocation[] {
-                for (elem in listOfLocations) {
-                    new StateLocation(ID, TITRE DE LA LOCATION)
-                }
-        });
-
-        mLocation.setAdapter(spinnerArrayAdapter3);
- */
+        mLocation.setAdapter(spinnerLocation);
     }
 
     /**
@@ -145,34 +129,6 @@ public abstract class TaskActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
         }
     }
-
-    private StateDuration[] createStateDurationTable() {
-        Context current_context = getApplicationContext();
-        return new StateDuration[] {
-                new StateDuration(5, current_context),
-                new StateDuration(15, current_context),
-                new StateDuration(30, current_context),
-                new StateDuration(60, current_context),
-                new StateDuration(120, current_context),
-                new StateDuration(240, current_context),
-                new StateDuration(1440, current_context),
-                new StateDuration(2880, current_context),
-                new StateDuration(5760, current_context),
-                new StateDuration(10080, current_context),
-                new StateDuration(20160, current_context),
-                new StateDuration(43800, current_context)
-        };
-    }
-
-    private StateEnergy[] createStateEnergyTable() {
-        Context current_context = getApplicationContext();
-        return new StateEnergy[] {
-                new StateEnergy(Task.Energy.LOW, current_context),
-                new StateEnergy(Task.Energy.NORMAL, current_context),
-                new StateEnergy(Task.Energy.HIGH, current_context)
-        };
-    }
-
 
     /**
      * Start the toolbar and enable that back button on the toolbar.
@@ -241,6 +197,25 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+
+                // to set correctly the energy from the radio button
+                RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
+                int index = radioGroup.indexOfChild(findViewById(radioGroup.getCheckedRadioButtonId()));
+                switch(index) {
+                    case 0:
+                        energy = Task.Energy.LOW;
+                        break;
+                    case 1:
+                        energy = Task.Energy.NORMAL;
+                        break;
+                    case 2:
+                        energy = Task.Energy.HIGH;
+                        break;
+                    default:
+                        energy = Task.Energy.NORMAL;
+                        break;
+                }
+
                 resultActivity();
                 setResult(RESULT_OK, intent);
                 finish();

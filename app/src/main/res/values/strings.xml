@@ -17,7 +17,7 @@
     <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">You can log in using your Google or Facebook account.</string>
+    <string name="welcome_text">Sign in with Google or Facebook</string>
     <string name="welcome_title">Welcome !</string>
 
     <!-- Facebook App ID -->
@@ -29,6 +29,7 @@
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
     <string name="flt_ctx_menu_edit">Edit</string>
+    <string name="flt_ctx_menu_done">Done</string>
 
     <!-- Maximum lengths -->
     <string name="max_length_title">20</string>
@@ -45,9 +46,6 @@
 
 
     <!-- Buttons description-->
-    <string name="button_location_description">Select your Location</string>
-    <string name="button_vitality_description">Select your vitality</string>
-    <string name="button_time_description">Select the time at your disposal</string>
     <string name="done_task_description">Done !</string>
     <string name="done_location_description">Done !</string>
 
@@ -103,12 +101,11 @@
     <string name="location_place_picker">LOCATION (Optional)</string>
     <string name="location_enter_address_button_text">Pick a place or enter address</string>
     <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
+    <string name="location_set_text">Set your preferred location</string>
+    <string name="default_text">Default</string>
+    <string name="custom_text">Custom</string>
 
-    <!-- To delete -->
-    <string-array name="location_array">
-        <item>Everywhere</item>
-        <item>Home</item>
-        <item>Office</item>
-    </string-array>
+    <!-- Energy description -->
+    <string name="description_energy">Lightning representing one point of energy</string>
 
 </resources>

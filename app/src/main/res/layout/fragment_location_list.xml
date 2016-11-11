@@ -5,9 +5,48 @@
     android:layout_height="match_parent"
     tools:context="ch.epfl.sweng.project.location_setting.LocationSettingActivity">
 
-    <ListView
-        android:id="@+id/list_view_locations"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" >
 
+        <TextView
+            android:id="@+id/default_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:textColor="@android:color/background_dark"
+            android:textSize="20sp"
+            android:text="@string/default_text"
+            android:textStyle="normal"/>
+
+        <ListView
+            android:id="@+id/default_list_view_locations"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/default_location"/>
+
+        <TextView
+            android:id="@+id/custom_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:textColor="@android:color/background_dark"
+            android:textSize="20sp"
+            android:text="@string/custom_text"
+            android:textStyle="normal"
+            android:layout_below="@+id/default_list_view_locations"/>
+
+        <ListView
+            android:id="@+id/list_view_locations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/custom_location"/>
+
+    </RelativeLayout>
 </FrameLayout>

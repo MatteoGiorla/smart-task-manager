@@ -6,14 +6,17 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 
-
-public class LocalDataExchanger implements DataExchanger {
+/**
+ * Local proxy that behave as firebase but does not require
+ * any internet connection.
+ * Mostly use to mock firebase in order to run tests faster.
+ */
+public class LocalTaskHelper implements TaskHelper {
 
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
-    private User mUser;
 
-    public LocalDataExchanger(TaskListAdapter adapter, ArrayList<Task> taskList) {
+    public LocalTaskHelper(TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
     }
@@ -21,12 +24,6 @@ public class LocalDataExchanger implements DataExchanger {
     @Override
     public void retrieveAllData(User user) {
         //Nothing to retrieve when doing tests
-    }
-
-    @Override
-    public User retrieveUserInformation() {
-        mUser = new User(User.DEFAULT_EMAIL);
-        return mUser;
     }
 
     @Override

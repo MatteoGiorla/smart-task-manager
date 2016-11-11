@@ -1,8 +1,6 @@
 package ch.epfl.sweng.project;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -35,6 +33,10 @@ public class EditTaskActivity extends TaskActivity {
         //Get the task to be edited
         mTaskToBeEdited = taskList.get(mIndexTaskToBeEdited);
 
+        date = mTaskToBeEdited.getDueDate();
+        energy = mTaskToBeEdited.getEnergy();
+        duration = mTaskToBeEdited.getDuration();
+
         //Populate the layout activity_task
         populateLayout();
     }
@@ -48,15 +50,14 @@ public class EditTaskActivity extends TaskActivity {
     @Override
     boolean titleIsNotUnique(String title) {
         boolean result = false;
-        for (int i = 0; i < taskList.size(); i++) {
-            if (taskList.get(i).getName().equals(title) && i != mIndexTaskToBeEdited) {
+        for (Task task : taskList) {
+            if (task.getName().equals(title) && task.getName() != mTaskToBeEdited.getName()) {
                 result = true;
             }
         }
         return result;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
         mTaskToBeEdited.setName(title);
