@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
@@ -76,7 +77,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 Calendar c = Calendar.getInstance();
 
                 int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
-                remainingDays.setText(Integer.toString(days));
+                remainingDays.setText(String.format(Locale.UK, "%d", days));
 
                 if (days < 10)
                     remainingDays.setTextColor(Color.RED);

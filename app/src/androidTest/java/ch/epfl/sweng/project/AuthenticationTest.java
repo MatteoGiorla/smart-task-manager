@@ -71,11 +71,6 @@ public class AuthenticationTest {
         untilTimeout = 20000;
     }
 
-    //@Test
-    public void ApriorRemoveAccount(){
-        removeAccount();
-        mUiDevice.pressHome();
-    }
 
     @Test
     public void authenticationFacebookCancelsIfInterrupted(){
@@ -87,10 +82,10 @@ public class AuthenticationTest {
 
     }
 
-   // @Test
+    @Test
     public void authenticationGoogleFailsIfInterrupted() throws java.lang.InterruptedException {
         onView(withId(R.id.google_sign_in_button)).perform(click());
-        Thread.sleep(10000);
+        Thread.sleep(untilTimeout);
         mUiDevice.pressBack();
         onView(withText(R.string.error_authentication_failed))
                 .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -120,34 +115,6 @@ public class AuthenticationTest {
         }
     }
 
-
-    /**
-     * perform user like actions on the phone to authenticate
-     * oneself into a google account
-     */
-    //@Test
-    public void googleLoginWorks() {
-        onView(withId(R.id.google_sign_in_button)).perform(click());
-        try{
-            Thread.sleep(untilTimeout);
-            associateNewGoogleAccount();
-        }catch(java.lang.InterruptedException i){
-            fail(i.getMessage());
-        }catch(UiObjectNotFoundException u){
-
-        }
-
-        checkIfActivity(R.id.add_task_button);
-        mUiDevice.pressBack();
-        mUiDevice.pressBack();
-
-    }
-
-    //@Test
-    public void googleRemoveAccount(){
-        removeAccount();
-    }
-
     /**
      * perform user like actions on the phone to authenticate
      * oneself into a google account with a email non present
@@ -171,11 +138,6 @@ public class AuthenticationTest {
         checkIfActivity(R.id.add_location_button);
         mUiDevice.pressBack();
         mUiDevice.pressBack();
-    }
-
-    //@Test
-    public void removingPreviousAccount(){
-        removeAccount();
     }
 
     /**

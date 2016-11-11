@@ -107,5 +107,6 @@
 
     <!-- Energy description -->
     <string name="description_energy">Lightning representing one point of energy</string>
+    <string name="description_remaining_days">represent the remaining days</string>
 
 </resources>
