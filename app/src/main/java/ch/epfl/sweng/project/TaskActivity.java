@@ -90,8 +90,8 @@ public abstract class TaskActivity extends AppCompatActivity {
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
-        ArrayAdapter<StateDuration> spinnerDuration = new ArrayAdapter<>(this,
-            android.R.layout.simple_spinner_dropdown_item, MainActivity.getStateDurationTable());
+        ArrayAdapter<String> spinnerDuration = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_dropdown_item, MainActivity.getDurationTable());
 
         mDuration.setAdapter(spinnerDuration);
 
@@ -196,7 +196,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
-                duration = ((StateDuration)mDuration.getSelectedItem()).getDuration();
+                duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);

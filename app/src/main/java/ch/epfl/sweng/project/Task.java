@@ -60,7 +60,7 @@ public class Task implements Parcelable {
     /**
      * Enum representing the values of energy needed.
      */
-    enum Energy {LOW, NORMAL, HIGH}
+    public enum Energy {LOW, NORMAL, HIGH}
 
 
     /**
