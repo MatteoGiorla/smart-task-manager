@@ -15,9 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.EditTaskActivity;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.StateDuration;
-import ch.epfl.sweng.project.StateEnergy;
 import ch.epfl.sweng.project.Task;
 
 import static ch.epfl.sweng.project.EditTaskActivity.RETURNED_EDITED_TASK;
@@ -187,12 +186,12 @@ public class TaskInformationActivity extends AppCompatActivity {
     private void createInformationItemList() {
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
                 taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
-        String duration_text = new StateDuration(taskToBeDisplayed.getDurationInMinutes(), getApplicationContext()).toString();
+        String duration_text = MainActivity.DURATION_MAP.get((int)taskToBeDisplayed.getDurationInMinutes());
         informationItemsList.add(new InformationItem(getString(R.string.duration_field),
                 String.valueOf(duration_text), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
                 taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
-        String energy_text = new StateEnergy(taskToBeDisplayed.getEnergy(), getApplicationContext()).toString();
+        String energy_text = MainActivity.ENERGY_MAP.get(taskToBeDisplayed.getEnergy().ordinal());
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 energy_text, R.drawable.thunder_36dp));
         informationItemsList.add(new InformationItem(getString(R

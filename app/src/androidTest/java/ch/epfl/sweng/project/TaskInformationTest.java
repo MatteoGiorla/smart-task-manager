@@ -102,7 +102,7 @@ public class TaskInformationTest extends SuperTest {
 
     @Test
     public void testDurationIsDisplayed() {
-        String duration_text = new StateDuration(task.getDurationInMinutes(), getApplicationContext()).toString();
+        String duration_text = MainActivity.DURATION_MAP.get((int)task.getDurationInMinutes());
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
                 .atPosition(1)
@@ -111,7 +111,7 @@ public class TaskInformationTest extends SuperTest {
 
     @Test
     public void testEnergyIsDisplayed() {
-        String energy_text = new StateEnergy(task.getEnergy(), getApplicationContext()).toString();
+        String energy_text = MainActivity.ENERGY_MAP.get(task.getEnergy().ordinal());
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
                 .atPosition(3)
