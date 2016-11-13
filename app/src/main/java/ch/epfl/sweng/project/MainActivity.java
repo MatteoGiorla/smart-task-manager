@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -160,8 +161,14 @@ public final class MainActivity extends AppCompatActivity {
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
         Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
 
+        String[] locationListForAdapter = getLocationTable();
+        for(int i = 0; i < locationListForAdapter.length; i++){
+            if(locationListForAdapter[i].equals(getString(R.string.everywhere_location))){
+                locationListForAdapter[i] = getString(R.string.elsewhere_location);
+            }
+        }
         CustomSpinnerAdapter<String> locationAdapter = new CustomSpinnerAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getLocationTable());
+                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
         CustomSpinnerAdapter<StateDuration> durationAdapter = new CustomSpinnerAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStateDurationTable());
@@ -195,7 +202,11 @@ public final class MainActivity extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userLocation = locationAdapter.getItem(position);
+                if(locationAdapter.getItem(position).equals(getString(R.string.elsewhere_location))){
+                    userLocation = getString(R.string.everywhere_location);
+                } else {
+                    userLocation = locationAdapter.getItem(position);
+                }
             }
 
             @Override
