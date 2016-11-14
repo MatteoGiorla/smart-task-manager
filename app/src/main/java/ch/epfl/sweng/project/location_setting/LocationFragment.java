@@ -191,7 +191,7 @@ public class LocationFragment extends Fragment {
 
         //if(selectedId != 0 && selectedId != 1) { //prevent default locations from edit or delete
             MenuInflater menuInflater = getActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.floating_context_menu, menu);
+            menuInflater.inflate(R.menu.floating_location_menu, menu);
         //}
 
     }
