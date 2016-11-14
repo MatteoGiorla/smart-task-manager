@@ -4,14 +4,14 @@
     <!-- Menu Used after a long click on a Task in the Main Screen -->
 
     <item
-        android:id="@+id/floating_done"
+        android:id="@+id/floating_task_done"
         android:title="@string/flt_ctx_menu_done" />
 
     <item
-        android:id="@+id/floating_edit"
+        android:id="@+id/floating_task_edit"
         android:title="@string/flt_ctx_menu_edit" />
 
     <item
-        android:id="@+id/floating_delete"
+        android:id="@+id/floating_task_delete"
         android:title="@string/flt_ctx_menu_delete" />
 </menu>

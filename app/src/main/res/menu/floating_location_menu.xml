@@ -5,10 +5,10 @@
 
 
     <item
-        android:id="@+id/floating_edit"
+        android:id="@+id/floating_location_edit"
         android:title="@string/flt_ctx_menu_edit" />
 
     <item
-        android:id="@+id/floating_delete"
+        android:id="@+id/floating_location_delete"
         android:title="@string/flt_ctx_menu_delete" />
 </menu>

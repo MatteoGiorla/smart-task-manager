@@ -209,10 +209,10 @@ public class LocationFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.floating_delete:
+            case R.id.floating_location_delete:
                 removeLocation(itemInfo);
                 return true;
-            case R.id.floating_edit:
+            case R.id.floating_location_edit:
                 startEditLocationActivity(itemInfo);
                 return true;
             default:
