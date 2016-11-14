@@ -150,13 +150,13 @@ public class TaskFragment extends Fragment {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.floating_delete:
+            case R.id.floating_task_delete:
                 removeTask(itemInfo, false);
                 return true;
-            case R.id.floating_edit:
+            case R.id.floating_task_edit:
                 startEditTaskActivity(itemInfo);
                 return true;
-            case R.id.floating_done:
+            case R.id.floating_task_done:
                 removeTask(itemInfo, true);
             default:
                 return super.onContextItemSelected(item);
