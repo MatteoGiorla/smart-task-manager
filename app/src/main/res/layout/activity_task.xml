@@ -191,17 +191,25 @@
                 android:layout_weight="1.14"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:text="@string/fractionTitle"
+                android:text="@string/startDurationTitle"
                 android:textStyle="bold" />
             <Spinner
-                android:id="@+id/fractionSpinner"
+                android:id="@+id/startDurationSpinner"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:gravity="end"
                 android:spinnerMode="dialog" />
+
         </LinearLayout>
+
+        <TextView
+            android:text="@string/start_duration_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/startDurationDescription"
+            android:layout_weight="1.17" />
 
         <View
             android:layout_width="match_parent"
