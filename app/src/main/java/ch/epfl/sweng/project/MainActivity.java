@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -17,16 +17,19 @@ import android.widget.Spinner;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.data.UserHelper;
-import ch.epfl.sweng.project.data.UserProvider;
 
 
 /**
@@ -40,6 +43,9 @@ public final class MainActivity extends AppCompatActivity {
     private TaskFragment fragment;
     private Context mContext;
     private static User currentUser;
+    private Bundle savedInstanceState;
+    private SynchronizedQueries synchronizedQueries;
+    private DatabaseReference userRef;
 
     // Will be used later on
     private int userEnergy;
@@ -65,36 +71,34 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.savedInstanceState = savedInstanceState;
+
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
 
-        //Define the currentUser
-        UserHelper userProvider = new UserProvider().getUserProvider();
-        currentUser = userProvider.retrieveUserInformation();
-
-        mContext = getApplicationContext();
-
-        createUtilityMaps();
-
-        //Add the user to TaskFragment
-        fragment = new TaskFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(USER_KEY, currentUser);
-        fragment.setArguments(bundle);
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.tasks_container, fragment)
-                    .commit();
+        String mail;
+        try {
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
         }
+        //Create an instance of the current user
+        currentUser = new User(mail);
+        //Get reference of the database
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        //Get reference of the user
+        userRef = mDatabase.child("users")
+                .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail()))
+                .child("listLocations").getRef();
 
-        //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
-        userLocation = getResources().getString(R.string.everywhere_location);
-        userTimeAtDisposal = 60; //1 hour
-        initializeAdapters();
+        //This class allows us to get all the user's data before continuing executing the app
+        synchronizedQueries = new SynchronizedQueries(userRef);
+        final com.google.android.gms.tasks
+                .Task<Map<DatabaseReference, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+        //Listener that listen when communications with firebase end
+        readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
     }
 
     /**
@@ -126,6 +130,12 @@ public final class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        synchronizedQueries.stop();
     }
 
     /**
@@ -214,7 +224,7 @@ public final class MainActivity extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(locationAdapter.getItem(position).equals(getString(R.string.elsewhere_location))){
+                if(getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))){
                     userLocation = getString(R.string.everywhere_location);
                 } else {
                     userLocation = locationAdapter.getItem(position);
@@ -352,5 +362,59 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getDurationTable() {
         return DURATION_MAP.values().toArray(new String[DURATION_MAP.values().size()]);
+    }
+
+    /**
+     * OnCompleteListener that execute the code after that the user's data are recovered.
+     */
+    private class AllOnCompleteListener implements OnCompleteListener<Map<DatabaseReference, DataSnapshot>> {
+        @Override
+        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<DatabaseReference, DataSnapshot>> task) {
+            if (task.isSuccessful()) {
+                final Map<DatabaseReference, DataSnapshot> result = task.getResult();
+                List<Location> listLocations = new ArrayList<>();
+                //Construct each user's location
+                for (DataSnapshot data : result.get(userRef).getChildren()) {
+                    String name = (String) data.child("name").getValue();
+                    Double latitude = data.child("latitude").getValue(Double.class);
+                    Double longitude = data.child("longitude").getValue(Double.class);
+                    //Create location
+                    Location location = new Location(name, latitude, longitude);
+                    //Add the location to the list
+                    listLocations.add(location);
+                }
+                //Set the list with the user's location list
+                currentUser.setListLocations(listLocations);
+
+                mContext = getApplicationContext();
+
+                createUtilityMaps();
+
+                //Add the user to TaskFragment
+                fragment = new TaskFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(USER_KEY, currentUser);
+                fragment.setArguments(bundle);
+
+                if (savedInstanceState == null) {
+                    getFragmentManager().beginTransaction()
+                            .add(R.id.tasks_container, fragment)
+                            .commit();
+                }
+
+                //Default values
+                userEnergy = Task.Energy.NORMAL.ordinal();
+                userLocation = getResources().getString(R.string.everywhere_location);
+                userTimeAtDisposal = 60; //1 hour
+                initializeAdapters();
+
+            } else {
+                try {
+                    task.getException();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

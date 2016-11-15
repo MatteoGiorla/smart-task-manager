@@ -104,9 +104,7 @@ public class User implements Parcelable {
         if(list == null) {
             throw new IllegalArgumentException("Bad list of locationName given in the setter of user");
         }else{
-            if(list.size() == 2) {
-                this.listLocations = new ArrayList<>(list);
-            }
+            listLocations = list;
         }
     }
     /**
