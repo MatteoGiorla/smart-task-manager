@@ -22,7 +22,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
@@ -46,7 +45,8 @@ public class TaskInformationTest extends SuperTest {
         long defaultDuration = 5;
         String defaultEnergy = Task.Energy.NORMAL.toString();
         String contributor = User.DEFAULT_EMAIL;
-        task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor));
+        long fraction = 30;
+        task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor), fraction);
     }
 
     @Before

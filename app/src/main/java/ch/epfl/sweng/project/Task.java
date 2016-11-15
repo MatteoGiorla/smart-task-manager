@@ -310,7 +310,7 @@ public class Task implements Parcelable {
      *
      * @return Static Comparator
      */
-    static Comparator<Task> getStaticComparator() {
+    public static Comparator<Task> getStaticComparator() {
         return new StaticComparator();
     }
 
@@ -342,7 +342,7 @@ public class Task implements Parcelable {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
-                / (75 * delay + 100 * fraction.intValue());
+                / (75 * delay + fraction.intValue());
     }
 
     /**

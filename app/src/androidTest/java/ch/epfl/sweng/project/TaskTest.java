@@ -37,7 +37,8 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
+        long fraction = 30;
+        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, fraction);
     }
 
     /**
@@ -55,8 +56,9 @@ public class TaskTest {
         String authorTest = "A test author";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
+        long fraction = 30;
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, fraction);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
@@ -64,6 +66,7 @@ public class TaskTest {
         assertEquals(dueDateTest.getTime(), newTaskTest.getDueDate().getTime());
         assertEquals(durationTest, newTaskTest.getDurationInMinutes());
         assertEquals(energyTest, newTaskTest.getEnergy());
+        assertEquals(fraction, newTaskTest.getFraction());
     }
 
     /**
@@ -117,6 +120,14 @@ public class TaskTest {
         assertTrue(testTask.getListOfContributors().contains("New author"));
     }
 
+
+    @Test
+    public void testTaskSetFraction() {
+        long newFraction = 5;
+        testTask.setFraction(newFraction);
+        assertEquals(newFraction, testTask.getFraction());
+    }
+
     /**
      * Test that the setName setter throws an IllegalArgumentException
      * when its argument is null
@@ -150,12 +161,11 @@ public class TaskTest {
         testTask.setEnergyNeeded(null);
     }
 
-
     @SuppressWarnings("ConstantConditions")
     @Test
     public void testTaskConstructorException() {
         thrownException.expect(NullPointerException.class);
-        new Task(null, null, null, null, 0, null, null);
+        new Task(null, null, null, null, 0, null, null, 0);
     }
 
     /**
