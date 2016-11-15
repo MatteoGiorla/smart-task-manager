@@ -45,8 +45,8 @@ public class TaskInformationTest extends SuperTest {
         long defaultDuration = 5;
         String defaultEnergy = Task.Energy.NORMAL.toString();
         String contributor = User.DEFAULT_EMAIL;
-        long fraction = 30;
-        task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor), fraction);
+        long startDuration = 30;
+        task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor), startDuration);
     }
 
     @Before

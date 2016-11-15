@@ -69,7 +69,7 @@ public class EditTaskActivity extends TaskActivity {
         mTaskToBeEdited.setDurationInMinutes(duration);
         mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
-        mTaskToBeEdited.setFraction(fraction);
+        mTaskToBeEdited.setStartDuration(startDuration);
         intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
     }

@@ -55,7 +55,7 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
-    private Long fraction; //in minutes
+    private Long startDuration; //in minutes
 
     /**
      * Enum representing the values of energy needed.
@@ -76,7 +76,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long fraction) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long startDuration) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -85,7 +85,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
-        this.fraction = fraction;
+        this.startDuration = startDuration;
     }
 
     /**
@@ -101,10 +101,10 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Getter returning fraction
+     * Getter returning start duration
      */
-    public long getFraction() {
-        return fraction;
+    public long getStartDuration() {
+        return startDuration;
     }
 
     /**
@@ -136,12 +136,12 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Setter to modify fraction
+     * Setter to modify start duration
      *
-     * @param newFraction the new fraction
+     * @param newStartDuration the new start duration
      */
-    public void setFraction(Long newFraction) {
-        fraction = newFraction;
+    public void setStartDuration(Long newStartDuration) {
+        startDuration = newStartDuration;
     }
 
     /**
@@ -301,7 +301,7 @@ public class Task implements Parcelable {
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
-        dest.writeLong(fraction);
+        dest.writeLong(startDuration);
 
     }
 
@@ -341,7 +341,7 @@ public class Task implements Parcelable {
     private int computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
-        double number_of_fractions = Math.ceil(durationInMinutes.intValue()/fraction.intValue());
+        double number_of_fractions = Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
                 / (75 * delay + 100 * (int) number_of_fractions);
     }

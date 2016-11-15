@@ -37,8 +37,8 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        long fraction = 30;
-        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, fraction);
+        long startDuration = 30;
+        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, startDuration);
     }
 
     /**
@@ -56,9 +56,9 @@ public class TaskTest {
         String authorTest = "A test author";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
-        long fraction = 30;
+        long startDuration= 30;
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, fraction);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, startDuration);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
@@ -66,7 +66,7 @@ public class TaskTest {
         assertEquals(dueDateTest.getTime(), newTaskTest.getDueDate().getTime());
         assertEquals(durationTest, newTaskTest.getDurationInMinutes());
         assertEquals(energyTest, newTaskTest.getEnergy());
-        assertEquals(fraction, newTaskTest.getFraction());
+        assertEquals(startDuration, newTaskTest.getStartDuration());
     }
 
     /**
@@ -122,10 +122,10 @@ public class TaskTest {
 
 
     @Test
-    public void testTaskSetFraction() {
-        long newFraction = 5;
-        testTask.setFraction(newFraction);
-        assertEquals(newFraction, testTask.getFraction());
+    public void testTaskSetStartDuration() {
+        long newStartDuration = 5;
+        testTask.setStartDuration(newStartDuration);
+        assertEquals(newStartDuration, testTask.getStartDuration());
     }
 
     /**

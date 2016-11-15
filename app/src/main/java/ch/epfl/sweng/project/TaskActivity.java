@@ -45,11 +45,11 @@ public abstract class TaskActivity extends AppCompatActivity {
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
-    long fraction;
+    long startDuration;
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
-    private Spinner mFraction;
+    private Spinner mStartDuration;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     static Date date;
@@ -85,7 +85,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
-        mFraction = (Spinner) findViewById(R.id.fractionSpinner);
+        mStartDuration = (Spinner) findViewById(R.id.startDurationSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
@@ -103,10 +103,10 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation.setAdapter(spinnerLocationAdapter);
 
-        ArrayAdapter<String> spinnerFractionAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, MainActivity.getFractionTable());
+        ArrayAdapter<String> spinnerStartDurationAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, MainActivity.getStartDurationTable());
 
-        mFraction.setAdapter(spinnerFractionAdapter);
+        mStartDuration.setAdapter(spinnerStartDurationAdapter);
     }
 
     /**
@@ -202,7 +202,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
-                fraction = MainActivity.REVERSE_FRACTIONS.get(mFraction.getSelectedItem().toString());
+                startDuration = MainActivity.REVERSE_START_DURATION.get(mStartDuration.getSelectedItem().toString());
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);

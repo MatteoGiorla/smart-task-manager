@@ -59,7 +59,7 @@
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
     <string name="contributors_field">Contributor</string>
-    <string name="fraction_field">Minimal time to work on the task</string>
+    <string name="start_duration_field">Minimal time needed to start working on the task</string>
 
     <!-- Fields titles of new/edit task activity -->
     <string name="locationTitle">LOCATION</string>
@@ -69,7 +69,7 @@
     <string name="enter_due_date_hint">Enter due date</string>
     <string name="dueDateTitle">DUE DATE</string>
     <string name="titleTitle">TITLE</string>
-    <string name="fractionTitle">MINIMAL TIME TO WORK ON THE APP</string>
+    <string name="startDurationTitle">START DURATION</string>
 
     <string name="title_activity_maps">Map</string>
 
