@@ -8,7 +8,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -19,15 +19,15 @@ import java.util.Map;
  */
 class SynchronizedQueries {
 
-    private final DatabaseReference reference;
-    private final HashMap<DatabaseReference, DataSnapshot> refsToSnaps = new HashMap<>();
+    private final Query reference;
+    private final HashMap<Query, DataSnapshot> refsToSnaps = new HashMap<>();
     private ValueEventListener listener;
 
-    SynchronizedQueries(final DatabaseReference reference) {
+    SynchronizedQueries(final Query reference) {
         this.reference = reference;
     }
 
-    public Task<Map<DatabaseReference, DataSnapshot>> start() {
+    public Task<Map<Query, DataSnapshot>> start() {
         // Create a Task<DataSnapshot> to trigger in response to each database listener.
         final Task<DataSnapshot> task;
         final TaskCompletionSource<DataSnapshot> source = new TaskCompletionSource<>();
@@ -39,9 +39,9 @@ class SynchronizedQueries {
         // Return a single Task that triggers when all queries are complete.  It contains
         // a map of all original DatabaseReferences originally given here to their resulting
         // DataSnapshot.
-        return Tasks.whenAll(task).continueWith(new Continuation<Void, Map<DatabaseReference, DataSnapshot>>() {
+        return Tasks.whenAll(task).continueWith(new Continuation<Void, Map<Query, DataSnapshot>>() {
             @Override
-            public Map<DatabaseReference, DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
+            public Map<Query, DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
                 task.getResult();
                 return new HashMap<>(refsToSnaps);
             }
@@ -59,10 +59,10 @@ class SynchronizedQueries {
      * to the current user's reference.
      */
     private class MyValueEventListener implements ValueEventListener {
-        private final DatabaseReference ref;
+        private final Query ref;
         private final TaskCompletionSource<DataSnapshot> taskSource;
 
-        MyValueEventListener(DatabaseReference ref, TaskCompletionSource<DataSnapshot> taskSource) {
+        MyValueEventListener(Query ref, TaskCompletionSource<DataSnapshot> taskSource) {
             this.ref = ref;
             this.taskSource = taskSource;
         }

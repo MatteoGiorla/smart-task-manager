@@ -22,14 +22,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.UserHelper;
+import ch.epfl.sweng.project.data.UserProvider;
 
 
 /**
@@ -45,7 +47,7 @@ public final class MainActivity extends AppCompatActivity {
     private static User currentUser;
     private Bundle savedInstanceState;
     private SynchronizedQueries synchronizedQueries;
-    private DatabaseReference userRef;
+    private Query userRef;
 
     // Will be used later on
     private int userEnergy;
@@ -84,6 +86,7 @@ public final class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
+
         //Create an instance of the current user
         currentUser = new User(mail);
         //Get reference of the database
@@ -96,7 +99,7 @@ public final class MainActivity extends AppCompatActivity {
         //This class allows us to get all the user's data before continuing executing the app
         synchronizedQueries = new SynchronizedQueries(userRef);
         final com.google.android.gms.tasks
-                .Task<Map<DatabaseReference, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+                .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
         //Listener that listen when communications with firebase end
         readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
     }
@@ -367,24 +370,16 @@ public final class MainActivity extends AppCompatActivity {
     /**
      * OnCompleteListener that execute the code after that the user's data are recovered.
      */
-    private class AllOnCompleteListener implements OnCompleteListener<Map<DatabaseReference, DataSnapshot>> {
+    private class AllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
         @Override
-        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<DatabaseReference, DataSnapshot>> task) {
+        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
             if (task.isSuccessful()) {
-                final Map<DatabaseReference, DataSnapshot> result = task.getResult();
-                List<Location> listLocations = new ArrayList<>();
-                //Construct each user's location
-                for (DataSnapshot data : result.get(userRef).getChildren()) {
-                    String name = (String) data.child("name").getValue();
-                    Double latitude = data.child("latitude").getValue(Double.class);
-                    Double longitude = data.child("longitude").getValue(Double.class);
-                    //Create location
-                    Location location = new Location(name, latitude, longitude);
-                    //Add the location to the list
-                    listLocations.add(location);
-                }
-                //Set the list with the user's location list
-                currentUser.setListLocations(listLocations);
+                final Map<Query, DataSnapshot> result = task.getResult();
+
+                //Define the currentUser
+                UserHelper userProvider = new UserProvider().getUserProvider();
+                currentUser = userProvider
+                        .retrieveUserInformation(currentUser, result.get(userRef).getChildren());
 
                 mContext = getApplicationContext();
 

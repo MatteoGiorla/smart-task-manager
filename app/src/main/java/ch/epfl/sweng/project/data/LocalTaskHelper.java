@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project.data;
 
+import com.google.firebase.database.DataSnapshot;
+
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Task;
@@ -22,7 +24,7 @@ public class LocalTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user) {
+    public void retrieveAllData(User user, Iterable<DataSnapshot> snapshots) {
         //Nothing to retrieve when doing tests
     }
 
