@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -352,5 +351,15 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getDurationTable() {
         return DURATION_MAP.values().toArray(new String[DURATION_MAP.values().size()]);
+    }
+
+    /**
+     * Construct the table from which the user can set the minimal time
+     * REQUIRED before working on the task.
+     *
+     * @return String[] the array containing the fractions.
+     */
+    public static String[] getFractionTable() {
+        return FRACTIONS_MAP.values().toArray(new String[FRACTIONS_MAP.values().size()]);
     }
 }

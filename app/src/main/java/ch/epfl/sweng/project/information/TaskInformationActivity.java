@@ -197,6 +197,8 @@ public class TaskInformationActivity extends AppCompatActivity {
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
+        informationItemsList.add(new InformationItem(getString(R.string.fraction_field),
+                String.valueOf(taskToBeDisplayed.getFraction()), R.drawable.minutes_needed_36dp));
 
 
         for(String contributor : taskToBeDisplayed.getListOfContributors()) {

@@ -45,12 +45,13 @@ public abstract class TaskActivity extends AppCompatActivity {
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
+    long fraction;
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
+    private Spinner mFraction;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
-    private static Button mButton;
     static Date date;
     private static final DateFormat dateFormat = DateFormat.getDateInstance();
 
@@ -82,26 +83,30 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         doneEditButton.setOnClickListener(new OnDoneButtonClickListener());
 
-        mButton = (Button)findViewById(R.id.pick_date);
-
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
+        mFraction = (Spinner) findViewById(R.id.fractionSpinner);
 
         /*
          * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
          */
-        ArrayAdapter<String> spinnerDuration = new ArrayAdapter<>(this,
+        ArrayAdapter<String> spinnerDurationAdapter = new ArrayAdapter<>(this,
             android.R.layout.simple_spinner_dropdown_item, MainActivity.getDurationTable());
 
-        mDuration.setAdapter(spinnerDuration);
+        mDuration.setAdapter(spinnerDurationAdapter);
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
         radioGroup.check(R.id.energy_normal);
 
-        ArrayAdapter<String> spinnerLocation = new ArrayAdapter<>(this,
+        ArrayAdapter<String> spinnerLocationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
-        mLocation.setAdapter(spinnerLocation);
+        mLocation.setAdapter(spinnerLocationAdapter);
+
+        ArrayAdapter<String> spinnerFractionAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, MainActivity.getFractionTable());
+
+        mFraction.setAdapter(spinnerFractionAdapter);
     }
 
     /**
@@ -197,6 +202,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
+                fraction = MainActivity.REVERSE_FRACTIONS.get(mFraction.getSelectedItem().toString());
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
@@ -311,6 +317,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
             date = cal.getTime();
+            final Button mButton = (Button) getActivity().findViewById(R.id.pick_date);
             mButton.setText(dateFormat.format(date.getTime()));
 
         }

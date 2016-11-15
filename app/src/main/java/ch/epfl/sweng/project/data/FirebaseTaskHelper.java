@@ -65,7 +65,9 @@ public class FirebaseTaskHelper implements TaskHelper {
                         Long date = (Long) task.child("dueDate").child("time").getValue();
                         Date dueDate = new Date(date);
 
-                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                        Long fraction = (Long) task.child("fraction").getValue();
+
+                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, fraction);
                         mTaskList.add(newTask);
                     }
                 }

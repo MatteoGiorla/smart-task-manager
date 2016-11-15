@@ -51,7 +51,7 @@ public class EditTaskActivity extends TaskActivity {
     boolean titleIsNotUnique(String title) {
         boolean result = false;
         for (Task task : taskList) {
-            if (task.getName().equals(title) && task.getName() != mTaskToBeEdited.getName()) {
+            if (task.getName().equals(title) && !task.getName().equals(mTaskToBeEdited.getName())) {
                 result = true;
             }
         }
@@ -66,6 +66,7 @@ public class EditTaskActivity extends TaskActivity {
         mTaskToBeEdited.setDurationInMinutes(duration);
         mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
+        mTaskToBeEdited.setFraction(fraction);
         intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
     }
