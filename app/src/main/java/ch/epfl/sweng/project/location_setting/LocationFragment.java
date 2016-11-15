@@ -306,7 +306,8 @@ public class LocationFragment extends Fragment {
      */
     public List<Location> getLocationList() {
         //return new ArrayList<>(locationList);
-        ArrayList<Location> tmp = defaultLocationList;
+        ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
+        tmp.addAll(locationList);
         return tmp;
     }
 }
