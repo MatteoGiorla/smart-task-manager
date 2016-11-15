@@ -341,8 +341,9 @@ public class Task implements Parcelable {
     private int computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
+        double number_of_fractions = Math.ceil(durationInMinutes.intValue()/fraction.intValue());
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
-                / (75 * delay + fraction.intValue());
+                / (75 * delay + 100 * (int) number_of_fractions);
     }
 
     /**
