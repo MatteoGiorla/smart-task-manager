@@ -55,7 +55,7 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
-    private final int fraction;
+    private Long startDuration; //in minutes
 
     /**
      * Enum representing the values of energy needed.
@@ -76,7 +76,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long startDuration) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -85,7 +85,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
-        fraction = 1;
+        this.startDuration = startDuration;
     }
 
     /**
@@ -97,7 +97,14 @@ public class Task implements Parcelable {
     private Task(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
-                in.createStringArrayList());
+                in.createStringArrayList(), in.readLong());
+    }
+
+    /**
+     * Getter returning start duration
+     */
+    public long getStartDuration() {
+        return startDuration;
     }
 
     /**
@@ -126,6 +133,15 @@ public class Task implements Parcelable {
      */
     public long getDurationInMinutes() {
         return durationInMinutes;
+    }
+
+    /**
+     * Setter to modify start duration
+     *
+     * @param newStartDuration the new start duration
+     */
+    public void setStartDuration(Long newStartDuration) {
+        startDuration = newStartDuration;
     }
 
     /**
@@ -285,6 +301,7 @@ public class Task implements Parcelable {
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
+        dest.writeLong(startDuration);
 
     }
 
@@ -293,7 +310,7 @@ public class Task implements Parcelable {
      *
      * @return Static Comparator
      */
-    static Comparator<Task> getStaticComparator() {
+    public static Comparator<Task> getStaticComparator() {
         return new StaticComparator();
     }
 
@@ -324,8 +341,9 @@ public class Task implements Parcelable {
     private int computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
+        double number_of_fractions = Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
-                / (75 * delay + 100 * fraction);
+                / (75 * delay + 100 * (int) number_of_fractions);
     }
 
     /**

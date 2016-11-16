@@ -48,8 +48,8 @@ public final class MainActivity extends AppCompatActivity {
 
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
-    public static Map<Integer, String> FRACTIONS_MAP;
-    public static Map<String, Integer> REVERSE_FRACTIONS;
+    public static Map<Integer, String> START_DURATION_MAP;
+    public static Map<String, Integer> REVERSE_START_DURATION;
     public static Map<Integer, String> ENERGY_MAP;
     public static Map<String, Integer> REVERSE_ENERGY;
 
@@ -186,7 +186,7 @@ public final class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
         CustomSpinnerAdapter<String> durationAdapter = new CustomSpinnerAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getDurationAtDisposalTable());
+                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         CustomSpinnerAdapter<String> energyAdapter = new CustomSpinnerAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
@@ -280,25 +280,25 @@ public final class MainActivity extends AppCompatActivity {
         REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration1m), 9600);
         REVERSE_DURATION = Collections.unmodifiableMap(REVERSE_DURATION);
 
-        FRACTIONS_MAP = new LinkedHashMap<>();
-        FRACTIONS_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
-        FRACTIONS_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
-        FRACTIONS_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        FRACTIONS_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
-        FRACTIONS_MAP.put(120, mContext.getResources().getString(R.string.duration2h));
-        FRACTIONS_MAP.put(240, mContext.getResources().getString(R.string.duration4h));
-        FRACTIONS_MAP.put(480, mContext.getResources().getString(R.string.duration1d));
-        FRACTIONS_MAP = Collections.unmodifiableMap(FRACTIONS_MAP);
+        START_DURATION_MAP = new LinkedHashMap<>();
+        START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
+        START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
+        START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
+        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2h));
+        START_DURATION_MAP.put(240, mContext.getResources().getString(R.string.duration4h));
+        START_DURATION_MAP.put(480, mContext.getResources().getString(R.string.duration1d));
+        START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
-        REVERSE_FRACTIONS = new LinkedHashMap<>();
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration5m), 5);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration15m), 15);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration1h), 60);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration2h), 120);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration4h), 240);
-        REVERSE_FRACTIONS.put(mContext.getResources().getString(R.string.duration1d), 480);
-        REVERSE_FRACTIONS = Collections.unmodifiableMap(REVERSE_FRACTIONS);
+        REVERSE_START_DURATION = new LinkedHashMap<>();
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2h), 120);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration4h), 240);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1d), 480);
+        REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();
         ENERGY_MAP.put(0, mContext.getResources().getString(R.string.low_energy));
@@ -324,18 +324,6 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Construct the table from which the user can set the time
-     * available to do a task.
-     * It is also used to know the time at disposal of the user
-     * in order to sort the list accordingly.
-     *
-     * @return String[] The array containing the durations.
-     */
-    public static String[] getDurationAtDisposalTable() {
-        return FRACTIONS_MAP.values().toArray(new String[FRACTIONS_MAP.values().size()]);
-    }
-
-    /**
      * Construct the table from which the user can set the energy
      * AVAILABLE to do a task.
      * It is also used to know the energy of the user
@@ -355,5 +343,15 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getDurationTable() {
         return DURATION_MAP.values().toArray(new String[DURATION_MAP.values().size()]);
+    }
+
+    /**
+     * Construct the table from which the user can set the minimal time
+     * REQUIRED before working on the task.
+     *
+     * @return String[] the array containing the start durations.
+     */
+    public static String[] getStartDurationTable() {
+        return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
     }
 }
