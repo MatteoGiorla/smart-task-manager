@@ -41,23 +41,9 @@ public abstract class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_location);
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
-        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-        try {
-            final Intent intent = intentBuilder.build(this);
-            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
-                }
-            });
 
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        }
+        // Place Picker
+        createPlacePicker(chooseLocationButton);
 
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
@@ -80,7 +66,6 @@ public abstract class LocationActivity extends AppCompatActivity {
         nameTextEdit.addTextChangedListener(new LocationTextWatcher());
 
         mToolbar.setNavigationOnClickListener(new LocationActivity.ReturnArrowListener());
-
 
         doneLocationButton.setOnClickListener(new OnDoneButtonClickListener() {
 
@@ -161,6 +146,26 @@ public abstract class LocationActivity extends AppCompatActivity {
         }
     }
 
+    private void createPlacePicker(Button chooseLocationButton) {
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+        try {
+            final Intent intent = intentBuilder.build(this);
+            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
+                }
+            });
+
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        }
+    }
+
     /**
      * Private class that implement TextWatcher.
      * This class is used to check on runtime if the inputs written by the user
@@ -213,3 +218,5 @@ public abstract class LocationActivity extends AppCompatActivity {
         }
     }
 }
+
+

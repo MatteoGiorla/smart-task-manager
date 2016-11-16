@@ -80,7 +80,68 @@ public class LoginActivity
 
         //initialize the preferences.
         prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+/*
+        // configure Google Sign In:
+        GoogleSignInOptions googleSignIn =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail() // to request the user email
+                        .build();
 
+        mGoogleClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
+                .build();*/
+        //configure Google Sign In:
+        configureGoogleSignIn();
+
+        // configure Firebase part:
+       /* mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };*/
+        configureFirebase();
+
+        // configure Facebook Sign In:
+        /*mFacebook = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mFacebook, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_canceled,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });*/
+        configureFacebookSignIn();
+    }
+
+    private void configureGoogleSignIn() {
         // configure Google Sign In:
         GoogleSignInOptions googleSignIn =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -92,8 +153,9 @@ public class LoginActivity
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
                 .build();
+    }
 
-        // configure Firebase part:
+    private void configureFirebase() {
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -109,8 +171,9 @@ public class LoginActivity
                 }
             }
         };
+    }
 
-        // configure Facebook Sign In:
+    private void configureFacebookSignIn() {
         mFacebook = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
         loginButton.setReadPermissions("email", "public_profile");
