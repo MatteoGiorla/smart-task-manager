@@ -252,9 +252,8 @@ public class LocationFragment extends Fragment {
         } else {
             locationList.set(indexEditedLocation, editedLocation);
             mLocationAdapter.notifyDataSetChanged();
-            Toast.makeText(getActivity().getApplicationContext(),
-                    editedLocation.getName() + " has been updated !",
-                    Toast.LENGTH_SHORT).show();
+            String toast = editedLocation.getName() + getString(R.string.info_updated);
+            Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -296,7 +295,7 @@ public class LocationFragment extends Fragment {
         mLocationAdapter.notifyDataSetChanged();
 
         Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE = locationName + R.string.info_deleted;
+        String TOAST_MESSAGE = locationName + getString(R.string.info_deleted);
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
     }

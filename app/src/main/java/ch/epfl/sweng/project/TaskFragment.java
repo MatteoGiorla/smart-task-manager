@@ -290,9 +290,9 @@ public class TaskFragment extends Fragment {
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE;
         if (isDone) {
-            TOAST_MESSAGE = taskName + R.string.info_done;
+            TOAST_MESSAGE = taskName + getString(R.string.info_done);
         } else {
-            TOAST_MESSAGE = taskName + R.string.info_deleted;
+            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
         }
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
