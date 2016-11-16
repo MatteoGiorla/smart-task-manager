@@ -39,6 +39,7 @@ class SynchronizedQueries {
         // Return a single Task that triggers when all queries are complete.  It contains
         // a map of all original DatabaseReferences originally given here to their resulting
         // DataSnapshot.
+        //So, it returns the task when all the DataSnapshot are loaded
         return Tasks.whenAll(task).continueWith(new Continuation<Void, Map<Query, DataSnapshot>>() {
             @Override
             public Map<Query, DataSnapshot> then(@NonNull Task<Void> task) throws Exception {
