@@ -105,10 +105,10 @@ public class EditTaskActivity extends TaskActivity {
         populateSpinner(locationSpinner, MainActivity.getLocationTable(),
                 mTaskToBeEdited.getLocationName());
 
-        Spinner minimalStartingTimeSpinner = (Spinner) findViewById(R.id.fractionSpinner);
-        Long minimalStartingTime = mTaskToBeEdited.getFraction();
-        populateSpinner(minimalStartingTimeSpinner, MainActivity.getFractionTable(),
-                MainActivity.FRACTIONS_MAP.get(minimalStartingTime.intValue()));
+        Spinner minimalStartingTimeSpinner = (Spinner) findViewById(R.id.startDurationSpinner);
+        Long minimalStartingTime = mTaskToBeEdited.getStartDuration();
+        populateSpinner(minimalStartingTimeSpinner, MainActivity.getStartDurationTable(),
+                MainActivity.START_DURATION_MAP.get(minimalStartingTime.intValue()));
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
 
