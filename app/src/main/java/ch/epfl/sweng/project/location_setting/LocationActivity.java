@@ -205,7 +205,7 @@ public abstract class LocationActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PLACE_PICKER) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toast = String.format("Place: %s", place.getName());
+                String toast = String.format(R.string.info_place_fixed + "%s", place.getName());
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
                 Toast.makeText(this, toast, Toast.LENGTH_LONG).show();

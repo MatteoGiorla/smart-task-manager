@@ -214,8 +214,7 @@ public class LoginActivity
                             if (task.getException().getMessage().contains("An account already " +
                                     "exists with the same email address but different sign-in " +
                                     "credentials.")) {
-                                Toast.makeText(LoginActivity.this, "You must use the same " +
-                                                "authentication service as before.",
+                                Toast.makeText(LoginActivity.this, R.string.warning_no_mult_account,
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
@@ -252,8 +251,7 @@ public class LoginActivity
                             if (task.getException().getMessage().contains("An account already " +
                                     "exists with the same email address but different sign-in " +
                                     "credentials.")) {
-                                Toast.makeText(LoginActivity.this, "You must use the same " +
-                                                "authentication service as before.",
+                                Toast.makeText(LoginActivity.this, R.string.warning_no_mult_account,
                                         Toast.LENGTH_LONG).show();
                                 LoginManager.getInstance().logOut();
                             } else {
@@ -277,7 +275,7 @@ public class LoginActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_SHORT).show();
     }
 
     /**

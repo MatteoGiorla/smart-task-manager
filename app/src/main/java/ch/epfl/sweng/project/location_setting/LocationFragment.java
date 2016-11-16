@@ -150,6 +150,7 @@ public class LocationFragment extends Fragment {
                     startActivityForResult(intent, editLocationRequestCode);
                 //} else {
                     //TODO : optionally display a toast "You can't edit or delete the default locations"
+
                 //}
             }
         });
@@ -164,6 +165,7 @@ public class LocationFragment extends Fragment {
                 startActivityForResult(intent, editLocationRequestCode);
             } else {
                 //TODO : optionally display a toast "You can't edit or delete the default locations"
+                //Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
             }
             }
         });
@@ -294,7 +296,7 @@ public class LocationFragment extends Fragment {
         mLocationAdapter.notifyDataSetChanged();
 
         Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE = locationName + " deleted";
+        String TOAST_MESSAGE = locationName + R.string.info_deleted;
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
     }
