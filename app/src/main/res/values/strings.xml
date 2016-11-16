@@ -116,12 +116,12 @@
     <string name="warning_google_serv_error">Google Play Services error.</string>
     <!-- LocationFragment -->
     <string name="info_deleted"> deleted</string>
-    <string name="info_cant_edit_delete">You can't edit or delete the default locations</string>
+    <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
     <!-- TaskFragment -->
     <string name="info_updated"> has been updated !</string>
     <string name="info_done"> is done</string>
     <!-- LocationActivity -->
     <string name="info_place_fixed">Place: </string>
     <!-- FirebaseTaskHelper -->
-    <string name="info_any_tasks">"You don't have any tasks !"</string>
+    <string name="info_any_tasks">"You don\'t have any tasks !"</string>
 </resources>
