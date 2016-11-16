@@ -146,6 +146,10 @@ public abstract class LocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creation of the Place Picker
+     * @param chooseLocationButton Button which "switch on" Place Picker
+     */
     private void createPlacePicker(Button chooseLocationButton) {
         PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
         try {
