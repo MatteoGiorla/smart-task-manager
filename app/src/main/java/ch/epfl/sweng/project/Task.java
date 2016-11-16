@@ -346,6 +346,10 @@ public class Task implements Parcelable {
                 / (75 * delay + 100 * (int) number_of_fractions);
     }
 
+    public int getStaticSortValue(){
+        return computeStaticSortValue();
+    }
+
     /**
      * Method returning a calendar for the specified Date.
      *
