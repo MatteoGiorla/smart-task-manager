@@ -78,7 +78,6 @@ public class TaskFragment extends Fragment {
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
-        sortTaskStatically();
     }
 
    /* @Override
@@ -234,6 +233,7 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
+        mTaskAdapter.sort(Task.getStaticComparator());
     }
 
     /**

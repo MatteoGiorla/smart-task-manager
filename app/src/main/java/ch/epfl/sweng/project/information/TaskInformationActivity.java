@@ -197,6 +197,9 @@ public class TaskInformationActivity extends AppCompatActivity {
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
                 taskToBeDisplayed.getDescription(), R.drawable.description_36dp));
+        String start_duration_text = MainActivity.START_DURATION_MAP.get((int)taskToBeDisplayed.getStartDuration());
+        informationItemsList.add(new InformationItem(getString(R.string.start_duration_field),
+                String.valueOf(start_duration_text), R.drawable.minutes_needed_36dp));
 
 
         for(String contributor : taskToBeDisplayed.getListOfContributors()) {
