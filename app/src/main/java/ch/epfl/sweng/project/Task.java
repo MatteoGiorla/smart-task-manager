@@ -167,7 +167,7 @@ public class Task implements Parcelable {
     /**
      * Getter returning a copy of the task's due date
      */
-    Date getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
@@ -194,7 +194,7 @@ public class Task implements Parcelable {
     /**
      * Getter returning the task's duration
      */
-    long getDuration() {
+    public long getDuration() {
         return durationInMinutes;
     }
 

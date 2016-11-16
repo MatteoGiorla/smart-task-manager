@@ -110,4 +110,11 @@
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 
+    <!-- Notification -->
+    <string name="notification_title_task">A task needs your attention</string>
+    <string name="notification_content_task">\'s due date is close !</string>
+
+    <!-- Toast Messages -->
+    <string name="empty_task_list">You don\'t have any tasks !</string>
+
 </resources>

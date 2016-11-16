@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -27,6 +26,7 @@ import java.util.Map;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserHelper;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.notification.TaskNotification;
 
 
 /**
@@ -123,6 +123,9 @@ public final class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.menu_item_notify: //TODO: To be removed
+                TaskNotification notificationBuilder = new TaskNotification(new ArrayList<>(fragment.getTaskList()), getApplicationContext());
+                notificationBuilder.scheduleNotification(notificationBuilder.buildNotification(fragment.getTaskList().get(0).getName()), 1, 0);
             default:
                 return super.onOptionsItemSelected(item);
         }
