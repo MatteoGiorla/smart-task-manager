@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,9 +65,8 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-            ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
-            ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
-            ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
+            TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
             View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
 
             if (titleView != null) {
@@ -75,31 +76,27 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
                 if(days > 1){
-                    String remaining_days_text = "";
                     remainingDays.setText(String.format(Locale.UK, "%d"+" remaining days", days));
                 } else if (days == 1) {
                     remainingDays.setText(String.format(Locale.UK, "%d"+" remaining day", days));
                 } else if (days == 0) {
                     remainingDays.setText("Due today !");
                 } else if (days == -1) {
-                    days = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" day late", days));
+                    int days_value_for_text = days * -1;
+                    remainingDays.setText(String.format(Locale.UK, "%d"+" day late", days_value_for_text));
                 } else if (days < 1) {
-                    days = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" days late", days));
+                    int days_value_for_text = days * -1;
+                    remainingDays.setText(String.format(Locale.UK, "%d"+" days late", days_value_for_text));
                 }
 
                 if (days < 10)
                     remainingDays.setTextColor(Color.RED);
             }
-            if (energyIconLow != null) {
-                Task.Energy e = taskInTheView.getEnergy();
-                if (e == Task.Energy.LOW) {
-                    energyIconNormal.setVisibility(View.INVISIBLE);
-                    energyIconHigh.setVisibility(View.INVISIBLE);
-                } else if (e == Task.Energy.NORMAL) {
-                    energyIconHigh.setVisibility(View.INVISIBLE);
-                }
+            if (taskLocation!= null) {
+                taskLocation.setText(taskInTheView.getLocationName());
+            }
+            if (taskEnergy != null) {
+                taskEnergy.setText(MainActivity.ENERGY_MAP.get(taskInTheView.getEnergy().ordinal()));
             }
             if (coloredIndicator != null) {
                 //int static_sort_value = taskInTheView.getStaticSortValue();

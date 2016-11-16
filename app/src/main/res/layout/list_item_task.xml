@@ -20,70 +20,69 @@
         android:id="@+id/list_entry_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:textColor="@color/black"
         android:textSize="@dimen/task_title_size"
         android:paddingTop="5dp"
         android:paddingBottom="@dimen/padding_between_tasks"
         android:textStyle="normal"/>
-    <!--
-        <TextView
-            android:id="@+id/list_entry_description"
-            android:layout_width="match_parent"
-            android:layout_height="11dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:paddingBottom="@dimen/padding_between_tasks"
-            android:textColor="@color/black"
-            android:textSize="@dimen/task_description_size" /> -->
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/list_remaining_days"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/green"
-                android:ellipsize="end"
-                android:contentDescription="@string/description_remaining_days"
-                android:paddingBottom="3dp"
-                android:textSize="@dimen/task_remaining_days_size"
-                android:layout_weight="0.78" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.78">
 
-            <ImageView
-                android:id="@+id/list_energy_low"
-                android:layout_width="28dp"
-                android:layout_height="29dp"
-                android:src="@drawable/vitality"
-                android:contentDescription="@string/description_energy"
-                android:tint="@color/yellow" />
+                <TextView
+                    android:id="@+id/list_remaining_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/green"
+                    android:ellipsize="end"
+                    android:contentDescription="@string/description_remaining_days"
+                    android:paddingBottom="3dp"
+                    android:textSize="@dimen/task_remaining_days_size"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/list_energy_normal"
-                android:layout_width="28dp"
-                android:layout_height="29dp"
-                android:contentDescription="@string/description_energy"
-                android:src="@drawable/vitality"
-                android:tint="@color/yellow" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.78">
 
-            <ImageView
-                android:id="@+id/list_energy_high"
-                android:layout_width="28dp"
-                android:layout_height="29dp"
-                android:contentDescription="@string/description_energy"
-                android:src="@drawable/vitality"
-                android:tint="@color/yellow" />
+                <TextView
+                    android:id="@+id/list_item_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:ellipsize="end"
+                    android:paddingBottom="3dp"
+                    android:textSize="@dimen/task_remaining_days_size"
+                    android:gravity="left"
+                    android:layout_weight="1" />
 
-            <View
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.45" />
+                <TextView
+                    android:id="@+id/list_item_energy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
+                    android:ellipsize="end"
+                    android:paddingBottom="3dp"
+                    android:textSize="@dimen/task_remaining_days_size"
+                    android:gravity="left"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
     <View
         android:id="@+id/list_colored_indicator"
