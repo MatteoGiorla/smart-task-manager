@@ -112,9 +112,13 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     urgency_percentage = (int)taskInTheView.getDuration()/(2*days);
                 }
                 System.out.println("urgence" + urgency_percentage);
-                int red = (255 * urgency_percentage) / 100;
-                int green = (255 * (100 - urgency_percentage)) / 100;
-                coloredIndicator.setBackgroundColor(Color.rgb(red, green, 0));
+                float[] hsv = new float[3];
+                hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
+                hsv[1] = 1;//Math.abs(urgency_percentage - 50)/50;
+                hsv[2] = 1;
+                //int red = (255 * urgency_percentage) / 100;
+                //int green = (255 * (100 - urgency_percentage)) / 100;
+                coloredIndicator.setBackgroundColor(Color.HSVToColor(hsv));
             }
         }
         return resultView;

@@ -33,7 +33,7 @@
 
     <!-- Maximum lengths -->
     <string name="max_length_title">30</string>
-    <string name="max_length_description">1000</string>
+    <string name="max_length_subtitle">1000</string>
 
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
