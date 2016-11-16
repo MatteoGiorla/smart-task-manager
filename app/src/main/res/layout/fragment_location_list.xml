@@ -20,7 +20,7 @@
             android:textColor="@android:color/background_dark"
             android:textSize="20sp"
             android:text="@string/default_text"
-            android:textStyle="normal"/>
+            android:textStyle="normal|italic"/>
 
         <ListView
             android:id="@+id/default_list_view_locations"
@@ -39,7 +39,7 @@
             android:textColor="@android:color/background_dark"
             android:textSize="20sp"
             android:text="@string/custom_text"
-            android:textStyle="normal"
+            android:textStyle="normal|italic"
             android:layout_below="@+id/default_list_view_locations"/>
 
         <ListView

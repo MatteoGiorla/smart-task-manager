@@ -70,6 +70,10 @@ public class LoginActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // hide the action bar
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().hide();
+
         // Initialize Facebook SDK:
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
