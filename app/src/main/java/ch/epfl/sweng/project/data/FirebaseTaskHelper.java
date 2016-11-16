@@ -65,7 +65,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             taskRef.setValue(task);
         }
         mTaskList.add(task);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.sort(Task.getStaticComparator());
     }
 
     @Override

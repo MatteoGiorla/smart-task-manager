@@ -293,7 +293,7 @@ public class Task implements Parcelable {
      *
      * @return Static Comparator
      */
-    static Comparator<Task> getStaticComparator() {
+    public static Comparator<Task> getStaticComparator() {
         return new StaticComparator();
     }
 
