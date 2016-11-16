@@ -89,8 +89,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                     remainingDays.setText(String.format(Locale.UK, "%d"+" days late", days_value_for_text));
                 }
 
-                if (days < 10)
+                if (days < 10 && days >= 1) {
+                    remainingDays.setTextColor(Color.rgb(255,140,0));
+                } else if (days < 1) {
                     remainingDays.setTextColor(Color.RED);
+                }
             }
             if (taskLocation!= null) {
                 taskLocation.setText(taskInTheView.getLocationName());
@@ -106,7 +109,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 if(days <= 0){
                     urgency_percentage = 100;
                 } else {
-                    urgency_percentage = (int)taskInTheView.getDuration()/(60*days);
+                    urgency_percentage = (int)taskInTheView.getDuration()/(2*days);
                 }
                 System.out.println("urgence" + urgency_percentage);
                 int red = (255 * urgency_percentage) / 100;
