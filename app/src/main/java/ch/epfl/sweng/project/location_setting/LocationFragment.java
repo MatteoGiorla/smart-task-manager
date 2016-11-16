@@ -27,6 +27,7 @@ import ch.epfl.sweng.project.R;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -164,8 +165,7 @@ public class LocationFragment extends Fragment {
                 intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, defaultLocationList);
                 startActivityForResult(intent, editLocationRequestCode);
             } else {
-                //TODO : optionally display a toast "You can't edit or delete the default locations"
-                //Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
             }
             }
         });
