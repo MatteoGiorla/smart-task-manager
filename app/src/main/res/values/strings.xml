@@ -24,7 +24,7 @@
     <string name="facebook_app_id">104609210014543</string>
 
     <!-- Google Place Key -->
-    <string name="google_maps_key">AIzaSyDYvTEtbvm8JXF7LJqBBubvf2e1dBomXfQ</string>
+    <string name="google_maps_key">AIzaSyCzHIpUhWB-JX7vLeGaG4Qu2gUYUNOwgRc</string>
 
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>

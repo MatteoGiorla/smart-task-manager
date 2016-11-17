@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import ch.epfl.sweng.project.R;
 
 public abstract class LocationActivity extends AppCompatActivity {
     private static final int REQUEST_PLACE_PICKER = 1;
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     Intent intent;
     private ImageButton doneLocationButton;
@@ -43,7 +46,44 @@ public abstract class LocationActivity extends AppCompatActivity {
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
 
         // Place Picker
-        createPlacePicker(chooseLocationButton);
+        //createPlacePicker(chooseLocationButton);
+        /*AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
+        try {
+            final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
+                    .build(this);
+            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                }
+            });
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            // TODO handle exception! Toast?
+        }*/
+
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
+        try {
+            final Intent intent = intentBuilder.build(this);
+            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
+                }
+            });
+
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        }
 
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
@@ -151,6 +191,26 @@ public abstract class LocationActivity extends AppCompatActivity {
      * @param chooseLocationButton Button which "switch on" Place Picker
      */
     private void createPlacePicker(Button chooseLocationButton) {
+        AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
+        try {
+            final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
+                    .build(this);
+            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                }
+            });
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+            // TODO handle exception!
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+            // TODO handle exception! Toast?
+        }
+        /*
         PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
         try {
             final Intent intent = intentBuilder.build(this);
@@ -167,7 +227,7 @@ public abstract class LocationActivity extends AppCompatActivity {
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
             // TODO handle exception!
-        }
+        }*/
     }
 
     /**
