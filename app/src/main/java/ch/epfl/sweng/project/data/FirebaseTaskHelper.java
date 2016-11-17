@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
@@ -48,7 +49,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-                    Toast.makeText(mContext, "You don't have any tasks !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.info_any_tasks, Toast.LENGTH_SHORT).show();
                 }
                 mTaskList.clear();
                 for (DataSnapshot task : dataSnapshot.getChildren()) {
@@ -65,11 +66,14 @@ public class FirebaseTaskHelper implements TaskHelper {
                         Long date = (Long) task.child("dueDate").child("time").getValue();
                         Date dueDate = new Date(date);
 
-                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                        Long startDuration = (Long) task.child("startDuration").getValue();
+
+                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
                         mTaskList.add(newTask);
                     }
                 }
                 mAdapter.notifyDataSetChanged();
+                mAdapter.sort(Task.getStaticComparator());
             }
 
             @Override

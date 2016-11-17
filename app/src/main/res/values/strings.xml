@@ -58,7 +58,8 @@
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
-    <string name="contributors_field">Contributor(s)</string>
+    <string name="contributors_field">Contributor</string>
+    <string name="start_duration_field">Minimal time needed to start working on the task</string>
 
     <!-- Fields titles of new/edit task activity -->
     <string name="locationTitle">LOCATION</string>
@@ -68,6 +69,7 @@
     <string name="enter_due_date_hint">Enter due date</string>
     <string name="dueDateTitle">DUE DATE</string>
     <string name="titleTitle">TITLE</string>
+    <string name="startDurationTitle">START DURATION</string>
 
     <string name="title_activity_maps">Map</string>
 
@@ -110,4 +112,18 @@
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 
+    <!-- Toast Messages -->
+    <!-- LoginActivity -->
+    <string name="warning_no_mult_account">You must use the same authentication service as before.</string>
+    <string name="warning_google_serv_error">Google Play Services error.</string>
+    <!-- LocationFragment -->
+    <string name="info_deleted"> deleted</string>
+    <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
+    <!-- TaskFragment -->
+    <string name="info_updated"> has been updated !</string>
+    <string name="info_done"> is done</string>
+    <!-- LocationActivity -->
+    <string name="info_place_fixed">Place: </string>
+    <!-- FirebaseTaskHelper -->
+    <string name="info_any_tasks">"You don\'t have any tasks !"</string>
 </resources>

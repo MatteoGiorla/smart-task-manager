@@ -85,60 +85,10 @@ public class LoginActivity
         //initialize the preferences.
         prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
 
-        // configure Google Sign In:
-        GoogleSignInOptions googleSignIn =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail() // to request the user email
-                        .build();
-
-        mGoogleClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
-                .build();
-
-        // configure Firebase part:
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
-
-        // configure Facebook Sign In:
-        mFacebook = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mFacebook, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-                Toast.makeText(LoginActivity.this, R.string.error_authentication_canceled,
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+        //configuration of each services:
+        configureGoogleSignIn();
+        configureFirebase();
+        configureFacebookSignIn();
     }
 
     /**
@@ -218,8 +168,7 @@ public class LoginActivity
                             if (task.getException().getMessage().contains("An account already " +
                                     "exists with the same email address but different sign-in " +
                                     "credentials.")) {
-                                Toast.makeText(LoginActivity.this, "You must use the same " +
-                                                "authentication service as before.",
+                                Toast.makeText(LoginActivity.this, R.string.warning_no_mult_account,
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
@@ -256,8 +205,7 @@ public class LoginActivity
                             if (task.getException().getMessage().contains("An account already " +
                                     "exists with the same email address but different sign-in " +
                                     "credentials.")) {
-                                Toast.makeText(LoginActivity.this, "You must use the same " +
-                                                "authentication service as before.",
+                                Toast.makeText(LoginActivity.this, R.string.warning_no_mult_account,
                                         Toast.LENGTH_LONG).show();
                                 LoginManager.getInstance().logOut();
                             } else {
@@ -281,7 +229,7 @@ public class LoginActivity
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -296,6 +244,74 @@ public class LoginActivity
                 signIn();
                 break;
         }
+    }
+
+    /**
+     * Configuration of the Google Sign In
+     */
+    private void configureGoogleSignIn() {
+        // configure Google Sign In:
+        GoogleSignInOptions googleSignIn =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail() // to request the user email
+                        .build();
+
+        mGoogleClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignIn)
+                .build();
+    }
+
+    /**
+     * Configuration of the Firebase service
+     */
+    private void configureFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+    }
+
+    /**
+     * Configuration of the Facebook Sign In
+     */
+    private void configureFacebookSignIn() {
+        mFacebook = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mFacebook, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "facebook:onCancel");
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_canceled,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, "facebook:onError", error);
+                Toast.makeText(LoginActivity.this, R.string.error_authentication_failed,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
