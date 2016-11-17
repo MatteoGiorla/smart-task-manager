@@ -129,5 +129,4 @@
     <string name="info_place_fixed">Place: </string>
     <!-- FirebaseTaskHelper -->
     <string name="info_any_tasks">"You don\'t have any tasks !"</string>
->>>>>>> master
 </resources>

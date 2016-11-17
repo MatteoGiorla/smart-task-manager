@@ -193,6 +193,7 @@
                 android:textColor="@color/black"
                 android:text="@string/startDurationTitle"
                 android:textStyle="bold" />
+
             <Spinner
                 android:id="@+id/startDurationSpinner"
                 android:layout_width="275dp"

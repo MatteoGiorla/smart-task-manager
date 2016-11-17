@@ -1,20 +1,15 @@
 package ch.epfl.sweng.project.data;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
@@ -42,44 +37,27 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user) {
-        Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+    public void retrieveAllData(User user, Iterable<DataSnapshot> snapshots) {
+        for (DataSnapshot data : snapshots) {
+            if (data != null) {
+                String title = (String) data.child("name").getValue();
+                String description = (String) data.child("description").getValue();
+                Long durationInMinutes = (Long) data.child("durationInMinutes").getValue();
+                String energy = (String) data.child("energy").getValue();
+                List<String> contributors = (List<String>) data.child("listOfContributors").getValue();
 
-        myTasks.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-                    Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
-                }
-                mTaskList.clear();
-                for (DataSnapshot task : dataSnapshot.getChildren()) {
-                    if (task != null) {
-                        String title = (String) task.child("name").getValue();
-                        String description = (String) task.child("description").getValue();
-                        Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
-                        String energy = (String) task.child("energy").getValue();
-                        List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
+                //Construct Location object
+                String locationName = (String) data.child("locationName").getValue();
+                //Construct the date
+                Long date = (Long) data.child("dueDate").child("time").getValue();
+                Date dueDate = new Date(date);
+                Long startDuration = (Long) data.child("startDuration").getValue();
 
-                        //Construct Location object
-                        String locationName = (String) task.child("locationName").getValue();
-                        //Construct the date
-                        Long date = (Long) task.child("dueDate").child("time").getValue();
-                        Date dueDate = new Date(date);
-
-                        Long startDuration = (Long) task.child("startDuration").getValue();
-
-                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
-                        mTaskList.add(newTask);
-                    }
-                }
-                mAdapter.notifyDataSetChanged();
+                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
+                mTaskList.add(newTask);
                 mAdapter.sort(Task.getStaticComparator());
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+        }
     }
 
     @Override
@@ -89,7 +67,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             taskRef.setValue(task);
         }
         mTaskList.add(task);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.sort(Task.getStaticComparator());
     }
 
     @Override
