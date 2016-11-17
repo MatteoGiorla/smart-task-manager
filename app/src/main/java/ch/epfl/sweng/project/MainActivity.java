@@ -182,7 +182,7 @@ public final class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
         CustomSpinnerAdapter<String> durationAdapter = new CustomSpinnerAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getDurationAtDisposalTable());
+                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         CustomSpinnerAdapter<String> energyAdapter = new CustomSpinnerAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
@@ -317,18 +317,6 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getLocationTable() {
         return currentUser.getListNamesLocations().toArray(new String[currentUser.getListLocations().size()]);
-    }
-
-    /**
-     * Construct the table from which the user can set the time
-     * available to do a task.
-     * It is also used to know the time at disposal of the user
-     * in order to sort the list accordingly.
-     *
-     * @return String[] The array containing the durations.
-     */
-    public static String[] getDurationAtDisposalTable() {
-        return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
     }
 
     /**

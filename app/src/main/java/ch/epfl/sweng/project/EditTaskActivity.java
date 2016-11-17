@@ -3,6 +3,9 @@ package ch.epfl.sweng.project;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+
+import java.util.Arrays;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -95,6 +98,21 @@ public class EditTaskActivity extends TaskActivity {
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
         descriptionEditText.setSelection(descriptionEditText.getText().length()); //put cursor at the end
+
+        Spinner durationSpinner = (Spinner) findViewById(R.id.durationSpinner);
+        Long duration = mTaskToBeEdited.getDuration();
+        populateSpinner(durationSpinner, MainActivity.getDurationTable(),
+                MainActivity.DURATION_MAP.get(duration.intValue()));
+
+        Spinner locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
+        populateSpinner(locationSpinner, MainActivity.getLocationTable(),
+                mTaskToBeEdited.getLocationName());
+
+        Spinner minimalStartingTimeSpinner = (Spinner) findViewById(R.id.startDurationSpinner);
+        Long minimalStartingTime = mTaskToBeEdited.getStartDuration();
+        populateSpinner(minimalStartingTimeSpinner, MainActivity.getStartDurationTable(),
+                MainActivity.START_DURATION_MAP.get(minimalStartingTime.intValue()));
+
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
 
         // check the right radio button for the energy
@@ -112,5 +130,10 @@ public class EditTaskActivity extends TaskActivity {
                 radioGroup.check(R.id.energy_normal);
                 break;
         }
+    }
+
+    private void populateSpinner(Spinner spinner, String[] nameList, String defaultItemName) {
+        int position = Arrays.asList(nameList).indexOf(defaultItemName);
+        spinner.setSelection(position);
     }
 }
