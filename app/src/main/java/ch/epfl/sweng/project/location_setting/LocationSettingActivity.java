@@ -47,7 +47,6 @@ public class LocationSettingActivity extends AppCompatActivity {
         doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
 
         doneLocationSettingButton.setOnClickListener(new LocationSettingActivity.OnDoneButtonClickListener());
-
     }
 
     /**
