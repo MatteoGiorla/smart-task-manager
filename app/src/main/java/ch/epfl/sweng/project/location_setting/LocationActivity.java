@@ -168,10 +168,10 @@ public abstract class LocationActivity extends AppCompatActivity {
             });
         } catch (GooglePlayServicesRepairableException e) {
             e.printStackTrace();
-            // TODO handle exception!
+            Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
-            // TODO handle exception! Toast?
+            Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         }
         /*
         PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
