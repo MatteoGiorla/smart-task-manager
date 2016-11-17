@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +19,12 @@ import android.widget.Spinner;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +47,9 @@ public final class MainActivity extends AppCompatActivity {
     private TaskFragment fragment;
     private Context mContext;
     private static User currentUser;
+    private Bundle savedInstanceState;
+    private SynchronizedQueries synchronizedQueries;
+    private Query userRef;
 
     // Will be used later on
     private int userEnergy;
@@ -64,36 +75,43 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.savedInstanceState = savedInstanceState;
+
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
 
-        //Define the currentUser
-        UserHelper userProvider = new UserProvider().getUserProvider();
-        currentUser = userProvider.retrieveUserInformation();
-
-        mContext = getApplicationContext();
-
-        createUtilityMaps();
-
-        //Add the user to TaskFragment
-        fragment = new TaskFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(USER_KEY, currentUser);
-        fragment.setArguments(bundle);
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.tasks_container, fragment)
-                    .commit();
+        String mail;
+        try {
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
         }
 
-        //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
-        userLocation = getResources().getString(R.string.everywhere_location);
-        userTimeAtDisposal = 60; //1 hour
-        initializeAdapters();
+
+        //Create an instance of the current user
+        currentUser = new User(mail);
+
+        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+            Log.e("errormain", "FIREBASE_PROVIDER");
+            //Get reference of the database
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            //Get reference of the user
+            userRef = mDatabase.child("users")
+                    .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail()))
+                    .child("listLocations").getRef();
+
+            //This class allows us to get all the user's data before continuing executing the app
+            synchronizedQueries = new SynchronizedQueries(userRef);
+            final com.google.android.gms.tasks
+                    .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+            //Listener that listen when communications with firebase end
+            readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
+        } else if(UserProvider.mProvider.equals(UserProvider.TEST_PROVIDER)){
+            Log.e("errormain", "TEST_PROVIDER");
+            launchFragment();
+        }
     }
 
     /**
@@ -124,6 +142,14 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+            synchronizedQueries.stop();
         }
     }
 
@@ -213,7 +239,7 @@ public final class MainActivity extends AppCompatActivity {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(locationAdapter.getItem(position).equals(getString(R.string.elsewhere_location))){
+                if(getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))){
                     userLocation = getString(R.string.everywhere_location);
                 } else {
                     userLocation = locationAdapter.getItem(position);
@@ -349,5 +375,55 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getStartDurationTable() {
         return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
+    }
+
+    private void launchFragment() {
+        mContext = getApplicationContext();
+
+        createUtilityMaps();
+
+        //Add the user to TaskFragment
+        fragment = new TaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_KEY, currentUser);
+        fragment.setArguments(bundle);
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.tasks_container, fragment)
+                    .commit();
+        }
+
+        //Default values
+        userEnergy = Task.Energy.NORMAL.ordinal();
+        userLocation = getResources().getString(R.string.everywhere_location);
+        userTimeAtDisposal = 60; //1 hour
+        initializeAdapters();
+    }
+
+    /**
+     * OnCompleteListener that execute the code after that the user's data are recovered.
+     */
+    private class AllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
+        @Override
+        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
+            if (task.isSuccessful()) {
+                final Map<Query, DataSnapshot> result = task.getResult();
+
+                //Define the currentUser
+                UserHelper userProvider = new UserProvider().getUserProvider();
+                currentUser = userProvider
+                        .retrieveUserInformation(currentUser, result.get(userRef).getChildren());
+
+                launchFragment();
+
+            } else {
+                try {
+                    task.getException();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

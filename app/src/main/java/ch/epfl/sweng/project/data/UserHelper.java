@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project.data;
 
+import com.google.firebase.database.DataSnapshot;
+
 import ch.epfl.sweng.project.User;
 
 /**
@@ -13,5 +15,5 @@ public interface UserHelper {
      *
      * @return the User recovered from the database
      */
-    User retrieveUserInformation();
+    User retrieveUserInformation(User currentUser, Iterable<DataSnapshot> snapshots);
 }
