@@ -63,7 +63,7 @@ public class NotificationTest extends SuperTest {
         TaskNotification notificationBuilder = new TaskNotification(taskList, getApplicationContext());
         notificationBuilder.scheduleNotification(notificationBuilder.buildNotification(task.getName()), 1, 0);
 
-        mDevice.waitForWindowUpdate(null, 6500);
+        mDevice.waitForWindowUpdate(null, 13000);
         mDevice.openNotification();
         mDevice.wait(Until.hasObject(By.pkg("com.android.systemui")), untilTimeout);
 
