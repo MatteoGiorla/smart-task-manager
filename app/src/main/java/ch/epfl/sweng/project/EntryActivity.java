@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.TaskProvider;
 
 /**
  * Activity launched at opening an app. This activity decides
@@ -26,7 +27,7 @@ public class EntryActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //Make the database persistent, must be called before anything is done in the database.
-        if(!isAlreadyPersistent) {
+        if(!isAlreadyPersistent && TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             isAlreadyPersistent = true;
         }

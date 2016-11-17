@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -87,21 +88,28 @@ public final class MainActivity extends AppCompatActivity {
             mail = User.DEFAULT_EMAIL;
         }
 
+
         //Create an instance of the current user
         currentUser = new User(mail);
-        //Get reference of the database
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        //Get reference of the user
-        userRef = mDatabase.child("users")
-                .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail()))
-                .child("listLocations").getRef();
 
-        //This class allows us to get all the user's data before continuing executing the app
-        synchronizedQueries = new SynchronizedQueries(userRef);
-        final com.google.android.gms.tasks
-                .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
-        //Listener that listen when communications with firebase end
-        readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
+        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+            //Get reference of the database
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            //Get reference of the user
+            userRef = mDatabase.child("users")
+                    .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail()))
+                    .child("listLocations").getRef();
+
+            //This class allows us to get all the user's data before continuing executing the app
+            synchronizedQueries = new SynchronizedQueries(userRef);
+            final com.google.android.gms.tasks
+                    .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+            //Listener that listen when communications with firebase end
+            readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
+        } else if(UserProvider.mProvider.equals(UserProvider.TEST_PROVIDER)){
+            Log.e("error", "errorororoirjlksqdnfqlmskd");
+            launchFragment();
+        }
     }
 
     /**
@@ -138,7 +146,9 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        synchronizedQueries.stop();
+        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+            synchronizedQueries.stop();
+        }
     }
 
     /**
@@ -367,6 +377,30 @@ public final class MainActivity extends AppCompatActivity {
         return DURATION_MAP.values().toArray(new String[DURATION_MAP.values().size()]);
     }
 
+    private void launchFragment() {
+        mContext = getApplicationContext();
+
+        createUtilityMaps();
+
+        //Add the user to TaskFragment
+        fragment = new TaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_KEY, currentUser);
+        fragment.setArguments(bundle);
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.tasks_container, fragment)
+                    .commit();
+        }
+
+        //Default values
+        userEnergy = Task.Energy.NORMAL.ordinal();
+        userLocation = getResources().getString(R.string.everywhere_location);
+        userTimeAtDisposal = 60; //1 hour
+        initializeAdapters();
+    }
+
     /**
      * OnCompleteListener that execute the code after that the user's data are recovered.
      */
@@ -381,27 +415,7 @@ public final class MainActivity extends AppCompatActivity {
                 currentUser = userProvider
                         .retrieveUserInformation(currentUser, result.get(userRef).getChildren());
 
-                mContext = getApplicationContext();
-
-                createUtilityMaps();
-
-                //Add the user to TaskFragment
-                fragment = new TaskFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(USER_KEY, currentUser);
-                fragment.setArguments(bundle);
-
-                if (savedInstanceState == null) {
-                    getFragmentManager().beginTransaction()
-                            .add(R.id.tasks_container, fragment)
-                            .commit();
-                }
-
-                //Default values
-                userEnergy = Task.Energy.NORMAL.ordinal();
-                userLocation = getResources().getString(R.string.everywhere_location);
-                userTimeAtDisposal = 60; //1 hour
-                initializeAdapters();
+                launchFragment();
 
             } else {
                 try {
