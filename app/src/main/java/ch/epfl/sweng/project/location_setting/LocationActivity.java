@@ -45,45 +45,8 @@ public abstract class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_location);
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
 
-        // Place Picker
-        //createPlacePicker(chooseLocationButton);
-        /*AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
-        try {
-            final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
-                    .build(this);
-            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                }
-            });
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-            // TODO handle exception! Toast?
-        }*/
-
-        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-        try {
-            final Intent intent = intentBuilder.build(this);
-            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
-                }
-            });
-
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        }
+        // Initialize Place Autocomplete
+        createPlaceAutocomplete(chooseLocationButton);
 
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
@@ -190,7 +153,7 @@ public abstract class LocationActivity extends AppCompatActivity {
      * Creation of the Place Picker
      * @param chooseLocationButton Button which "switch on" Place Picker
      */
-    private void createPlacePicker(Button chooseLocationButton) {
+    private void createPlaceAutocomplete(Button chooseLocationButton) {
         AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
         try {
             final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
@@ -282,5 +245,3 @@ public abstract class LocationActivity extends AppCompatActivity {
         }
     }
 }
-
-
