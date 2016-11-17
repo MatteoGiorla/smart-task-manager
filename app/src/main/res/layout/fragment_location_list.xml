@@ -16,7 +16,7 @@
         android:text="@string/default_text"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
-        android:textStyle="normal" />
+        android:textStyle="normal|italic" />
 
     <ListView
         android:id="@+id/default_list_view_locations"
@@ -36,7 +36,7 @@
         android:text="@string/custom_text"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
-        android:textStyle="normal" />
+        android:textStyle="normal|italic" />
 
     <ListView
         android:id="@+id/list_view_locations"
