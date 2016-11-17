@@ -28,18 +28,6 @@
             android:src="@drawable/ic_done_white_36dp"
             tools:ignore="RtlSymmetry" />
 
-        <TextView
-            android:id="@+id/default_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:textColor="@android:color/background_dark"
-            android:textSize="20sp"
-            android:text="@string/location_set_text"
-            android:textStyle="normal"
-            tools:textStyle="bold"/>
     </android.support.v7.widget.Toolbar>
 
 
