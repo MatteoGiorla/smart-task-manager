@@ -161,10 +161,7 @@ public abstract class LocationActivity extends AppCompatActivity {
                 }
             });
 
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        } catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
             // TODO handle exception!
         }

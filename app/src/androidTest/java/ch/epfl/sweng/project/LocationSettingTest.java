@@ -48,14 +48,13 @@ public final class LocationSettingTest extends SuperTest {
         //Override to be able to change the SharedPreferences effectively
         @Override
         protected void beforeActivityLaunched(){
-            prefs = InstrumentationRegistry.getTargetContext().getSharedPreferences("ch.epfl.sweng", Context.MODE_PRIVATE);
+            SharedPreferences prefs = InstrumentationRegistry.getTargetContext().getSharedPreferences("ch.epfl.sweng", Context.MODE_PRIVATE);
             prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
             super.beforeActivityLaunched();
         }
     };
     private String mTitleToBeTyped;
     private String mOldTitle;
-    private SharedPreferences prefs;
 
 
     @Before
@@ -84,7 +83,7 @@ public final class LocationSettingTest extends SuperTest {
             deleteALocation(0);
             checkALocation(LocationFragment.defaultLocations[i+1].getName(), 0);
         }
-        //now checking longclick and simple click doesn't get us to another activity
+        //now checking long click and simple click doesn't get us to another activity
         /*
         for(int i = 0; i < 2; ++i){
             onData(anything())
