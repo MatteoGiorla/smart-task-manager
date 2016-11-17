@@ -20,6 +20,7 @@ import java.util.Date;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.junit.Assert.assertTrue;
@@ -77,6 +78,6 @@ public class NotificationTest extends SuperTest {
         assertTrue(notificationSelectorUiObject.exists());
 
         //Perform click on notification
-        notificationSelectorUiObject.click();
+        pressBack();
     }
 }
