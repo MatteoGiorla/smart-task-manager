@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -32,9 +33,9 @@ import java.util.Map;
 import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
+import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.MainActivity.USER_KEY;
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_MODIFIED;
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
@@ -73,9 +74,10 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
-            currentUser = bundle.getParcelable(USER_KEY);
-        }else{
+
+        if (bundle != null) {
+            currentUser = bundle.getParcelable(MainActivity.USER_KEY);
+        } else {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
 
@@ -86,14 +88,24 @@ public class TaskFragment extends Fragment {
                 taskList
         );
 
-        DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        myTasks = mDatabaseRef.child("tasks")
-                .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail())).getRef();
-        synchronizedQueries = new SynchronizedQueries(myTasks);
-        final com.google.android.gms.tasks
-                .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
 
-        readFirebaseTask.addOnCompleteListener(new AllOnCompleteListener());
+        if(TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)) {
+            Log.e("errorfragment", "FIREBASE_PROVIDER");
+            DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+            myTasks = mDatabaseRef.child("tasks")
+                    .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail())).getRef();
+            synchronizedQueries = new SynchronizedQueries(myTasks);
+            final com.google.android.gms.tasks
+                    .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
+
+            readFirebaseTask.addOnCompleteListener(new AllOnCompleteListener());
+        } else if(TaskProvider.mProvider.equals(TaskProvider.TEST_PROVIDER)){
+            Log.e("errorfragment", "TEST_PROVIDER");
+            mDatabase.retrieveAllData(currentUser, null);
+            sortTaskStatically();
+        }
     }
 
     /**
@@ -104,8 +116,14 @@ public class TaskFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        synchronizedQueries.stop();
+        if(TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)){
+            synchronizedQueries.stop();
+        }
     }
+
+        /*TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
+        mDatabase.retrieveAllData(currentUser);*/
 
     /**
      * Override the onCreateView method to initialize the adapter of
@@ -204,16 +222,16 @@ public class TaskFragment extends Fragment {
             onEditTaskActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
-            if(taskStatus == -1)
+            if (taskStatus == -1)
                 throw new IllegalArgumentException("Error with the intent form TaskInformationActivity");
 
             switch (taskStatus) {
-                case TASK_IS_MODIFIED :
+                case TASK_IS_MODIFIED:
                     onEditTaskActivityResult(data);
                     break;
-                case TASK_IS_DELETED :
+                case TASK_IS_DELETED:
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
-                    if(taskIndex == -1) {
+                    if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
                     removeTaskAction(taskIndex, false);
@@ -238,8 +256,11 @@ public class TaskFragment extends Fragment {
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + " has been updated !",
+                    editedTask.getName() + R.string.info_updated,
                     Toast.LENGTH_SHORT).show();
+
+            //Create a notification
+            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
     }
 
@@ -254,6 +275,10 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
+        sortTaskStatically();
+
+        //Update notifications
+        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
     }
 
     /**
@@ -273,19 +298,12 @@ public class TaskFragment extends Fragment {
         startActivityForResult(intent, editTaskRequestCode);
     }
 
-    /*
-    public void removeTaskByTask(Task task) {
-        if (taskList.contains(task)) {
-            removeTaskAction(taskList.indexOf(task));
-        }
-    }*/
-
     /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @param isDone true if the task is done, otherwise false.
+     * @param isDone   true if the task is done, otherwise false.
      * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
@@ -298,7 +316,7 @@ public class TaskFragment extends Fragment {
      * It removes the task from the database.
      *
      * @param position Position of the task to be removed.
-     * @param isDone Boolean indicating if the task is done.
+     * @param isDone   Boolean indicating if the task is done.
      */
     private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
@@ -310,16 +328,18 @@ public class TaskFragment extends Fragment {
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE;
         if (isDone) {
-            TOAST_MESSAGE = taskName + " is done";
+            TOAST_MESSAGE = taskName + getString(R.string.info_done);
         } else {
-            TOAST_MESSAGE = taskName + " deleted";
+            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
         }
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
 
+        //Update notifications
+        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
     }
 
-    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam){
+    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam) {
         locationParameter = "";
         timeParameter = 0;
         energyParameter = 0;
@@ -334,9 +354,9 @@ public class TaskFragment extends Fragment {
     /**
      * Method that launch the dynamic sort on the tasks.
      *
-     * @param currentLocation User's current location
+     * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
-     * @param currentEnergy User's current energy
+     * @param currentEnergy       User's current energy
      */
     public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
         mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
@@ -366,8 +386,6 @@ public class TaskFragment extends Fragment {
         public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
             if (task.isSuccessful()) {
                 final Map<Query, DataSnapshot> result = task.getResult();
-                TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
-                mDatabase = provider.getTaskProvider();
                 mDatabase.retrieveAllData(currentUser, result.get(myTasks).getChildren());
                 sortTaskStatically();
             } else {
@@ -379,5 +397,4 @@ public class TaskFragment extends Fragment {
             }
         }
     }
-
 }

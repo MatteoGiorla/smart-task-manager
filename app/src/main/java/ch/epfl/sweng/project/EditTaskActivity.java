@@ -69,6 +69,7 @@ public class EditTaskActivity extends TaskActivity {
         mTaskToBeEdited.setDurationInMinutes(duration);
         mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
+        mTaskToBeEdited.setStartDuration(startDuration);
         intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
     }
@@ -103,6 +104,11 @@ public class EditTaskActivity extends TaskActivity {
         Spinner locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
         populateSpinner(locationSpinner, MainActivity.getLocationTable(),
                 mTaskToBeEdited.getLocationName());
+
+        Spinner minimalStartingTimeSpinner = (Spinner) findViewById(R.id.startDurationSpinner);
+        Long minimalStartingTime = mTaskToBeEdited.getStartDuration();
+        populateSpinner(minimalStartingTimeSpinner, MainActivity.getStartDurationTable(),
+                MainActivity.START_DURATION_MAP.get(minimalStartingTime.intValue()));
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
 

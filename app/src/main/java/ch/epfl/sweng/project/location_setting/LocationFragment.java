@@ -27,6 +27,7 @@ import ch.epfl.sweng.project.R;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -41,7 +42,6 @@ public class LocationFragment extends Fragment {
     private ArrayList<Location> defaultLocationList;
     public static final int defaultLocationsSize = 5;
     public static final Location[] defaultLocations = new Location[defaultLocationsSize];
-    private SharedPreferences prefs;
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -109,7 +109,7 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 defaultLocationList
         );
-        prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        SharedPreferences prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             addDefaultLocations();
         }
@@ -150,6 +150,7 @@ public class LocationFragment extends Fragment {
                     startActivityForResult(intent, editLocationRequestCode);
                 //} else {
                     //TODO : optionally display a toast "You can't edit or delete the default locations"
+
                 //}
             }
         });
@@ -163,7 +164,7 @@ public class LocationFragment extends Fragment {
                 intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, defaultLocationList);
                 startActivityForResult(intent, editLocationRequestCode);
             } else {
-                //TODO : optionally display a toast "You can't edit or delete the default locations"
+                Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
             }
             }
         });
@@ -250,9 +251,8 @@ public class LocationFragment extends Fragment {
         } else {
             locationList.set(indexEditedLocation, editedLocation);
             mLocationAdapter.notifyDataSetChanged();
-            Toast.makeText(getActivity().getApplicationContext(),
-                    editedLocation.getName() + " has been updated !",
-                    Toast.LENGTH_SHORT).show();
+            String toast = editedLocation.getName() + getString(R.string.info_updated);
+            Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -294,7 +294,7 @@ public class LocationFragment extends Fragment {
         mLocationAdapter.notifyDataSetChanged();
 
         Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE = locationName + " deleted";
+        String TOAST_MESSAGE = locationName + getString(R.string.info_deleted);
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
     }
@@ -306,7 +306,7 @@ public class LocationFragment extends Fragment {
      */
     public List<Location> getLocationList() {
         //return new ArrayList<>(locationList);
-        ArrayList<Location> tmp = defaultLocationList;
+        ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
         tmp.addAll(locationList);
         return tmp;
     }

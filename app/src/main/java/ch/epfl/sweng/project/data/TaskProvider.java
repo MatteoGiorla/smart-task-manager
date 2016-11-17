@@ -24,7 +24,7 @@ public class TaskProvider {
      * Constructor of the TaskProvider.
      *
      * @param context The context in which the taskList is.
-     * @param adapter The Adapater of the taskList
+     * @param adapter The Adapter of the taskList
      * @param taskList The list of tasks
      */
     public TaskProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {

@@ -1,52 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="ch.epfl.sweng.project.location_setting.LocationSettingActivity">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/default_location"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:text="@string/default_text"
+        android:textColor="@android:color/background_dark"
+        android:textSize="20sp"
+        android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/default_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:textColor="@android:color/background_dark"
-            android:textSize="20sp"
-            android:text="@string/default_text"
-            android:textStyle="normal"/>
+    <ListView
+        android:id="@+id/default_list_view_locations"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/default_location" />
 
-        <ListView
-            android:id="@+id/default_list_view_locations"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@+id/default_location"/>
+    <TextView
+        android:id="@+id/custom_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/default_list_view_locations"
+        android:gravity="center_horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:text="@string/custom_text"
+        android:textColor="@android:color/background_dark"
+        android:textSize="20sp"
+        android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/custom_location"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:textColor="@android:color/background_dark"
-            android:textSize="20sp"
-            android:text="@string/custom_text"
-            android:textStyle="normal"
-            android:layout_below="@+id/default_list_view_locations"/>
+    <ListView
+        android:id="@+id/list_view_locations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/custom_location" />
 
-        <ListView
-            android:id="@+id/list_view_locations"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/custom_location"/>
-
-    </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>
