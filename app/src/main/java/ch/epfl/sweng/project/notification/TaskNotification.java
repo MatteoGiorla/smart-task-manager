@@ -16,8 +16,8 @@ import java.util.List;
 
 import ch.epfl.sweng.project.EntryActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.receiver.NotificationReceiver;
+import ch.epfl.sweng.project.Task;
 
 public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     private List<Task> taskList;

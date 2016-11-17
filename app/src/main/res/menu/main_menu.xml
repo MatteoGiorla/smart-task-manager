@@ -13,10 +13,4 @@
         android:icon="@android:drawable/ic_menu_share"
         android:title="@string/logout_menu"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/menu_item_notify"
-        android:icon="@android:drawable/ic_menu_share"
-        android:title="Notify !"
-        app:showAsAction="never" />
 </menu>
