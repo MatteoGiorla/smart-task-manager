@@ -30,7 +30,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -40,14 +41,13 @@
 
                 <TextView
                     android:id="@+id/list_remaining_days"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/green"
                     android:ellipsize="end"
                     android:contentDescription="@string/description_remaining_days"
                     android:paddingBottom="3dp"
-                    android:textSize="@dimen/task_remaining_days_size"
-                    android:layout_weight="1" />
+                    android:textSize="@dimen/task_subtitle_size"/>
             </LinearLayout>
 
             <LinearLayout
@@ -63,8 +63,8 @@
                     android:textColor="@android:color/darker_gray"
                     android:ellipsize="end"
                     android:paddingBottom="3dp"
-                    android:textSize="@dimen/task_remaining_days_size"
-                    android:gravity="left"
+                    android:textSize="@dimen/task_subtitle_size"
+                    android:gravity="start"
                     android:layout_weight="1" />
 
                 <TextView
@@ -74,8 +74,8 @@
                     android:textColor="@android:color/darker_gray"
                     android:ellipsize="end"
                     android:paddingBottom="3dp"
-                    android:textSize="@dimen/task_remaining_days_size"
-                    android:gravity="left"
+                    android:textSize="@dimen/task_subtitle_size"
+                    android:gravity="start"
                     android:layout_weight="1" />
 
             </LinearLayout>

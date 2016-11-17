@@ -33,7 +33,7 @@
 
     <!-- Maximum lengths -->
     <string name="max_length_title">30</string>
-    <string name="max_length_subtitle">1000</string>
+    <string name="max_length_description">1000</string>
 
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
@@ -64,11 +64,9 @@
     <!-- Fields titles of new/edit task activity -->
     <string name="locationTitle">LOCATION</string>
     <string name="energyTitle">ENERGY</string>
-    <string name="descriptionTitle">DESCRIPTION</string>
     <string name="durationTitle">DURATION</string>
     <string name="enter_due_date_hint">Enter due date</string>
     <string name="dueDateTitle">DUE DATE</string>
-    <string name="titleTitle">TITLE</string>
     <string name="startDurationTitle">START DURATION</string>
 
     <string name="title_activity_maps">Map</string>
@@ -108,7 +106,6 @@
     <string name="custom_text">Custom</string>
 
     <!-- Energy description -->
-    <string name="description_energy">Lightning representing one point of energy</string>
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 

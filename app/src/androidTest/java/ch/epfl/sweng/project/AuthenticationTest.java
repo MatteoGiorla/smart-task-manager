@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -10,21 +9,12 @@ import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
-import org.hamcrest.Matcher;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import android.os.IBinder;
-import android.support.test.espresso.Root;
-import android.view.View;
-import android.view.WindowManager;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
