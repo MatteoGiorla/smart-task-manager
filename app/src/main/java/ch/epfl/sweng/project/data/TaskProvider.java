@@ -15,7 +15,7 @@ public class TaskProvider {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
 
-    private static String mProvider = FIREBASE_PROVIDER;
+    public static String mProvider = FIREBASE_PROVIDER;
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
