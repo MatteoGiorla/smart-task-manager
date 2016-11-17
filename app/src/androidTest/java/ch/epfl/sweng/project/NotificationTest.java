@@ -20,10 +20,6 @@ import java.util.Date;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.junit.Assert.assertTrue;
@@ -82,8 +78,5 @@ public class NotificationTest extends SuperTest {
 
         //Perform click on notification
         notificationSelectorUiObject.click();
-
-        //Check that mainActivity is opened
-        onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 }
