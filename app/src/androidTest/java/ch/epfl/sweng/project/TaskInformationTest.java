@@ -79,7 +79,7 @@ public class TaskInformationTest extends SuperTest {
     public void testDescriptionIsDisplayed() {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(4)
+                .atPosition(5)
                 .check(matches(hasDescendant(withText(task.getDescription()))));
     }
 

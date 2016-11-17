@@ -342,6 +342,12 @@ public class Task implements Parcelable {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
         double number_of_fractions = Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
+        if(number_of_fractions < 1) {
+            number_of_fractions = 1;
+        }
+        if(delay < 0) {
+            delay = 0;
+        }
         return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
                 / (75 * delay + 100 * (int) number_of_fractions);
     }

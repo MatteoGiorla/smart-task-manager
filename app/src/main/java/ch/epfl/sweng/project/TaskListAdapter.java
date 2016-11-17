@@ -76,17 +76,17 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
                 if(days > 1){
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" remaining days", days));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_days), days));
                 } else if (days == 1) {
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" remaining day", days));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_day), days));
                 } else if (days == 0) {
-                    remainingDays.setText("Due today !");
+                    remainingDays.setText(R.string.due_today);
                 } else if (days == -1) {
                     int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" day late", days_value_for_text));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_late), days_value_for_text));
                 } else if (days < 1) {
                     int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+" days late", days_value_for_text));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_late), days_value_for_text));
                 }
 
                 if (days < 10 && days >= 1) {
@@ -104,20 +104,15 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (coloredIndicator != null) {
                 //int static_sort_value = taskInTheView.getStaticSortValue();
                 int urgency_percentage;
-                System.out.println("duration" + taskInTheView.getDuration());
-                System.out.println("days" + days);
                 if(days <= 0){
                     urgency_percentage = 100;
                 } else {
                     urgency_percentage = (int)taskInTheView.getDuration()/(2*days);
                 }
-                System.out.println("urgence" + urgency_percentage);
                 float[] hsv = new float[3];
                 hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
-                hsv[1] = 1;//Math.abs(urgency_percentage - 50)/50;
+                hsv[1] = 1;
                 hsv[2] = 1;
-                //int red = (255 * urgency_percentage) / 100;
-                //int green = (255 * (100 - urgency_percentage)) / 100;
                 coloredIndicator.setBackgroundColor(Color.HSVToColor(hsv));
             }
         }
