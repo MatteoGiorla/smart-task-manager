@@ -112,7 +112,10 @@
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 
-    <!-- Toast Messages -->
+    <!-- Notification -->
+    <string name="notification_title_task">A task needs your attention</string>
+    <string name="notification_content_task">\'s due date is close !</string>
+
     <!-- LoginActivity -->
     <string name="warning_no_mult_account">You must use the same authentication service as before.</string>
     <string name="warning_google_serv_error">Google Play Services error.</string>
@@ -126,4 +129,5 @@
     <string name="info_place_fixed">Place: </string>
     <!-- FirebaseTaskHelper -->
     <string name="info_any_tasks">"You don\'t have any tasks !"</string>
+>>>>>>> master
 </resources>

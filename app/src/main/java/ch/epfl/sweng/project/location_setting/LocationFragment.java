@@ -42,7 +42,6 @@ public class LocationFragment extends Fragment {
     private ArrayList<Location> defaultLocationList;
     public static final int defaultLocationsSize = 5;
     public static final Location[] defaultLocations = new Location[defaultLocationsSize];
-    private SharedPreferences prefs;
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -110,7 +109,7 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 defaultLocationList
         );
-        prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        SharedPreferences prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
         if(prefs.getBoolean("FIRST_LOGIN", true)){
             addDefaultLocations();
         }

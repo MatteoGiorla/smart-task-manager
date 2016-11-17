@@ -88,13 +88,15 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"/>
 
         <activity
             android:name=".location_setting.LocationSettingActivity"
             android:screenOrientation="portrait"
             android:label="@string/location_settings"
             android:theme="@style/AppThemeNoActionBar"/>
+
+        <receiver android:name=".receiver.NotificationReceiver" />
     </application>
 
 </manifest>

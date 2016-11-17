@@ -15,7 +15,7 @@ public class TaskProvider {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
 
-    private static String mProvider = FIREBASE_PROVIDER;
+    public static String mProvider = FIREBASE_PROVIDER;
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
@@ -24,7 +24,7 @@ public class TaskProvider {
      * Constructor of the TaskProvider.
      *
      * @param context The context in which the taskList is.
-     * @param adapter The Adapater of the taskList
+     * @param adapter The Adapter of the taskList
      * @param taskList The list of tasks
      */
     public TaskProvider(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {

@@ -39,7 +39,7 @@
             android:textSize="20sp"
             android:text="@string/location_set_text"
             android:textStyle="normal"
-            tools:textStyle="bold"></TextView>
+            tools:textStyle="bold"/>
 
     </android.support.v7.widget.Toolbar>
 

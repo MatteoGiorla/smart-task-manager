@@ -10,7 +10,7 @@ import android.widget.TextView;
  * Custom adapter that set the title of the spinners to the empty string
  * in order to hide the text from being written on top of an image.
  *
- * @param <T> The type of the adapater
+ * @param <T> The type of the adapter
  */
 public class CustomSpinnerAdapter<T> extends ArrayAdapter<T> {
 
