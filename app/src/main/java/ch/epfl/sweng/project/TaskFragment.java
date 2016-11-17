@@ -256,7 +256,7 @@ public class TaskFragment extends Fragment {
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + R.string.info_updated,
+                    editedTask.getName() + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification

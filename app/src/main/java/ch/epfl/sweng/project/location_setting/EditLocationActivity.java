@@ -83,5 +83,6 @@ public class EditLocationActivity extends LocationActivity {
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.locationName);
         titleEditText.setText(mLocationToBeEdited.getName());
+        titleEditText.setSelection(titleEditText.getText().length());
     }
 }
