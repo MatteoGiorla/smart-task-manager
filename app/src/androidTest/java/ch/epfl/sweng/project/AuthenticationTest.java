@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -10,21 +9,12 @@ import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
-import org.hamcrest.Matcher;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-import android.os.IBinder;
-import android.support.test.espresso.Root;
-import android.view.View;
-import android.view.WindowManager;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 
@@ -122,7 +112,7 @@ public class AuthenticationTest {
             associateNewGoogleAccount();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
-        }catch(UiObjectNotFoundException u){
+        }catch(UiObjectNotFoundException ignored){
 
         }
         checkIfActivity(R.id.add_location_button);
@@ -157,8 +147,8 @@ public class AuthenticationTest {
             UiObject acceptAction = mUiDevice.findObject(new UiSelector().resourceId(ACCEPT_ID));
             acceptAction.clickAndWaitForNewWindow();
 
-            UiScrollable googServices = new UiScrollable(new UiSelector().scrollable(true));
-            googServices.scrollForward();
+            UiScrollable googleServices = new UiScrollable(new UiSelector().scrollable(true));
+            googleServices.scrollForward();
 
             UiObject nextGoogleServer = mUiDevice.findObject(new UiSelector().text("NEXT"));
             nextGoogleServer.clickAndWaitForNewWindow();
@@ -180,7 +170,7 @@ public class AuthenticationTest {
 
             //scroll the settings
             UiScrollable settingsView = new UiScrollable(new UiSelector().scrollable(true));
-            //put the scroller on the upmost position to scrollForward correctly after.
+            //put the scroller on the up most position to scrollForward correctly after.
             settingsView.flingBackward();
             settingsView.scrollForward();
             settingsView.scrollForward();

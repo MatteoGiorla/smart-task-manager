@@ -24,6 +24,7 @@ import java.util.List;
 import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
+import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.app.Activity.RESULT_OK;
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
@@ -62,9 +63,9 @@ public class TaskFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         User currentUser;
-        if(bundle != null) {
+        if (bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
-        }else{
+        } else {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
 
@@ -79,12 +80,6 @@ public class TaskFragment extends Fragment {
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
     }
-
-   /* @Override
-    public void onResume() {
-        super.onResume();
-        sortTasksDynamically(locationParameter, timeParameter, energyParameter);
-    }*/
 
     /**
      * Override the onCreateView method to initialize the adapter of
@@ -183,16 +178,16 @@ public class TaskFragment extends Fragment {
             onEditTaskActivityResult(data);
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
-            if(taskStatus == -1)
+            if (taskStatus == -1)
                 throw new IllegalArgumentException("Error with the intent form TaskInformationActivity");
 
             switch (taskStatus) {
-                case TASK_IS_MODIFIED :
+                case TASK_IS_MODIFIED:
                     onEditTaskActivityResult(data);
                     break;
-                case TASK_IS_DELETED :
+                case TASK_IS_DELETED:
                     int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
-                    if(taskIndex == -1) {
+                    if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
                     removeTaskAction(taskIndex, false);
@@ -219,6 +214,9 @@ public class TaskFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(),
                     editedTask.getName() + R.string.info_updated,
                     Toast.LENGTH_SHORT).show();
+
+            //Create a notification
+            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
     }
 
@@ -234,6 +232,9 @@ public class TaskFragment extends Fragment {
         }
         mDatabase.addNewTask(task);
         mTaskAdapter.sort(Task.getStaticComparator());
+
+        //Update notifications
+        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
     }
 
     /**
@@ -253,19 +254,12 @@ public class TaskFragment extends Fragment {
         startActivityForResult(intent, editTaskRequestCode);
     }
 
-    /*
-    public void removeTaskByTask(Task task) {
-        if (taskList.contains(task)) {
-            removeTaskAction(taskList.indexOf(task));
-        }
-    }*/
-
     /**
      * Remove a task from the database and the taskList.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
-     * @param isDone true if the task is done, otherwise false.
+     * @param isDone   true if the task is done, otherwise false.
      * @throws SQLiteException if an error occurred
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
@@ -278,7 +272,7 @@ public class TaskFragment extends Fragment {
      * It removes the task from the database.
      *
      * @param position Position of the task to be removed.
-     * @param isDone Boolean indicating if the task is done.
+     * @param isDone   Boolean indicating if the task is done.
      */
     private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
@@ -297,9 +291,11 @@ public class TaskFragment extends Fragment {
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
 
+        //Update notifications
+        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
     }
 
-    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam){
+    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam) {
         locationParameter = "";
         timeParameter = 0;
         energyParameter = 0;
@@ -314,9 +310,9 @@ public class TaskFragment extends Fragment {
     /**
      * Method that launch the dynamic sort on the tasks.
      *
-     * @param currentLocation User's current location
+     * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
-     * @param currentEnergy User's current energy
+     * @param currentEnergy       User's current energy
      */
     public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
         mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
@@ -337,5 +333,4 @@ public class TaskFragment extends Fragment {
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
     }
-
 }
