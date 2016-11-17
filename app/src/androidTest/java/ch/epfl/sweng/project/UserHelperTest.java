@@ -25,7 +25,7 @@ public class UserHelperTest extends SuperTest {
 
     @Test
     public void localProviderReturnsTheCorrectUser() {
-        User currentUser = provider.retrieveUserInformation();
+        User currentUser = provider.retrieveUserInformation(null, null);
 
         assertEquals(user.getEmail(), currentUser.getEmail());
         assertEquals(user.getListLocations().size(), currentUser.getListLocations().size());

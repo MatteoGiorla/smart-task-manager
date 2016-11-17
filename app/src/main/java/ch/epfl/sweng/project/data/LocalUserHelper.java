@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project.data;
 
+import com.google.firebase.database.DataSnapshot;
+
 import ch.epfl.sweng.project.User;
 
 /**
@@ -10,7 +12,7 @@ import ch.epfl.sweng.project.User;
 public class LocalUserHelper implements UserHelper{
 
     @Override
-    public User retrieveUserInformation() {
+    public User retrieveUserInformation(User currentUser, Iterable<DataSnapshot> snapshots) {
         return new User(User.DEFAULT_EMAIL);
     }
 }

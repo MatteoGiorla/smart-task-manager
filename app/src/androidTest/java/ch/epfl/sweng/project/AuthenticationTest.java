@@ -112,7 +112,7 @@ public class AuthenticationTest {
             associateNewGoogleAccount();
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
-        }catch(UiObjectNotFoundException u){
+        }catch(UiObjectNotFoundException ignored){
 
         }
         checkIfActivity(R.id.add_location_button);
@@ -147,8 +147,8 @@ public class AuthenticationTest {
             UiObject acceptAction = mUiDevice.findObject(new UiSelector().resourceId(ACCEPT_ID));
             acceptAction.clickAndWaitForNewWindow();
 
-            UiScrollable googServices = new UiScrollable(new UiSelector().scrollable(true));
-            googServices.scrollForward();
+            UiScrollable googleServices = new UiScrollable(new UiSelector().scrollable(true));
+            googleServices.scrollForward();
 
             UiObject nextGoogleServer = mUiDevice.findObject(new UiSelector().text("NEXT"));
             nextGoogleServer.clickAndWaitForNewWindow();
@@ -170,7 +170,7 @@ public class AuthenticationTest {
 
             //scroll the settings
             UiScrollable settingsView = new UiScrollable(new UiSelector().scrollable(true));
-            //put the scroller on the upmost position to scrollForward correctly after.
+            //put the scroller on the up most position to scrollForward correctly after.
             settingsView.flingBackward();
             settingsView.scrollForward();
             settingsView.scrollForward();

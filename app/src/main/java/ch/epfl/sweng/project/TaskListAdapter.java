@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
  * Adapter used to display the task list
  */
 public class TaskListAdapter extends ArrayAdapter<Task> {
-    private List<Task> taskList;
 
     /**
      * Constructor of the class
@@ -32,7 +31,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
-        taskList = objects;
+        List<Task> taskList = objects;
     }
 
     /**

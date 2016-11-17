@@ -183,7 +183,7 @@ public class Task implements Parcelable {
     /**
      * Getter returning a copy of the task's due date
      */
-    Date getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
@@ -210,7 +210,7 @@ public class Task implements Parcelable {
     /**
      * Getter returning the task's duration
      */
-    long getDuration() {
+    public long getDuration() {
         return durationInMinutes;
     }
 
@@ -342,14 +342,15 @@ public class Task implements Parcelable {
         Calendar c = Calendar.getInstance();
         int delay = daysBetween(c.getTime(), dueDate);
         double number_of_fractions = Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
-        if(number_of_fractions < 1) {
+       /* if(number_of_fractions < 1) {
             number_of_fractions = 1;
-        }
+        }*/
         if(delay < 0) {
             delay = 0;
         }
-        return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
-                / (75 * delay + 100 * (int) number_of_fractions);
+        //int number_of_fractions = (int) Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
+        int number_of_fractions = 1;
+        return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt()) / (75 * delay + 100 * number_of_fractions);
     }
 
     public int getStaticSortValue(){

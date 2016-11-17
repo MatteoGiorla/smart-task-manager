@@ -95,6 +95,8 @@
             android:screenOrientation="portrait"
             android:label="@string/location_settings"
             android:theme="@style/AppThemeNoActionBar"/>
+
+        <receiver android:name=".receiver.NotificationReceiver" />
     </application>
 
 </manifest>

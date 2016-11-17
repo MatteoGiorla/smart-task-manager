@@ -99,9 +99,9 @@
     <string name="location_name">NAME</string>
     <string name="location_enter_name">Enter the location name</string>
     <string name="location_place_picker">LOCATION (Optional)</string>
-    <string name="location_enter_address_button_text">Pick a place or enter address</string>
-    <string name="location_gps_coordinates_explanation">Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
-    <string name="location_set_text">Set your preferred location</string>
+    <string name="location_enter_address_button_text">Pick a place</string>
+    <string name="location_gps_coordinates_explanation">(Optional) Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
+    <string name="location_set_text">Set your locations</string>
     <string name="default_text">Default</string>
     <string name="custom_text">Custom</string>
 
@@ -109,7 +109,10 @@
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 
-    <!-- Toast Messages -->
+    <!-- Notification -->
+    <string name="notification_title_task">A task needs your attention</string>
+    <string name="notification_content_task">\'s due date is close !</string>
+
     <!-- LoginActivity -->
     <string name="warning_no_mult_account">You must use the same authentication service as before.</string>
     <string name="warning_google_serv_error">Google Play Services error.</string>

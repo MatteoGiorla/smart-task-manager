@@ -22,8 +22,6 @@ public class LocationSettingActivity extends AppCompatActivity {
     private static final String TAG = "LocationSettingActivity";
     private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
-    private Intent intent;
-    private ImageButton doneLocationSettingButton;
     private SharedPreferences prefs;
 
     @Override
@@ -44,7 +42,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
         initializeToolbar(mToolbar);
 
-        doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
+        ImageButton doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
 
         doneLocationSettingButton.setOnClickListener(new LocationSettingActivity.OnDoneButtonClickListener());
     }
@@ -118,7 +116,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             resultActivity();
-            intent = new Intent(LocationSettingActivity.this, MainActivity.class);
+            Intent intent = new Intent(LocationSettingActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
