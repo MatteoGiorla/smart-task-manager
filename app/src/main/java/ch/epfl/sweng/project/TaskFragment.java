@@ -212,7 +212,7 @@ public class TaskFragment extends Fragment {
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + " has been updated !",
+                    editedTask.getName() + R.string.info_updated,
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
@@ -284,9 +284,9 @@ public class TaskFragment extends Fragment {
         Context context = getActivity().getApplicationContext();
         String TOAST_MESSAGE;
         if (isDone) {
-            TOAST_MESSAGE = taskName + " is done";
+            TOAST_MESSAGE = taskName + getString(R.string.info_done);
         } else {
-            TOAST_MESSAGE = taskName + " deleted";
+            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
         }
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
