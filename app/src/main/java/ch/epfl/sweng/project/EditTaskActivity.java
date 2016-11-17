@@ -89,9 +89,12 @@ public class EditTaskActivity extends TaskActivity {
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.title_task);
         titleEditText.setText(mTaskToBeEdited.getName());
+        titleEditText.setSelection(titleEditText.getText().length()); //put cursor at the end
+
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
+        descriptionEditText.setSelection(descriptionEditText.getText().length()); //put cursor at the end
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
 
         // check the right radio button for the energy
