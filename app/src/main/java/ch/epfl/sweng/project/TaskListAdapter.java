@@ -59,8 +59,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-            TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
+            //TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
             TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
+            TextView taskDuration = (TextView) resultView.findViewById(R.id.list_item_duration);
             View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
 
             if (titleView != null) {
@@ -70,9 +71,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
                 if(days > 1){
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_days), days));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_left), days));
                 } else if (days == 1) {
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_day), days));
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_left), days));
                 } else if (days == 0) {
                     remainingDays.setText(R.string.due_today);
                 } else if (days == -1) {
@@ -92,9 +93,14 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (taskLocation!= null) {
                 taskLocation.setText(taskInTheView.getLocationName());
             }
+            /*
             if (taskEnergy != null) {
                 taskEnergy.setText(MainActivity.ENERGY_MAP.get(taskInTheView.getEnergy().ordinal()));
+            }*/
+            if (taskDuration != null) {
+                taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
             }
+
             if (coloredIndicator != null) {
                 //int static_sort_value = taskInTheView.getStaticSortValue();
                 int urgency_percentage;

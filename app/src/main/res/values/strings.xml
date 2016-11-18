@@ -129,8 +129,8 @@
 
     <!-- MainActivity ListView texts -->
     <string name="due_today">Due today !</string>
-    <string name="remaining_days">" remaining days"</string>
-    <string name="remaining_day">" remaining day"</string>
+    <string name="days_left">" days left"</string>
+    <string name="day_left">" day left"</string>
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
 </resources>
