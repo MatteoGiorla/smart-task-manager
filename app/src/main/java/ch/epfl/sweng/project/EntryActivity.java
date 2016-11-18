@@ -39,7 +39,7 @@ public class EntryActivity extends Activity {
             String className = getScreenClassName();
             launchActivity = Class.forName(className);
         } catch (ClassNotFoundException e) {
-            launchActivity = MainActivity.class;
+            launchActivity = SynchronizationActivity.class;
         }
         launchIntent.setClass(getApplicationContext(), launchActivity);
         startActivity(launchIntent);
@@ -54,8 +54,8 @@ public class EntryActivity extends Activity {
         String activity;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            // if the user is already logged in the MainActivity with the tasks list is displayed
-            activity = MainActivity.class.getName();
+            // if the user is already logged in, the Synchronisation Activity is launched
+            activity = SynchronizationActivity.class.getName();
         } else {
             // else, if the user isn't logged in, the LoginActivity will be displayed
             activity = LoginActivity.class.getName();

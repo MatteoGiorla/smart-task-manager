@@ -79,6 +79,6 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
                 .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
 
         readFirebaseTask
-                .addOnCompleteListener(new TaskAllOnCompleteListener(currentUser, synchronizationActivityContext));
+                .addOnCompleteListener(new TaskAllOnCompleteListener(currentUser, synchronizationActivityContext, myTasks));
     }
 }

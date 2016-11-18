@@ -7,8 +7,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
@@ -27,19 +25,20 @@ public class TaskAllOnCompleteListener implements OnCompleteListener<Map<Query, 
     private ArrayList<Task> taskList;
     private User currentUser;
     private Context synchronizationActivityContext;
+    private Query myTasks;
 
-    TaskAllOnCompleteListener(@NonNull User currentUser, @NonNull Context synchronizationActivityContext) {
+    TaskAllOnCompleteListener(@NonNull User currentUser, @NonNull Context synchronizationActivityContext,
+                              @NonNull Query myTasks) {
         super();
         taskList = new ArrayList<>();
         this.currentUser = currentUser;
         this.synchronizationActivityContext = synchronizationActivityContext;
+        this.myTasks = myTasks;
     }
     @Override
     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
         if(task.isSuccessful()) {
             final Map<Query, DataSnapshot> taskResult = task.getResult();
-            DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-            final Query myTasks = mDatabaseRef.child("tasks");
             retrieveTask(taskResult.get(myTasks).getChildren());
             launchNextActivity();
         } else {

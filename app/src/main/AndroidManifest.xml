@@ -73,6 +73,11 @@
             android:label="@string/edit_location"
             android:theme="@style/AppThemeNoActionBar"/>
 
+        <activity
+            android:name=".SynchronizationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
                 (See the file "res/values/google_maps_api.xml").

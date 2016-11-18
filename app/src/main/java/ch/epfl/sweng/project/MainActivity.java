@@ -371,8 +371,6 @@ public final class MainActivity extends AppCompatActivity {
      * Check extra passed with the intent
      */
     private void checkIntentExtra() {
-//        if(currentUser == null) Log.e("user null", "current user is null");
-//        if(taskList == null) Log.e("list null", "list of task is null");
         if(currentUser == null || taskList == null) {
             throw new IllegalArgumentException("User or List passed with the intent null");
         }
