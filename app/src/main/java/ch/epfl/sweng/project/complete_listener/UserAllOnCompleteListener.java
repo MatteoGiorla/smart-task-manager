@@ -1,12 +1,11 @@
 package ch.epfl.sweng.project.complete_listener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
@@ -14,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.SynchronizedQueries;
 import ch.epfl.sweng.project.User;
-import ch.epfl.sweng.project.Utils;
 
 
 public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
@@ -42,7 +41,8 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         if (task.isSuccessful()) {
             final Map<Query, DataSnapshot> UserResult = task.getResult();
             retrieveUserInformation(UserResult.get(userRef).getChildren());
-            retrieveUserTask();
+//            retrieveUserTask();
+            launchNextActivity();
         } else {
             try {
                 task.getException();
@@ -68,17 +68,9 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         currentUser.setListLocations(listLocations);
     }
 
-    private void retrieveUserTask() {
-        DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        //Get the taskList reference
-        final Query myTasks = mDatabaseRef.child("tasks")
-                .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail())).getRef();
-
-        synchronizedQueries = new SynchronizedQueries(myTasks);
-        final com.google.android.gms.tasks
-                .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
-
-        readFirebaseTask
-                .addOnCompleteListener(new TaskAllOnCompleteListener(currentUser, synchronizationActivityContext, myTasks));
+    private void launchNextActivity() {
+        Intent intent = new Intent(synchronizationActivityContext, MainActivity.class);
+        intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
+        synchronizationActivityContext.startActivity(intent);
     }
 }

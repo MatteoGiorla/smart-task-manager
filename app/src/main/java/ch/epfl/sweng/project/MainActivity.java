@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.complete_listener.TaskAllOnCompleteListener;
 import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
 
 
@@ -34,14 +33,12 @@ import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
 public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
-    public static final String LIST_TASK_KEY = "ch.epfl.sweng.MainActivity.LIST_TASK_KEY";
 
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
     private Context mContext;
 
     private Intent intent;
-    private ArrayList<Task> taskList;
     private static User currentUser;
 
     // Will be used later on
@@ -75,7 +72,6 @@ public final class MainActivity extends AppCompatActivity {
 
         intent = getIntent();
         checkIntent();
-        taskList = intent.getParcelableArrayListExtra(TaskAllOnCompleteListener.TASK_LIST_KEY);
         currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
         checkIntentExtra();
 
@@ -87,7 +83,7 @@ public final class MainActivity extends AppCompatActivity {
         fragment = new TaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
-        bundle.putParcelableArrayList(LIST_TASK_KEY, taskList);
+//        bundle.putParcelableArrayList(LIST_TASK_KEY, taskList);
         fragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
@@ -371,8 +367,8 @@ public final class MainActivity extends AppCompatActivity {
      * Check extra passed with the intent
      */
     private void checkIntentExtra() {
-        if(currentUser == null || taskList == null) {
-            throw new IllegalArgumentException("User or List passed with the intent null");
+        if(currentUser == null/* || taskList == null*/) {
+            throw new IllegalArgumentException("User passed with the intent is null");
         }
     }
 }
