@@ -65,11 +65,11 @@ public class TaskFragment extends Fragment {
         User currentUser;
         if (bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
+            taskList = bundle.getParcelableArrayList(MainActivity.LIST_TASK_KEY);
         } else {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
 
-        taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
                 R.layout.list_item_task,

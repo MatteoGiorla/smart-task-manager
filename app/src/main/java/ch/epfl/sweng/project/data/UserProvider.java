@@ -7,7 +7,7 @@ package ch.epfl.sweng.project.data;
 public class UserProvider {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
-    private static String mProvider = FIREBASE_PROVIDER;
+    public static String mProvider = FIREBASE_PROVIDER;
 
     /**
      * Getter that return the Proxy to reach

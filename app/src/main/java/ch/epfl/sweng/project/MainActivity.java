@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.data.UserHelper;
-import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.complete_listener.TaskAllOnCompleteListener;
+import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
 
 
 /**
@@ -34,10 +34,14 @@ import ch.epfl.sweng.project.data.UserProvider;
 public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
+    public static final String LIST_TASK_KEY = "ch.epfl.sweng.MainActivity.LIST_TASK_KEY";
 
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
     private Context mContext;
+
+    private Intent intent;
+    private ArrayList<Task> taskList;
     private static User currentUser;
 
     // Will be used later on
@@ -69,9 +73,11 @@ public final class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //Define the currentUser
-        UserHelper userProvider = new UserProvider().getUserProvider();
-        currentUser = userProvider.retrieveUserInformation();
+        intent = getIntent();
+        checkIntent();
+        taskList = intent.getParcelableArrayListExtra(TaskAllOnCompleteListener.TASK_LIST_KEY);
+        currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+        checkIntentExtra();
 
         mContext = getApplicationContext();
 
@@ -81,6 +87,7 @@ public final class MainActivity extends AppCompatActivity {
         fragment = new TaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
+        bundle.putParcelableArrayList(LIST_TASK_KEY, taskList);
         fragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
@@ -349,5 +356,25 @@ public final class MainActivity extends AppCompatActivity {
      */
     public static String[] getStartDurationTable() {
         return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
+    }
+
+    /**
+     * Check the validity of the intent
+     */
+    private void checkIntent() {
+        if(intent == null) {
+            throw new IllegalArgumentException("No intent was passed to MainActivity");
+        }
+    }
+
+    /**
+     * Check extra passed with the intent
+     */
+    private void checkIntentExtra() {
+//        if(currentUser == null) Log.e("user null", "current user is null");
+//        if(taskList == null) Log.e("list null", "list of task is null");
+        if(currentUser == null || taskList == null) {
+            throw new IllegalArgumentException("User or List passed with the intent null");
+        }
     }
 }
