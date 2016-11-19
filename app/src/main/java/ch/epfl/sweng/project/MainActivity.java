@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,6 +33,10 @@ import java.util.Map;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserHelper;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.information.TaskInformationActivity;
+
+import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED;
+import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
 
 
 /**
@@ -75,6 +78,9 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mContext = getApplicationContext();
+        createUtilityMaps();
+
         this.savedInstanceState = savedInstanceState;
 
         // Initialize Facebook SDK, in order to logout correctly
@@ -111,6 +117,17 @@ public final class MainActivity extends AppCompatActivity {
         } else if(UserProvider.mProvider.equals(UserProvider.TEST_PROVIDER)){
             Log.e("errormain", "TEST_PROVIDER");
             launchFragment();
+        }
+
+        //This is used when we opened the task information activity through the notification
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra(TASKS_LIST_KEY) && intent.hasExtra(INDEX_TASK_TO_BE_DISPLAYED)) {
+            Intent newIntent = new Intent(this, TaskInformationActivity.class);
+            ArrayList<Task> listOfTasks = intent.getParcelableArrayListExtra(TASKS_LIST_KEY);
+            int position = intent.getIntExtra(INDEX_TASK_TO_BE_DISPLAYED, -1);
+            newIntent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
+            newIntent.putParcelableArrayListExtra(TASKS_LIST_KEY, listOfTasks);
+            startActivity(newIntent);
         }
     }
 
@@ -378,10 +395,6 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void launchFragment() {
-        mContext = getApplicationContext();
-
-        createUtilityMaps();
-
         //Add the user to TaskFragment
         fragment = new TaskFragment();
         Bundle bundle = new Bundle();

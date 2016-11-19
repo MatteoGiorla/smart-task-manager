@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -105,6 +107,37 @@ public class TaskFragment extends Fragment {
             Log.e("errorfragment", "TEST_PROVIDER");
             mDatabase.retrieveAllData(currentUser, null);
             sortTaskStatically();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO
+                waiting();
+                swipeLayout.setRefreshing(false);
+            }
+        });
+
+        swipeLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), android.R.color.holo_blue_light),
+                ContextCompat.getColor(getActivity(), android.R.color.holo_green_light),
+                ContextCompat.getColor(getActivity(), android.R.color.holo_orange_light),
+                ContextCompat.getColor(getActivity(), android.R.color.holo_red_light));
+    }
+
+    public void waiting() {
+        try {
+            synchronized (this) {
+                wait(4000);
+            }
+        }catch(InterruptedException e) {
+
         }
     }
 

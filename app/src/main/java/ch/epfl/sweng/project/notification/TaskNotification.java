@@ -14,16 +14,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.EntryActivity;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.TaskFragment;
 import ch.epfl.sweng.project.receiver.NotificationReceiver;
 
 public class TaskNotification extends AsyncTask<Integer, Void, Void> {
-    private List<Task> taskList;
+    private ArrayList<Task> taskList;
     private Context mContext;
 
-    public TaskNotification(ArrayList<Task> taskList, Context context) {
+    public TaskNotification(List<Task> taskList, Context context) {
         this.taskList = new ArrayList<>(taskList);
         mContext = context;
     }
@@ -33,11 +34,6 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         clearAllNotifications(params[0]);
         createAllNotifications(params[1]);
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
     }
 
     private void clearAllNotifications(int numberOfIds) {
@@ -59,7 +55,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     private void createAllNotifications(int numberOfIds) {
         for (int i = 0; i < numberOfIds; i++) {
             Task task = taskList.get(i);
-            scheduleNotification(buildNotification(task.getName()), setDelayToNotify(task), i);
+            scheduleNotification(buildNotification(task, i), setDelayToNotify(task), i);
         }
     }
 
@@ -114,34 +110,47 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_KEY, notification);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
-            long futureInMillis = SystemClock.elapsedRealtime() + delay;
+            long futureInMillis = SystemClock.elapsedRealtime() + 1000;
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
         }
     }
 
-    public Notification buildNotification(String title) {
-        Intent startActivityIntent = new Intent(mContext, EntryActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        mContext,
-                        0,
-                        startActivityIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
+    public Notification buildNotification(Task task, int position) {
+        // Intent
+        Intent openInformationActivity = new Intent(mContext, MainActivity.class);
+        openInformationActivity.putExtra(TaskFragment.INDEX_TASK_TO_BE_DISPLAYED, position);
+        openInformationActivity.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, taskList);
+        openInformationActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                mContext,
+                0,
+                openInformationActivity,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
+        //Notification builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
         builder.setAutoCancel(true);
-        builder.setSmallIcon(R.drawable.notification);
-        builder.setContentTitle(mContext.getString(R.string.notification_title_task));
-        builder.setContentText(title + mContext.getString(R.string.notification_content_task));
+        builder.setSmallIcon(R.drawable.ic_event_notification);
+        builder.setContentTitle(task.getName() + mContext.getString(R.string.notification_content_task));
         builder.setContentIntent(resultPendingIntent);
+        builder.setDefaults(Notification.DEFAULT_VIBRATE);
+
+        // inbox style
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.addLine(mContext.getString(R.string.notification_detail_date) + task.dueDateToString());
+        inboxStyle.addLine(mContext.getString(R.string.notification_detail_location) + task.getLocationName());
+
+        // Moves the expanded layout object into the notification object.
+        builder.setStyle(inboxStyle);
 
         return builder.build();
     }
 
     public void createUniqueNotification(int id) {
         Task task = taskList.get(id);
-        scheduleNotification(buildNotification(task.getName()), setDelayToNotify(task), id);
+        scheduleNotification(buildNotification(task, id), setDelayToNotify(task), id);
     }
 }
