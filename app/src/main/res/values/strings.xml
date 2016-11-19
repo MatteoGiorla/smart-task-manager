@@ -132,4 +132,7 @@
     <string name="day_left">" day left"</string>
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
+    <string name="current_location_main_activity_text">Current location</string>
+    <string name="time_at_disposal_main_activity_text">Time at disposal</string>
+    <string name="start_by_filling_up_your_tasks_main_activity">Start by filling up your tasks</string>
 </resources>

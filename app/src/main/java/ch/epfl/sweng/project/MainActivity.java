@@ -52,7 +52,6 @@ public final class MainActivity extends AppCompatActivity {
     private Query userRef;
 
     // Will be used later on
-    private int userEnergy;
     private String userLocation;
     private int userTimeAtDisposal;
 
@@ -196,7 +195,6 @@ public final class MainActivity extends AppCompatActivity {
     private void initializeAdapters() {
         Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
-        Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
 
         String[] locationListForAdapter = getLocationTable();
         for(int i = 0; i < locationListForAdapter.length; i++){
@@ -210,15 +208,10 @@ public final class MainActivity extends AppCompatActivity {
         CustomSpinnerAdapter<String> durationAdapter = new CustomSpinnerAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
-        CustomSpinnerAdapter<String> energyAdapter = new CustomSpinnerAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
-
-
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
-        mEnergy.setAdapter(energyAdapter);
 
-        setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
+        setListeners(mLocation,mDuration,locationAdapter,durationAdapter);
     }
 
     /**
@@ -226,15 +219,12 @@ public final class MainActivity extends AppCompatActivity {
      * on an image button inside the MainActivity layout.
      * @param location Spinner for the user locations
      * @param duration Spinner for the time at disposal of the user
-     * @param energy Spinner for the current energy of the user
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
-     * @param energyAdapter The adapter of energy
      */
-    private void setListeners(Spinner location, Spinner duration, Spinner energy,
+    private void setListeners(Spinner location, Spinner duration,
                               final CustomSpinnerAdapter<String> locationAdapter,
-                              final CustomSpinnerAdapter<String> durationAdapter,
-                              final CustomSpinnerAdapter<String> energyAdapter)
+                              final CustomSpinnerAdapter<String> durationAdapter)
     {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -254,16 +244,6 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_DURATION.get(durationAdapter.getItem(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userEnergy = REVERSE_ENERGY.get(energyAdapter.getItem(position));
             }
 
             @Override
@@ -395,7 +375,6 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
         userLocation = getResources().getString(R.string.everywhere_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
