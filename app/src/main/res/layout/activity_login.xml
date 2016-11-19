@@ -70,7 +70,7 @@
             android:paddingBottom="20dp"/>
 
         <ImageButton
-            android:id="@+id/facebook_sign_in_button_image"
+            android:id="@+id/facebook_sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/facebook_sign_in_button_image"
@@ -82,7 +82,7 @@
         <!-- this button is invisible and unclickable-->
 
         <com.facebook.login.widget.LoginButton
-            android:id="@+id/facebook_sign_in_button"
+            android:id="@+id/facebook_sign_in_button_invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
