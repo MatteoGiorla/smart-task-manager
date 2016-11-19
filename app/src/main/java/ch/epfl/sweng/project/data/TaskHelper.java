@@ -37,4 +37,12 @@ public interface TaskHelper {
      * @param task the task to be deleted
      */
     void deleteTask(Task task);
+
+    /**
+     * Take care of retrieving all user data when the
+     * user force it.
+     *
+     * @param user The user we want to retrieve data from.
+     */
+    void refreshData(User user);
 }

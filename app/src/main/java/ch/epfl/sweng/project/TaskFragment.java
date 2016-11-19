@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
-
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -97,9 +95,7 @@ public class TaskFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // TODO
-                mDatabase.retrieveAllData(currentUser);
-
+                mDatabase.refreshData(currentUser);
                 swipeLayout.setRefreshing(false);
             }
         });

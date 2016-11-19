@@ -27,6 +27,11 @@ public class LocalTaskHelper implements TaskHelper {
     }
 
     @Override
+    public void refreshData(User user) {
+        //Nothing to refresh when doing tests
+    }
+
+    @Override
     public void addNewTask(Task task) {
         mTaskList.add(task);
         mAdapter.sort(Task.getStaticComparator());

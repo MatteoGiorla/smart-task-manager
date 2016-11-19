@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.MainActivity;
+import ch.epfl.sweng.project.EntryActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
-import ch.epfl.sweng.project.TaskFragment;
 import ch.epfl.sweng.project.receiver.NotificationReceiver;
 
 public class TaskNotification extends AsyncTask<Integer, Void, Void> {
@@ -110,7 +109,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_KEY, notification);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, id, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
-            long futureInMillis = SystemClock.elapsedRealtime() + 1000;
+            long futureInMillis = SystemClock.elapsedRealtime() + delay;
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
         }
@@ -118,11 +117,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
 
     public Notification buildNotification(Task task, int position) {
         // Intent
-        Intent openInformationActivity = new Intent(mContext, MainActivity.class);
-        openInformationActivity.putExtra(TaskFragment.INDEX_TASK_TO_BE_DISPLAYED, position);
-        openInformationActivity.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, taskList);
-        openInformationActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+        Intent openInformationActivity = new Intent(mContext, EntryActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
                 mContext,
                 0,
@@ -136,7 +131,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         builder.setSmallIcon(R.drawable.ic_event_notification);
         builder.setContentTitle(task.getName() + mContext.getString(R.string.notification_content_task));
         builder.setContentIntent(resultPendingIntent);
-        builder.setDefaults(Notification.DEFAULT_VIBRATE);
+        builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
 
         // inbox style
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
