@@ -74,7 +74,7 @@
             android:theme="@style/AppThemeNoActionBar"/>
 
         <activity
-            android:name=".SynchronizationActivity"
+            android:name=".synchronization.SynchronizationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
 

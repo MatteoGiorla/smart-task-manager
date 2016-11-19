@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.SynchronizationActivity;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;

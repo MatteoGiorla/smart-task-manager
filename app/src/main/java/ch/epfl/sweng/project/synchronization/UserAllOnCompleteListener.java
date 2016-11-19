@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project.complete_listener;
+package ch.epfl.sweng.project.synchronization;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
-import ch.epfl.sweng.project.SynchronizedQueries;
 import ch.epfl.sweng.project.User;
 
 

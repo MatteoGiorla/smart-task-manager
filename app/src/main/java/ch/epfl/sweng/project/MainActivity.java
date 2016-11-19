@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 import ch.epfl.sweng.project.data.UserProvider;
 
 

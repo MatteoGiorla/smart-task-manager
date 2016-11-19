@@ -38,7 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.SynchronizationActivity;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 

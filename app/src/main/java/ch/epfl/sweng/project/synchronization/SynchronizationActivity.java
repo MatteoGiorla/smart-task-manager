@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.synchronization;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import com.google.firebase.database.Query;
 
 import java.util.Map;
 
-import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
+import ch.epfl.sweng.project.MainActivity;
+import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.UserProvider;
 
 public class SynchronizationActivity extends Activity {

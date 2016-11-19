@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.synchronization;
 
 import android.support.annotation.NonNull;
 
