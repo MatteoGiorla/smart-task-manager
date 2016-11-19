@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -51,16 +52,20 @@ public class SynchronizationActivity extends Activity {
                 break;
 
             case UserProvider.TEST_PROVIDER:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 break;
 
             default:
-
+                throw new IllegalStateException("UserProvider not in FIREBASE_PROVIDER nor in TEST_PROVIDER");
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        synchronizedQueries.stop();
+        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+            synchronizedQueries.stop();
+        }
     }
 }

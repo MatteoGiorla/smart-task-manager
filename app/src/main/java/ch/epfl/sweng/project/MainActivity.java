@@ -25,6 +25,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener;
+import ch.epfl.sweng.project.data.UserProvider;
 
 
 /**
@@ -70,10 +71,25 @@ public final class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        intent = getIntent();
-        checkIntent();
-        currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
-        checkIntentExtra();
+        //If we are not in test mode
+        //We get the user that was loaded in SynchronisationActivity
+        switch (UserProvider.mProvider) {
+            case UserProvider.FIREBASE_PROVIDER:
+                intent = getIntent();
+                checkIntent();
+                currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+                checkIntentExtra();
+                break;
+
+            case UserProvider.TEST_PROVIDER:
+                currentUser = new User(User.DEFAULT_EMAIL);
+                break;
+
+            default:
+                throw new IllegalStateException("UserProvider not in FIREBASE_PROVIDER nor in TEST_PROVIDER");
+        }
+
+
 
         mContext = getApplicationContext();
 
