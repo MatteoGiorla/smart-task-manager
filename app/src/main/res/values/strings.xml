@@ -17,8 +17,7 @@
     <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">Sign in with Google or Facebook</string>
-    <string name="welcome_title">Welcome !</string>
+    <string name="sign_in_text">Sign in with Google or Facebook</string>
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
