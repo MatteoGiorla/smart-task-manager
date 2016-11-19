@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -32,7 +31,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
-        List<Task> taskList = objects;
     }
 
     /**
@@ -59,40 +57,57 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         final Task taskInTheView = getItem(position);
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
-            // TextView descriptionView = (TextView) resultView.findViewById(R.id.list_entry_description);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-            ImageView energyIconLow = (ImageView) resultView.findViewById(R.id.list_energy_low);
-            ImageView energyIconNormal = (ImageView) resultView.findViewById(R.id.list_energy_normal);
-            ImageView energyIconHigh = (ImageView) resultView.findViewById(R.id.list_energy_high);
+            TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
+            TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
             View coloredIndicator = resultView.findViewById(R.id.list_colored_indicator);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
             }
-           /* if (descriptionView != null) {
-                descriptionView.setText(taskInTheView.getDescription());
-            }*/
+            Calendar c = Calendar.getInstance();
+            int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
-                Calendar c = Calendar.getInstance();
+                if(days > 1){
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_days), days));
+                } else if (days == 1) {
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.remaining_day), days));
+                } else if (days == 0) {
+                    remainingDays.setText(R.string.due_today);
+                } else if (days == -1) {
+                    int days_value_for_text = days * -1;
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_late), days_value_for_text));
+                } else if (days < 1) {
+                    int days_value_for_text = days * -1;
+                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_late), days_value_for_text));
+                }
 
-                int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
-                remainingDays.setText(String.format(Locale.UK, "%d", days));
-
-                if (days < 10)
+                if (days < 10 && days >= 1) {
+                    remainingDays.setTextColor(Color.rgb(255,140,0));
+                } else if (days < 1) {
                     remainingDays.setTextColor(Color.RED);
-            }
-            if (energyIconLow != null) {
-                Task.Energy e = taskInTheView.getEnergy();
-                if (e == Task.Energy.LOW) {
-                    energyIconNormal.setVisibility(View.INVISIBLE);
-                    energyIconHigh.setVisibility(View.INVISIBLE);
-                } else if (e == Task.Energy.NORMAL) {
-                    energyIconHigh.setVisibility(View.INVISIBLE);
                 }
             }
-            /*if (coloredIndicator != null) {
-
-            }*/
+            if (taskLocation!= null) {
+                taskLocation.setText(taskInTheView.getLocationName());
+            }
+            if (taskEnergy != null) {
+                taskEnergy.setText(MainActivity.ENERGY_MAP.get(taskInTheView.getEnergy().ordinal()));
+            }
+            if (coloredIndicator != null) {
+                //int static_sort_value = taskInTheView.getStaticSortValue();
+                int urgency_percentage;
+                if(days <= 0){
+                    urgency_percentage = 100;
+                } else {
+                    urgency_percentage = (int)taskInTheView.getDuration()/(2*days);
+                }
+                float[] hsv = new float[3];
+                hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
+                hsv[1] = 1;
+                hsv[2] = 1;
+                coloredIndicator.setBackgroundColor(Color.HSVToColor(hsv));
+            }
         }
         return resultView;
     }

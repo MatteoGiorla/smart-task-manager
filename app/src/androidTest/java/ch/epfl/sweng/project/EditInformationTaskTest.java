@@ -57,7 +57,7 @@ public class EditInformationTaskTest extends SuperTest {
         //Check that the new description is displayed in the task's information list
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(4)
+                .atPosition(5)
                 .check(matches(hasDescendant(withText(mEditedDescription))));
 
         pressBack();

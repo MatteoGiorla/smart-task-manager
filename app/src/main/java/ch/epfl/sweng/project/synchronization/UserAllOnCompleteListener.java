@@ -23,7 +23,6 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
 
     private Query userRef;
     private User currentUser;
-    private SynchronizedQueries synchronizedQueries;
     private Context synchronizationActivityContext;
 
     public UserAllOnCompleteListener(@NonNull Query userRef, @NonNull User currentUser, @NonNull SynchronizedQueries synchronizedQueries,
@@ -31,7 +30,7 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         super();
         this.userRef = userRef;
         this.currentUser = currentUser;
-        this.synchronizedQueries = synchronizedQueries;
+        SynchronizedQueries synchronizedQueries1 = synchronizedQueries;
         this.synchronizationActivityContext = synchronizationActivityContext;
     }
 

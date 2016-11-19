@@ -62,10 +62,11 @@ public class TaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
+
         User currentUser;
         if (bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
-            if(currentUser == null) {
+            if (currentUser == null) {
                 throw new IllegalArgumentException("User passed with the intend is null");
             }
         } else {
@@ -214,7 +215,7 @@ public class TaskFragment extends Fragment {
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + R.string.info_updated,
+                    editedTask.getName() + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
@@ -233,7 +234,7 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
-        mTaskAdapter.sort(Task.getStaticComparator());
+        sortTaskStatically();
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);

@@ -24,8 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
 /**
@@ -90,7 +90,6 @@ public final class MainActivity extends AppCompatActivity {
         }
 
 
-
         mContext = getApplicationContext();
 
         createUtilityMaps();
@@ -99,7 +98,6 @@ public final class MainActivity extends AppCompatActivity {
         fragment = new TaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
-//        bundle.putParcelableArrayList(LIST_TASK_KEY, taskList);
         fragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
@@ -192,8 +190,8 @@ public final class MainActivity extends AppCompatActivity {
         Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
 
         String[] locationListForAdapter = getLocationTable();
-        for(int i = 0; i < locationListForAdapter.length; i++){
-            if(locationListForAdapter[i].equals(getString(R.string.everywhere_location))){
+        for (int i = 0; i < locationListForAdapter.length; i++) {
+            if (locationListForAdapter[i].equals(getString(R.string.everywhere_location))) {
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
@@ -211,28 +209,28 @@ public final class MainActivity extends AppCompatActivity {
         mDuration.setAdapter(durationAdapter);
         mEnergy.setAdapter(energyAdapter);
 
-        setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
+        setListeners(mLocation, mDuration, mEnergy, locationAdapter, durationAdapter, energyAdapter);
     }
 
     /**
      * Set the Listeners in order to have the spinners dropdown when we click
      * on an image button inside the MainActivity layout.
-     * @param location Spinner for the user locations
-     * @param duration Spinner for the time at disposal of the user
-     * @param energy Spinner for the current energy of the user
+     *
+     * @param location        Spinner for the user locations
+     * @param duration        Spinner for the time at disposal of the user
+     * @param energy          Spinner for the current energy of the user
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
-     * @param energyAdapter The adapter of energy
+     * @param energyAdapter   The adapter of energy
      */
     private void setListeners(Spinner location, Spinner duration, Spinner energy,
                               final CustomSpinnerAdapter<String> locationAdapter,
                               final CustomSpinnerAdapter<String> durationAdapter,
-                              final CustomSpinnerAdapter<String> energyAdapter)
-    {
+                              final CustomSpinnerAdapter<String> energyAdapter) {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(locationAdapter.getItem(position).equals(getString(R.string.elsewhere_location))){
+                if (getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))) {
                     userLocation = getString(R.string.everywhere_location);
                 } else {
                     userLocation = locationAdapter.getItem(position);
@@ -240,7 +238,8 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -250,7 +249,8 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -260,11 +260,12 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
-    private void createUtilityMaps(){
+    private void createUtilityMaps() {
         DURATION_MAP = new LinkedHashMap<>();
         DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
@@ -374,7 +375,7 @@ public final class MainActivity extends AppCompatActivity {
      * Check the validity of the intent
      */
     private void checkIntent() {
-        if(intent == null) {
+        if (intent == null) {
             throw new IllegalArgumentException("No intent was passed to MainActivity");
         }
     }
@@ -383,7 +384,7 @@ public final class MainActivity extends AppCompatActivity {
      * Check extra passed with the intent
      */
     private void checkIntentExtra() {
-        if(currentUser == null/* || taskList == null*/) {
+        if (currentUser == null/* || taskList == null*/) {
             throw new IllegalArgumentException("User passed with the intent is null");
         }
     }

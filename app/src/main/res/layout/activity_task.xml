@@ -54,15 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginRight="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_height="57dp">
-            <TextView
-                android:id="@+id/titleTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:text="@string/titleTitle"
-                android:textColor="@color/black" />
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/title_task"
@@ -136,8 +128,6 @@
                 android:id="@+id/durationSpinner"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:gravity="end"
                 android:spinnerMode="dialog" />
 
@@ -167,49 +157,9 @@
                 android:id="@+id/locationSpinner"
                 android:layout_width="275dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:gravity="end"
                 android:spinnerMode="dialog" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/fractionTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:text="@string/startDurationTitle"
-                android:textStyle="bold" />
-            <Spinner
-                android:id="@+id/startDurationSpinner"
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="end"
-                android:spinnerMode="dialog" />
-
-        </LinearLayout>
-
-        <TextView
-            android:text="@string/start_duration_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/startDurationDescription"
-            android:layout_weight="1.17" />
 
         <View
             android:layout_width="match_parent"
@@ -268,28 +218,54 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/description_task_layout"
-                android:layout_width="361dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:baselineAligned="false"
+            <TextView
+                android:id="@+id/fractionTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.14"
                 android:gravity="center_vertical"
-                android:text="@string/descriptionTitle"
-                android:textColor="@color/black" >
+                android:textColor="@color/black"
+                android:text="@string/startDurationTitle"
+                android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/startDurationSpinner"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:spinnerMode="dialog" />
 
-                <EditText
-                    android:id="@+id/description_task"
-                    android:layout_width="match_parent"
-                    android:layout_height="152dp"
-                    android:hint="@string/hint_description"
-                    android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                    android:maxLength="@string/max_length_description"
-                    android:maxLines="10"
-                    android:gravity="top"/>
-            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:text="@string/start_duration_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/startDurationDescription"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/description_task_layout"
+            android:layout_width="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:textColor="@color/black" >
+
+            <EditText
+                android:id="@+id/description_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_description"
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                android:gravity="top"
+                android:maxLength="@string/max_length_description" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
-</LinearLayout>
 </RelativeLayout>

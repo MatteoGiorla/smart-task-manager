@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -36,7 +37,8 @@ public class CustomSpinnerAdapter<T> extends ArrayAdapter<T> {
      * @param parent      ViewGroup that this view will eventually be attached to
      * @return the view to be displayed
      */
-    public View getView(int position, View convertView, ViewGroup parent) {
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
         textView.setText("");
