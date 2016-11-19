@@ -11,8 +11,8 @@ import android.widget.ImageButton;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
-import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -116,7 +116,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             resultActivity();
-            Intent intent = new Intent(LocationSettingActivity.this, MainActivity.class);
+            Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
