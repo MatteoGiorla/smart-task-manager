@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.synchronization;
 
 import android.support.annotation.NonNull;
 
@@ -17,13 +17,13 @@ import java.util.Map;
 /**
  * Class that allow us to retrieve the user's data before executing the remaining code of the app.
  */
-class SynchronizedQueries {
+public class SynchronizedQueries {
 
     private final Query reference;
     private final HashMap<Query, DataSnapshot> refsToSnaps = new HashMap<>();
     private ValueEventListener listener;
 
-    SynchronizedQueries(final Query reference) {
+    public SynchronizedQueries(final Query reference) {
         this.reference = reference;
     }
 
@@ -49,7 +49,7 @@ class SynchronizedQueries {
         });
     }
 
-    void stop() {
+    public void stop() {
         reference.removeEventListener(listener);
         refsToSnaps.clear();
     }

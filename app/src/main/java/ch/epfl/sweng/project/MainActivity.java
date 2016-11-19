@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,12 +16,7 @@ import android.widget.Spinner;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,12 +24,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.data.UserHelper;
 import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED;
 import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
 /**
@@ -49,10 +42,9 @@ public final class MainActivity extends AppCompatActivity {
     private final int newTaskRequestCode = 1;
     private TaskFragment fragment;
     private Context mContext;
+
+    private Intent intent;
     private static User currentUser;
-    private Bundle savedInstanceState;
-    private SynchronizedQueries synchronizedQueries;
-    private Query userRef;
 
     // Will be used later on
     private int userEnergy;
@@ -77,46 +69,43 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mContext = getApplicationContext();
-        createUtilityMaps();
-
-        this.savedInstanceState = savedInstanceState;
-
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
 
-        String mail;
-        try {
-            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        } catch (NullPointerException e) {
-            mail = User.DEFAULT_EMAIL;
+        //If we are not in test mode
+        //We get the user that was loaded in SynchronisationActivity
+        switch (UserProvider.mProvider) {
+            case UserProvider.FIREBASE_PROVIDER:
+                intent = getIntent();
+                checkIntent();
+                currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+                checkIntentExtra();
+                break;
+
+            case UserProvider.TEST_PROVIDER:
+                currentUser = new User(User.DEFAULT_EMAIL);
+                break;
+
+            default:
+                throw new IllegalStateException("UserProvider not in FIREBASE_PROVIDER nor in TEST_PROVIDER");
         }
 
+        mContext = getApplicationContext();
 
-        //Create an instance of the current user
-        currentUser = new User(mail);
+        createUtilityMaps();
 
-        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
-            Log.e("errormain", "FIREBASE_PROVIDER");
-            //Get reference of the database
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-            //Get reference of the user
-            userRef = mDatabase.child("users")
-                    .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail()))
-                    .child("listLocations").getRef();
+        //Add the user to TaskFragment
+        fragment = new TaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_KEY, currentUser);
+        fragment.setArguments(bundle);
 
-            //This class allows us to get all the user's data before continuing executing the app
-            synchronizedQueries = new SynchronizedQueries(userRef);
-            final com.google.android.gms.tasks
-                    .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
-            //Listener that listen when communications with firebase end
-            readFirebaseTask.addOnCompleteListener(this, new AllOnCompleteListener());
-        } else if(UserProvider.mProvider.equals(UserProvider.TEST_PROVIDER)){
-            Log.e("errormain", "TEST_PROVIDER");
-            launchFragment();
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.tasks_container, fragment)
+                    .commit();
         }
 
         //This is used when we opened the task information activity through the notification
@@ -129,6 +118,11 @@ public final class MainActivity extends AppCompatActivity {
             newIntent.putParcelableArrayListExtra(TASKS_LIST_KEY, listOfTasks);
             startActivity(newIntent);
         }
+        //Default values
+        userEnergy = Task.Energy.NORMAL.ordinal();
+        userLocation = getResources().getString(R.string.everywhere_location);
+        userTimeAtDisposal = 60; //1 hour
+        initializeAdapters();
     }
 
     /**
@@ -159,14 +153,6 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
-            synchronizedQueries.stop();
         }
     }
 
@@ -216,8 +202,8 @@ public final class MainActivity extends AppCompatActivity {
         Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
 
         String[] locationListForAdapter = getLocationTable();
-        for(int i = 0; i < locationListForAdapter.length; i++){
-            if(locationListForAdapter[i].equals(getString(R.string.everywhere_location))){
+        for (int i = 0; i < locationListForAdapter.length; i++) {
+            if (locationListForAdapter[i].equals(getString(R.string.everywhere_location))) {
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
@@ -235,28 +221,28 @@ public final class MainActivity extends AppCompatActivity {
         mDuration.setAdapter(durationAdapter);
         mEnergy.setAdapter(energyAdapter);
 
-        setListeners(mLocation,mDuration,mEnergy,locationAdapter,durationAdapter,energyAdapter);
+        setListeners(mLocation, mDuration, mEnergy, locationAdapter, durationAdapter, energyAdapter);
     }
 
     /**
      * Set the Listeners in order to have the spinners dropdown when we click
      * on an image button inside the MainActivity layout.
-     * @param location Spinner for the user locations
-     * @param duration Spinner for the time at disposal of the user
-     * @param energy Spinner for the current energy of the user
+     *
+     * @param location        Spinner for the user locations
+     * @param duration        Spinner for the time at disposal of the user
+     * @param energy          Spinner for the current energy of the user
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
-     * @param energyAdapter The adapter of energy
+     * @param energyAdapter   The adapter of energy
      */
     private void setListeners(Spinner location, Spinner duration, Spinner energy,
                               final CustomSpinnerAdapter<String> locationAdapter,
                               final CustomSpinnerAdapter<String> durationAdapter,
-                              final CustomSpinnerAdapter<String> energyAdapter)
-    {
+                              final CustomSpinnerAdapter<String> energyAdapter) {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))){
+                if (getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))) {
                     userLocation = getString(R.string.everywhere_location);
                 } else {
                     userLocation = locationAdapter.getItem(position);
@@ -264,7 +250,8 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -274,7 +261,8 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -284,11 +272,12 @@ public final class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
-    private void createUtilityMaps(){
+    private void createUtilityMaps() {
         DURATION_MAP = new LinkedHashMap<>();
         DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
@@ -394,49 +383,21 @@ public final class MainActivity extends AppCompatActivity {
         return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
     }
 
-    private void launchFragment() {
-        //Add the user to TaskFragment
-        fragment = new TaskFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(USER_KEY, currentUser);
-        fragment.setArguments(bundle);
-
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.tasks_container, fragment)
-                    .commit();
+    /**
+     * Check the validity of the intent
+     */
+    private void checkIntent() {
+        if (intent == null) {
+            throw new IllegalArgumentException("No intent was passed to MainActivity");
         }
-
-        //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
-        userLocation = getResources().getString(R.string.everywhere_location);
-        userTimeAtDisposal = 60; //1 hour
-        initializeAdapters();
     }
 
     /**
-     * OnCompleteListener that execute the code after that the user's data are recovered.
+     * Check extra passed with the intent
      */
-    private class AllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
-        @Override
-        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
-            if (task.isSuccessful()) {
-                final Map<Query, DataSnapshot> result = task.getResult();
-
-                //Define the currentUser
-                UserHelper userProvider = new UserProvider().getUserProvider();
-                currentUser = userProvider
-                        .retrieveUserInformation(currentUser, result.get(userRef).getChildren());
-
-                launchFragment();
-
-            } else {
-                try {
-                    task.getException();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+    private void checkIntentExtra() {
+        if (currentUser == null/* || taskList == null*/) {
+            throw new IllegalArgumentException("User passed with the intent is null");
         }
     }
 }

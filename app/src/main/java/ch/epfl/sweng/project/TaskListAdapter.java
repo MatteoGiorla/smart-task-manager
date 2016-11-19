@@ -31,7 +31,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
-        List<Task> taskList = objects;
     }
 
     /**
@@ -61,7 +60,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
             TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
             TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
-            View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
+            View coloredIndicator = resultView.findViewById(R.id.list_colored_indicator);
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
