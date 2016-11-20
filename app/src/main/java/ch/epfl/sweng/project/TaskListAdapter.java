@@ -60,8 +60,12 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
             //TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
             TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
+<<<<<<< HEAD
             TextView taskDuration = (TextView) resultView.findViewById(R.id.list_item_duration);
             View coloredIndicator = (View) resultView.findViewById(R.id.list_colored_indicator);
+=======
+            View coloredIndicator = resultView.findViewById(R.id.list_colored_indicator);
+>>>>>>> master
 
             if (titleView != null) {
                 titleView.setText(taskInTheView.getName());
