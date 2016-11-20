@@ -31,6 +31,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
@@ -117,6 +119,9 @@ public final class MainActivity extends AppCompatActivity {
                             return true; // if you want to handle the touch event
                         case MotionEvent.ACTION_UP:
                             unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null)); // White Tint
+                            Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             return true; // if you want to handle the touch event
                     }
                     return false;

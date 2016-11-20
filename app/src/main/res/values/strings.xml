@@ -7,6 +7,8 @@
     <string name="location_settings">Location Settings</string>
     <string name="edit_location">Edit location</string>
     <string name="new_location">New location</string>
+    <string name="unfinished_tasks">Tasks to fill up</string>
+
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>

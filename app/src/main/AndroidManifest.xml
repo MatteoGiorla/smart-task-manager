@@ -102,6 +102,12 @@
             android:label="@string/location_set_text"
             android:theme="@style/AppThemeNoActionBar"/>
 
+        <activity
+            android:name=".UnfilledTasksActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/unfinished_tasks"
+            android:theme="@style/AppThemeNoActionBar"/>
+
         <receiver android:name=".receiver.NotificationReceiver" />
     </application>
 
