@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,10 +27,10 @@ import java.util.Map;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED;
 import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
-import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
 /**
@@ -73,6 +74,9 @@ public final class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
+        setSupportActionBar(mToolbar);
 
         //If we are not in test mode
         //We get the user that was loaded in SynchronisationActivity
