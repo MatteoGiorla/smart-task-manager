@@ -118,7 +118,7 @@ public final class MainActivity extends AppCompatActivity {
                             unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
                             return true; // if you want to handle the touch event
                         case MotionEvent.ACTION_UP:
-                            unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null)); // White Tint
+                            unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
                             Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
