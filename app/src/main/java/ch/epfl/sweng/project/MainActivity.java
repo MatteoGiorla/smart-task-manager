@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -108,7 +107,6 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
         userLocation = getResources().getString(R.string.everywhere_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
@@ -201,24 +199,28 @@ public final class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
+        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
+
+
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
-        setListeners(mLocation,mDuration,locationAdapter,durationAdapter);
+        setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
     /**
      * Set the Listeners in order to have the spinners dropdown when we click
      * on an image button inside the MainActivity layout.
-     * @param location Spinner for the user locations
-     * @param duration Spinner for the time at disposal of the user
+     *
+     * @param location        Spinner for the user locations
+     * @param duration        Spinner for the time at disposal of the user
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
      */
     private void setListeners(Spinner location, Spinner duration,
                               final ArrayAdapter<String> locationAdapter,
-                              final ArrayAdapter<String> durationAdapter)
-    {
+                              final ArrayAdapter<String> durationAdapter) {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -353,11 +355,6 @@ public final class MainActivity extends AppCompatActivity {
         if (intent == null) {
             throw new IllegalArgumentException("No intent was passed to MainActivity");
         }
-
-        //Default values
-        userLocation = getResources().getString(R.string.everywhere_location);
-        userTimeAtDisposal = 60; //1 hour
-        initializeAdapters();
     }
 
     /**

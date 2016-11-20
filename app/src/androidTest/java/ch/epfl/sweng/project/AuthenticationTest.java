@@ -61,7 +61,7 @@ public class AuthenticationTest {
     }
 
 
-   /* @Test
+    @Test
     public void authenticationFacebookCancelsIfInterrupted(){
         try{
             UiObject facebookButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/facebook_sign_in_button"));
@@ -74,7 +74,7 @@ public class AuthenticationTest {
                 .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-    }*/
+    }
 
 
     /**
