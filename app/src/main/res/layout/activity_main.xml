@@ -32,6 +32,8 @@
                     android:paddingTop="3dp"
                     android:paddingLeft="5dp"
                     android:paddingStart="5dp"
+                    android:paddingRight="1dp"
+                    android:paddingEnd="1dp"
                     android:id="@+id/location_user_spinner_text"
                     android:textColor="@color/black" />
 
@@ -45,9 +47,12 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingStart="5dp"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
                         app:srcCompat="@drawable/task_location_36dp"
                         android:id="@+id/imageView"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:contentDescription="@string/location_logo_content_description"/>
 
                     <Spinner
                         android:id="@+id/location_user"
@@ -79,6 +84,8 @@
                     android:paddingTop="3dp"
                     android:paddingLeft="5dp"
                     android:paddingStart="5dp"
+                    android:paddingRight="1dp"
+                    android:paddingEnd="1dp"
                     android:id="@+id/time_user_spinner_text"
                     android:textColor="@color/black" />
 
@@ -92,9 +99,12 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="3dp"
                         android:paddingStart="3dp"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
                         app:srcCompat="@drawable/minutes_needed_36dp"
                         android:id="@+id/imageView3"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:contentDescription="@string/stop_watch_icon_content_description"/>
 
                     <Spinner
                         android:id="@+id/time_user"
@@ -145,6 +155,8 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="15dp"
                 android:paddingStart="15dp"
+                android:paddingRight="1dp"
+                android:paddingEnd="1dp"
                 android:gravity="center_vertical"
                 android:id="@+id/tasks_to_fill_up"
                 android:textSize="20sp"
@@ -158,7 +170,8 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 android:id="@+id/imageView4"
-                android:layout_weight="0.1"/>
+                android:layout_weight="0.1"
+                android:contentDescription="@string/right_arrow_content_description"/>
 
         </LinearLayout>
 

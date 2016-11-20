@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.facebook.FacebookSdk;
@@ -202,10 +202,10 @@ public final class MainActivity extends AppCompatActivity {
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
-        CustomSpinnerAdapter<String> locationAdapter = new CustomSpinnerAdapter<>(this,
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
-        CustomSpinnerAdapter<String> durationAdapter = new CustomSpinnerAdapter<>(this,
+        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         mLocation.setAdapter(locationAdapter);
@@ -223,8 +223,8 @@ public final class MainActivity extends AppCompatActivity {
      * @param durationAdapter The adapter of duration
      */
     private void setListeners(Spinner location, Spinner duration,
-                              final CustomSpinnerAdapter<String> locationAdapter,
-                              final CustomSpinnerAdapter<String> durationAdapter)
+                              final ArrayAdapter<String> locationAdapter,
+                              final ArrayAdapter<String> durationAdapter)
     {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
