@@ -65,10 +65,10 @@
             app:srcCompat="@drawable/google_sign_in_button_image"
             android:layout_gravity="center"
             android:background="#00000000"
-            android:scaleX="0.91"
-            android:scaleY="0.91"
-            android:paddingTop="40dp"
-            android:paddingBottom="20dp"
+            android:scaleX="1.63"
+            android:scaleY="1.63"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp"
             android:contentDescription="@string/google_sign_in_button_content_description"/>
 
         <ImageButton
@@ -78,8 +78,8 @@
             app:srcCompat="@drawable/facebook_sign_in_button_image"
             android:layout_gravity="center"
             android:background="#00000000"
-            android:scaleX="0.9"
-            android:scaleY="0.9"
+            android:scaleX="1.6"
+            android:scaleY="1.6"
             android:contentDescription="@string/facebook_sign_in_button_content_description"/>
 
         <!-- this button is invisible and unclickable-->
