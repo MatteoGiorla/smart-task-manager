@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.support.annotation.NonNull;
-=======
->>>>>>> master
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -207,17 +204,12 @@ public final class MainActivity extends AppCompatActivity {
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
-<<<<<<< HEAD
         setListeners(mLocation,mDuration,locationAdapter,durationAdapter);
-=======
-        setListeners(mLocation, mDuration, mEnergy, locationAdapter, durationAdapter, energyAdapter);
->>>>>>> master
     }
 
     /**
      * Set the Listeners in order to have the spinners dropdown when we click
      * on an image button inside the MainActivity layout.
-<<<<<<< HEAD
      * @param location Spinner for the user locations
      * @param duration Spinner for the time at disposal of the user
      * @param locationAdapter The adapter of location
@@ -227,20 +219,6 @@ public final class MainActivity extends AppCompatActivity {
                               final ArrayAdapter<String> locationAdapter,
                               final ArrayAdapter<String> durationAdapter)
     {
-=======
-     *
-     * @param location        Spinner for the user locations
-     * @param duration        Spinner for the time at disposal of the user
-     * @param energy          Spinner for the current energy of the user
-     * @param locationAdapter The adapter of location
-     * @param durationAdapter The adapter of duration
-     * @param energyAdapter   The adapter of energy
-     */
-    private void setListeners(Spinner location, Spinner duration, Spinner energy,
-                              final CustomSpinnerAdapter<String> locationAdapter,
-                              final CustomSpinnerAdapter<String> durationAdapter,
-                              final CustomSpinnerAdapter<String> energyAdapter) {
->>>>>>> master
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -264,22 +242,7 @@ public final class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-<<<<<<< HEAD
             }
-=======
-            }
-        });
-
-        energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userEnergy = REVERSE_ENERGY.get(energyAdapter.getItem(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
->>>>>>> master
         });
     }
 
@@ -390,14 +353,11 @@ public final class MainActivity extends AppCompatActivity {
         if (intent == null) {
             throw new IllegalArgumentException("No intent was passed to MainActivity");
         }
-<<<<<<< HEAD
 
         //Default values
         userLocation = getResources().getString(R.string.everywhere_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
-=======
->>>>>>> master
     }
 
     /**
