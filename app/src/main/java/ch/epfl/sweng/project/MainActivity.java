@@ -2,17 +2,22 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TableRow;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -99,6 +104,28 @@ public final class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
         fragment.setArguments(bundle);
+
+        //Handle the table row in case of unfinished tasks
+        final TableRow unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+        if(areThereUnfinishedTasks()){
+            unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
+                            return true; // if you want to handle the touch event
+                        case MotionEvent.ACTION_UP:
+                            unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null)); // White Tint
+                            return true; // if you want to handle the touch event
+                    }
+                    return false;
+                }
+            });
+        }else{
+            unfilledTaskButton.setVisibility(View.GONE);
+            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
+        }
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -364,5 +391,14 @@ public final class MainActivity extends AppCompatActivity {
         if (currentUser == null/* || taskList == null*/) {
             throw new IllegalArgumentException("User passed with the intent is null");
         }
+    }
+
+    /**
+     * Tells whether there are unfilled tasks left to be complete
+     *
+     * @return boolean the existence of unfilled tasks.
+     */
+    private boolean areThereUnfinishedTasks(){
+        return true;
     }
 }
