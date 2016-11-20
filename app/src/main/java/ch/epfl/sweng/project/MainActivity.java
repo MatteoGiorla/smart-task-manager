@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.facebook.FacebookSdk;
@@ -43,7 +44,6 @@ public final class MainActivity extends AppCompatActivity {
     private static User currentUser;
 
     // Will be used later on
-    private int userEnergy;
     private String userLocation;
     private int userTimeAtDisposal;
 
@@ -107,7 +107,6 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userEnergy = Task.Energy.NORMAL.ordinal();
         userLocation = getResources().getString(R.string.everywhere_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
@@ -187,7 +186,6 @@ public final class MainActivity extends AppCompatActivity {
     private void initializeAdapters() {
         Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
-        Spinner mEnergy = (Spinner) findViewById(R.id.vitality_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -195,21 +193,20 @@ public final class MainActivity extends AppCompatActivity {
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
-        CustomSpinnerAdapter<String> locationAdapter = new CustomSpinnerAdapter<>(this,
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
-        CustomSpinnerAdapter<String> durationAdapter = new CustomSpinnerAdapter<>(this,
+        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
-        CustomSpinnerAdapter<String> energyAdapter = new CustomSpinnerAdapter<>(this,
+        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
 
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
-        mEnergy.setAdapter(energyAdapter);
 
-        setListeners(mLocation, mDuration, mEnergy, locationAdapter, durationAdapter, energyAdapter);
+        setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
     /**
@@ -218,15 +215,12 @@ public final class MainActivity extends AppCompatActivity {
      *
      * @param location        Spinner for the user locations
      * @param duration        Spinner for the time at disposal of the user
-     * @param energy          Spinner for the current energy of the user
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
-     * @param energyAdapter   The adapter of energy
      */
-    private void setListeners(Spinner location, Spinner duration, Spinner energy,
-                              final CustomSpinnerAdapter<String> locationAdapter,
-                              final CustomSpinnerAdapter<String> durationAdapter,
-                              final CustomSpinnerAdapter<String> energyAdapter) {
+    private void setListeners(Spinner location, Spinner duration,
+                              final ArrayAdapter<String> locationAdapter,
+                              final ArrayAdapter<String> durationAdapter) {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -245,18 +239,7 @@ public final class MainActivity extends AppCompatActivity {
         duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userTimeAtDisposal = REVERSE_DURATION.get(durationAdapter.getItem(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        energy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userEnergy = REVERSE_ENERGY.get(energyAdapter.getItem(position));
+                userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
             }
 
             @Override
@@ -300,20 +283,14 @@ public final class MainActivity extends AppCompatActivity {
         START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
-        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2h));
-        START_DURATION_MAP.put(240, mContext.getResources().getString(R.string.duration4h));
-        START_DURATION_MAP.put(480, mContext.getResources().getString(R.string.duration1d));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1hstartTime));
         START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
         REVERSE_START_DURATION = new LinkedHashMap<>();
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2h), 120);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration4h), 240);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1d), 480);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1hstartTime), 60);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();

@@ -6,6 +6,7 @@
     <string name="edit_task">Edit task</string>
     <string name="location_settings">Location Settings</string>
     <string name="edit_location">Edit location</string>
+    <string name="new_location">New location</string>
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
@@ -17,8 +18,7 @@
     <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
-    <string name="welcome_text">Sign in with Google or Facebook</string>
-    <string name="welcome_title">Welcome !</string>
+    <string name="sign_in_text">Sign in with Google or Facebook</string>
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
@@ -40,6 +40,7 @@
     <string name="error_title_duplicated">This title is already taken !</string>
     <string name="error_location_name_empty">The location name can not be empty !</string>
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
+    <string name="info_any_tasks">You have no task !</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_authentication_canceled">Authentication canceled.</string>
 
@@ -90,6 +91,8 @@
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
 
+    <string name="duration1hstartTime">"> 1 hour"</string>
+
     <!-- Default locations titles-->
     <string name="everywhere_location">Everywhere</string>
     <string name="downtown_location">Downtown</string>
@@ -124,13 +127,22 @@
     <string name="info_done">" is done"</string>
     <!-- LocationActivity -->
     <string name="info_place_fixed">"Place: "</string>
-    <!-- FirebaseTaskHelper -->
-    <string name="info_any_tasks">"You don\'t have any tasks !"</string>
 
     <!-- MainActivity ListView texts -->
     <string name="due_today">Due today !</string>
-    <string name="remaining_days">" remaining days"</string>
-    <string name="remaining_day">" remaining day"</string>
+    <string name="days_left">" days left"</string>
+    <string name="day_left">" day left"</string>
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
+    <string name="current_location_main_activity_text">Current location</string>
+    <string name="time_at_disposal_main_activity_text">Time at disposal</string>
+    <string name="start_by_filling_up_your_tasks_main_activity">Start by filling up your tasks</string>
+    <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
+    <string name="custom_location_subtitle">These are your favorite locations. Feel free to add, rename or remove locations. They will be useful to sort the tasks according to your current location.</string>
+    <string name="padlock_image_description">padlock</string>
+    <string name="location_logo_content_description">location logo</string>
+    <string name="google_sign_in_button_content_description">Google sign in button</string>
+    <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
+    <string name="stop_watch_icon_content_description">stop watch icon</string>
+    <string name="right_arrow_content_description">right arrow</string>
 </resources>

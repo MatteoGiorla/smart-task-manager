@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -58,6 +60,9 @@ public class LoginActivity
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SharedPreferences prefs;
+    private Button facebookButton;
+    private ImageButton facebookImageButton;
+    private ImageButton googleImageButton;
 
     /**
      * Override the onCreate method
@@ -79,8 +84,23 @@ public class LoginActivity
         setContentView(R.layout.activity_login);
 
         // Sign In Buttons:
-        findViewById(R.id.google_sign_in_button).setOnClickListener(this);
-        findViewById(R.id.facebook_sign_in_button).setOnClickListener(this);
+        googleImageButton = (ImageButton) findViewById(R.id.google_sign_in_button);
+        googleImageButton.setOnClickListener(this);
+
+
+        facebookButton = (Button) findViewById(R.id.facebook_sign_in_button_invisible);
+        facebookButton.setOnClickListener(this);
+        facebookButton.setEnabled(false);
+        facebookButton.setVisibility(View.INVISIBLE);
+
+        facebookImageButton = (ImageButton) findViewById(R.id.facebook_sign_in_button);
+        facebookImageButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        facebookButton.performClick();
+                    }
+                });
 
         //initialize the preferences.
         prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
@@ -289,7 +309,7 @@ public class LoginActivity
      */
     private void configureFacebookSignIn() {
         mFacebook = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button);
+        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_sign_in_button_invisible);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mFacebook, new FacebookCallback<LoginResult>() {
             @Override
