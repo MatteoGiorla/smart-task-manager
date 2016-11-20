@@ -31,7 +31,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      */
     TaskListAdapter(Context context, int resource, List<Task> objects) {
         super(context, resource, objects);
-        List<Task> taskList = objects;
     }
 
     /**

@@ -167,8 +167,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/right_arrow"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
                 android:id="@+id/imageView4"
                 android:layout_weight="0.1"
                 android:contentDescription="@string/right_arrow_content_description"/>
