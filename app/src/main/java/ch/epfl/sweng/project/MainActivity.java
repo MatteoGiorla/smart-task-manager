@@ -243,7 +243,7 @@ public final class MainActivity extends AppCompatActivity {
         duration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                userTimeAtDisposal = REVERSE_DURATION.get(durationAdapter.getItem(position));
+                userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
             }
 
             @Override
@@ -286,20 +286,14 @@ public final class MainActivity extends AppCompatActivity {
         START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
-        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2h));
-        START_DURATION_MAP.put(240, mContext.getResources().getString(R.string.duration4h));
-        START_DURATION_MAP.put(480, mContext.getResources().getString(R.string.duration1d));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1hstartTime));
         START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
         REVERSE_START_DURATION = new LinkedHashMap<>();
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2h), 120);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration4h), 240);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1d), 480);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1hstartTime), 60);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();

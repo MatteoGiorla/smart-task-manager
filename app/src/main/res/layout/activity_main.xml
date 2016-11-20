@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/gray">
+        android:background="@color/light_gray">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -110,9 +110,15 @@
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white" />
+
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray">
 
         <LinearLayout
             android:orientation="horizontal"
