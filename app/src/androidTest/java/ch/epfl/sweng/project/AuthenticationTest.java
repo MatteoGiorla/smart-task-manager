@@ -20,7 +20,6 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -64,7 +63,12 @@ public class AuthenticationTest {
 
     @Test
     public void authenticationFacebookCancelsIfInterrupted(){
-        onView(withId(R.id.facebook_sign_in_button)).perform(click());
+        try{
+            UiObject facebookButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/facebook_sign_in_button"));
+            facebookButton.clickAndWaitForNewWindow();
+        }catch(UiObjectNotFoundException i){
+            fail("Could not find facebook button to click on it");
+        }
         mUiDevice.pressBack();
         onView(withText(R.string.error_authentication_canceled))
                 .inRoot(withDecorView(not((mActivityRule.getActivity().getWindow().getDecorView()))))
@@ -81,8 +85,8 @@ public class AuthenticationTest {
     @Test
     public void facebookSignInGetLaunch() {
         try {
-
-            onView(withId(R.id.facebook_sign_in_button)).perform(click());
+            UiObject facebookButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/facebook_sign_in_button"));
+            facebookButton.click();
             Thread.sleep(untilTimeout);
             //the android.webkit.WebView launched by facebook should be the only to have those properties
             UiObject facebookWebLaunched = mUiDevice.findObject(new UiSelector().className("android.webkit.WebView"));
@@ -106,18 +110,22 @@ public class AuthenticationTest {
 
         mGoogleEmail = "cirdec3961@gmail.com";
         mGooglePassword = "Kristel99";
-        onView(withId(R.id.google_sign_in_button)).perform(click());
         try{
-            Thread.sleep(untilTimeout);
-            associateNewGoogleAccount();
-        }catch(java.lang.InterruptedException i){
-            fail(i.getMessage());
-        }catch(UiObjectNotFoundException ignored){
-
+            UiObject googleButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/google_sign_in_button"));
+            googleButton.clickAndWaitForNewWindow();
+            try{
+                Thread.sleep(untilTimeout);
+                associateNewGoogleAccount();
+            }catch(java.lang.InterruptedException i){
+                fail(i.getMessage());
+            }catch(UiObjectNotFoundException ignored){
+            }
+            checkIfActivity(R.id.add_location_button);
+            mUiDevice.pressBack();
+            mUiDevice.pressBack();
+        }catch(UiObjectNotFoundException u){
+            fail("Could not get googleButton to click on it "+u.getMessage());
         }
-        checkIfActivity(R.id.add_location_button);
-        mUiDevice.pressBack();
-        mUiDevice.pressBack();
     }
 
     /**

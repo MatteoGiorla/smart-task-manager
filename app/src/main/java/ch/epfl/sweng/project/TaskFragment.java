@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -20,15 +18,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
@@ -52,9 +43,6 @@ public class TaskFragment extends Fragment {
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
-    private Query myTasks;
-    private User currentUser;
-    private SynchronizedQueries synchronizedQueries;
 
     //sorting parameters
     static String locationParameter;
@@ -75,12 +63,15 @@ public class TaskFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
+        User currentUser;
         if (bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
+            if (currentUser == null) {
+                throw new IllegalArgumentException("User passed with the intend is null");
+            }
         } else {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
-
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
@@ -90,40 +81,8 @@ public class TaskFragment extends Fragment {
 
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
-
-        if(TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)) {
-            Log.e("errorfragment", "FIREBASE_PROVIDER");
-            DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-            myTasks = mDatabaseRef.child("tasks")
-                    .child(Utils.encodeMailAsFirebaseKey(currentUser.getEmail())).getRef();
-            synchronizedQueries = new SynchronizedQueries(myTasks);
-            final com.google.android.gms.tasks
-                    .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
-
-            readFirebaseTask.addOnCompleteListener(new AllOnCompleteListener());
-        } else if(TaskProvider.mProvider.equals(TaskProvider.TEST_PROVIDER)){
-            Log.e("errorfragment", "TEST_PROVIDER");
-            mDatabase.retrieveAllData(currentUser, null);
-            sortTaskStatically();
-        }
+        mDatabase.retrieveAllData(currentUser);
     }
-
-    /**
-     * Called when the Fragment is no longer started.  This is generally
-     * tied to {@link MainActivity#onStop() Activity.onStop} of the containing
-     * Activity's lifecycle.
-     */
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)){
-            synchronizedQueries.stop();
-        }
-    }
-
-        /*TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);*/
 
     /**
      * Override the onCreateView method to initialize the adapter of
@@ -376,25 +335,5 @@ public class TaskFragment extends Fragment {
      */
     public List<Task> getTaskList() {
         return new ArrayList<>(taskList);
-    }
-
-    /**
-     *
-     */
-    private class AllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
-        @Override
-        public void onComplete(@NonNull com.google.android.gms.tasks.Task<Map<Query, DataSnapshot>> task) {
-            if (task.isSuccessful()) {
-                final Map<Query, DataSnapshot> result = task.getResult();
-                mDatabase.retrieveAllData(currentUser, result.get(myTasks).getChildren());
-                sortTaskStatically();
-            } else {
-                try {
-                    task.getException();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }

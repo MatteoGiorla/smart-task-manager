@@ -46,6 +46,7 @@
             android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".location_setting.NewLocationActivity"
+            android:label="@string/new_location"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
@@ -73,6 +74,11 @@
             android:label="@string/edit_location"
             android:theme="@style/AppThemeNoActionBar"/>
 
+        <activity
+            android:name=".synchronization.SynchronizationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
                 (See the file "res/values/google_maps_api.xml").
@@ -93,7 +99,7 @@
         <activity
             android:name=".location_setting.LocationSettingActivity"
             android:screenOrientation="portrait"
-            android:label="@string/location_settings"
+            android:label="@string/location_set_text"
             android:theme="@style/AppThemeNoActionBar"/>
 
         <receiver android:name=".receiver.NotificationReceiver" />

@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project.data;
 
-import com.google.firebase.database.DataSnapshot;
-
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
@@ -16,7 +14,7 @@ public interface TaskHelper {
      *
      * @param user The user we want to retrieve data from.
      */
-    void retrieveAllData(User user, Iterable<DataSnapshot> snapshots);
+    void retrieveAllData(User user);
 
     /**
      * Add a tasks to the remote storage device
