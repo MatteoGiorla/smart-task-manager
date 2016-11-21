@@ -56,6 +56,10 @@ public class Task implements Parcelable {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private Long startDuration; //in minutes
+    private final static String EVERYWHERE_LOCATION = "everywhere_location";
+
+
+
 
     /**
      * Enum representing the values of energy needed.
@@ -319,13 +323,11 @@ public class Task implements Parcelable {
      *
      * @param currentLocation The user's current location
      * @param currentTimeDisposal The user's current disposal time
-     * @param currentEnergy The user's current energy
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                        int currentTimeDisposal,
-                                                        int currentEnergy) {
-        return new DynamicComparator(currentLocation, currentTimeDisposal, currentEnergy);
+                                                        int currentTimeDisposal) {
+        return new DynamicComparator(currentLocation, currentTimeDisposal);
     }
 
     /**
@@ -415,12 +417,10 @@ public class Task implements Parcelable {
          * Private constructor of the class.
          * @param currentLocation User's current location
          * @param currentTimeDisposal User's current disposal time
-         * @param currentEnergy User's current energy
          */
-        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
-            this.currentEnergy = currentEnergy;
         }
 
         /**
@@ -447,13 +447,11 @@ public class Task implements Parcelable {
         private int computeDynamicSortValue(Task task) {
             int dynamicSortValue = task.computeStaticSortValue();
             if(task.getLocationName().equals(currentLocation) ||
-                    Resources.getSystem().getString(R.string.everywhere_location).equals(currentLocation)) {
+                    //Resources.getSystem().getString(R.string.everywhere_location).equals(currentLocation)) {
+                    EVERYWHERE_LOCATION.equals(currentLocation)) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
                 if(task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;
-                    if(task.getEnergyToInt() <= currentEnergy) {
-                        dynamicSortValue += ENERGY_COEFFICIENT;
-                    }
                 }
             }
             return dynamicSortValue;

@@ -174,6 +174,8 @@ public final class MainActivity extends AppCompatActivity {
                 Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
+                // trigger the dynamic sort
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
             }
         }
     }
@@ -229,6 +231,10 @@ public final class MainActivity extends AppCompatActivity {
                 } else {
                     userLocation = locationAdapter.getItem(position);
                 }
+
+                // trigger the dynamic sort
+                //final String everywhere_location = getApplicationContext().getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
             }
 
             @Override
@@ -240,6 +246,8 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
+                // trigger the dynamic sort
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
             }
 
             @Override
