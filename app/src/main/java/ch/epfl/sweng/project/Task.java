@@ -56,9 +56,6 @@ public class Task implements Parcelable {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private Long startDuration; //in minutes
-    private final static String EVERYWHERE_LOCATION = "everywhere_location";
-
-
 
 
     /**
@@ -326,8 +323,8 @@ public class Task implements Parcelable {
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                        int currentTimeDisposal) {
-        return new DynamicComparator(currentLocation, currentTimeDisposal);
+                                                        int currentTimeDisposal, String everywhere_location) {
+        return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location);
     }
 
     /**
@@ -406,21 +403,21 @@ public class Task implements Parcelable {
      * Private static inner class representing the dynamic comparator.
      */
     private static class DynamicComparator implements Comparator<Task> {
-        private static final int ENERGY_COEFFICIENT = 10000000;
         private static final int TIME_COEFFICIENT = 100000000;
         private static final int LOCATION_COEFFICIENT = 1000000000;
         private String currentLocation;
         private int currentTimeDisposal;
-        private int currentEnergy;
+        private String everywhere_location = "";
 
         /**
          * Private constructor of the class.
          * @param currentLocation User's current location
          * @param currentTimeDisposal User's current disposal time
          */
-        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal) {
+        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, String everywhere_location) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
+            this.everywhere_location = everywhere_location;
         }
 
         /**
@@ -447,8 +444,7 @@ public class Task implements Parcelable {
         private int computeDynamicSortValue(Task task) {
             int dynamicSortValue = task.computeStaticSortValue();
             if(task.getLocationName().equals(currentLocation) ||
-                    //Resources.getSystem().getString(R.string.everywhere_location).equals(currentLocation)) {
-                    EVERYWHERE_LOCATION.equals(currentLocation)) {
+                    task.getLocationName().equals(everywhere_location)) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
                 if(task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;

@@ -175,7 +175,8 @@ public final class MainActivity extends AppCompatActivity {
                 // Add element to the listTask
                 fragment.addTask(newTask);
                 // trigger the dynamic sort
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
         }
     }
@@ -233,8 +234,8 @@ public final class MainActivity extends AppCompatActivity {
                 }
 
                 // trigger the dynamic sort
-                //final String everywhere_location = getApplicationContext().getApplicationContext().getString(R.string.everywhere_location);
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
 
             @Override
@@ -247,7 +248,8 @@ public final class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
                 // trigger the dynamic sort
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
 
             @Override
