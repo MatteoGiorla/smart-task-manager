@@ -196,7 +196,7 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        sortTaskStatically();
+        //sortTaskStatically();
     }
 
     /**
