@@ -40,7 +40,7 @@ public class LocationFragment extends Fragment {
     private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
-    public static final int defaultLocationsSize = 5;
+    public static final int defaultLocationsSize = 6;
     public static final Location[] defaultLocations = new Location[defaultLocationsSize];
 
     /**
@@ -66,22 +66,20 @@ public class LocationFragment extends Fragment {
     }
 
     private void addDefaultLocations(){
-        defaultLocations[0] = new Location(getString(R.string.everywhere_location),0,0);
-        defaultLocations[1] = new Location(getString(R.string.downtown_location),0,0);
-        defaultLocations[2] = new Location(getString(R.string.home_location),0,0);
-        defaultLocations[3] = new Location(getString(R.string.office_location),0,0);
-        defaultLocations[4] = new Location(getString(R.string.school_location),0,0);
-        /*
-        for(Location l: defaultLocations){
-            addDefaultLocation(l);
-        }
-        */
+        defaultLocations[0] = new Location(getString(R.string.select_one_location),0,0);
+        defaultLocations[1] = new Location(getString(R.string.everywhere_location),0,0);
+        defaultLocations[2] = new Location(getString(R.string.downtown_location),0,0);
+        defaultLocations[3] = new Location(getString(R.string.home_location),0,0);
+        defaultLocations[4] = new Location(getString(R.string.office_location),0,0);
+        defaultLocations[5] = new Location(getString(R.string.school_location),0,0);
+
         addDefaultLocation(defaultLocations[0]);
         addDefaultLocation(defaultLocations[1]);
+        addDefaultLocation(defaultLocations[2]);
 
-        addLocation(defaultLocations[2]);
         addLocation(defaultLocations[3]);
         addLocation(defaultLocations[4]);
+        addLocation(defaultLocations[5]);
     }
 
     /**
@@ -143,29 +141,17 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //if(id != 0 && id != 1) { //prevent default locations from edit or delete
-                    Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-                    intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-                    intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-                    startActivityForResult(intent, editLocationRequestCode);
-                //} else {
-                    //TODO : optionally display a toast "You can't edit or delete the default locations"
-
-                //}
+            Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+            intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+            intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
+            startActivityForResult(intent, editLocationRequestCode);
             }
         });
 
         listViewDefault.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(id != 0 && id != 1) { //prevent default locations from edit or delete
-                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, defaultLocationList);
-                startActivityForResult(intent, editLocationRequestCode);
-            } else {
-                Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -185,16 +171,8 @@ public class LocationFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        long selectedId = info.id;
-
-
-
-        //if(selectedId != 0 && selectedId != 1) { //prevent default locations from edit or delete
-            MenuInflater menuInflater = getActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.floating_location_menu, menu);
-        //}
-
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.floating_location_menu, menu);
     }
 
     /**
@@ -305,7 +283,6 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
-        //return new ArrayList<>(locationList);
         ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
         tmp.addAll(locationList);
         return tmp;

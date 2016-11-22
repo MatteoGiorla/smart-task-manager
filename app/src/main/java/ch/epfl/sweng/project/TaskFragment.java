@@ -316,8 +316,8 @@ public class TaskFragment extends Fragment {
      * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
      */
-    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location) {
-        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location));
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
     }
 
     /**

@@ -139,7 +139,7 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userLocation = getResources().getString(R.string.everywhere_location);
+        userLocation = getResources().getString(R.string.select_one_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
     }
@@ -208,7 +208,8 @@ public final class MainActivity extends AppCompatActivity {
                 fragment.addTask(newTask);
                 // trigger the dynamic sort
                 String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
         }
     }
@@ -237,6 +238,10 @@ public final class MainActivity extends AppCompatActivity {
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
+        //set default value to the spinner
+        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration1hstartTime));
+        mDuration.setSelection(spinnerPosition);
+
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
@@ -263,7 +268,8 @@ public final class MainActivity extends AppCompatActivity {
 
                 // trigger the dynamic sort
                 String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
             @Override
@@ -277,7 +283,8 @@ public final class MainActivity extends AppCompatActivity {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
                 // trigger the dynamic sort
                 String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
             @Override

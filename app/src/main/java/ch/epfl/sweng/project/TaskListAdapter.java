@@ -67,7 +67,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 titleView.setText(taskInTheView.getName());
             }
             Calendar c = Calendar.getInstance();
-            int days = (int)daysBetween(c.getTime(), taskInTheView.getDueDate());
+            int days = taskInTheView.daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
                 if(days > 1){
                     remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_left), days));
@@ -92,21 +92,16 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             if (taskLocation!= null) {
                 taskLocation.setText(taskInTheView.getLocationName());
             }
-            /*
-            if (taskEnergy != null) {
-                taskEnergy.setText(MainActivity.ENERGY_MAP.get(taskInTheView.getEnergy().ordinal()));
-            }*/
             if (taskDuration != null) {
                 taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
             }
-
             if (coloredIndicator != null) {
-                //int static_sort_value = taskInTheView.getStaticSortValue();
-                int urgency_percentage;
-                if(days <= 0){
+                double static_sort_value = taskInTheView.getStaticSortValue();
+                double urgency_percentage;
+                if(days <= 2 || static_sort_value > 100){
                     urgency_percentage = 100;
                 } else {
-                    urgency_percentage = (int)taskInTheView.getDuration()/(2*days);
+                    urgency_percentage = static_sort_value;
                 }
                 float[] hsv = new float[3];
                 hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
@@ -130,14 +125,5 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal;
-    }
-
-    private long daysBetween(Date startDate, Date endDate) {
-        Calendar sDate = getDatePart(startDate);
-        Calendar eDate = getDatePart(endDate);
-
-        Long millisDifference = eDate.getTimeInMillis() - sDate.getTimeInMillis();
-        Long daysDifference =  TimeUnit.MILLISECONDS.toDays(millisDifference);
-        return daysDifference.intValue();
     }
 }
