@@ -202,10 +202,6 @@ public final class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
-        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
-
-
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
