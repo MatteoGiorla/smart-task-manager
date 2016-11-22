@@ -206,6 +206,9 @@ public final class MainActivity extends AppCompatActivity {
                 Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
         }
     }
@@ -230,10 +233,6 @@ public final class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
-
-        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
-
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -261,6 +260,10 @@ public final class MainActivity extends AppCompatActivity {
                 } else {
                     userLocation = locationAdapter.getItem(position);
                 }
+
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
 
             @Override
@@ -272,6 +275,9 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location);
             }
 
             @Override
