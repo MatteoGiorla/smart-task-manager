@@ -101,6 +101,26 @@ public class AuthenticationTest {
 
     /**
      * perform user like actions on the phone to authenticate
+     * oneself into a google account
+     */
+    //@Test
+    public void googleLoginWorks() {
+        onView(withId(R.id.google_sign_in_button)).perform(click());
+        try{
+            Thread.sleep(untilTimeout);
+            associateNewGoogleAccount();
+            checkIfActivity(R.id.add_task_button);
+        }catch(java.lang.InterruptedException i){
+            fail(i.getMessage());
+        }catch(UiObjectNotFoundException u){
+
+        }
+        checkIfActivity(R.id.add_location_button);
+        mUiDevice.pressBack();
+        mUiDevice.pressBack();
+    }
+    /**
+     * perform user like actions on the phone to authenticate
      * oneself into a google account with a email non present
      * on the Firebase Database so lhe locationSettingActivity
      * gets launch.
