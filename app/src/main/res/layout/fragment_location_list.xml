@@ -5,43 +5,97 @@
     android:layout_height="wrap_content"
     tools:context="ch.epfl.sweng.project.location_setting.LocationSettingActivity">
 
-    <TextView
-        android:id="@+id/default_location"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="@string/default_text"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        android:textStyle="normal|italic" />
+        android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/default_list_view_locations"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_below="@+id/default_location" />
+        <TextView
+            android:id="@+id/default_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="1dp"
+            android:paddingEnd="1dp"
+            android:text="@string/default_text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/custom_location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/default_list_view_locations"
-        android:gravity="center_horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="@string/custom_text"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        android:textStyle="normal|italic" />
+        <TextView
+            android:id="@+id/default_location_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="1dp"
+            android:paddingEnd="1dp"
+            android:text="@string/default_location_subtitle"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
-    <ListView
-        android:id="@+id/list_view_locations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/custom_location" />
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="1dp" />
+
+        <ListView
+            android:id="@+id/default_list_view_locations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="1dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:id="@+id/custom_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="1dp"
+            android:paddingEnd="1dp"
+            android:text="@string/custom_text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/custom_location_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="1dp"
+            android:paddingEnd="1dp"
+            android:text="@string/custom_location_subtitle"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="1dp" />
+
+        <ListView
+            android:id="@+id/list_view_locations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/gray"
+            android:layout_height="1dp" />
+    </LinearLayout>
 
 </RelativeLayout>

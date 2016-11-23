@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -86,6 +87,11 @@ public class TaskFragment extends Fragment {
         mDatabase.retrieveAllData(currentUser);
     }
 
+    /**
+     * Override onActivityCreated method. It set the refresh swipe colors and listener.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     *                           this is the state
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -95,15 +101,20 @@ public class TaskFragment extends Fragment {
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mDatabase.refreshData(currentUser);
-                swipeLayout.setRefreshing(false);
+                new Handler().postDelayed(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mDatabase.refreshData(currentUser);
+                                swipeLayout.setRefreshing(false);
+                            }
+                        }, 2500);
             }
         });
 
         swipeLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), android.R.color.holo_blue_light),
                 ContextCompat.getColor(getActivity(), android.R.color.holo_green_light),
-                ContextCompat.getColor(getActivity(), android.R.color.holo_orange_light),
-                ContextCompat.getColor(getActivity(), android.R.color.holo_red_light));
+                ContextCompat.getColor(getActivity(), android.R.color.holo_orange_light));
     }
 
     /**

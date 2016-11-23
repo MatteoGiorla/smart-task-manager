@@ -87,9 +87,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
         mStartDuration = (Spinner) findViewById(R.id.startDurationSpinner);
 
-        /*
-         * source: http://stackoverflow.com/questions/1587028/android-configure-spinner-to-use-array
-         */
         ArrayAdapter<String> spinnerDurationAdapter = new ArrayAdapter<>(this,
             android.R.layout.simple_spinner_dropdown_item, MainActivity.getDurationTable());
 

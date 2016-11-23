@@ -35,6 +35,11 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         return null;
     }
 
+    public void createUniqueNotification(int id) {
+        Task task = taskList.get(id);
+        scheduleNotification(buildNotification(task), setDelayToNotify(task), id);
+    }
+
     private void clearAllNotifications(int numberOfIds) {
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         for (int i = 0; i < numberOfIds; i++) {
@@ -54,7 +59,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     private void createAllNotifications(int numberOfIds) {
         for (int i = 0; i < numberOfIds; i++) {
             Task task = taskList.get(i);
-            scheduleNotification(buildNotification(task, i), setDelayToNotify(task), i);
+            scheduleNotification(buildNotification(task), setDelayToNotify(task), i);
         }
     }
 
@@ -102,7 +107,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         return Math.max(0, delay);
     }
 
-    public void scheduleNotification(Notification notification, long delay, int id) {
+    private void scheduleNotification(Notification notification, long delay, int id) {
         if (delay > 0) {
             Intent notificationIntent = new Intent(mContext, NotificationReceiver.class);
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
@@ -115,7 +120,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         }
     }
 
-    public Notification buildNotification(Task task, int position) {
+    private Notification buildNotification(Task task) {
         // Intent
         Intent openInformationActivity = new Intent(mContext, EntryActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
@@ -142,10 +147,5 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         builder.setStyle(inboxStyle);
 
         return builder.build();
-    }
-
-    public void createUniqueNotification(int id) {
-        Task task = taskList.get(id);
-        scheduleNotification(buildNotification(task, id), setDelayToNotify(task), id);
     }
 }
