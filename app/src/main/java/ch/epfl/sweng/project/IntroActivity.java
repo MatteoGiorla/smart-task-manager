@@ -42,8 +42,6 @@ public class IntroActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
-        prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
         goToEntryActivity();
     }
 
@@ -54,6 +52,8 @@ public class IntroActivity extends AppIntro {
     }
 
     private void goToEntryActivity() {
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
         Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
         startActivity(intent);
     }
