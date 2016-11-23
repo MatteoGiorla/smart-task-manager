@@ -194,9 +194,6 @@ public class TaskInformationActivity extends AppCompatActivity {
         String energy_text = MainActivity.ENERGY_MAP.get(taskToBeDisplayed.getEnergy().ordinal());
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 energy_text, R.drawable.thunder_36dp));
-        String start_duration_text = MainActivity.START_DURATION_MAP.get((int)taskToBeDisplayed.getStartDuration());
-        informationItemsList.add(new InformationItem(getString(R.string.start_duration_field),
-                String.valueOf(start_duration_text), R.drawable.minutes_needed_36dp));
 
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
