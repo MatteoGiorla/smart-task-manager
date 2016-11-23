@@ -16,6 +16,8 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.User;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 
 public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
     public static final String CURRENT_USER_KEY =
@@ -69,6 +71,7 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
     private void launchNextActivity() {
         Intent intent = new Intent(synchronizationActivityContext, MainActivity.class);
         intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         synchronizationActivityContext.startActivity(intent);
     }
 }

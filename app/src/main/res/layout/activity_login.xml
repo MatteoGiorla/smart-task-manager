@@ -82,7 +82,7 @@
             android:scaleY="1.6"
             android:contentDescription="@string/facebook_sign_in_button_content_description"/>
 
-        <!-- this button is invisible and unclickable-->
+        <!-- this button is invisible and not clickable-->
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_sign_in_button_invisible"

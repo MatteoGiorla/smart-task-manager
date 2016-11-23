@@ -65,11 +65,12 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //If we are not in test mode
         //We get the user that was loaded in SynchronisationActivity
@@ -88,7 +89,6 @@ public final class MainActivity extends AppCompatActivity {
             default:
                 throw new IllegalStateException("UserProvider not in FIREBASE_PROVIDER nor in TEST_PROVIDER");
         }
-
 
         mContext = getApplicationContext();
 
@@ -198,10 +198,6 @@ public final class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
-
-        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
-
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);

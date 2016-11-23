@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -43,6 +46,7 @@ public class TaskFragment extends Fragment {
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
+    private User currentUser;
 
     //sorting parameters
     static String locationParameter;
@@ -63,7 +67,6 @@ public class TaskFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
-        User currentUser;
         if (bundle != null) {
             currentUser = bundle.getParcelable(MainActivity.USER_KEY);
             if (currentUser == null) {
@@ -82,6 +85,36 @@ public class TaskFragment extends Fragment {
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
+    }
+
+    /**
+     * Override onActivityCreated method. It set the refresh swipe colors and listener.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     *                           this is the state
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                mDatabase.refreshData(currentUser);
+                                swipeLayout.setRefreshing(false);
+                            }
+                        }, 2500);
+            }
+        });
+
+        swipeLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), android.R.color.holo_blue_light),
+                ContextCompat.getColor(getActivity(), android.R.color.holo_green_light),
+                ContextCompat.getColor(getActivity(), android.R.color.holo_orange_light));
     }
 
     /**
