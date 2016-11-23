@@ -23,11 +23,7 @@ import ch.epfl.sweng.project.data.UserProvider;
 public class EntryActivity extends Activity {
 
     public static boolean isAlreadyPersistent = false;
-<<<<<<< HEAD
     private static SharedPreferences prefs;
-=======
-    private SharedPreferences prefs;
->>>>>>> 9cf67888b3ef30cf2e2ca280fa83aa5d5c0f7188
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +36,9 @@ public class EntryActivity extends Activity {
         }
 
         prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        if(!prefs.contains(getString(R.string.first_launch))){
+            prefs.edit().putBoolean(getString(R.string.first_launch), true).apply();
+        }
 
         // launch a different activity
         Intent launchIntent = new Intent();
@@ -61,7 +60,8 @@ public class EntryActivity extends Activity {
      **/
     private String getScreenClassName() {
         String activity;
-        boolean firstConnection = prefs.contains("FIRST_LOGIN") && prefs.getBoolean("FIRST_LOGIN", true);
+        boolean firstConnection = prefs.contains(getString(R.string.new_user))
+                && prefs.getBoolean(getString(R.string.new_user), true);
         FirebaseUser user = null;
 
         //this try catch is a hack to ensure jenkins pass this test (it would work on local otherwise)
@@ -71,7 +71,9 @@ public class EntryActivity extends Activity {
         }catch( IllegalStateException e){
             testCase = true;
         }
-        if ((user != null || testCase) && !firstConnection) {
+        if(prefs.getBoolean(getString(R.string.first_launch), true)){
+            activity = IntroActivity.class.getName();
+        } else if ((user != null || testCase) && !firstConnection) {
             // if the user is already logged in the MainActivity with the tasks list is displayed
             activity = MainActivity.class.getName();
         } else {
