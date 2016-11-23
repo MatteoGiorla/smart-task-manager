@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableRow;
 
@@ -31,8 +30,6 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
-import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
-import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
@@ -239,7 +236,7 @@ public final class MainActivity extends AppCompatActivity {
         mDuration.setAdapter(durationAdapter);
 
         //set default value to the spinner
-        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration1hstartTime));
+        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
         mDuration.setSelection(spinnerPosition);
 
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
@@ -328,14 +325,16 @@ public final class MainActivity extends AppCompatActivity {
         START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1hstartTime));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
+        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2hstartTime));
         START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
         REVERSE_START_DURATION = new LinkedHashMap<>();
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1hstartTime), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
+        REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration2hstartTime), 120);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();

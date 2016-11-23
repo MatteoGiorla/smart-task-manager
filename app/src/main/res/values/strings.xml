@@ -93,7 +93,7 @@
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
 
-    <string name="duration1hstartTime">"> 1 hour"</string>
+    <string name="duration2hstartTime">"> 2 hours"</string>
 
     <!-- Default locations titles-->
     <string name="everywhere_location">Everywhere</string>
