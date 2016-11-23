@@ -34,8 +34,10 @@ public class EntryActivityMainTest {
         //Override to be able to change the SharedPreferences effectively
         @Override
         protected void beforeActivityLaunched() {
-            prefs = InstrumentationRegistry.getTargetContext().getSharedPreferences("ch.epfl.sweng", Context.MODE_PRIVATE);
-            prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+            Context actualContext = InstrumentationRegistry.getTargetContext();
+            prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
+            prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
+            prefs.edit().putBoolean(actualContext.getString(R.string.new_user), false).apply();
             super.beforeActivityLaunched();
         }
     };
