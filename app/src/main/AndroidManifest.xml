@@ -108,6 +108,8 @@
             android:label="@string/unfinished_tasks"
             android:theme="@style/AppThemeNoActionBar"/>
 
+        <activity android:name=".IntroActivity"/>
+
         <receiver android:name=".receiver.NotificationReceiver" />
     </application>
 
