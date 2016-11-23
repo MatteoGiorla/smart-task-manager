@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.project.location_setting.LocationFragment;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
+import static android.provider.Settings.System.getString;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -48,8 +49,11 @@ public final class LocationSettingTest extends SuperTest {
         //Override to be able to change the SharedPreferences effectively
         @Override
         protected void beforeActivityLaunched(){
-            SharedPreferences prefs = InstrumentationRegistry.getTargetContext().getSharedPreferences("ch.epfl.sweng", Context.MODE_PRIVATE);
-            prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
+            Context actualContext = InstrumentationRegistry.getTargetContext();
+            SharedPreferences prefs = actualContext.getSharedPreferences(
+                    actualContext.getString(R.string.application_prefs_name),
+                    Context.MODE_PRIVATE);
+            prefs.edit().putBoolean(actualContext.getString(R.string.new_user), true).apply();
             super.beforeActivityLaunched();
         }
     };

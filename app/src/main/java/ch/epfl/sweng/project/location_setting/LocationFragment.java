@@ -107,8 +107,8 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 defaultLocationList
         );
-        SharedPreferences prefs = getContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
-        if(prefs.getBoolean("FIRST_LOGIN", true)){
+        SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        if(prefs.getBoolean(getString(R.string.new_user), true)){
             addDefaultLocations();
         }
     }

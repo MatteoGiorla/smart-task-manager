@@ -29,7 +29,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_location_setting);
-        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         fragment = new LocationFragment();
 
         if (savedInstanceState == null) {

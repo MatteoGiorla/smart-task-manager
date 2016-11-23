@@ -114,7 +114,8 @@
     <string name="custom_text">Custom</string>
 
     <!-- Preference key -->
-    <string name="new_user">FIRST_LOGIN</string>
+    <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
+    <string name="new_user">FIRST_USER_LOGIN</string>
     <string name="first_launch">FIRST_LAUNCH</string>
 
 

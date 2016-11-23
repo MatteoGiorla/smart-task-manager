@@ -103,7 +103,7 @@ public class LoginActivity
                 });
 
         //initialize the preferences.
-        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
 
         //configuration of each services:
         configureGoogleSignIn();

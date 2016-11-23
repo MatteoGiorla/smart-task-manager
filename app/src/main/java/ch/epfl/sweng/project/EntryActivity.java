@@ -2,6 +2,7 @@ package ch.epfl.sweng.project;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 public class EntryActivity extends Activity {
 
     public static boolean isAlreadyPersistent = false;
+    private static SharedPreferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class EntryActivity extends Activity {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             isAlreadyPersistent = true;
         }
+
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
 
         // launch a different activity
         Intent launchIntent = new Intent();
