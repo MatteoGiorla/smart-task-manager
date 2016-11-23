@@ -59,7 +59,7 @@ public class EntryActivity extends Activity {
             activity = SynchronizationActivity.class.getName();
         } else {
             // else, if the user isn't logged in, the LoginActivity will be displayed
-            activity = LoginActivity.class.getName();
+            activity = IntroActivity.class.getName();
         }
         return activity;
     }
