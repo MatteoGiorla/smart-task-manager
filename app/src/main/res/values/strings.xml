@@ -101,6 +101,7 @@
     <string name="home_location">Home</string>
     <string name="office_location">Office</string>
     <string name="school_location">School</string>
+
     <string name="select_one_location">Select one</string>
 
     <string name="location_name">NAME</string>
@@ -111,6 +112,11 @@
     <string name="location_set_text">Set your locations</string>
     <string name="default_text">Default</string>
     <string name="custom_text">Custom</string>
+
+    <!-- Preference key -->
+    <string name="new_user">FIRST_LOGIN</string>
+    <string name="first_launch">FIRST_LAUNCH</string>
+
 
     <!-- Energy description -->
     <string name="description_remaining_days">represent the remaining days</string>

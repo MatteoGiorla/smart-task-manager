@@ -97,12 +97,12 @@ public class LocationSettingActivity extends AppCompatActivity {
     }
 
     private void resultActivity() {
-        if(prefs.getBoolean("FIRST_LOGIN", true)){
+        if(prefs.getBoolean(getString(R.string.new_user), true)){
             Bundle extras = getIntent().getExtras();
             final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
             User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
-            prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+            prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
         }else{
             //TODO Update the user when accessing Location Settings from the MainActivity
         }
