@@ -69,6 +69,8 @@ public final class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //If we are not in test mode
         //We get the user that was loaded in SynchronisationActivity
@@ -196,10 +198,6 @@ public final class MainActivity extends AppCompatActivity {
 
         ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
-
-        ArrayAdapter<String> energyAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getEnergyTable());
-
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
