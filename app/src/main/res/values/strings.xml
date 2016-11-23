@@ -1,6 +1,6 @@
 <resources>
     <!-- Activity name strings-->
-    <string name="app_name">TaskIt</string>
+    <string name="app_name">Taskit</string>
     <string name="new_task">New task</string>
     <string name="login_label">Log In</string>
     <string name="edit_task">Edit task</string>

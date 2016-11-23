@@ -40,8 +40,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     /**
      * Handle the heavy operations of removing and recreating all
      * notifications on a background thread.
-     * @param params
-     * @return
+     * @param params The integers representing the numberOfIds
      */
     @Override
     protected Void doInBackground(Integer... params) {
@@ -80,7 +79,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     }
 
     /**
-     * Create a notification with different id for all task until the paramater
+     * Create a notification with different id for all task until the parameter
      * numberOfIds.
      * @param numberOfIds The maximal id of a notification.
      *                    Is normally set to the size of the list.
