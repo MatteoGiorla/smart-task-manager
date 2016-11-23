@@ -19,15 +19,30 @@ import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.receiver.NotificationReceiver;
 
+/**
+ * Task which create notifications. It also handle the deletion of a notification.
+ */
 public class TaskNotification extends AsyncTask<Integer, Void, Void> {
     private ArrayList<Task> taskList;
     private Context mContext;
 
+    /**
+     * Public constructor of TaskNotification which take the list of tasks
+     * and a Context.
+     * @param taskList The list of Task
+     * @param context The Context of the caller
+     */
     public TaskNotification(List<Task> taskList, Context context) {
         this.taskList = new ArrayList<>(taskList);
         mContext = context;
     }
 
+    /**
+     * Handle the heavy operations of removing and recreating all
+     * notifications on a background thread.
+     * @param params
+     * @return
+     */
     @Override
     protected Void doInBackground(Integer... params) {
         clearAllNotifications(params[0]);
@@ -35,11 +50,19 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         return null;
     }
 
+    /**
+     * Create a notification given the position of the task in the list.
+     * @param id The index of the task in the list.
+     */
     public void createUniqueNotification(int id) {
         Task task = taskList.get(id);
         scheduleNotification(buildNotification(task), setDelayToNotify(task), id);
     }
 
+    /**
+     * Remove all pending notifications.
+     * @param numberOfIds Number of notifications pending.
+     */
     private void clearAllNotifications(int numberOfIds) {
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         for (int i = 0; i < numberOfIds; i++) {
@@ -56,6 +79,12 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         }
     }
 
+    /**
+     * Create a notification with different id for all task until the paramater
+     * numberOfIds.
+     * @param numberOfIds The maximal id of a notification.
+     *                    Is normally set to the size of the list.
+     */
     private void createAllNotifications(int numberOfIds) {
         for (int i = 0; i < numberOfIds; i++) {
             Task task = taskList.get(i);
@@ -63,6 +92,12 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         }
     }
 
+    /**
+     * Compute the time when the notification should arrive. It is
+     * computed according to the time needed to do the task and the due date of the task.
+     * @param task The task we need the delay
+     * @return The delay as a long
+     */
     private long setDelayToNotify(Task task) {
         Date dueDate = task.getDueDate();
         long timeNeeded = task.getDuration();
@@ -107,6 +142,13 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         return Math.max(0, delay);
     }
 
+    /**
+     * Set the alarm on the device given a notification, the delay and the id
+     * of the notification.
+     * @param notification The notification
+     * @param delay The delay to notify
+     * @param id The id of the notification
+     */
     private void scheduleNotification(Notification notification, long delay, int id) {
         if (delay > 0) {
             Intent notificationIntent = new Intent(mContext, NotificationReceiver.class);
@@ -120,6 +162,13 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         }
     }
 
+    /**
+     * Build a notification content such as the icon, the title and information
+     * of the notification.
+     * @param task The task we need to create a notification for.
+     *
+     * @return The notification of the task given.
+     */
     private Notification buildNotification(Task task) {
         // Intent
         Intent openInformationActivity = new Intent(mContext, EntryActivity.class);
