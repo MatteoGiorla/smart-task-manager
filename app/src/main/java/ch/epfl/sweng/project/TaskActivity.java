@@ -49,7 +49,6 @@ public abstract class TaskActivity extends AppCompatActivity {
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
-    private Spinner mStartDuration;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     static Date date;
@@ -85,7 +84,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
-        mStartDuration = (Spinner) findViewById(R.id.startDurationSpinner);
 
         ArrayAdapter<String> spinnerDurationAdapter = new ArrayAdapter<>(this,
             android.R.layout.simple_spinner_dropdown_item, MainActivity.getDurationTable());
@@ -99,11 +97,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
         mLocation.setAdapter(spinnerLocationAdapter);
-
-        ArrayAdapter<String> spinnerStartDurationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, MainActivity.getStartDurationTable());
-
-        mStartDuration.setAdapter(spinnerStartDurationAdapter);
     }
 
     /**
@@ -199,7 +192,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
-                startDuration = MainActivity.REVERSE_START_DURATION.get(mStartDuration.getSelectedItem().toString());
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);

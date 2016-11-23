@@ -55,7 +55,7 @@ public class NewTaskActivity extends TaskActivity {
         }
 
         listOfContributors.add(contributor);
-        Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors, startDuration);
+        Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
 
         intent.putExtra(RETURNED_TASK, newTask);
     }
