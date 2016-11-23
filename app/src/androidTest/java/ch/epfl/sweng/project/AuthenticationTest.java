@@ -9,6 +9,7 @@ import android.support.test.uiautomator.UiScrollable;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -58,6 +59,13 @@ public class AuthenticationTest {
         mGoogleEmail = "trixyfinger@gmail.com";
         mGooglePassword = "sweng1234TaskIt";
         untilTimeout = 20000;
+    }
+
+    @After
+    public void tearDown(){
+        mUiDevice.pressHome();
+        mUiDevice.pressHome();
+        mUiDevice.pressHome();
     }
 
 
@@ -121,8 +129,36 @@ public class AuthenticationTest {
             }catch(UiObjectNotFoundException ignored){
             }
             checkIfActivity(R.id.add_location_button);
-            mUiDevice.pressBack();
-            mUiDevice.pressBack();
+        }catch(UiObjectNotFoundException u){
+            fail("Could not get googleButton to click on it "+u.getMessage());
+        }
+    }
+
+    @Test
+    public void loginRemoveOfAccount(){
+        removeAccount();
+    }
+
+    /**
+     * perform user like actions on the phone to authenticate
+     * oneself into a google account with an email located in user
+     * table from the firebase Database so lhe MainActivity
+     * gets launch.
+     */
+    @Test
+    public void loginWithAnAccountAlreadyInDBLaunchMainActivity() {
+
+        try{
+            UiObject googleButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/google_sign_in_button"));
+            googleButton.clickAndWaitForNewWindow();
+            try{
+                Thread.sleep(untilTimeout);
+                associateNewGoogleAccount();
+            }catch(java.lang.InterruptedException i){
+                fail(i.getMessage());
+            }catch(UiObjectNotFoundException ignored){
+            }
+            checkIfActivity(R.id.add_task_button);
         }catch(UiObjectNotFoundException u){
             fail("Could not get googleButton to click on it "+u.getMessage());
         }
@@ -155,8 +191,8 @@ public class AuthenticationTest {
             UiObject acceptAction = mUiDevice.findObject(new UiSelector().resourceId(ACCEPT_ID));
             acceptAction.clickAndWaitForNewWindow();
 
-            UiScrollable googleServices = new UiScrollable(new UiSelector().scrollable(true));
-            googleServices.scrollForward();
+            /*UiScrollable googleServices = new UiScrollable(new UiSelector().scrollable(true));
+            googleServices.scrollForward();*/
 
             UiObject nextGoogleServer = mUiDevice.findObject(new UiSelector().text("NEXT"));
             nextGoogleServer.clickAndWaitForNewWindow();
@@ -206,7 +242,7 @@ public class AuthenticationTest {
                 //the account does not exist.
             }
         }catch (UiObjectNotFoundException e){
-            Log.d(TAG, "Error, something UI related not found.");
+            fail("Error, UI related object not found : "+ e);
         }
     }
 
