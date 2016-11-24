@@ -202,5 +202,5 @@
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal" />
     </FrameLayout>
-
 </LinearLayout>
+
