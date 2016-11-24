@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.GeoDataApi;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
@@ -38,6 +41,7 @@ public abstract class LocationActivity extends AppCompatActivity {
     String name;
     double longitude = 0;
     double latitude = 0;
+    private final String TAG = "Google Autocomplete";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +159,7 @@ public abstract class LocationActivity extends AppCompatActivity {
      */
     private void createPlaceAutocomplete(Button chooseLocationButton) {
         AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
+        //GeoDataApi.getAutocompletePredictions();
         try {
             final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                     .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
@@ -233,12 +238,23 @@ public abstract class LocationActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_PLACE_PICKER) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+              /*  Place place = PlacePicker.getPlace(data, this);
                 String toast = getString(R.string.info_place_fixed) + place.getName();
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
-                Toast.makeText(this, toast, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, toast, Toast.LENGTH_LONG).show();*/
+
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place: " + place.getName());
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                // TODO: Handle the error.
+                Log.i(TAG, status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
             }
         }
-    }
+
 }
