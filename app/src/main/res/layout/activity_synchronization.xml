@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/red"
     tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity">
 
     <RelativeLayout
@@ -12,10 +13,16 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
+        <ImageView
+            android:src="@drawable/logo_white_mini"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
     </RelativeLayout>
 
 </LinearLayout>
