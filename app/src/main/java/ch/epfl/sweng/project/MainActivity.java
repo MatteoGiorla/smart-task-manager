@@ -203,12 +203,12 @@ public final class MainActivity extends AppCompatActivity {
                 Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
-                // trigger the dynamic sort
-                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
-                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
         }
+        // trigger the dynamic sort
+        String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+        String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+        fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
     }
 
     /**
