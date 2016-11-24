@@ -40,15 +40,13 @@ public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
+
+
+    //need two of each for the unfilled task in opposition to the well-formed ones.
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
 
-    //sorting parameters
-    static String locationParameter;
-    static int timeParameter;
-    static int energyParameter;
-    static boolean dynamic;
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -298,18 +296,6 @@ public class TaskFragment extends Fragment {
         new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
     }
 
-    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam) {
-        locationParameter = "";
-        timeParameter = 0;
-        energyParameter = 0;
-        dynamic = false;
-        /*
-        locationParameter = locationParam;
-        timeParameter = timeParam;
-        energyParameter = energyParam;
-        dynamic = dynamicParam;*/
-    }
-
     /**
      * Method that launch the dynamic sort on the tasks.
      *
@@ -333,6 +319,10 @@ public class TaskFragment extends Fragment {
      * @return an immutable copy of taskList
      */
     public List<Task> getTaskList() {
-        return new ArrayList<>(taskList);
+        if(taskList != null){
+            return new ArrayList<>(taskList);
+        }else{
+            return null;
+        }
     }
 }

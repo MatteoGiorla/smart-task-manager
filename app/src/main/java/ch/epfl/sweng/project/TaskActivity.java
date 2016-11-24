@@ -53,6 +53,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     private ImageButton doneEditButton;
     static Date date;
     private static final DateFormat dateFormat = DateFormat.getDateInstance();
+    public static final String IS_UNFILLED = "ch.epfl.sweng.TaskActivity.UNFILLED_TASK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -13,7 +14,8 @@ import java.util.Date;
  * Class that represents the inflated activity_new_task
  */
 public class NewTaskActivity extends TaskActivity {
-    public static final String RETURNED_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+    public static final String RETURNED_NEW_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,11 @@ public class NewTaskActivity extends TaskActivity {
 
         listOfContributors.add(contributor);
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
-
-        intent.putExtra(RETURNED_TASK, newTask);
+        intent.putExtra(RETURNED_NEW_TASK, newTask);
+        if(newTask.getLocationName().equals(getString(R.string.select_one_location))){
+            intent.putExtra(IS_UNFILLED, true);
+        }else{
+            intent.putExtra(IS_UNFILLED, false);
+        }
     }
 }
