@@ -29,7 +29,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_location_setting);
-        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         fragment = new LocationFragment();
 
         if (savedInstanceState == null) {
@@ -39,7 +39,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
 
         //Initialize the toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.location_setting_toolbar);
         initializeToolbar(mToolbar);
 
         ImageButton doneLocationSettingButton = (ImageButton) findViewById(R.id.location_setting_done_button_toolbar);
@@ -90,26 +90,22 @@ public class LocationSettingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
     }
 
     private void resultActivity() {
-        if(prefs.getBoolean("FIRST_LOGIN", true)){
+        if(prefs.getBoolean(getString(R.string.new_user), true)){
             Bundle extras = getIntent().getExtras();
             final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
             User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
-            prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+            prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
         }else{
             //TODO Update the user when accessing Location Settings from the MainActivity
         }
-
-
-
-        //TODO : store user locally cf Mikael
     }
 
     private class OnDoneButtonClickListener implements View.OnClickListener {

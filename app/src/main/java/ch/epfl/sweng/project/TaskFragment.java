@@ -229,7 +229,7 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        sortTaskStatically();
+        //sortTaskStatically();
     }
 
     /**
@@ -348,10 +348,9 @@ public class TaskFragment extends Fragment {
      *
      * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
-     * @param currentEnergy       User's current energy
      */
-    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, int currentEnergy) {
-        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, currentEnergy));
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
     }
 
     /**

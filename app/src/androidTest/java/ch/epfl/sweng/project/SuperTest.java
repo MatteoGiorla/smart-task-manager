@@ -15,6 +15,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.anything;
 
 class SuperTest {
@@ -31,7 +32,7 @@ class SuperTest {
         UserProvider.setProvider(UserProvider.TEST_PROVIDER);
     }
 
-    void checkALocation(String locationTitle, int locationPos){
+    static void checkALocation(String locationTitle, int locationPos){
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))
                 .atPosition(locationPos)
@@ -59,6 +60,18 @@ class SuperTest {
                 .inAdapterView(withId(R.id.list_view_locations))
                 .atPosition(position).perform(longClick());
         onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+    }
+
+
+    /**
+     * Utilitary method to wait until we can check which activity was launched.
+     */
+    static void waitForrActivity(){
+        try{
+            Thread.sleep(3000);
+        }catch(java.lang.InterruptedException i){
+            fail(i.getMessage());
+        }
     }
 
     /**

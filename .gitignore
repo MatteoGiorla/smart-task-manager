@@ -8,6 +8,10 @@
 /.idea/gradle.xml
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/compile.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
 
 app/app.iml
 

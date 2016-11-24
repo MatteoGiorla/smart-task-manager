@@ -13,6 +13,7 @@
         android:id="@+id/location_setting_toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:minHeight="?attr/actionBarSize"
         android:theme="@style/ActionBar">
 
         <ImageButton
