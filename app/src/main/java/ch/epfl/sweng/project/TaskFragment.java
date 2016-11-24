@@ -40,6 +40,9 @@ public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
+
+
+    //need two of each for the unfilled task in opposition to the well-formed ones.
     private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
@@ -315,6 +318,10 @@ public class TaskFragment extends Fragment {
      * @return an immutable copy of taskList
      */
     public List<Task> getTaskList() {
-        return new ArrayList<>(taskList);
+        if(taskList != null){
+            return new ArrayList<>(taskList);
+        }else{
+            return null;
+        }
     }
 }
