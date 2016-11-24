@@ -123,12 +123,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:id="@+id/spinner_unfilled_separation" />
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_gray">
+        android:background="@color/light_gray"
+        android:id="@+id/unfilled_task_button">
 
         <LinearLayout
             android:orientation="horizontal"

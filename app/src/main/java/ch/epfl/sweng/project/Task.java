@@ -57,6 +57,7 @@ public class Task implements Parcelable {
     private final DateFormat dateFormat;
     private Long startDuration; //in minutes
 
+
     /**
      * Enum representing the values of energy needed.
      */
@@ -319,13 +320,11 @@ public class Task implements Parcelable {
      *
      * @param currentLocation The user's current location
      * @param currentTimeDisposal The user's current disposal time
-     * @param currentEnergy The user's current energy
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                        int currentTimeDisposal,
-                                                        int currentEnergy) {
-        return new DynamicComparator(currentLocation, currentTimeDisposal, currentEnergy);
+                                                        int currentTimeDisposal, String everywhere_location, String select_one_location) {
+        return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location);
     }
 
     /**
@@ -338,13 +337,17 @@ public class Task implements Parcelable {
         return energyNeeded.ordinal() + 1;
     }
 
-    private int computeStaticSortValue() {
+    private double computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = Math.max(0, daysBetween(c.getTime(), dueDate));
-//        int number_of_fractions = (int) Math.ceil(durationInMinutes.intValue()/startDuration.intValue());
-        int number_of_fractions = 1;
-        return (120 * durationInMinutes.intValue() + 55 * getEnergyToInt())
-                / (75 * delay + 100 * number_of_fractions);
+        if(delay <= 0) {
+            delay = 0;
+        }
+        return this.getDuration()/(2*delay+0.1);
+    }
+
+    public double getStaticSortValue(){
+        return computeStaticSortValue();
     }
 
     /**
@@ -370,7 +373,7 @@ public class Task implements Parcelable {
      * @param endDate the last day
      * @return number of days between startDate and endDate
      */
-    private int daysBetween(Date startDate, Date endDate) {
+    public int daysBetween(Date startDate, Date endDate) {
         Calendar sDate = getDatePart(startDate);
         Calendar eDate = getDatePart(endDate);
 
@@ -396,7 +399,7 @@ public class Task implements Parcelable {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public int compare(Task o1, Task o2) {
-            return Integer.compare(o2.computeStaticSortValue(), o1.computeStaticSortValue());
+            return Double.compare(o2.computeStaticSortValue(), o1.computeStaticSortValue());
         }
     }
 
@@ -404,23 +407,25 @@ public class Task implements Parcelable {
      * Private static inner class representing the dynamic comparator.
      */
     private static class DynamicComparator implements Comparator<Task> {
-        private static final int ENERGY_COEFFICIENT = 10000000;
+        private static final int SHORT_DELAY_COEFFICIENT = 100000;
         private static final int TIME_COEFFICIENT = 100000000;
         private static final int LOCATION_COEFFICIENT = 1000000000;
+        private static final int TIME_LIMIT = 120;
         private String currentLocation;
         private int currentTimeDisposal;
-        private int currentEnergy;
+        private String everywhere_location = "";
+        private String select_one_location = "";
 
         /**
          * Private constructor of the class.
          * @param currentLocation User's current location
          * @param currentTimeDisposal User's current disposal time
-         * @param currentEnergy User's current energy
          */
-        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, int currentEnergy) {
+        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
-            this.currentEnergy = currentEnergy;
+            this.everywhere_location = everywhere_location;
+            this.select_one_location = select_one_location;
         }
 
         /**
@@ -435,7 +440,7 @@ public class Task implements Parcelable {
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public int compare(Task o1, Task o2) {
-            return Integer.compare(computeDynamicSortValue(o2), computeDynamicSortValue(o1));
+            return Double.compare(computeDynamicSortValue(o2), computeDynamicSortValue(o1));
         }
 
         /**
@@ -444,16 +449,21 @@ public class Task implements Parcelable {
          * @param task for which we compute the number of points
          * @return number of point of the task
          */
-        private int computeDynamicSortValue(Task task) {
-            int dynamicSortValue = task.computeStaticSortValue();
+        private double computeDynamicSortValue(Task task) {
+            double dynamicSortValue = task.computeStaticSortValue();
+
+            Calendar c = Calendar.getInstance();
+            int days = task.daysBetween(c.getTime(), task.getDueDate());
+
+            if (days <= 2) {
+                dynamicSortValue += SHORT_DELAY_COEFFICIENT;
+            }
             if(task.getLocationName().equals(currentLocation) ||
-                    Resources.getSystem().getString(R.string.everywhere_location).equals(currentLocation)) {
+                    task.getLocationName().equals(everywhere_location) ||
+                    currentLocation.equals(select_one_location)) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
-                if(task.getDurationInMinutes() <= currentTimeDisposal) {
+                if(currentTimeDisposal != TIME_LIMIT && task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;
-                    if(task.getEnergyToInt() <= currentEnergy) {
-                        dynamicSortValue += ENERGY_COEFFICIENT;
-                    }
                 }
             }
             return dynamicSortValue;

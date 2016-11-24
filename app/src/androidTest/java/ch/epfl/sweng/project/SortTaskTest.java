@@ -31,48 +31,7 @@ public final class SortTaskTest extends SuperTest{
             MainActivity.class);
 
     @Test
-    public void testStaticSort() {
-        addNewTask();
+    public void testDynamicSort() {
 
-        //Open task information
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
-                .perform(click());
-
-        //Come back on the main screen
-        //(we have to do that for now because we don't wait that
-        //all the task are recover from firebase.
-        pressBack();
-
-        for(int i = 0; i < taskNames.size(); i++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(i)
-                    .check(matches(hasDescendant(withText(taskNames.get(i)))));
-        }
-    }
-
-
-
-    private void addNewTask() {
-        //String taskMonth = "A month";
-        String taskHighEnergy = "High energy";
-        String taskNormalEnergy = "Normal energy";
-        String taskLowEnergy = "Low energy";
-
-        taskNames = Arrays.asList(taskHighEnergy, taskNormalEnergy, taskLowEnergy);
-
-        addTaskWithName(taskLowEnergy, R.id.energy_low);
-        addTaskWithName(taskHighEnergy, R.id.energy_high);
-        addTaskWithName(taskNormalEnergy, R.id.energy_normal);
-    }
-
-    private void addTaskWithName(String taskName, int radioButtonId) {
-        onView(withId(R.id.add_task_button)).perform(click());
-        onView(withId(R.id.title_task)).perform(typeText(taskName));
-        pressBack();
-        onView(withId(radioButtonId)).perform(click());
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 }
