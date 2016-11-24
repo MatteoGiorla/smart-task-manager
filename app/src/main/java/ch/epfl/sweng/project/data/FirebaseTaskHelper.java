@@ -48,36 +48,28 @@ public class FirebaseTaskHelper implements TaskHelper {
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-                    Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
-                }
-                mTaskList.clear();
-                for (DataSnapshot task : dataSnapshot.getChildren()) {
-                    if (task != null) {
-                        String title = (String) task.child("name").getValue();
-                        String description = (String) task.child("description").getValue();
-                        Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
-                        String energy = (String) task.child("energy").getValue();
-                        List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
-
-                        //Construct Location object
-                        String locationName = (String) task.child("locationName").getValue();
-                        //Construct the date
-                        Long date = (Long) task.child("dueDate").child("time").getValue();
-                        Date dueDate = new Date(date);
-
-                        Long startDuration = (Long) task.child("startDuration").getValue();
-
-                        Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
-                        mTaskList.add(newTask);
-                    }
-                }
-                mAdapter.notifyDataSetChanged();
-                mAdapter.sort(Task.getStaticComparator());
+                retrieveTasks(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    @Override
+    public void refreshData(User user) {
+        Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+
+        myTasks.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                retrieveTasks(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -108,5 +100,39 @@ public class FirebaseTaskHelper implements TaskHelper {
     public void updateTask(Task original, Task updated) {
         deleteTask(original);
         addNewTask(updated);
+    }
+
+    /**
+     * Reconstruct the tasks form the DataSnapshot given.
+     *
+     * @param dataSnapshot Data recovered from the database
+     */
+    private void retrieveTasks(DataSnapshot dataSnapshot) {
+        if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
+            Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
+        }
+        mTaskList.clear();
+        for (DataSnapshot task : dataSnapshot.getChildren()) {
+            if (task != null) {
+                String title = (String) task.child("name").getValue();
+                String description = (String) task.child("description").getValue();
+                Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
+                String energy = (String) task.child("energy").getValue();
+                List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
+
+                //Construct Location object
+                String locationName = (String) task.child("locationName").getValue();
+                //Construct the date
+                Long date = (Long) task.child("dueDate").child("time").getValue();
+                Date dueDate = new Date(date);
+
+                Long startDuration = (Long) task.child("startDuration").getValue();
+
+                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
+                mTaskList.add(newTask);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+        mAdapter.sort(Task.getStaticComparator());
     }
 }

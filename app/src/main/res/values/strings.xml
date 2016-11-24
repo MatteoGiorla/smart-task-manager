@@ -1,6 +1,6 @@
 <resources>
     <!-- Activity name strings-->
-    <string name="app_name">TaskIt</string>
+    <string name="app_name">Taskit</string>
     <string name="new_task">New task</string>
     <string name="login_label">Log In</string>
     <string name="edit_task">Edit task</string>
@@ -125,6 +125,8 @@
     <!-- Notification -->
     <string name="notification_title_task">A task needs your attention</string>
     <string name="notification_content_task">\'s due date is close !</string>
+    <string name="notification_detail_date">"Due date: "</string>
+    <string name="notification_detail_location">"Location: "</string>
 
     <!-- LoginActivity -->
     <string name="warning_no_mult_account">You must use the same authentication service as before.</string>
