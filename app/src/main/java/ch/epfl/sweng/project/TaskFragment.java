@@ -47,7 +47,6 @@ public class TaskFragment extends Fragment {
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
 
-
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *

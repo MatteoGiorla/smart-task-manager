@@ -101,7 +101,7 @@
     <string name="home_location">Home</string>
     <string name="office_location">Office</string>
     <string name="school_location">School</string>
-    <string name="select_one_location">Select one</string>
+    <string name="select_one">Select one</string>
 
     <string name="location_name">NAME</string>
     <string name="location_enter_name">Enter the location name</string>

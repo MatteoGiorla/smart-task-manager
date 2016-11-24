@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -17,12 +18,19 @@ public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_NEW_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        date = new Date();
-        energy = Task.Energy.NORMAL;
 
+        //Set default values
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 1899);
+        cal.set(Calendar.MONTH, 0);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        date = cal.getTime();
+
+        energy = Task.Energy.NORMAL;
     }
 
     /**
@@ -59,6 +67,7 @@ public class NewTaskActivity extends TaskActivity {
         listOfContributors.add(contributor);
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
+
         if(isUnfilled(newTask)){
             intent.putExtra(IS_UNFILLED, true);
         }else{

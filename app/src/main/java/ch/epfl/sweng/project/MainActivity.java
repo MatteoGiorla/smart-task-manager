@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,8 +32,6 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
-import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
-import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
@@ -128,7 +125,7 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userLocation = getResources().getString(R.string.select_one_location);
+        userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
     }
@@ -203,7 +200,7 @@ public final class MainActivity extends AppCompatActivity {
                         mainFragment.addTask(newTask);
                         // trigger the dynamic sort
                         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                        String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                        String select_one_location = getApplicationContext().getString(R.string.select_one);
                         mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
                     }
                 }
@@ -265,7 +262,8 @@ public final class MainActivity extends AppCompatActivity {
 
                 // trigger the dynamic sort
                 String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+
+                String select_one_location = getApplicationContext().getString(R.string.select_one);
                 mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
@@ -280,7 +278,8 @@ public final class MainActivity extends AppCompatActivity {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
                 // trigger the dynamic sort
                 String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+
+                String select_one_location = getApplicationContext().getString(R.string.select_one);
                 mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
@@ -342,6 +341,7 @@ public final class MainActivity extends AppCompatActivity {
 
     private void createUtilityMaps() {
         DURATION_MAP = new LinkedHashMap<>();
+        DURATION_MAP.put(0, mContext.getResources().getString(R.string.select_one));
         DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
@@ -357,6 +357,7 @@ public final class MainActivity extends AppCompatActivity {
         DURATION_MAP = Collections.unmodifiableMap(DURATION_MAP);
 
         REVERSE_DURATION = new LinkedHashMap<>();
+        REVERSE_DURATION.put(mContext.getResources().getString(R.string.select_one), 0);
         REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);

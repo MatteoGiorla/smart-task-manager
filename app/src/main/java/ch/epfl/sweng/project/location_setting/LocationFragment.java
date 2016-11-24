@@ -66,7 +66,7 @@ public class LocationFragment extends Fragment {
     }
 
     private void addDefaultLocations(){
-        defaultLocations[0] = new Location(getString(R.string.select_one_location),0,0);
+        defaultLocations[0] = new Location(getString(R.string.select_one),0,0);
         defaultLocations[1] = new Location(getString(R.string.everywhere_location),0,0);
         defaultLocations[2] = new Location(getString(R.string.downtown_location),0,0);
         defaultLocations[3] = new Location(getString(R.string.home_location),0,0);

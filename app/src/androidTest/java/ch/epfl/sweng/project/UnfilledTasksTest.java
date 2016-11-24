@@ -50,7 +50,8 @@ public class UnfilledTasksTest {
         mUiDevice = getInstance(getInstrumentation());
     }
 
-    @Test
+
+    //@Test
     public void MainActivityToUnfilledRoundTrip(){
         onView(withId(R.id.unfilled_task_button)).perform(click());
         onView(withId(R.id.unfilled_tasks_toolbar)).check(matches(isDisplayed()));
@@ -63,6 +64,12 @@ public class UnfilledTasksTest {
         }
 
         onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void createAnIncompleteTaskTriggersTableRowDisplay(){
 
     }
+
+
 }

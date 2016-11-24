@@ -38,7 +38,7 @@ public class TaskTest {
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
         long startDuration = 30;
-        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, startDuration);
+        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TaskTest {
         listContributorsTest.add(authorTest);
         long startDuration= 30;
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, startDuration);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
@@ -66,7 +66,6 @@ public class TaskTest {
         assertEquals(dueDateTest.getTime(), newTaskTest.getDueDate().getTime());
         assertEquals(durationTest, newTaskTest.getDurationInMinutes());
         assertEquals(energyTest, newTaskTest.getEnergy());
-        assertEquals(startDuration, newTaskTest.getStartDuration());
     }
 
     /**
@@ -120,14 +119,6 @@ public class TaskTest {
         assertTrue(testTask.getListOfContributors().contains("New author"));
     }
 
-
-    @Test
-    public void testTaskSetStartDuration() {
-        long newStartDuration = 5;
-        testTask.setStartDuration(newStartDuration);
-        assertEquals(newStartDuration, testTask.getStartDuration());
-    }
-
     /**
      * Test that the setName setter throws an IllegalArgumentException
      * when its argument is null
@@ -165,7 +156,7 @@ public class TaskTest {
     @Test
     public void testTaskConstructorException() {
         thrownException.expect(NullPointerException.class);
-        new Task(null, null, null, null, 0, null, null, 0);
+        new Task(null, null, null, null, 0, null, null);
     }
 
     /**

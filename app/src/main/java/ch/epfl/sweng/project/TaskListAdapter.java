@@ -1,8 +1,13 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +47,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      * @param parent      ViewGroup that this view will eventually be attached to
      * @return the view to be displayed
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
     public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
@@ -84,9 +90,11 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 }
 
                 if (days < 10 && days >= 1) {
-                    remainingDays.setTextColor(Color.rgb(255,140,0));
+                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_orange));
                 } else if (days < 1) {
-                    remainingDays.setTextColor(Color.RED);
+                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                } else {
+                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_green));
                 }
             }
             if (taskLocation!= null) {
@@ -107,23 +115,16 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
                 hsv[1] = 1;
                 hsv[2] = 1;
-                coloredIndicator.setBackgroundColor(Color.HSVToColor(hsv));
+
+                //flatten the color (formula : Saturation - 37%, lightness + 3.95% (modified))
+                float[] hsl = new float[3];
+                ColorUtils.colorToHSL(Color.HSVToColor(hsv), hsl);
+                hsl[1] = hsl[1] - (float)0.2 * hsl[1];
+                hsl[2] = hsl[2] + (float)0.2 * hsl[2];
+
+                coloredIndicator.setBackgroundColor(ColorUtils.HSLToColor(hsl));
             }
         }
         return resultView;
-    }
-
-    /**
-     * Helper functions to calculate the number of remaining days
-     * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
-     */
-    private Calendar getDatePart(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal;
     }
 }
