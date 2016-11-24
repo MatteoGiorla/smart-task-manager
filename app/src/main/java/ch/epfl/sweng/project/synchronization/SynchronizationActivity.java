@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +16,7 @@ import com.google.firebase.database.Query;
 import java.util.Map;
 
 import ch.epfl.sweng.project.MainActivity;
+import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.UserProvider;
@@ -25,6 +28,7 @@ public class SynchronizationActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_synchronization);
         String mail;
         try {
             mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
