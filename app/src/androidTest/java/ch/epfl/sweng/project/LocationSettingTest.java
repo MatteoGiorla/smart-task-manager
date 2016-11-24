@@ -75,18 +75,15 @@ public final class LocationSettingTest extends SuperTest {
      */
     @Test
     public void defaultLocationsArePresent(){
-        for(int i = 2; i < LocationFragment.defaultLocationsSize; ++i){
-            checkALocation(LocationFragment.defaultLocations[i].getName(), i-2);
-        }
+        checkALocation("Home", 0);
     }
 
     @Test
     public void someDefaultLocationsCanBeDeletedOtherNot(){
         //deleting the "optional" default locations and testing they are not there.
-        for(int i = 2; i < LocationFragment.defaultLocationsSize - 1;  ++i){
-            deleteALocation(0);
-            checkALocation(LocationFragment.defaultLocations[i+1].getName(), 0);
-        }
+        deleteALocation(0);
+        checkALocation("Office", 0);
+
         //now checking long click and simple click doesn't get us to another activity
         /*
         for(int i = 0; i < 2; ++i){
@@ -111,7 +108,7 @@ public final class LocationSettingTest extends SuperTest {
         for (int i = 0; i < createdLocations; i++) {
             createALocation(mTitleToBeTyped + i);
             //Check title name inside listView
-            checkALocation(mTitleToBeTyped + i, i + LocationFragment.defaultLocationsSize-2);
+            checkALocation(mTitleToBeTyped + i, i + 3);
         }
     }
 
@@ -143,7 +140,7 @@ public final class LocationSettingTest extends SuperTest {
 
     @Test
     public void testCanEditLocation() {
-        final int locationPosition = LocationFragment.defaultLocationsSize-2;
+        final int locationPosition = 3;
         //Create a location
         createALocation(mOldTitle);
 
@@ -173,7 +170,7 @@ public final class LocationSettingTest extends SuperTest {
      */
     @Test
     public void testCannotEditLocationWithAlreadyExistingTitle() {
-        final int locationPosition = LocationFragment.defaultLocationsSize-2;
+        final int locationPosition = 3;
         //Create a location
         createALocation(mOldTitle);
 
@@ -184,7 +181,7 @@ public final class LocationSettingTest extends SuperTest {
         onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
         //Update the title and the description
         onView(withId(R.id.locationName)).perform(clearText());
-        onView(withId(R.id.locationName)).perform(typeText(LocationFragment.defaultLocations[2].getName()));
+        onView(withId(R.id.locationName)).perform(typeText("Home"));
         pressBack();
 
 
@@ -216,7 +213,7 @@ public final class LocationSettingTest extends SuperTest {
 
         //Try to create a second class with the same title as the first one
         onView(withId(R.id.add_location_button)).perform(click());
-        onView(withId(R.id.locationName)).perform(typeText(LocationFragment.defaultLocations[0].getName()));
+        onView(withId(R.id.locationName)).perform(typeText("Everywhere"));
         pressBack();
         onView(withId(R.id.location_done_button_toolbar)).check(matches(not(isDisplayed())));
 

@@ -40,8 +40,6 @@ public class LocationFragment extends Fragment {
     private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
-    public static final int defaultLocationsSize = 6;
-    public static final Location[] defaultLocations = new Location[defaultLocationsSize];
 
     /**
      * Method that adds a location in the locationList and in the database.
