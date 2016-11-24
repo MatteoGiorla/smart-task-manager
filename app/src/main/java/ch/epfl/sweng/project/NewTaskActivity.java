@@ -67,7 +67,7 @@ public class NewTaskActivity extends TaskActivity {
         listOfContributors.add(contributor);
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
-        if(newTask.getLocationName().equals(getString(R.string.select_one_location))){
+        if(newTask.getLocationName().equals(getString(R.string.select_one))){
             intent.putExtra(IS_UNFILLED, true);
         }else{
             intent.putExtra(IS_UNFILLED, false);
