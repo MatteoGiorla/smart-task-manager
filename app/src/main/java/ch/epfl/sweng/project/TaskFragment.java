@@ -44,12 +44,6 @@ public class TaskFragment extends Fragment {
     private ArrayList<Task> taskList;
     private TaskHelper mDatabase;
 
-    //sorting parameters
-    static String locationParameter;
-    static int timeParameter;
-    static int energyParameter;
-    static boolean dynamic;
-
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *
@@ -296,18 +290,6 @@ public class TaskFragment extends Fragment {
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
-    }
-
-    public static void fixSortingParams(String locationParam, int timeParam, int energyParam, boolean dynamicParam) {
-        locationParameter = "";
-        timeParameter = 0;
-        energyParameter = 0;
-        dynamic = false;
-        /*
-        locationParameter = locationParam;
-        timeParameter = timeParam;
-        energyParameter = energyParam;
-        dynamic = dynamicParam;*/
     }
 
     /**

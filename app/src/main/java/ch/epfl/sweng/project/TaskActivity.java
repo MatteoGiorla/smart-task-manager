@@ -52,7 +52,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     static Date date;
-    private static final DateFormat dateFormat = DateFormat.getDateInstance();
+    static final DateFormat dateFormat = DateFormat.getDateInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,15 +285,29 @@ public abstract class TaskActivity extends AppCompatActivity {
 
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        Button mButton;
+
         @NonNull
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
+            mButton = (Button) getActivity().findViewById(R.id.pick_date);
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            int year;
+            int month;
+            int day;
+
+            if(mButton.getText().equals(getString(R.string.enter_due_date_hint))){
+                // Use the current date as the default date in the picker
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+            } else {
+                c.setTime(date);
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH) + 1;
+                day = c.get(Calendar.DAY_OF_MONTH);
+            }
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -301,14 +315,13 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         @RequiresApi(api = Build.VERSION_CODES.N)
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            mButton = (Button) getActivity().findViewById(R.id.pick_date);
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
             date = cal.getTime();
-            final Button mButton = (Button) getActivity().findViewById(R.id.pick_date);
             mButton.setText(dateFormat.format(date.getTime()));
-
         }
 
     }

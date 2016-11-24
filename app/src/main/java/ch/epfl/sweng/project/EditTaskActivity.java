@@ -1,6 +1,10 @@
 package ch.epfl.sweng.project;
 
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -15,6 +19,7 @@ public class EditTaskActivity extends TaskActivity {
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     private Task mTaskToBeEdited;
     private int mIndexTaskToBeEdited;
+    private String text_to_set_on_date_button;
 
     /**
      * Override the onCreate method
@@ -25,6 +30,7 @@ public class EditTaskActivity extends TaskActivity {
      *                           being shut down then this Bundle contains the data it
      *                           most recently supplied in onSaveInstanceState(Bundle)
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +45,14 @@ public class EditTaskActivity extends TaskActivity {
         date = mTaskToBeEdited.getDueDate();
         energy = mTaskToBeEdited.getEnergy();
         duration = mTaskToBeEdited.getDuration();
+
+        final Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int year = c.get(Calendar.YEAR);
+        text_to_set_on_date_button = getString(R.string.enter_due_date_hint);
+        if(year != 1899){
+            text_to_set_on_date_button = dateFormat.format(date.getTime());
+        }
 
         //Populate the layout activity_task
         populateLayout();
@@ -93,6 +107,8 @@ public class EditTaskActivity extends TaskActivity {
         titleEditText.setText(mTaskToBeEdited.getName());
         titleEditText.setSelection(titleEditText.getText().length()); //put cursor at the end
 
+        Button mButton = (Button) findViewById(R.id.pick_date);
+        mButton.setText(text_to_set_on_date_button);
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
         descriptionEditText.setText(mTaskToBeEdited.getDescription());
