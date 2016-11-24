@@ -27,7 +27,7 @@ public class IntroActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_2_title), getString(R.string.tutorial_slide_2_description), R.drawable.automatic_sort_illustration, getColor(R.color.tutorial_background)));
         addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_3_title), getString(R.string.tutorial_slide_3_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
         addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_4_title), getString(R.string.tutorial_slide_4_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_5_title), getString(R.string.tutorial_slide_5_description), R.drawable.description_36dp, getColor(R.color.tutorial_background)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_5_title), getString(R.string.tutorial_slide_5_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
         //addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_6_title), getString(R.string.tutorial_slide_6_description), R.drawable.description_36dp, getColor(R.color.tutorial_background)));
         //addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_7_title), getString(R.string.tutorial_slide_7_description), R.drawable.description_36dp, getColor(R.color.tutorial_background)));
 

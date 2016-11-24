@@ -334,7 +334,7 @@ public final class MainActivity extends AppCompatActivity {
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
-        REVERSE_DURATION.put(mContext.getResources().getString(R.string.duration2hstartTime), 120);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2hstartTime), 120);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();

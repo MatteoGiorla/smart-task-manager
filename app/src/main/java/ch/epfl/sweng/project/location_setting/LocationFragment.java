@@ -66,20 +66,12 @@ public class LocationFragment extends Fragment {
     }
 
     private void addDefaultLocations(){
-        defaultLocations[0] = new Location(getString(R.string.select_one_location),0,0);
-        defaultLocations[1] = new Location(getString(R.string.everywhere_location),0,0);
-        defaultLocations[2] = new Location(getString(R.string.downtown_location),0,0);
-        defaultLocations[3] = new Location(getString(R.string.home_location),0,0);
-        defaultLocations[4] = new Location(getString(R.string.office_location),0,0);
-        defaultLocations[5] = new Location(getString(R.string.school_location),0,0);
+        addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
+        addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
 
-        addDefaultLocation(defaultLocations[0]);
-        addDefaultLocation(defaultLocations[1]);
-        addDefaultLocation(defaultLocations[2]);
-
-        addLocation(defaultLocations[3]);
-        addLocation(defaultLocations[4]);
-        addLocation(defaultLocations[5]);
+        addLocation(new Location(getString(R.string.home_location),0,0));
+        addLocation(new Location(getString(R.string.office_location),0,0));
+        addLocation(new Location(getString(R.string.school_location),0,0));
     }
 
     /**
@@ -283,6 +275,7 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
+        defaultLocationList.add(0, new Location(getString(R.string.select_one_location),0,0));
         ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
         tmp.addAll(locationList);
         return tmp;

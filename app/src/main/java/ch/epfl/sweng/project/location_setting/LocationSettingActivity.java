@@ -106,10 +106,6 @@ public class LocationSettingActivity extends AppCompatActivity {
         }else{
             //TODO Update the user when accessing Location Settings from the MainActivity
         }
-
-
-
-        //TODO : store user locally cf Mikael
     }
 
     private class OnDoneButtonClickListener implements View.OnClickListener {
