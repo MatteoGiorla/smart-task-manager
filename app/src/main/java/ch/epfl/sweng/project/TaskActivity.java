@@ -284,6 +284,15 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isUnfilled(Task task){
+        /*Calendar c = Calendar.getInstance();
+        c = getTime(*date*);
+        int year = c.get(Calendar.YEAR);*/
+
+        return task.getLocationName().equals(getString(R.string.select_one_location))
+        || task.getDuration() == 0;
+
+    }
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         @NonNull

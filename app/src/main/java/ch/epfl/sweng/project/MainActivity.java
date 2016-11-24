@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -47,8 +48,10 @@ public final class MainActivity extends AppCompatActivity {
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
     private TaskFragment mainFragment;
-    private TaskFragment unfilledFragment;
     private Context mContext;
+
+    //stock unfilledTasks
+    private ArrayList<Task> unfilledTasks;
 
     private Intent intent;
     private static User currentUser;
@@ -64,6 +67,7 @@ public final class MainActivity extends AppCompatActivity {
     public static Map<Integer, String> ENERGY_MAP;
     public static Map<String, Integer> REVERSE_ENERGY;
 
+    private TableRow unfilledTaskButton;
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -104,16 +108,18 @@ public final class MainActivity extends AppCompatActivity {
 
         createUtilityMaps();
 
+        unfilledTasks = new ArrayList<>();
+
         //Add the user to TaskFragments
         mainFragment = new TaskFragment();
-        unfilledFragment = new TaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
         mainFragment.setArguments(bundle);
-        unfilledFragment.setArguments(bundle);
 
         //Handle the table row in case of unfinished tasks
+        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
         initializeUnfilledTableRow();
+        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -191,7 +197,7 @@ public final class MainActivity extends AppCompatActivity {
                     //treat the unfilled case
                     boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
                     if(unfilled){
-                        
+                        unfilledTasks.add(newTask);
                     }else{
                         // Add element to the listTask
                         mainFragment.addTask(newTask);
@@ -202,8 +208,7 @@ public final class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-        initializeUnfilledTableRow();
-
+        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
 
     /**
@@ -289,27 +294,46 @@ public final class MainActivity extends AppCompatActivity {
      *  initialize the TableRow to access to unfilled tasks and its functionnality
      */
     private void initializeUnfilledTableRow(){
-        final TableRow unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        Log.d("MainActivity : ","AreThereUnfinishedTaks?"+areThereUnfinishedTasks());
-        if(areThereUnfinishedTasks()){
-            unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
-                            return true; // if you want to handle the touch event
-                        case MotionEvent.ACTION_UP:
-                            unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
-                            Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
-                            intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) unfilledFragment.getTaskList());
-                            startActivityForResult(intent, unfilledTaskRequestCode);
-                            //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            return true; // if you want to handle the touch event
-                    }
-                    return false;
+        unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
+                        return true; // if you want to handle the touch event
+                    case MotionEvent.ACTION_UP:
+                        unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
+                        Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
+                        intent.putParcelableArrayListExtra("UNFILLED_TASKS", unfilledTasks);
+                        startActivityForResult(intent, unfilledTaskRequestCode);
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        return true; // if you want to handle the touch event
                 }
-            });
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Set the visibility of the TableRow displaying undone tasks's presence,
+     * and update also the number of tasks to be tried.
+     *
+     * @param visible if true makes it visible, invisible otherwise
+     */
+    private void updateUnfilledTasksTableRow(boolean visible){
+        if(visible){
+            unfilledTaskButton.setVisibility(View.VISIBLE);
+            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
+            if(unfilledTasks != null){
+
+                int taskNum = unfilledTasks.size();
+                String numberToDisplay = Integer.toString(taskNum);
+                if(taskNum >= 99){
+                    numberToDisplay = "99+";
+                }
+                TextView taskNumRedDot = (TextView) findViewById(R.id.number_of_unfilled_tasks);
+                taskNumRedDot.setText(numberToDisplay);
+            }
         }else{
             unfilledTaskButton.setVisibility(View.GONE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
@@ -440,6 +464,6 @@ public final class MainActivity extends AppCompatActivity {
      * @return boolean the existence of unfilled tasks.
      */
     private boolean areThereUnfinishedTasks(){
-        return (unfilledFragment.getTaskList() != null) && (!unfilledFragment.getTaskList().isEmpty());
+        return (unfilledTasks != null) && (!unfilledTasks.isEmpty());
     }
 }
