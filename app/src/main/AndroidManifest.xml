@@ -30,11 +30,6 @@
         <activity
             android:name=".EntryActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -68,18 +63,16 @@
         <activity
             android:name=".information.TaskInformationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
-
+            android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".location_setting.EditLocationActivity"
-            android:screenOrientation="portrait"
             android:label="@string/edit_location"
-            android:theme="@style/AppThemeNoActionBar"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".synchronization.SynchronizationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -96,15 +89,28 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
-
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".location_setting.LocationSettingActivity"
-            android:screenOrientation="portrait"
             android:label="@string/location_set_text"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".UnfilledTasksActivity"
+            android:label="@string/unfinished_tasks"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".IntroActivity" />
 
         <receiver android:name=".receiver.NotificationReceiver" />
+
+        <activity android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

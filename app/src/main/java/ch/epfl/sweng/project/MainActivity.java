@@ -2,17 +2,21 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TableRow;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
@@ -100,6 +104,31 @@ public final class MainActivity extends AppCompatActivity {
         bundle.putParcelable(USER_KEY, currentUser);
         fragment.setArguments(bundle);
 
+        //Handle the table row in case of unfinished tasks
+        final TableRow unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+        if(areThereUnfinishedTasks()){
+            unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
+                            return true; // if you want to handle the touch event
+                        case MotionEvent.ACTION_UP:
+                            unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
+                            Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            return true; // if you want to handle the touch event
+                    }
+                    return false;
+                }
+            });
+        }else{
+            unfilledTaskButton.setVisibility(View.GONE);
+            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
+        }
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.tasks_container, fragment)
@@ -107,7 +136,7 @@ public final class MainActivity extends AppCompatActivity {
         }
 
         //Default values
-        userLocation = getResources().getString(R.string.everywhere_location);
+        userLocation = getResources().getString(R.string.select_one_location);
         userTimeAtDisposal = 60; //1 hour
         initializeAdapters();
     }
@@ -174,6 +203,10 @@ public final class MainActivity extends AppCompatActivity {
                 Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_TASK);
                 // Add element to the listTask
                 fragment.addTask(newTask);
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
         }
     }
@@ -202,6 +235,10 @@ public final class MainActivity extends AppCompatActivity {
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
+        //set default value to the spinner
+        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
+        mDuration.setSelection(spinnerPosition);
+
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
@@ -225,6 +262,11 @@ public final class MainActivity extends AppCompatActivity {
                 } else {
                     userLocation = locationAdapter.getItem(position);
                 }
+
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
             @Override
@@ -236,6 +278,10 @@ public final class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
+                // trigger the dynamic sort
+                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+                String select_one_location = getApplicationContext().getString(R.string.select_one_location);
+                fragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
             }
 
             @Override
@@ -279,14 +325,16 @@ public final class MainActivity extends AppCompatActivity {
         START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1hstartTime));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
+        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2hstartTime));
         START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
         REVERSE_START_DURATION = new LinkedHashMap<>();
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1hstartTime), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2hstartTime), 120);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();
@@ -360,5 +408,14 @@ public final class MainActivity extends AppCompatActivity {
         if (currentUser == null/* || taskList == null*/) {
             throw new IllegalArgumentException("User passed with the intent is null");
         }
+    }
+
+    /**
+     * Tells whether there are unfilled tasks left to be complete
+     *
+     * @return boolean the existence of unfilled tasks.
+     */
+    private boolean areThereUnfinishedTasks(){
+        return true;
     }
 }

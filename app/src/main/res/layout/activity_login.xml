@@ -15,11 +15,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:weightSum="1">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="110dp"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -82,27 +79,12 @@
             android:scaleY="1.6"
             android:contentDescription="@string/facebook_sign_in_button_content_description"/>
 
-        <!-- this button is invisible and not clickable-->
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/facebook_sign_in_button_invisible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
     </LinearLayout>
 
-    <!--
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_sign_in_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="120dp" />
--->
-
+    <!-- this button is invisible and not clickable-->
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_sign_in_button_invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

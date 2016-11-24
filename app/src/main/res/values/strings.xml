@@ -7,6 +7,8 @@
     <string name="location_settings">Location Settings</string>
     <string name="edit_location">Edit location</string>
     <string name="new_location">New location</string>
+    <string name="unfinished_tasks">Tasks to fill up</string>
+
 
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
@@ -43,7 +45,6 @@
     <string name="info_any_tasks">You have no task !</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_authentication_canceled">Authentication canceled.</string>
-
 
 
     <!-- Buttons description-->
@@ -91,7 +92,7 @@
     <string name="duration2w">2 weeks</string>
     <string name="duration1m">1 month</string>
 
-    <string name="duration1hstartTime">"> 1 hour"</string>
+    <string name="duration2hstartTime">"> 2 hours"</string>
 
     <!-- Default locations titles-->
     <string name="everywhere_location">Everywhere</string>
@@ -99,6 +100,9 @@
     <string name="home_location">Home</string>
     <string name="office_location">Office</string>
     <string name="school_location">School</string>
+
+    <string name="select_one_location">Select one</string>
+
     <string name="location_name">NAME</string>
     <string name="location_enter_name">Enter the location name</string>
     <string name="location_place_picker">LOCATION (Optional)</string>
@@ -107,6 +111,12 @@
     <string name="location_set_text">Set your locations</string>
     <string name="default_text">Default</string>
     <string name="custom_text">Custom</string>
+
+    <!-- Preference key -->
+    <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
+    <string name="new_user">FIRST_USER_LOGIN</string>
+    <string name="first_launch">FIRST_LAUNCH</string>
+
 
     <!-- Energy description -->
     <string name="description_remaining_days">represent the remaining days</string>
@@ -147,4 +157,27 @@
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="stop_watch_icon_content_description">stop watch icon</string>
     <string name="right_arrow_content_description">right arrow</string>
+
+    <!-- Tutorial texts -->
+    <string name="tutorial_slide_1_title">Welcome !</string>
+    <string name="tutorial_slide_2_title">Never miss a deadline</string>
+    <string name="tutorial_slide_3_title">Task parameters</string>
+    <string name="tutorial_slide_4_title">Due date and duration</string>
+    <string name="tutorial_slide_5_title">Location</string>
+<!--
+    <string name="tutorial_slide_6_title">Notifications</string>
+    <string name="tutorial_slide_7_title">Be located automatically</string>
+-->
+    <string name="tutorial_slide_1_description">To get the best out of Taskit let us go through some key concepts.</string>
+    <string name="tutorial_slide_2_description">Taskit automatically orders your tasks according to your current location and time at disposal so that you immediately know where you should start.</string>
+    <string name="tutorial_slide_3_description">To sort your tasks, the app needs you to specify 3 essential parameters. Unfilled tasks will be placed in an inbox at the top of your tasks list. Always try to fill up all your tasks to avoid missing an important one.</string>
+    <string name="tutorial_slide_4_description">Enter the date at which your task has to be completed and specify how long you estimate having to work on it. A task that takes too long is a bad sign. Always try to split it up into shorter ones. This will also keep you motivated.</string>
+    <string name="tutorial_slide_5_description">Specify where your task can be completed. If you can complete it anywhere select "Everywhere". After Log In you will be asked to set your favorite locations for this purpose.</string>
+<!--
+    <string name="tutorial_slide_6_description">Allow TaskIt to send you notifications whenever a task needs your attention.</string>
+    <string name="tutorial_slide_7_description">Allow TaskIt to get your current position when you open the app so that you don’t need to enter it manually.</string>
+-->
+    <string name="skip_button">Skip</string>
+    <string name="done_button">Done</string>
+
 </resources>
