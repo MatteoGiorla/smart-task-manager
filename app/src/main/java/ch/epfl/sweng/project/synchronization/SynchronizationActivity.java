@@ -25,7 +25,6 @@ public class SynchronizationActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         String mail;
         try {
             mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
