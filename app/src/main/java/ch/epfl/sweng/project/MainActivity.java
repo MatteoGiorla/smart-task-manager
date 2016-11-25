@@ -49,7 +49,6 @@ public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
-    public static final String UNFILLED_DATA = "chEpflSwengTaskItUnfilledTasks.ser";
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
@@ -114,12 +113,7 @@ public final class MainActivity extends AppCompatActivity {
 
         createUtilityMaps();
 
-        //handling local storage
-        checkLocalDataFile();
-        unfilledTasks = loadUnfilledTasks();
-        if(unfilledTasks == null){
-            unfilledTasks = new ArrayList<>();
-        }
+        unfilledTasks = new ArrayList<>();
 
         //Add the user to TaskFragments
         mainFragment = new TaskFragment();
@@ -210,7 +204,6 @@ public final class MainActivity extends AppCompatActivity {
                     boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
                     if(unfilled){
                         unfilledTasks.add(newTask);
-                        saveUnfilledTasks();
                     }else{
                         // Add element to the listTask
                         mainFragment.addTask(newTask);
@@ -230,7 +223,6 @@ public final class MainActivity extends AppCompatActivity {
 
                         //update the list of unfilledTasks
                         unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
-                        saveUnfilledTasks();
                     }
                 }
             }
@@ -497,44 +489,6 @@ public final class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkLocalDataFile(){
-        try{
-            File unfilledFile = mContext.getFileStreamPath(UNFILLED_DATA);
-            if(!unfilledFile.exists()){
-                unfilledFile.createNewFile();
-            }
-        }catch(IOException i){
-            i.printStackTrace();
-        }
-    }
-
-    private ArrayList<Task> loadUnfilledTasks(){
-        try {
-            FileInputStream fileIn = mContext.openFileInput(UNFILLED_DATA);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            ArrayList<Task> tasks = (ArrayList<Task>) in.readObject();
-            in.close();
-            fileIn.close();
-            return tasks;
-        }catch(IOException i) {
-            i.printStackTrace();
-            return null;
-        }catch(ClassNotFoundException c) {
-            return null;
-        }
-    }
-
-    private void saveUnfilledTasks(){
-        try {
-            FileOutputStream fileOut = mContext.openFileOutput(UNFILLED_DATA, Context.MODE_PRIVATE);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(unfilledTasks);
-            out.close();
-            fileOut.close();
-        } catch(IOException i) {
-            i.printStackTrace();
-        }
-    }
 
     /**
      * Tells whether there are unfilled tasks left to be complete
