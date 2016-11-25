@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,9 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_unfilled_tasks);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
+        initializeToolbar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
 
         ArrayList<Task> unfilledTasks = getIntent().getParcelableArrayListExtra(MainActivity.UNFILLED_TASKS);
         //Add the user to TaskFragments
@@ -34,9 +38,6 @@ public class UnfilledTasksActivity extends AppCompatActivity {
                     .commit();
         }
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
-        initializeToolbar(mToolbar);
-        mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
     }
 
 
@@ -52,6 +53,11 @@ public class UnfilledTasksActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
+
+            Intent intent = getIntent();
+            intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
+            intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

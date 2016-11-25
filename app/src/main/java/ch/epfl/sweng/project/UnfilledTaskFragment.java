@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-
 import android.app.Fragment;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +29,6 @@ import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STA
  * Class that represents the inflated fragment located in the unfilled_task_activity
  */
 public class UnfilledTaskFragment extends Fragment {
-    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.UnfilledTaskFragment.INDEX_TASK_TO_BE_EDITED";
-    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.UnfilledTaskFragment.TASKS_LIST";
-    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.UnfilledTaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
 
@@ -59,7 +54,7 @@ public class UnfilledTaskFragment extends Fragment {
         unfilledTaskList = bundle.getParcelableArrayList(MainActivity.UNFILLED_TASKS);
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
-                R.layout.list_unfilled_task,
+                R.layout.list_item_task,
                 unfilledTaskList
         );
     }
@@ -89,8 +84,8 @@ public class UnfilledTaskFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
+                intent.putExtra(TaskFragment.INDEX_TASK_TO_BE_DISPLAYED, position);
+                intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, unfilledTaskList);
                 startActivityForResult(intent, displayTaskRequestCode);
             }
         });
@@ -128,20 +123,20 @@ public class UnfilledTaskFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_task_delete:
-                removeTask(itemInfo, false);
+                int position = itemInfo.position;
+                unfilledTaskList.remove(position);
+                mTaskAdapter.notifyDataSetChanged();
                 return true;
             case R.id.floating_task_edit:
                 startEditTaskActivity(itemInfo);
                 return true;
-            case R.id.floating_task_done:
-                removeTask(itemInfo, true);
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
     /**
-     * Method called when an activity launch inside MainActivity,
+     * Method called when an activity launch inside UnfilledTaskActivity,
      * is finished. This method is triggered only if we use
      * startActivityForResult.
      *
@@ -176,7 +171,7 @@ public class UnfilledTaskFragment extends Fragment {
                     unfilledTaskList.remove(taskIndex);
             }
         }
-        //sortTaskStatically();
+        mTaskAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -213,49 +208,11 @@ public class UnfilledTaskFragment extends Fragment {
         int position = itemInfo.position;
         Intent intent = new Intent(getActivity(), EditTaskActivity.class);
 
-        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
+        intent.putExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, position);
+        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, unfilledTaskList);
 
         startActivityForResult(intent, editTaskRequestCode);
     }
-
-    /**
-     * Remove a task from the taskList of unfilled.
-     *
-     * @param itemInfo Extra information about the item
-     *                 for which the context menu should be shown
-     * @param isDone   true if the task is done, otherwise false.
-     * @throws SQLiteException if an error occurred
-     */
-    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
-        int position = itemInfo.position;
-        unfilledTaskList.remove(position);
-    }
-
-    /**
-     * Private method executing the actions needed to remove the task.
-     * It removes the task from the database.
-     *
-     * @param position Position of the task to be removed.
-     * @param isDone   Boolean indicating if the task is done.
-     */
-   /* private void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = unfilledTaskList.get(position);
-
-        String taskName = taskToBeDeleted.getName();
-
-        mDatabase.deleteTask(taskToBeDeleted);
-
-        Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE;
-        if (isDone) {
-            TOAST_MESSAGE = taskName + getString(R.string.info_done);
-        } else {
-            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
-        }
-        int duration = Toast.LENGTH_SHORT;
-        Toast.makeText(context, TOAST_MESSAGE, duration).show();
-    }*/
 
     /**
      * Getter for the taskList of unfilled tasks
@@ -275,7 +232,7 @@ public class UnfilledTaskFragment extends Fragment {
      *
      * @return an immutable copy of taskList
      */
-    public List<Task> getDoneTaskList() {
+    public List<Task> getFilledTaskList() {
         if(unfilledTaskList != null){
             return new ArrayList<>(unfilledTaskList);
         }else{

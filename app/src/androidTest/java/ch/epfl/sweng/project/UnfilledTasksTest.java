@@ -21,14 +21,17 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -58,7 +61,7 @@ public class UnfilledTasksTest {
     }
 
 
-    @Test
+    //@Test
     public void MainActivityToUnfilledRoundTrip(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -80,7 +83,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 
-    @Test
+    //@Test
     public void createATaskWithoutDueDateTriggersTableRowDisplay(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -104,7 +107,7 @@ public class UnfilledTasksTest {
     }
 
 
-    @Test
+    //@Test
     public void createATaskWithoutDurationTriggersTableRowDisplay(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -132,7 +135,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 
-    @Test
+    //@Test
     public void tableRowDisplaysCorrectNumberOfUnfilledTasks(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -153,6 +156,59 @@ public class UnfilledTasksTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         onView(withId(R.id.number_of_unfilled_tasks)).check(matches(withText("2")));
+    }
+
+    @Test
+    public void CanSeeUnfilledTaskOnTheUnfilledActivity(){
+        onView(withId(R.id.add_task_button)).perform(click());
+        String titre = "unfTask 0";
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText(titre));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withId(R.id.unfilled_task_button)).perform(click());
+
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0)
+                .check(matches(hasDescendant(withText(titre))));
+    }
+
+    @Test
+    public void canDeleteUnfilledTask(){
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText("unfTask 0"));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        String titleToCheck = "unfTask special";
+        onView(withId(R.id.title_task)).perform(typeText(titleToCheck));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withId(R.id.unfilled_task_button)).perform(click());
+
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0).perform(longClick());
+        onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+
+
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0)
+                .check(matches(hasDescendant(withText(titleToCheck))));
+
     }
 
 
