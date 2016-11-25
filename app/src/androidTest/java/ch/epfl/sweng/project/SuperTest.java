@@ -25,10 +25,8 @@ import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.StringStartsWith.startsWith;
 
 class SuperTest {
     final int createdTask = 2;

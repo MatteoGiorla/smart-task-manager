@@ -125,6 +125,9 @@
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
 
+    <string name="logo_mini_description">Smaller version of the official Taskit logo</string>
+
+
     <!-- Notification -->
     <string name="notification_title_task">A task needs your attention</string>
     <string name="notification_content_task">\'s due date is close !</string>

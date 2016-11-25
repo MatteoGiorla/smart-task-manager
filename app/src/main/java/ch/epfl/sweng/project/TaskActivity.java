@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;

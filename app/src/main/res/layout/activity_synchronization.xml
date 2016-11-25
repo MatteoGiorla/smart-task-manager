@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red"
+    android:background="@color/colorPrimary"
     tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity">
 
     <RelativeLayout
@@ -17,6 +17,7 @@
             android:src="@drawable/logo_white_mini"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
+            android:contentDescription="@string/logo_mini_description"
             android:layout_height="wrap_content" />
 
         <ProgressBar

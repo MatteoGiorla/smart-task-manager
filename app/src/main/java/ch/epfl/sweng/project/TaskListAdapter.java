@@ -1,7 +1,6 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -15,10 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -135,6 +132,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 hsl[2] = hsl[2] + (float)0.2 * hsl[2];
 
                 coloredIndicator.setBackgroundColor(ColorUtils.HSLToColor(hsl));
+            }
+            if(Utils.isUnfilled(taskInTheView, getContext())){
+                coloredIndicator.setVisibility(View.INVISIBLE);
             }
         }
         return resultView;

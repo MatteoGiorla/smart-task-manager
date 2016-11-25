@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
