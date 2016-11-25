@@ -45,15 +45,28 @@ public class Utils {
      *
      * @return a boolean wether the task in unfilled or not
      */
-    @TargetApi(Build.VERSION_CODES.N)
     public static boolean isUnfilled(Task task, Context context){
+
+        return  isLocationUnfilled(task, context)
+                || isDurationUnfilled(task) || isDueDateUnfilled(task);
+    }
+
+    public static boolean isLocationUnfilled(Task task, Context context){
+        return task.getLocationName().equals(context.getString(R.string.select_one));
+    }
+
+    public static boolean isDurationUnfilled(Task task){
+        return task.getDuration() == 0;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public static boolean isDueDateUnfilled(Task task){
         Calendar c = Calendar.getInstance();
         c.setTime(task.getDueDate());
         int year = c.get(Calendar.YEAR);
-
-        return task.getLocationName().equals(context.getString(R.string.select_one))
-                || task.getDuration() == 0 || year == 1899;
+        return year == 1899;
     }
+
 
     /**
      * Deleter a user in the database

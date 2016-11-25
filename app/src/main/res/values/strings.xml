@@ -112,6 +112,11 @@
     <string name="default_text">Default</string>
     <string name="custom_text">Custom</string>
 
+    <!-- Unfilled task informations messages-->
+    <string name="unfilled_due_date">Not decided yet</string>
+    <string name="unfilled_duration">Not decided yet</string>
+    <string name="unfilled_location">Not decided yet</string>
+
     <!-- Energy description -->
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>

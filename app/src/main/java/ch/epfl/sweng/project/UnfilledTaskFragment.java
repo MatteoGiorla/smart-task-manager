@@ -234,7 +234,7 @@ public class UnfilledTaskFragment extends Fragment {
      */
     public List<Task> getFilledTaskList() {
         if(unfilledTaskList != null){
-            return new ArrayList<>(unfilledTaskList);
+            return new ArrayList<>(filledTaskList);
         }else{
             return null;
         }
