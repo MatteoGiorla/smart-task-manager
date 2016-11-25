@@ -72,7 +72,7 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
     private void launchNextActivity() {
         Intent intent = new Intent(synchronizationActivityContext, MainActivity.class);
         intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
-        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
         synchronizationActivityContext.startActivity(intent);
     }
 }

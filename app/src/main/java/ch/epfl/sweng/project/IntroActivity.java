@@ -57,6 +57,7 @@ public class IntroActivity extends AppIntro {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
         Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 }
