@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GoogleApiAvailability;
+//import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -163,15 +163,15 @@ public abstract class LocationActivity extends AppCompatActivity {
         } catch (GooglePlayServicesRepairableException e) {
             // Indicates that Google Play Services is either not installed or not up to date. Prompt
             // the user to correct the issue.
-            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
-                    0 ).show();
+            //GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+            //        0 ).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         } catch (GooglePlayServicesNotAvailableException e) {
             // Indicates that Google Play Services is not available and the problem is not easily
             // resolvable.
-            String message = "Google Play Services is not available: " +
-                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            //String message = "Google Play Services is not available: " +
+            //        GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+            //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         }
     }
