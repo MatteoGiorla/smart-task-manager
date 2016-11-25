@@ -75,35 +75,47 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             Calendar c = Calendar.getInstance();
             int days = taskInTheView.daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
-                if(days > 1){
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_left), days));
-                } else if (days == 1) {
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_left), days));
-                } else if (days == 0) {
-                    remainingDays.setText(R.string.due_today);
-                } else if (days == -1) {
-                    int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_late), days_value_for_text));
-                } else if (days < 1) {
-                    int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_late), days_value_for_text));
-                }
+                if(Utils.isDueDateUnfilled(taskInTheView)){
+                    remainingDays.setText("-");
+                }else{
+                    if (days > 1) {
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.days_left), days));
+                    } else if (days == 1) {
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.day_left), days));
+                    } else if (days == 0) {
+                        remainingDays.setText(R.string.due_today);
+                    } else if (days == -1) {
+                        int days_value_for_text = days * -1;
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.day_late), days_value_for_text));
+                    } else if (days < 1) {
+                        int days_value_for_text = days * -1;
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.days_late), days_value_for_text));
+                    }
 
-                if (days < 10 && days >= 1) {
-                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_orange));
-                } else if (days < 1) {
-                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                } else {
-                    remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_green));
+                    if (days < 10 && days >= 1) {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_orange));
+                    } else if (days < 1) {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    } else {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_green));
+                    }
                 }
             }
             if (taskLocation!= null) {
-                taskLocation.setText(taskInTheView.getLocationName());
+                if(Utils.isLocationUnfilled(taskInTheView, getContext())){
+                    taskLocation.setText("-");
+                }else{
+                    taskLocation.setText(taskInTheView.getLocationName());
+                }
             }
             if (taskDuration != null) {
-                taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
+                if(Utils.isDurationUnfilled(taskInTheView)){
+                    taskDuration.setText("-");
+                }else{
+                    taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
+                }
             }
-            if (coloredIndicator != null) {
+            if (coloredIndicator != null && !Utils.isUnfilled(taskInTheView, getContext())) {
                 double static_sort_value = taskInTheView.getStaticSortValue();
                 double urgency_percentage;
                 if(days <= 2 || static_sort_value > 100){
