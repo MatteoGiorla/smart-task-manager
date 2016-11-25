@@ -8,6 +8,8 @@ import android.view.View;
 
 public class UnfilledTasksActivity extends AppCompatActivity {
 
+    public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
 

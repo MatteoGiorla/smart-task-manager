@@ -41,6 +41,7 @@ import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
+    public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
@@ -199,13 +200,31 @@ public final class MainActivity extends AppCompatActivity {
                         // Add element to the listTask
                         mainFragment.addTask(newTask);
                         // trigger the dynamic sort
-                        String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-                        String select_one_location = getApplicationContext().getString(R.string.select_one);
-                        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+                        triggerDynamicSort();
+                    }
+                }
+            }else{
+                if(requestCode == unfilledTaskRequestCode){
+                    if(resultCode == RESULT_OK){
+                        ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
+                        for(Task t : newFinishedTasks){
+                            mainFragment.addTask(t);
+                        }
+                        //trigger the dynamic sort
+                        triggerDynamicSort();
+
+                        //update the list of unfilledTasks
+                        unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                     }
                 }
             }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+    }
+
+    private void triggerDynamicSort(){
+        String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+        String select_one_location = getApplicationContext().getString(R.string.select_one);
+        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
     }
 
     /**
@@ -290,7 +309,7 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *  initialize the TableRow to access to unfilled tasks and its functionnality
+     *  initialize the functionnality of the TableRow
      */
     private void initializeUnfilledTableRow(){
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
@@ -301,12 +320,12 @@ public final class MainActivity extends AppCompatActivity {
                         unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
                         return true; // if you want to handle the touch event
                     case MotionEvent.ACTION_UP:
+                        v.performClick();
                         unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
                         Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
-                        intent.putParcelableArrayListExtra("UNFILLED_TASKS", unfilledTasks);
+                        intent.putParcelableArrayListExtra(UNFILLED_TASKS, unfilledTasks);
                         startActivityForResult(intent, unfilledTaskRequestCode);
-                        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        return true; // if you want to handle the touch event
+                        return true;
                 }
                 return false;
             }

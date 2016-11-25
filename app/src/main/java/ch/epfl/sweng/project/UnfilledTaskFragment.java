@@ -2,7 +2,6 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
@@ -21,10 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.TaskHelper;
-import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
-import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.app.Activity.RESULT_OK;
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
@@ -34,17 +30,17 @@ import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STA
 /**
  * Class that represents the inflated fragment located in the activity_main
  */
-public class TaskFragment extends Fragment {
-    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_EDITED";
-    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
-    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
+public class UnfilledTaskFragment extends Fragment {
+    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.UnfilledTaskFragment.INDEX_TASK_TO_BE_EDITED";
+    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.UnfilledTaskFragment.TASKS_LIST";
+    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.UnfilledTaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
 
 
     private TaskListAdapter mTaskAdapter;
-    private ArrayList<Task> taskList;
-    private TaskHelper mDatabase;
+    private ArrayList<Task> unfilledTaskList;
+    private ArrayList<Task> filledTaskList;
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -59,25 +55,13 @@ public class TaskFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
 
-        User currentUser;
-        if (bundle != null) {
-            currentUser = bundle.getParcelable(MainActivity.USER_KEY);
-            if (currentUser == null) {
-                throw new IllegalArgumentException("User passed with the intend is null");
-            }
-        } else {
-            throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
-        }
-        taskList = new ArrayList<>();
+        filledTaskList = new ArrayList<>();
+        unfilledTaskList = bundle.getParcelableArrayList(MainActivity.UNFILLED_TASKS);
         mTaskAdapter = new TaskListAdapter(
                 getActivity(),
-                R.layout.list_item_task,
-                taskList
+                R.layout.list_unfilled_task,
+                unfilledTaskList
         );
-
-        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);
     }
 
     /**
@@ -106,7 +90,7 @@ public class TaskFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
                 intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
                 startActivityForResult(intent, displayTaskRequestCode);
             }
         });
@@ -189,7 +173,7 @@ public class TaskFragment extends Fragment {
                     if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    removeTaskAction(taskIndex, false);
+                    unfilledTaskList.remove(taskIndex);
             }
         }
         //sortTaskStatically();
@@ -207,33 +191,14 @@ public class TaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
-            //taskList.set(indexEditedTask, editedTask);
+            if(TaskActivity.isUnfilled(editedTask)){
+                unfilledTaskList.set(indexEditedTask, editedTask);
+            }else{
+                unfilledTaskList.remove(indexEditedTask);
+                filledTaskList.add(editedTask);
+            }
             mTaskAdapter.notifyDataSetChanged();
-            Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + getString(R.string.info_updated),
-                    Toast.LENGTH_SHORT).show();
-
-            //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
-    }
-
-    /**
-     * Method that adds a task in the taskList and in the database.
-     *
-     * @param task The task to be added
-     * @throws IllegalArgumentException If the task to be added is null
-     */
-    public void addTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException();
-        }
-        mDatabase.addNewTask(task);
-        sortTaskStatically();
-
-        //Update notifications
-        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
     }
 
     /**
@@ -248,13 +213,13 @@ public class TaskFragment extends Fragment {
         Intent intent = new Intent(getActivity(), EditTaskActivity.class);
 
         intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
 
         startActivityForResult(intent, editTaskRequestCode);
     }
 
     /**
-     * Remove a task from the database and the taskList.
+     * Remove a task from the taskList of unfilled.
      *
      * @param itemInfo Extra information about the item
      *                 for which the context menu should be shown
@@ -263,7 +228,7 @@ public class TaskFragment extends Fragment {
      */
     private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
         int position = itemInfo.position;
-        removeTaskAction(position, isDone);
+        unfilledTaskList.remove(position);
     }
 
     /**
@@ -273,8 +238,8 @@ public class TaskFragment extends Fragment {
      * @param position Position of the task to be removed.
      * @param isDone   Boolean indicating if the task is done.
      */
-    private void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = taskList.get(position);
+   /* private void removeTaskAction(int position, Boolean isDone) {
+        Task taskToBeDeleted = unfilledTaskList.get(position);
 
         String taskName = taskToBeDeleted.getName();
 
@@ -289,36 +254,29 @@ public class TaskFragment extends Fragment {
         }
         int duration = Toast.LENGTH_SHORT;
         Toast.makeText(context, TOAST_MESSAGE, duration).show();
-
-        //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
-    }
+    }*/
 
     /**
-     * Method that launch the dynamic sort on the tasks.
-     *
-     * @param currentLocation     User's current location
-     * @param currentTimeDisposal User's current disposal time
-     */
-    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
-        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
-    }
-
-    /**
-     * Method that launch the static sort on the tasks.
-     */
-    public void sortTaskStatically() {
-        mTaskAdapter.sort(Task.getStaticComparator());
-    }
-
-    /**
-     * Getter for the taskList
+     * Getter for the taskList of unfilled tasks
      *
      * @return an immutable copy of taskList
      */
-    public List<Task> getTaskList() {
-        if(taskList != null){
-            return new ArrayList<>(taskList);
+    public List<Task> getUnfilledTaskList() {
+        if(unfilledTaskList != null){
+            return new ArrayList<>(unfilledTaskList);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Getter for the taskList of task that have been filled
+     *
+     * @return an immutable copy of taskList
+     */
+    public List<Task> getDoneTaskList() {
+        if(unfilledTaskList != null){
+            return new ArrayList<>(unfilledTaskList);
         }else{
             return null;
         }

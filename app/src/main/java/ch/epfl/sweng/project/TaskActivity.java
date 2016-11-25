@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -284,14 +285,14 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isUnfilled(Task task){
-        /*Calendar c = Calendar.getInstance();
-        c = getTime(*date*);
-        int year = c.get(Calendar.YEAR);*/
+    @TargetApi(Build.VERSION_CODES.N)
+    public static boolean isUnfilled(Task task){
+        Calendar c = Calendar.getInstance();
+        c.setTime(task.getDueDate());
+        int year = c.get(Calendar.YEAR);
 
         return task.getLocationName().equals(getString(R.string.select_one))
-        || task.getDuration() == 0;
-
+        || task.getDuration() == 0 || year == 1899;
     }
 
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
