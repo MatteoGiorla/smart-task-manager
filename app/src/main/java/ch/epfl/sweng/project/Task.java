@@ -389,7 +389,7 @@ public class Task implements Parcelable {
         private static final int SHORT_DELAY_COEFFICIENT = 100000;
         private static final int TIME_COEFFICIENT = 100000000;
         private static final int LOCATION_COEFFICIENT = 1000000000;
-        private static final int TIME_LIMIT = 60;
+        private static final int TIME_LIMIT = 120;
         private String currentLocation;
         private int currentTimeDisposal;
         private String everywhere_location = "";

@@ -85,11 +85,12 @@ public final class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //If we are not in test mode
         //We get the user that was loaded in SynchronisationActivity
@@ -263,7 +264,7 @@ public final class MainActivity extends AppCompatActivity {
         mDuration.setAdapter(durationAdapter);
 
         //set default value to the spinner
-        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration1hstartTime));
+        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
         mDuration.setSelection(spinnerPosition);
 
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
@@ -406,14 +407,16 @@ public final class MainActivity extends AppCompatActivity {
         START_DURATION_MAP.put(5, mContext.getResources().getString(R.string.duration5m));
         START_DURATION_MAP.put(15, mContext.getResources().getString(R.string.duration15m));
         START_DURATION_MAP.put(30, mContext.getResources().getString(R.string.duration30m));
-        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1hstartTime));
+        START_DURATION_MAP.put(60, mContext.getResources().getString(R.string.duration1h));
+        START_DURATION_MAP.put(120, mContext.getResources().getString(R.string.duration2hstartTime));
         START_DURATION_MAP = Collections.unmodifiableMap(START_DURATION_MAP);
 
         REVERSE_START_DURATION = new LinkedHashMap<>();
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration5m), 5);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration15m), 15);
         REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration30m), 30);
-        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1hstartTime), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration1h), 60);
+        REVERSE_START_DURATION.put(mContext.getResources().getString(R.string.duration2hstartTime), 120);
         REVERSE_START_DURATION = Collections.unmodifiableMap(REVERSE_START_DURATION);
 
         ENERGY_MAP = new LinkedHashMap<>();

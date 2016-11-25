@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -40,9 +41,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 
 
 /**
@@ -75,9 +76,10 @@ public class LoginActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // hide the action bar
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().hide();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         // Initialize Facebook SDK:
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -103,7 +105,7 @@ public class LoginActivity
                 });
 
         //initialize the preferences.
-        prefs = getApplicationContext().getSharedPreferences("ch.epfl.sweng", MODE_PRIVATE);
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
 
         //configuration of each services:
         configureGoogleSignIn();
@@ -364,12 +366,12 @@ public class LoginActivity
                 Intent intent;
                 if(dataSnapshot.exists()){
                     //precising the user has already been logged in before
-                    prefs.edit().putBoolean("FIRST_LOGIN", false).apply();
+                    prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
                     intent = new Intent(LoginActivity.this, SynchronizationActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 }else{
                     //setting the flag for first login of the user.
-                    prefs.edit().putBoolean("FIRST_LOGIN", true).apply();
+                    prefs.edit().putBoolean(getString(R.string.new_user), true).apply();
 
                     intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                     intent.putExtra(USER_EMAIL_KEY, currentEmail);
