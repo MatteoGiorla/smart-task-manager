@@ -244,7 +244,7 @@ public abstract class LocationActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PLACE_PICKER) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
               /*  Place place = PlacePicker.getPlace(data, this);
                 String toast = getString(R.string.info_place_fixed) + place.getName();
