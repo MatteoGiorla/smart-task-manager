@@ -15,13 +15,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.util.ArrayList;
@@ -48,16 +48,15 @@ public abstract class LocationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .build();
         setContentView(R.layout.activity_edit_location);
         Button chooseLocationButton = (Button) findViewById(R.id.choose_location);
-
-        // Initialize Place Autocomplete
-        createPlaceAutocomplete(chooseLocationButton);
+        chooseLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Initialize Place Autocomplete
+                createPlaceAutocomplete();
+            }
+        });
 
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.locationToolbar);
@@ -162,27 +161,29 @@ public abstract class LocationActivity extends AppCompatActivity {
 
     /**
      * Creation of the Place Picker
-     * @param chooseLocationButton Button which "switch on" Place Picker
      */
-    private void createPlaceAutocomplete(Button chooseLocationButton) {
+    private void createPlaceAutocomplete() {
         AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
         //GeoDataApi.getAutocompletePredictions();
         try {
-            final Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                     .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
                     .build(this);
-            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                }
-            });
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt
+            // the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+                    0 /* requestCode */).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
+            // Indicates that Google Play Services is not available and the problem is not easily
+            // resolvable.
+            String message = "Google Play Services is not available: " +
+                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+
+            Log.e(TAG, message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         }
         /*
