@@ -25,6 +25,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
@@ -129,6 +130,29 @@ public class UnfilledTasksTest {
         onView(withId(R.id.description_task)).perform(typeText("my beautiful task"));
         pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+    }
+
+    @Test
+    public void tableRowDisplaysCorrectNumberOfUnfilledTasks(){
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText("unfTask 0"));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withId(R.id.number_of_unfilled_tasks)).check(matches(withText("1")));
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText("unfTask 1"));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withId(R.id.number_of_unfilled_tasks)).check(matches(withText("2")));
     }
 
 

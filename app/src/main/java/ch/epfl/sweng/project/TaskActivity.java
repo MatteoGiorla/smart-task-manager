@@ -285,16 +285,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public static boolean isUnfilled(Task task){
-        Calendar c = Calendar.getInstance();
-        c.setTime(task.getDueDate());
-        int year = c.get(Calendar.YEAR);
-
-        return task.getLocationName().equals(getString(R.string.select_one))
-        || task.getDuration() == 0 || year == 1899;
-    }
-
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         Button mButton;
 

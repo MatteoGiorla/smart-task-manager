@@ -28,7 +28,7 @@ import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_
 import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
 
 /**
- * Class that represents the inflated fragment located in the activity_main
+ * Class that represents the inflated fragment located in the unfilled_task_activity
  */
 public class UnfilledTaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.UnfilledTaskFragment.INDEX_TASK_TO_BE_EDITED";
@@ -191,7 +191,8 @@ public class UnfilledTaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            if(TaskActivity.isUnfilled(editedTask)){
+            //if the task has been fulfilled, we can put it on the temporary list of good tasks.
+            if(Utils.isUnfilled(editedTask, this.getActivity().getApplicationContext())){
                 unfilledTaskList.set(indexEditedTask, editedTask);
             }else{
                 unfilledTaskList.remove(indexEditedTask);

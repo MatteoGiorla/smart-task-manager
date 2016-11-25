@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.util.ArrayList;
+
 
 public class UnfilledTasksActivity extends AppCompatActivity {
 
     public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
+    private UnfilledTaskFragment unfilledFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -16,6 +19,20 @@ public class UnfilledTasksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_unfilled_tasks);
+
+
+        ArrayList<Task> unfilledTasks = getIntent().getParcelableArrayListExtra(MainActivity.UNFILLED_TASKS);
+        //Add the user to TaskFragments
+        unfilledFragment = new UnfilledTaskFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(MainActivity.UNFILLED_TASKS, unfilledTasks);
+        unfilledFragment.setArguments(bundle);
+
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.unfilled_tasks_container, unfilledFragment)
+                    .commit();
+        }
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
         initializeToolbar(mToolbar);

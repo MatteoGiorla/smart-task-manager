@@ -68,7 +68,7 @@ public class NewTaskActivity extends TaskActivity {
         Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
-        if(isUnfilled(newTask)){
+        if(Utils.isUnfilled(newTask, this.getApplicationContext())){
             intent.putExtra(IS_UNFILLED, true);
         }else{
             intent.putExtra(IS_UNFILLED, false);

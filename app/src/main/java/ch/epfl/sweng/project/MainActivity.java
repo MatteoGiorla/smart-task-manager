@@ -101,7 +101,6 @@ public final class MainActivity extends AppCompatActivity {
                 throw new IllegalStateException("UserProvider not in FIREBASE_PROVIDER nor in TEST_PROVIDER");
         }
 
-
         mContext = getApplicationContext();
 
         createUtilityMaps();
@@ -114,16 +113,17 @@ public final class MainActivity extends AppCompatActivity {
         bundle.putParcelable(USER_KEY, currentUser);
         mainFragment.setArguments(bundle);
 
-        //Handle the table row in case of unfinished tasks
-        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        initializeUnfilledTableRow();
-        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
-
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.tasks_container, mainFragment)
                     .commit();
         }
+
+
+        //Handle the table row in case of unfinished tasks
+        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+        initializeUnfilledTableRow();
+        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
 
         //Default values
         userLocation = getResources().getString(R.string.select_one);
@@ -221,6 +221,9 @@ public final class MainActivity extends AppCompatActivity {
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
 
+    /**
+     * Trigger the dynamic sort.
+     */
     private void triggerDynamicSort(){
         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
         String select_one_location = getApplicationContext().getString(R.string.select_one);
