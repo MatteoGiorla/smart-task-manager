@@ -114,7 +114,7 @@ public class LocationSettingActivity extends AppCompatActivity {
         public void onClick(View v) {
             resultActivity();
             Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         }

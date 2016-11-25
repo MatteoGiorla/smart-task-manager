@@ -368,14 +368,14 @@ public class LoginActivity
                     //precising the user has already been logged in before
                     prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
                     intent = new Intent(LoginActivity.this, SynchronizationActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 }else{
                     //setting the flag for first login of the user.
                     prefs.edit().putBoolean(getString(R.string.new_user), true).apply();
 
                     intent = new Intent(LoginActivity.this, LocationSettingActivity.class);
                     intent.putExtra(USER_EMAIL_KEY, currentEmail);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 }
                 startActivity(intent);
                 finish();
