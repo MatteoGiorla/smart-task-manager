@@ -42,7 +42,7 @@ public class TaskInformationTest extends SuperTest {
         createATask(taskName, taskDescription);
         String defaultLocation = "Everywhere";
         Date defaultDueDate = new Date();
-        long defaultDuration = 5;
+        long defaultDuration = 60;
         String defaultEnergy = Task.Energy.NORMAL.toString();
         String contributor = User.DEFAULT_EMAIL;
         task = new Task(taskName, taskDescription, defaultLocation, defaultDueDate, defaultDuration, defaultEnergy, Collections.singletonList(contributor));
@@ -78,7 +78,7 @@ public class TaskInformationTest extends SuperTest {
     public void testDescriptionIsDisplayed() {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(5)
+                .atPosition(4)
                 .check(matches(hasDescendant(withText(task.getDescription()))));
     }
 
