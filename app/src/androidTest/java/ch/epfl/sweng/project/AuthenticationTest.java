@@ -110,26 +110,6 @@ public class AuthenticationTest {
 
     /**
      * perform user like actions on the phone to authenticate
-     * oneself into a google account
-     */
-    //@Test
-    public void googleLoginWorks() {
-        onView(withId(R.id.google_sign_in_button)).perform(click());
-        try{
-            Thread.sleep(untilTimeout);
-            associateNewGoogleAccount();
-            checkIfActivity(R.id.add_task_button);
-        }catch(java.lang.InterruptedException i){
-            fail(i.getMessage());
-        }catch(UiObjectNotFoundException u){
-
-        }
-        checkIfActivity(R.id.add_location_button);
-        mUiDevice.pressBack();
-        mUiDevice.pressBack();
-    }
-    /**
-     * perform user like actions on the phone to authenticate
      * oneself into a google account with a email non present
      * on the Firebase Database so lhe locationSettingActivity
      * gets launch.
@@ -154,36 +134,7 @@ public class AuthenticationTest {
             fail("Could not get googleButton to click on it "+u.getMessage());
         }
     }
-
-    @Test
-    public void loginRemoveOfAccount(){
-        removeAccount();
-    }
-
-    /**
-     * perform user like actions on the phone to authenticate
-     * oneself into a google account with an email located in user
-     * table from the firebase Database so lhe MainActivity
-     * gets launch.
-     */
-    @Test
-    public void loginWithAnAccountAlreadyInDBLaunchMainActivity() {
-
-        try{
-            UiObject googleButton = mUiDevice.findObject(new UiSelector().resourceId("ch.epfl.sweng.project:id/google_sign_in_button"));
-            googleButton.clickAndWaitForNewWindow();
-            try{
-                Thread.sleep(untilTimeout);
-                associateNewGoogleAccount();
-            }catch(java.lang.InterruptedException i){
-                fail(i.getMessage());
-            }catch(UiObjectNotFoundException ignored){
-            }
-            checkIfActivity(R.id.add_task_button);
-        }catch(UiObjectNotFoundException u){
-            fail("Could not get googleButton to click on it "+u.getMessage());
-        }
-    }
+    
 
     /**
      * method that proceeds to go through all the authentication process
