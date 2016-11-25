@@ -1,6 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -55,8 +54,6 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
-    private Long startDuration; //in minutes
-
 
     /**
      * Enum representing the values of energy needed.
@@ -77,7 +74,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long startDuration) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -86,7 +83,6 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
-        this.startDuration = startDuration;
     }
 
     /**
@@ -98,14 +94,7 @@ public class Task implements Parcelable {
     private Task(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
-                in.createStringArrayList(), in.readLong());
-    }
-
-    /**
-     * Getter returning start duration
-     */
-    public long getStartDuration() {
-        return startDuration;
+                in.createStringArrayList());
     }
 
     /**
@@ -134,15 +123,6 @@ public class Task implements Parcelable {
      */
     public long getDurationInMinutes() {
         return durationInMinutes;
-    }
-
-    /**
-     * Setter to modify start duration
-     *
-     * @param newStartDuration the new start duration
-     */
-    public void setStartDuration(Long newStartDuration) {
-        startDuration = newStartDuration;
     }
 
     /**
@@ -302,8 +282,6 @@ public class Task implements Parcelable {
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
-        dest.writeLong(startDuration);
-
     }
 
     /**

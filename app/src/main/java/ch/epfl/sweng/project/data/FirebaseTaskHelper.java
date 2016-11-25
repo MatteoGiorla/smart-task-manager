@@ -128,7 +128,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
                 Long startDuration = (Long) task.child("startDuration").getValue();
 
-                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, startDuration);
+                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
                 mTaskList.add(newTask);
             }
         }

@@ -140,7 +140,7 @@
 
 
             <TextView
-                android:text="100"
+                android:text="@string/num_unfilled_default"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:paddingTop="8dp"

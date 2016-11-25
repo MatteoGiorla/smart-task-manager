@@ -12,10 +12,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.project.location_setting.LocationFragment;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
-import static android.provider.Settings.System.getString;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;

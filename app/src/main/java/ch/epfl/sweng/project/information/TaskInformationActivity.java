@@ -18,6 +18,7 @@ import ch.epfl.sweng.project.EditTaskActivity;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.Utils;
 
 import static ch.epfl.sweng.project.EditTaskActivity.RETURNED_EDITED_TASK;
 import static ch.epfl.sweng.project.EditTaskActivity.RETURNED_INDEX_EDITED_TASK;
@@ -39,6 +40,9 @@ public class TaskInformationActivity extends AppCompatActivity {
     private TextView taskTitleTextView;
     private InformationListAdapter mInformationAdapter;
     private int taskStatus;
+    private static final int TASK_DUE_DATE = 3;
+    private static final int TASK_DURATION = 4;
+    private static final int TASK_LOCATION = 5;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -185,18 +189,14 @@ public class TaskInformationActivity extends AppCompatActivity {
      */
     private void createInformationItemList() {
         informationItemsList.add(new InformationItem(getString(R.string.due_date_field),
-                taskToBeDisplayed.dueDateToString(), R.drawable.calendar_36dp));
-        String duration_text = MainActivity.DURATION_MAP.get((int)taskToBeDisplayed.getDurationInMinutes());
+                safeTaskInformationGetter(TASK_DUE_DATE, taskToBeDisplayed), R.drawable.calendar_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.duration_field),
-                String.valueOf(duration_text), R.drawable.minutes_needed_36dp));
+                safeTaskInformationGetter(TASK_DURATION, taskToBeDisplayed), R.drawable.minutes_needed_36dp));
         informationItemsList.add(new InformationItem(getString(R.string.location_field),
-                taskToBeDisplayed.getLocationName(), R.drawable.task_location_36dp));
+                safeTaskInformationGetter(TASK_LOCATION, taskToBeDisplayed), R.drawable.task_location_36dp));
         String energy_text = MainActivity.ENERGY_MAP.get(taskToBeDisplayed.getEnergy().ordinal());
         informationItemsList.add(new InformationItem(getString(R.string.energy_field),
                 energy_text, R.drawable.thunder_36dp));
-        String start_duration_text = MainActivity.START_DURATION_MAP.get((int)taskToBeDisplayed.getStartDuration());
-        informationItemsList.add(new InformationItem(getString(R.string.start_duration_field),
-                String.valueOf(start_duration_text), R.drawable.minutes_needed_36dp));
 
         informationItemsList.add(new InformationItem(getString(R
                 .string.description_field),
@@ -204,6 +204,47 @@ public class TaskInformationActivity extends AppCompatActivity {
         for(String contributor : taskToBeDisplayed.getListOfContributors()) {
             informationItemsList.add(new InformationItem(getString(R.string.contributors_field),
                     contributor, R.drawable.author_36dp));
+        }
+    }
+
+    /**
+     * According to which information we're looking at, will retrieve the correct task's information
+     * or if the task is unfilled, will give back a message to display on the taskInformationActivity
+     * noting this fact. IT is "safe" because it prevents defaultinternal values from appearing
+     * on the taskInformationActivity.
+     *
+     * @param reqCode identifier to decide which information is needed
+     * @param task the task to retrieve the information and then transform it to String
+     *
+     * @return the String corresponding to the information requested
+     */
+    private String safeTaskInformationGetter(int reqCode, Task task){
+        String result;
+        switch(reqCode){
+            case TASK_DUE_DATE:
+                if(Utils.isDueDateUnfilled(task)){
+                    result = getString(R.string.unfilled_due_date);
+                }else{
+                    result = task.dueDateToString();
+                }
+                return result;
+            case TASK_DURATION:
+                String duration_text = MainActivity.DURATION_MAP.get((int)task.getDurationInMinutes());
+                if(Utils.isDurationUnfilled(task)){
+                    result = getString(R.string.unfilled_duration);
+                }else{
+                    result = String.valueOf(duration_text);
+                }
+                return result;
+            case TASK_LOCATION:
+                if(Utils.isLocationUnfilled(task, getApplicationContext())){
+                    result = getString(R.string.unfilled_location);
+                }else{
+                    result = task.getLocationName();
+                }
+                return result;
+            default:
+                throw new IllegalArgumentException("An incorrect code was passed to safely retrieve the informations of the task. ");
         }
     }
 
