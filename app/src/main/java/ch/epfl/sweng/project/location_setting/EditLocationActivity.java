@@ -60,7 +60,7 @@ public class EditLocationActivity extends LocationActivity {
     protected void resultActivity() {
         mLocationToBeEdited.setName(name);
         mLocationToBeEdited.setLatitude(latitude);
-        mLocationToBeEdited.setLatitude(longitude);
+        mLocationToBeEdited.setLongitude(longitude);
         intent.putExtra(RETURNED_EDITED_LOCATION, mLocationToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_LOCATION, mIndexLocationToBeEdited);
     }
