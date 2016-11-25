@@ -114,7 +114,7 @@ public class AuthenticationTest {
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
         }catch(UiObjectNotFoundException u){
-
+            u.printStackTrace();
         }
         checkIfActivity(R.id.add_location_button);
         mUiDevice.pressBack();

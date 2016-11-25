@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-//import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -24,6 +23,8 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
+
+//import com.google.android.gms.common.GoogleApiAvailability;
 
 public abstract class LocationActivity extends AppCompatActivity {
     private static final int PLACE_REQUEST_CODE = 1;
