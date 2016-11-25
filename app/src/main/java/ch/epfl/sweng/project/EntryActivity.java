@@ -10,8 +10,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.TaskProvider;
-import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 
 /**
  * Activity launched at opening an app. This activity decides

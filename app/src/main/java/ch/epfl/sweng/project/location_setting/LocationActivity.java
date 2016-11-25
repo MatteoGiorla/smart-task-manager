@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -230,7 +229,6 @@ public abstract class LocationActivity extends AppCompatActivity {
                 Place place = PlacePicker.getPlace(data, this);
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
-                Log.d("YO", longitude + " "+ latitude);
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
