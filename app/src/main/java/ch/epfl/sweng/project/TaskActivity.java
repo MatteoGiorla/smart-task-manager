@@ -49,11 +49,11 @@ public abstract class TaskActivity extends AppCompatActivity {
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
-    private Spinner mStartDuration;
     private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     static Date date;
-    private static final DateFormat dateFormat = DateFormat.getDateInstance();
+    static final DateFormat dateFormat = DateFormat.getDateInstance();
+    public static final String IS_UNFILLED = "ch.epfl.sweng.TaskActivity.UNFILLED_TASK";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation = (Spinner) findViewById(R.id.locationSpinner);
         mDuration = (Spinner) findViewById(R.id.durationSpinner);
-        mStartDuration = (Spinner) findViewById(R.id.startDurationSpinner);
 
         ArrayAdapter<String> spinnerDurationAdapter = new ArrayAdapter<>(this,
             android.R.layout.simple_spinner_dropdown_item, MainActivity.getDurationTable());
@@ -99,11 +98,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
         mLocation.setAdapter(spinnerLocationAdapter);
-
-        ArrayAdapter<String> spinnerStartDurationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, MainActivity.getStartDurationTable());
-
-        mStartDuration.setAdapter(spinnerStartDurationAdapter);
     }
 
     /**
@@ -199,7 +193,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
                 duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
-                startDuration = MainActivity.REVERSE_START_DURATION.get(mStartDuration.getSelectedItem().toString());
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
@@ -291,17 +284,30 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
-
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        Button mButton;
+
         @NonNull
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
+            mButton = (Button) getActivity().findViewById(R.id.pick_date);
             final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            int year;
+            int month;
+            int day;
+
+            if(mButton.getText().equals(getString(R.string.enter_due_date_hint))){
+                // Use the current date as the default date in the picker
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+            } else {
+                c.setTime(date);
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH) + 1;
+                day = c.get(Calendar.DAY_OF_MONTH);
+            }
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -309,14 +315,13 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         @RequiresApi(api = Build.VERSION_CODES.N)
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            mButton = (Button) getActivity().findViewById(R.id.pick_date);
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.YEAR, year);
             cal.set(Calendar.MONTH, month);
             cal.set(Calendar.DAY_OF_MONTH, day);
             date = cal.getTime();
-            final Button mButton = (Button) getActivity().findViewById(R.id.pick_date);
             mButton.setText(dateFormat.format(date.getTime()));
-
         }
 
     }

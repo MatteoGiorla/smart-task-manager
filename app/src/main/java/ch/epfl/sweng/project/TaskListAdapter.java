@@ -2,7 +2,11 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -42,6 +44,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
      * @param parent      ViewGroup that this view will eventually be attached to
      * @return the view to be displayed
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @NonNull
     @Override
     public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
@@ -69,33 +72,47 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             Calendar c = Calendar.getInstance();
             int days = taskInTheView.daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
-                if(days > 1){
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_left), days));
-                } else if (days == 1) {
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_left), days));
-                } else if (days == 0) {
-                    remainingDays.setText(R.string.due_today);
-                } else if (days == -1) {
-                    int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.day_late), days_value_for_text));
-                } else if (days < 1) {
-                    int days_value_for_text = days * -1;
-                    remainingDays.setText(String.format(Locale.UK, "%d"+ getContext().getString(R.string.days_late), days_value_for_text));
-                }
+                if(Utils.isDueDateUnfilled(taskInTheView)){
+                    remainingDays.setText("-");
+                }else{
+                    if (days > 1) {
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.days_left), days));
+                    } else if (days == 1) {
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.day_left), days));
+                    } else if (days == 0) {
+                        remainingDays.setText(R.string.due_today);
+                    } else if (days == -1) {
+                        int days_value_for_text = days * -1;
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.day_late), days_value_for_text));
+                    } else if (days < 1) {
+                        int days_value_for_text = days * -1;
+                        remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.days_late), days_value_for_text));
+                    }
 
-                if (days < 10 && days >= 1) {
-                    remainingDays.setTextColor(Color.rgb(255,140,0));
-                } else if (days < 1) {
-                    remainingDays.setTextColor(Color.RED);
+                    if (days < 10 && days >= 1) {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_orange));
+                    } else if (days < 1) {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    } else {
+                        remainingDays.setTextColor(ContextCompat.getColor(getContext(), R.color.flat_green));
+                    }
                 }
             }
             if (taskLocation!= null) {
-                taskLocation.setText(taskInTheView.getLocationName());
+                if(Utils.isLocationUnfilled(taskInTheView, getContext())){
+                    taskLocation.setText("-");
+                }else{
+                    taskLocation.setText(taskInTheView.getLocationName());
+                }
             }
             if (taskDuration != null) {
-                taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
+                if(Utils.isDurationUnfilled(taskInTheView)){
+                    taskDuration.setText("-");
+                }else{
+                    taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
+                }
             }
-            if (coloredIndicator != null) {
+            if (coloredIndicator != null && !Utils.isUnfilled(taskInTheView, getContext())) {
                 double static_sort_value = taskInTheView.getStaticSortValue();
                 double urgency_percentage;
                 if(days <= 2 || static_sort_value > 100){
@@ -107,23 +124,19 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 hsv[0]= (float)Math.floor((100 - urgency_percentage) * 120 / 100);
                 hsv[1] = 1;
                 hsv[2] = 1;
-                coloredIndicator.setBackgroundColor(Color.HSVToColor(hsv));
+
+                //flatten the color (formula : Saturation - 37%, lightness + 3.95% (modified))
+                float[] hsl = new float[3];
+                ColorUtils.colorToHSL(Color.HSVToColor(hsv), hsl);
+                hsl[1] = hsl[1] - (float)0.2 * hsl[1];
+                hsl[2] = hsl[2] + (float)0.2 * hsl[2];
+
+                coloredIndicator.setBackgroundColor(ColorUtils.HSLToColor(hsl));
+            }
+            if(Utils.isUnfilled(taskInTheView, getContext())){
+                coloredIndicator.setVisibility(View.INVISIBLE);
             }
         }
         return resultView;
-    }
-
-    /**
-     * Helper functions to calculate the number of remaining days
-     * source: http://stackoverflow.com/questions/3838527/android-java-date-difference-in-days
-     */
-    private Calendar getDatePart(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal;
     }
 }

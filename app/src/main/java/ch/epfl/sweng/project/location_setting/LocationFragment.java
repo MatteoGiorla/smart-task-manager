@@ -273,7 +273,7 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
-        defaultLocationList.add(0, new Location(getString(R.string.select_one_location),0,0));
+        defaultLocationList.add(0, new Location(getString(R.string.select_one),0,0));
         ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
         tmp.addAll(locationList);
         return tmp;
