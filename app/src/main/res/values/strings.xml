@@ -24,9 +24,6 @@
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
 
-    <!-- Google Place Key -->
-   <!-- <string name="google_maps_key">AIzaSyA9-PWm2QLeMO9ajm0cWLEkF0ViS06ic0w</string> -->
-
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
     <string name="flt_ctx_menu_edit">Edit</string>

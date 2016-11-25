@@ -167,7 +167,7 @@ public abstract class LocationActivity extends AppCompatActivity {
         //GeoDataApi.getAutocompletePredictions();
         try {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .setFilter(a.setTypeFilter(AutocompleteFilter.TYPE_FILTER_REGIONS).build())
+
                     .build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
