@@ -25,6 +25,13 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -42,11 +49,13 @@ public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
+    public static final String UNFILLED_DATA = "chEpflSwengTaskItUnfilledTasks.ser";
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
     private TaskFragment mainFragment;
     private Context mContext;
+    private static String filePath;
 
     //stock unfilledTasks
     private ArrayList<Task> unfilledTasks;
@@ -105,7 +114,12 @@ public final class MainActivity extends AppCompatActivity {
 
         createUtilityMaps();
 
-        unfilledTasks = new ArrayList<>();
+        //handling local storage
+        checkLocalDataFile();
+        unfilledTasks = loadUnfilledTasks();
+        if(unfilledTasks == null){
+            unfilledTasks = new ArrayList<>();
+        }
 
         //Add the user to TaskFragments
         mainFragment = new TaskFragment();
@@ -196,6 +210,7 @@ public final class MainActivity extends AppCompatActivity {
                     boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
                     if(unfilled){
                         unfilledTasks.add(newTask);
+                        saveUnfilledTasks();
                     }else{
                         // Add element to the listTask
                         mainFragment.addTask(newTask);
@@ -215,6 +230,7 @@ public final class MainActivity extends AppCompatActivity {
 
                         //update the list of unfilledTasks
                         unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
+                        saveUnfilledTasks();
                     }
                 }
             }
@@ -478,6 +494,45 @@ public final class MainActivity extends AppCompatActivity {
     private void checkIntentExtra() {
         if (currentUser == null/* || taskList == null*/) {
             throw new IllegalArgumentException("User passed with the intent is null");
+        }
+    }
+
+    private void checkLocalDataFile(){
+        try{
+            File unfilledFile = mContext.getFileStreamPath(UNFILLED_DATA);
+            if(!unfilledFile.exists()){
+                unfilledFile.createNewFile();
+            }
+        }catch(IOException i){
+            i.printStackTrace();
+        }
+    }
+
+    private ArrayList<Task> loadUnfilledTasks(){
+        try {
+            FileInputStream fileIn = mContext.openFileInput(UNFILLED_DATA);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            ArrayList<Task> tasks = (ArrayList<Task>) in.readObject();
+            in.close();
+            fileIn.close();
+            return tasks;
+        }catch(IOException i) {
+            i.printStackTrace();
+            return null;
+        }catch(ClassNotFoundException c) {
+            return null;
+        }
+    }
+
+    private void saveUnfilledTasks(){
+        try {
+            FileOutputStream fileOut = mContext.openFileOutput(UNFILLED_DATA, Context.MODE_PRIVATE);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(unfilledTasks);
+            out.close();
+            fileOut.close();
+        } catch(IOException i) {
+            i.printStackTrace();
         }
     }
 

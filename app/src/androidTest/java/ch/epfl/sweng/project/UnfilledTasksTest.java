@@ -62,7 +62,7 @@ public class UnfilledTasksTest {
     }
 
 
-    //@Test
+    @Test
     public void MainActivityToUnfilledRoundTrip(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -84,7 +84,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 
-    //@Test
+    @Test
     public void createATaskWithoutDueDateTriggersTableRowDisplay(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -108,7 +108,7 @@ public class UnfilledTasksTest {
     }
 
 
-    //@Test
+    @Test
     public void createATaskWithoutDurationTriggersTableRowDisplay(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -136,7 +136,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 
-    //@Test
+    @Test
     public void tableRowDisplaysCorrectNumberOfUnfilledTasks(){
         onView(withId(R.id.add_task_button)).perform(click());
 
@@ -159,7 +159,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.number_of_unfilled_tasks)).check(matches(withText("2")));
     }
 
-    //@Test
+    @Test
     public void CanSeeUnfilledTaskOnTheUnfilledActivity(){
         onView(withId(R.id.add_task_button)).perform(click());
         String titre = "unfTask 0";
@@ -177,7 +177,7 @@ public class UnfilledTasksTest {
                 .check(matches(hasDescendant(withText(titre))));
     }
 
-    //@Test
+    @Test
     public void canDeleteUnfilledTask(){
 
         onView(withId(R.id.add_task_button)).perform(click());
@@ -212,7 +212,7 @@ public class UnfilledTasksTest {
 
     }
 
-    //@Test
+    @Test
     public void previouslyUnfilledTasksEndUpOnMainActivity(){
 
         onView(withId(R.id.add_task_button)).perform(click());
