@@ -215,6 +215,13 @@ public abstract class LocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get the place longitude and latitude when the user choosed a location
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_REQUEST_CODE) {
