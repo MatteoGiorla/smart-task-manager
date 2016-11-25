@@ -53,6 +53,7 @@
 
 
     <string name="image_information_field_description">Image</string>
+    <string name="num_unfilled_default">0</string>
 
     <!-- Fields titles of task information activity -->
     <string name="description_field">Description</string>
@@ -61,7 +62,6 @@
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
     <string name="contributors_field">Contributor</string>
-    <string name="start_duration_field">Minimal time needed to start working on the task</string>
 
     <!-- Fields titles of new/edit task activity -->
     <string name="locationTitle">LOCATION</string>
@@ -69,7 +69,6 @@
     <string name="durationTitle">DURATION</string>
     <string name="enter_due_date_hint">Enter due date</string>
     <string name="dueDateTitle">DUE DATE</string>
-    <string name="startDurationTitle">START DURATION</string>
 
     <string name="title_activity_maps">Map</string>
 
@@ -102,7 +101,6 @@
     <string name="school_location">School</string>
     <string name="select_one">Select one</string>
 
-    <string name="location_name">NAME</string>
     <string name="location_enter_name">Enter the location name</string>
     <string name="location_place_picker">LOCATION (Optional)</string>
     <string name="location_enter_address_button_text">Pick a place</string>

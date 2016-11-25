@@ -134,7 +134,7 @@ public class AuthenticationTest {
             fail("Could not get googleButton to click on it "+u.getMessage());
         }
     }
-    
+
 
     /**
      * method that proceeds to go through all the authentication process
