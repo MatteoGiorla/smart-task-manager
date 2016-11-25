@@ -15,7 +15,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        //multiDexEnabled true
+//        multiDexEnabled true
     }
 
     buildTypes {
@@ -71,7 +71,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:9.6.1'
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.google.android.gms:play-services-maps:9.6.1'
-    compile 'com.google.android.gms:play-services:9.6.1'
 }
 
 // Do not change the below code unless you're sure you know what you're doing
