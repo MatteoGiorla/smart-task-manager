@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +17,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 
@@ -30,8 +26,7 @@ import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
 
 public abstract class LocationActivity extends AppCompatActivity {
-    private static final int REQUEST_PLACE_PICKER = 1;
-    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int PLACE_REQUEST_CODE = 1;
 
     Intent intent;
     private ImageButton doneLocationButton;
@@ -41,8 +36,6 @@ public abstract class LocationActivity extends AppCompatActivity {
     String name;
     double longitude = 0;
     double latitude = 0;
-    private final String TAG = "Google Autocomplete";
-    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -53,8 +46,8 @@ public abstract class LocationActivity extends AppCompatActivity {
         chooseLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Initialize Place Autocomplete
-                createPlaceAutocomplete();
+                // Initialize Place Picker
+                createPlacePicker();
             }
         });
 
@@ -162,45 +155,25 @@ public abstract class LocationActivity extends AppCompatActivity {
     /**
      * Creation of the Place Picker
      */
-    private void createPlaceAutocomplete() {
-        AutocompleteFilter.Builder a = new AutocompleteFilter.Builder();
-        //GeoDataApi.getAutocompletePredictions();
+    private void createPlacePicker() {
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
         try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-
-                    .build(this);
-            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+            Intent intent = intentBuilder.build(this);
+            startActivityForResult(intent, PLACE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
             // Indicates that Google Play Services is either not installed or not up to date. Prompt
             // the user to correct the issue.
             GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
-                    0 /* requestCode */).show();
+                    0 ).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         } catch (GooglePlayServicesNotAvailableException e) {
             // Indicates that Google Play Services is not available and the problem is not easily
             // resolvable.
             String message = "Google Play Services is not available: " +
                     GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
-
-            Log.e(TAG, message);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         }
-        /*
-        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
-        try {
-            final Intent intent = intentBuilder.build(this);
-            chooseLocationButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivityForResult(intent, REQUEST_PLACE_PICKER);
-                }
-            });
-
-        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-            // TODO handle exception!
-        }*/
     }
 
     /**
@@ -244,21 +217,11 @@ public abstract class LocationActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+        if (requestCode == PLACE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-              /*  Place place = PlacePicker.getPlace(data, this);
-                String toast = getString(R.string.info_place_fixed) + place.getName();
+                Place place = PlacePicker.getPlace(data, this);
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
-                Toast.makeText(this, toast, Toast.LENGTH_LONG).show();*/
-
-                Place place = PlaceAutocomplete.getPlace(this, data);
-                Log.i(TAG, "Place: " + place.getName());
-            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
-                Log.i(TAG, status.getStatusMessage());
-
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
