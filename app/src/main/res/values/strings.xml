@@ -9,7 +9,6 @@
     <string name="new_location">New location</string>
     <string name="unfinished_tasks">Tasks to fill up</string>
 
-
     <!-- Menu strings-->
     <string name="options_menu">Options</string>
     <string name="logout_menu">Log Out</string>
@@ -24,9 +23,8 @@
 
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
-
     <!-- Google Place Key -->
-    <string name="google_maps_key">AIzaSyDYvTEtbvm8JXF7LJqBBubvf2e1dBomXfQ</string>
+    <string name="google_maps_key">AIzaSyCCCx8Xr6CrMgXfZI3aj2it2TWF4lZfdls</string>
 
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
@@ -143,7 +141,6 @@
     <string name="info_done">" is done"</string>
     <!-- LocationActivity -->
     <string name="info_place_fixed">"Place: "</string>
-
     <!-- MainActivity ListView texts -->
     <string name="due_today">Due today !</string>
     <string name="days_left">" days left"</string>

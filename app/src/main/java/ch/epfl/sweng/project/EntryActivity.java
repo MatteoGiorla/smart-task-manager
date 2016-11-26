@@ -10,8 +10,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.TaskProvider;
-import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
+
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
 /**
  * Activity launched at opening an app. This activity decides
@@ -50,6 +52,7 @@ public class EntryActivity extends Activity {
             launchActivity = SynchronizationActivity.class;
         }
         launchIntent.setClass(getApplicationContext(), launchActivity);
+        launchIntent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
         startActivity(launchIntent);
 
         finish();
