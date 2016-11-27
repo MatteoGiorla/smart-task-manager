@@ -72,7 +72,7 @@ public class PlacePickerTest {
             onView(withId(R.id.location_done_button_toolbar)).perform(click());
 
             //Check that the title has been updated
-            SuperTest.checkALocation(EPFL, 5);
+            SuperTest.checkALocation(EPFL, 3);
 
         }catch(UiObjectNotFoundException u){
             fail("Something went wrong with UiAutomator actions : " + u.getMessage());
@@ -82,17 +82,28 @@ public class PlacePickerTest {
     }
 
 
-    //@Test
+    @Test
     public void canAddCustomLocationWithPlacePicker(){
         onView(withId(R.id.add_location_button)).perform(click());
         onView(withId(R.id.choose_location)).perform(click());
         UiObject selectLocation = mUiDevice.findObject(new UiSelector().text(SEL_LOCATION_TXT));
         try{
             selectLocation.click();
-            //TODO: when this buton works (cf bastian nanchen from Granges) test it.
+            UiObject selectLocationPlacePick = mUiDevice.findObject(new UiSelector().text("SELECT"));
+            selectLocationPlacePick.clickAndWaitForNewWindow();
+            Thread.sleep(5000);
+
+            onView(withId(R.id.locationName)).perform(typeText(EPFL));
+            pressBack();
+            onView(withId(R.id.location_done_button_toolbar)).perform(click());
+
+            //Check that the title has been updated
+            SuperTest.checkALocation(EPFL, 3);
 
         }catch(UiObjectNotFoundException u){
             fail("Something went wrong with UiAutomator actions.");
+        }catch(java.lang.InterruptedException i){
+            fail(i.getMessage());
         }
     }
 }
