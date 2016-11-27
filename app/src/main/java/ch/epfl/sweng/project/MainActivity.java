@@ -158,6 +158,11 @@ public final class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
+            case R.id.menu_item_settings:
+                Intent intent_settings = new Intent(this, SettingsActivity.class);
+                startActivity(intent_settings);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
