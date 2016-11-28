@@ -1,8 +1,11 @@
 package ch.epfl.sweng.project.location_setting;
 
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
@@ -16,7 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,6 +46,7 @@ public class LocationFragment extends Fragment {
     private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
+    private static boolean notCancelled = false;
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -105,7 +112,7 @@ public class LocationFragment extends Fragment {
             addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
             addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
 
-            //TODO : load locations from user (WITH GPS COORDINATES !)
+            //TODO : load locations from user
         }
     }
 
@@ -185,7 +192,48 @@ public class LocationFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
-                removeLocation(itemInfo);
+                //TODO : test if other locations use it
+
+
+
+
+                //if location used :
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                // Add the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // TODO : Replace locations
+
+
+
+                        notCancelled = true;
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        notCancelled = false;
+                    }
+                });
+                builder.setMessage("You have tasks set to this location. Set all these tasks to a new location :").setTitle("Used location");
+                //Create spinner
+                String[] s = { "India ", "Arica", "India ", "Arica", "India ", "Arica",
+                        "India ", "Arica", "India ", "Arica" };
+                final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                        android.R.layout.simple_spinner_dropdown_item, s);
+                final Spinner locationSpinnerForReplacement = new Spinner(getApplicationContext());
+                locationSpinnerForReplacement.setAdapter(adp);
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) locationSpinnerForReplacement.getLayoutParams();
+                if(layoutParams != null) {
+                    layoutParams.setMargins(10, 0, 10, 0);
+                }
+                locationSpinnerForReplacement.setLayoutParams(new LinearLayout.MarginLayoutParams(layoutParams));
+
+                builder.setView(locationSpinnerForReplacement);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                if(notCancelled) {
+                    removeLocation(itemInfo);
+                }
                 return true;
             case R.id.floating_location_edit:
                 startEditLocationActivity(itemInfo);

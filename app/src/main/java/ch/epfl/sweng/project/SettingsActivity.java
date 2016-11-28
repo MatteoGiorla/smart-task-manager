@@ -54,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
                             LoginManager.getInstance().logOut();
                         }
                         Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
                 });
