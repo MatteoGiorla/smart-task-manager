@@ -6,24 +6,31 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity">
+    <!--
+        <RelativeLayout
+            android:id="@+id/loading_circle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"> -->
 
-    <RelativeLayout
-        android:id="@+id/loading_circle"
+    <TextView
+        android:text="Retrieving data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:id="@+id/textView" />
 
-        <ImageView
-            android:src="@drawable/logo_white_mini"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:contentDescription="@string/logo_mini_description"
-            android:layout_height="wrap_content" />
+    <ProgressBar
+        android:progressTint="#777"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-    </RelativeLayout>
+    <ImageView
+        android:src="@drawable/logo_white_mini"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:contentDescription="@string/logo_mini_description"
+        android:layout_height="wrap_content" />
+    <!-- </RelativeLayout> -->
 
 </LinearLayout>
