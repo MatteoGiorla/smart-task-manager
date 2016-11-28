@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.SettingsActivity;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -103,8 +104,15 @@ public class LocationSettingActivity extends AppCompatActivity {
             User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
             prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
+            Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
         }else{
             //TODO Update the user when accessing Location Settings from the MainActivity
+            Intent intent = new Intent(LocationSettingActivity.this, SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
     }
 
@@ -113,9 +121,6 @@ public class LocationSettingActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             resultActivity();
-            Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
             finish();
         }
     }

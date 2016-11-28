@@ -108,9 +108,7 @@
     <string name="custom_text">Custom</string>
 
     <!-- Unfilled task informations messages-->
-    <string name="unfilled_due_date">Not decided yet</string>
-    <string name="unfilled_duration">Not decided yet</string>
-    <string name="unfilled_location">Not decided yet</string>
+    <string name="unfilled_param">"—"</string>
     <!-- Preference key -->
     <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
     <string name="new_user">FIRST_USER_LOGIN</string>

@@ -61,7 +61,6 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         if (taskInTheView != null) {
             TextView titleView = (TextView) resultView.findViewById(R.id.list_entry_title);
             TextView remainingDays = (TextView) resultView.findViewById(R.id.list_remaining_days);
-            //TextView taskEnergy = (TextView) resultView.findViewById(R.id.list_item_energy);
             TextView taskLocation = (TextView) resultView.findViewById(R.id.list_item_location);
             TextView taskDuration = (TextView) resultView.findViewById(R.id.list_item_duration);
             View coloredIndicator = resultView.findViewById(R.id.list_colored_indicator);
@@ -73,7 +72,7 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             int days = taskInTheView.daysBetween(c.getTime(), taskInTheView.getDueDate());
             if (remainingDays != null) {
                 if(Utils.isDueDateUnfilled(taskInTheView)){
-                    remainingDays.setText("-");
+                    remainingDays.setText("—");
                 }else{
                     if (days > 1) {
                         remainingDays.setText(String.format(Locale.UK, "%d" + getContext().getString(R.string.days_left), days));
@@ -100,14 +99,14 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
             }
             if (taskLocation!= null) {
                 if(Utils.isLocationUnfilled(taskInTheView, getContext())){
-                    taskLocation.setText("-");
+                    taskLocation.setText("—");
                 }else{
                     taskLocation.setText(taskInTheView.getLocationName());
                 }
             }
             if (taskDuration != null) {
                 if(Utils.isDurationUnfilled(taskInTheView)){
-                    taskDuration.setText("-");
+                    taskDuration.setText("—");
                 }else{
                     taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
                 }
@@ -134,7 +133,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
                 coloredIndicator.setBackgroundColor(ColorUtils.HSLToColor(hsl));
             }
             if(Utils.isUnfilled(taskInTheView, getContext())){
-                coloredIndicator.setVisibility(View.INVISIBLE);
+                if (coloredIndicator != null) {
+                    coloredIndicator.setVisibility(View.INVISIBLE);
+                }
             }
         }
         return resultView;

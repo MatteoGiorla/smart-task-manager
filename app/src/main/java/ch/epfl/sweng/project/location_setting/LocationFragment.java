@@ -100,6 +100,12 @@ public class LocationFragment extends Fragment {
         SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         if(prefs.getBoolean(getString(R.string.new_user), true)){
             addDefaultLocations();
+        } else {
+            //If accessed from settings
+            addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
+            addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
+
+            //TODO : load locations from user (WITH GPS COORDINATES !)
         }
     }
 
