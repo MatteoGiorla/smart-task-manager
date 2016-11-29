@@ -38,13 +38,15 @@ public class IntroActivity extends AppIntro {
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-        goToEntryActivity();
+        //goToEntryActivity();
+        goToSettingActivity();
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        goToEntryActivity();
+        //goToEntryActivity();
+        goToSettingActivity();
     }
 
     @Override
@@ -57,6 +59,12 @@ public class IntroActivity extends AppIntro {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
         Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+    }
+
+    private void goToSettingActivity() {
+        Intent intent = new Intent(IntroActivity.this, SettingsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
