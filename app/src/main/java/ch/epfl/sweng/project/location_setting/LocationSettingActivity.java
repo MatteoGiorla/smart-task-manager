@@ -17,13 +17,15 @@ import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 public class LocationSettingActivity extends AppCompatActivity {
-
-    private static final String TAG = "LocationSettingActivity";
+    public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     private final int newLocationRequestCode = 1;
     private LocationFragment fragment;
     private SharedPreferences prefs;
+    private static User currentUser;
+    private boolean firstConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,15 @@ public class LocationSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location_setting);
         prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         fragment = new LocationFragment();
+        firstConnection = prefs.contains(getString(R.string.new_user))
+                && prefs.getBoolean(getString(R.string.new_user), true);
+        if(!firstConnection) {
+            //if accessed from settings, load custom locations
+            currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(USER_KEY, currentUser);
+            fragment.setArguments(bundle);
+        }
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -78,6 +89,10 @@ public class LocationSettingActivity extends AppCompatActivity {
                 Location newLocation = data.getParcelableExtra(NewLocationActivity.RETURNED_LOCATION);
                 // Add element to the listLocation
                 fragment.addLocation(newLocation);
+                if (!firstConnection) {
+                    currentUser = new User(currentUser.getEmail(), fragment.getLocationList());
+                    Utils.updateUser(currentUser);
+                }
             }
         }
     }
@@ -109,8 +124,9 @@ public class LocationSettingActivity extends AppCompatActivity {
             startActivity(intent);
 
         }else{
-            //TODO Update the user when accessing Location Settings from the MainActivity
+            //when accessing Location Settings from the MainActivity
             Intent intent = new Intent(LocationSettingActivity.this, SettingsActivity.class);
+            intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }

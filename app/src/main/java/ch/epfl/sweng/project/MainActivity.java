@@ -128,7 +128,7 @@ public final class MainActivity extends AppCompatActivity {
 
         //Default values
         userLocation = getResources().getString(R.string.select_one);
-        userTimeAtDisposal = 60; //1 hour
+        userTimeAtDisposal = 120; //2 hours
         initializeAdapters();
     }
 
@@ -160,8 +160,8 @@ public final class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.menu_item_settings:
                 Intent intent_settings = new Intent(this, SettingsActivity.class);
+                intent_settings.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
                 startActivity(intent_settings);
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

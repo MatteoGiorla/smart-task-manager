@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,23 +13,26 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
+import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+
         TextView mTutorial = (TextView) findViewById(R.id.settings_text_tutorial);
         mTutorial.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //v.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.gray, null));
                         Intent intent = new Intent(SettingsActivity.this, IntroActivity.class);
                         startActivity(intent);
-                        //v.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
                     }
                 });
 
@@ -37,10 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //v.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.gray, null));
                         Intent intent = new Intent(SettingsActivity.this, LocationSettingActivity.class);
+                        intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
                         startActivity(intent);
-                        //v.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
                     }
                 });
 

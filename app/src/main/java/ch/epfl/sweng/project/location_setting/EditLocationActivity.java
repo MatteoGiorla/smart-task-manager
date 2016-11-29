@@ -61,7 +61,6 @@ public class EditLocationActivity extends LocationActivity {
         mLocationToBeEdited.setName(name);
         mLocationToBeEdited.setLatitude(latitude);
         mLocationToBeEdited.setLongitude(longitude);
-        //TODO : Replace location edited in all tasks using it
 
         intent.putExtra(RETURNED_EDITED_LOCATION, mLocationToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_LOCATION, mIndexLocationToBeEdited);

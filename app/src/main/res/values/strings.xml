@@ -134,6 +134,11 @@
     <!-- LocationFragment -->
     <string name="info_deleted">" deleted"</string>
     <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
+    <string name="replace_location">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="location_delete_dialog_message">You have tasks set to this location. Set all these tasks to a new location :</string>
+    <string name="location_delete_dialog_title">Used location</string>
+
     <!-- TaskFragment -->
     <string name="info_updated">" has been updated !"</string>
     <string name="info_done">" is done"</string>

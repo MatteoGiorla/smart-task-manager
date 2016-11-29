@@ -25,11 +25,17 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.SettingsActivity;
+import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -46,7 +52,10 @@ public class LocationFragment extends Fragment {
     private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
-    private static boolean notCancelled = false;
+    private static User currentUser;
+    private SharedPreferences prefs;
+    private boolean firstConnection;
+
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -70,13 +79,13 @@ public class LocationFragment extends Fragment {
         mDefaultLocationAdapter.notifyDataSetChanged();
     }
 
-    private void addDefaultLocations(){
-        addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
-        addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
+    private void addDefaultLocations() {
+        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
 
-        addLocation(new Location(getString(R.string.home_location),0,0));
-        addLocation(new Location(getString(R.string.office_location),0,0));
-        addLocation(new Location(getString(R.string.school_location),0,0));
+        addLocation(new Location(getString(R.string.home_location), 0, 0));
+        addLocation(new Location(getString(R.string.office_location), 0, 0));
+        addLocation(new Location(getString(R.string.school_location), 0, 0));
     }
 
     /**
@@ -104,15 +113,32 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 defaultLocationList
         );
-        SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
-        if(prefs.getBoolean(getString(R.string.new_user), true)){
-            addDefaultLocations();
-        } else {
-            //If accessed from settings
-            addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
-            addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
 
-            //TODO : load locations from user
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        firstConnection = prefs.contains(getString(R.string.new_user))
+                && prefs.getBoolean(getString(R.string.new_user), true);
+
+        if (prefs.getBoolean(getString(R.string.new_user), true)) {
+            addDefaultLocations();
+        } else if (!firstConnection) {
+            //If accessed from settings, load default locations
+            addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+            addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
+
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                currentUser = bundle.getParcelable(LocationSettingActivity.USER_KEY);
+                if (currentUser == null) {
+                    throw new IllegalArgumentException("User passed with the intend is null");
+                } else {
+                    List<Location> listOfCurrentUserLocations = currentUser.getListLocations();
+                    for(int i = 3; i < listOfCurrentUserLocations.size(); ++i){
+                        addLocation(listOfCurrentUserLocations.get(i));
+                    }
+                }
+            } else {
+                throw new NullPointerException("User was badly passed from LocationSettingsActivity to LocationFragment !");
+            }
         }
     }
 
@@ -144,17 +170,17 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-            intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-            intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-            startActivityForResult(intent, editLocationRequestCode);
+                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
+                startActivityForResult(intent, editLocationRequestCode);
             }
         });
 
         listViewDefault.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -188,50 +214,40 @@ public class LocationFragment extends Fragment {
      * true to consume it here
      */
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
-                //TODO : test if other locations use it
+                if (!firstConnection) {
+                    //TODO : test if other locations use it
+                    boolean locationUsedByTasks = true;
 
 
-
-
-                //if location used :
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                // Add the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // TODO : Replace locations
-
-
-
-                        notCancelled = true;
+                    if (locationUsedByTasks) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        // Add the buttons
+                        builder.setPositiveButton(R.string.replace_location, new MyOnClickListener(itemInfo));
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                        builder.setMessage(R.string.location_delete_dialog_message).setTitle(R.string.location_delete_dialog_title);
+                        //Create spinner
+                        ArrayList<String> listOfLocationForSpinner = (ArrayList) currentUser.getListNamesLocations();
+                        listOfLocationForSpinner.remove(itemInfo.position);
+                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                                android.R.layout.simple_spinner_dropdown_item, listOfLocationForSpinner.toArray(new String[listOfLocationForSpinner.size()]));
+                        final Spinner locationSpinnerForReplacement = new Spinner(getApplicationContext());
+                        locationSpinnerForReplacement.setAdapter(adp);
+                        builder.setView(locationSpinnerForReplacement);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        removeLocation(itemInfo);
+                        currentUser = new User(currentUser.getEmail(), getLocationList());
+                        Utils.updateUser(currentUser);
                     }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        notCancelled = false;
-                    }
-                });
-                builder.setMessage("You have tasks set to this location. Set all these tasks to a new location :").setTitle("Used location");
-                //Create spinner
-                String[] s = { "India ", "Arica", "India ", "Arica", "India ", "Arica",
-                        "India ", "Arica", "India ", "Arica" };
-                final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
-                        android.R.layout.simple_spinner_dropdown_item, s);
-                final Spinner locationSpinnerForReplacement = new Spinner(getApplicationContext());
-                locationSpinnerForReplacement.setAdapter(adp);
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) locationSpinnerForReplacement.getLayoutParams();
-                if(layoutParams != null) {
-                    layoutParams.setMargins(10, 0, 10, 0);
-                }
-                locationSpinnerForReplacement.setLayoutParams(new LinearLayout.MarginLayoutParams(layoutParams));
-
-                builder.setView(locationSpinnerForReplacement);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                if(notCancelled) {
+                } else {
                     removeLocation(itemInfo);
                 }
                 return true;
@@ -275,6 +291,13 @@ public class LocationFragment extends Fragment {
             mLocationAdapter.notifyDataSetChanged();
             String toast = editedLocation.getName() + getString(R.string.info_updated);
             Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+
+            //TODO : Replace location edited in all tasks using it
+
+            if (!firstConnection) {
+                currentUser = new User(currentUser.getEmail(), getLocationList());
+                Utils.updateUser(currentUser);
+            }
         }
     }
 
@@ -327,9 +350,30 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
-        defaultLocationList.add(0, new Location(getString(R.string.select_one),0,0));
         ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
+        tmp.add(0, new Location(getString(R.string.select_one), 0, 0));
         tmp.addAll(locationList);
         return tmp;
+    }
+
+
+    public class MyOnClickListener implements DialogInterface.OnClickListener {
+
+        AdapterView.AdapterContextMenuInfo itemInfo;
+
+        MyOnClickListener(AdapterView.AdapterContextMenuInfo itemInfo) {
+            this.itemInfo = itemInfo;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            // TODO : Replace locations
+
+
+            removeLocation(itemInfo);
+
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            Utils.updateUser(currentUser);
+        }
     }
 }
