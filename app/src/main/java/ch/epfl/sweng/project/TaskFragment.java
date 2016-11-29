@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -18,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,8 +43,8 @@ public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
     public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
-    private final int editTaskRequestCode = 2;
-    private final int displayTaskRequestCode = 3;
+    public static final int editTaskRequestCode = 2;
+    public static final int displayTaskRequestCode = 3;
 
 
     private TaskListAdapter mTaskAdapter;
@@ -72,15 +74,7 @@ public class TaskFragment extends Fragment {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
         taskList = new ArrayList<>();
-        mTaskAdapter = new TaskListAdapter(
-                getActivity(),
-                R.layout.list_item_task,
-                taskList
-        );
-
-        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);
+        mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
     }
 
     /**
@@ -124,25 +118,28 @@ public class TaskFragment extends Fragment {
      *                           from a previous saved state as given here
      * @return the view of the list to be displayed
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
-        listView.setAdapter(mTaskAdapter);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.list_view_tasks);
 
-        registerForContextMenu(listView);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-                startActivityForResult(intent, displayTaskRequestCode);
-            }
-        });
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+
+        recyclerView.setAdapter(mTaskAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        registerForContextMenu(recyclerView);
+
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
+        mDatabase.retrieveAllData(currentUser);
 
         return rootView;
     }
@@ -258,6 +255,7 @@ public class TaskFragment extends Fragment {
      * @param task The task to be added
      * @throws IllegalArgumentException If the task to be added is null
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void addTask(Task task) {
         if (task == null) {
             throw new IllegalArgumentException();
@@ -333,6 +331,7 @@ public class TaskFragment extends Fragment {
      * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
         mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
     }
@@ -340,6 +339,7 @@ public class TaskFragment extends Fragment {
     /**
      * Method that launch the static sort on the tasks.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void sortTaskStatically() {
         mTaskAdapter.sort(Task.getStaticComparator());
     }

@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +53,7 @@ public class UnfilledTaskFragment extends Fragment {
 
         filledTaskList = new ArrayList<>();
         unfilledTaskList = bundle.getParcelableArrayList(MainActivity.UNFILLED_TASKS);
-        mTaskAdapter = new TaskListAdapter(
-                getActivity(),
-                R.layout.list_item_task,
-                unfilledTaskList
-        );
+        mTaskAdapter = new TaskListAdapter(getActivity(), unfilledTaskList);
     }
 
     /**
@@ -75,20 +72,13 @@ public class UnfilledTaskFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
-        listView.setAdapter(mTaskAdapter);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.list_view_tasks);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mTaskAdapter);
 
-        registerForContextMenu(listView);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(TaskFragment.INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, unfilledTaskList);
-                startActivityForResult(intent, displayTaskRequestCode);
-            }
-        });
+        registerForContextMenu(recyclerView);
 
         return rootView;
     }

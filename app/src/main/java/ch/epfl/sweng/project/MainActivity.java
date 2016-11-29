@@ -129,6 +129,12 @@ public final class MainActivity extends AppCompatActivity {
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 60; //1 hour
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void onStart() {
+        super.onStart();
         initializeAdapters();
     }
 
@@ -204,20 +210,20 @@ public final class MainActivity extends AppCompatActivity {
                         triggerDynamicSort();
                     }
                 }
-            }else{
-                if(requestCode == unfilledTaskRequestCode){
-                    if(resultCode == RESULT_OK){
-                        ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                        for(Task t : newFinishedTasks){
-                            mainFragment.addTask(t);
-                        }
-                        //trigger the dynamic sort
-                        triggerDynamicSort();
-
-                        //update the list of unfilledTasks
-                        unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
+            }else if(requestCode == unfilledTaskRequestCode){
+                if(resultCode == RESULT_OK){
+                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
+                    for(Task t : newFinishedTasks){
+                        mainFragment.addTask(t);
                     }
+                    //trigger the dynamic sort
+                    triggerDynamicSort();
+
+                    //update the list of unfilledTasks
+                    unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
+            } else {
+                mainFragment.onActivityResult(requestCode, resultCode, data);
             }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
@@ -225,6 +231,7 @@ public final class MainActivity extends AppCompatActivity {
     /**
      * Trigger the dynamic sort.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void triggerDynamicSort(){
         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
         String select_one_location = getApplicationContext().getString(R.string.select_one);
@@ -236,6 +243,7 @@ public final class MainActivity extends AppCompatActivity {
      * so the spinners attach to them dropdown when we click
      * on the image.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initializeAdapters() {
         Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
@@ -271,6 +279,7 @@ public final class MainActivity extends AppCompatActivity {
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setListeners(Spinner location, Spinner duration,
                               final ArrayAdapter<String> locationAdapter,
                               final ArrayAdapter<String> durationAdapter) {
