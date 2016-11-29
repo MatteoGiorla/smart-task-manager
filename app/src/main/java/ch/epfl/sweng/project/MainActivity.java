@@ -2,12 +2,18 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,10 +24,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -37,7 +50,7 @@ import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 /**
  * MainActivity
  */
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
@@ -67,6 +80,12 @@ public final class MainActivity extends AppCompatActivity {
 
     private TableRow unfilledTaskButton;
 
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private final String TAG = "Location API";
+
     /**
      * Override the onCreate method to create a TaskFragment
      *
@@ -79,6 +98,10 @@ public final class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        createGoogleApiClient();
+
+        // createLocationRequest();
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().setIcon(R.mipmap.logo);
@@ -188,38 +211,162 @@ public final class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if(newTaskRequestCode == requestCode) {
-                if (resultCode == RESULT_OK) {
-                    // Get result from the result intent.
-                    Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_NEW_TASK);
+        if (newTaskRequestCode == requestCode) {
+            if (resultCode == RESULT_OK) {
+                // Get result from the result intent.
+                Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_NEW_TASK);
 
-                    //treat the unfilled case
-                    boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
-                    if(unfilled){
-                        unfilledTasks.add(newTask);
-                    }else{
-                        // Add element to the listTask
-                        mainFragment.addTask(newTask);
-                        // trigger the dynamic sort
-                        triggerDynamicSort();
-                    }
-                }
-            }else{
-                if(requestCode == unfilledTaskRequestCode){
-                    if(resultCode == RESULT_OK){
-                        ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                        for(Task t : newFinishedTasks){
-                            mainFragment.addTask(t);
-                        }
-                        //trigger the dynamic sort
-                        triggerDynamicSort();
-
-                        //update the list of unfilledTasks
-                        unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
-                    }
+                //treat the unfilled case
+                boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
+                if (unfilled) {
+                    unfilledTasks.add(newTask);
+                } else {
+                    // Add element to the listTask
+                    mainFragment.addTask(newTask);
+                    // trigger the dynamic sort
+                    triggerDynamicSort();
                 }
             }
+        } else {
+            if (requestCode == unfilledTaskRequestCode) {
+                if (resultCode == RESULT_OK) {
+                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
+                    for (Task t : newFinishedTasks) {
+                        mainFragment.addTask(t);
+                    }
+                    //trigger the dynamic sort
+                    triggerDynamicSort();
+
+                    //update the list of unfilledTasks
+                    unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
+                }
+            }
+        }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        /*if (mLastLocation == null) {
+            // PermissionCheck
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+        String toast = mLastLocation.getLongitude() + " " + mLastLocation.getLatitude();
+        Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
+        Log.d(TAG, "YOLO");*/
+        // Get last known recent location.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        // Note that this can be NULL if last location isn't already known.
+        if (mCurrentLocation != null) {
+            // Print current location if not null
+            Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
+            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        }
+        // Begin polling for new location updates.
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        // TODO useful fist part??
+        if (i == CAUSE_SERVICE_DISCONNECTED) {
+            Toast.makeText(this, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
+        } else if (i == CAUSE_NETWORK_LOST) {
+            Toast.makeText(this, "Network lost. Please re-connect.", Toast.LENGTH_SHORT).show();
+        }
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // New location has now been determined
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        // You can now create a LatLng Object for use with maps
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    protected void startLocationUpdates() {
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
+        // Request location updates
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest locationRequest = new LocationRequest();
+        // Request location precision to within a city block, which is an accuracy of approximately 100 meters.
+        // It is likely to consume less power for a good accuracy.
+        // With this setting, the location services are likely to use WiFi and cell tower positioning.
+        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+    private void createGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     /**
