@@ -82,9 +82,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private final String TAG = "Location API";
+    private static final int REQUEST_LOCATION = 2;
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -247,25 +248,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        /*if (mLastLocation == null) {
-            // PermissionCheck
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
-        String toast = mLastLocation.getLongitude() + " " + mLastLocation.getLatitude();
-        Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
-        Log.d(TAG, "YOLO");*/
-        // Get last known recent location.
+        Log.d("YO","YO");
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -274,17 +257,35 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+            // Check Permissions Now
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+            //return;
+        } else {
+            // Get last known recent location:
+            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); 
+            Toast.makeText(this, "This is"+ mCurrentLocation, Toast.LENGTH_LONG).show();
+            // Note that this can be NULL if last location isn't already known.
+            if (mCurrentLocation != null) {
+                // Print current location if not null
+                Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
+                LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            }
+            // Begin polling for new location updates.
+            startLocationUpdates();
         }
-        Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        // Note that this can be NULL if last location isn't already known.
-        if (mCurrentLocation != null) {
-            // Print current location if not null
-            Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
-            LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION) {
+            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // We can now safely use the API we requested access to
+                Log.d("ICI", "SION");
+            } else {
+                // Permission was denied or request was cancelled
+                Log.d("ICI", "MARTIGNY");
+            }
         }
-        // Begin polling for new location updates.
-        startLocationUpdates();
     }
 
     @Override
@@ -320,7 +321,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL);
+                .setFastestInterval(FASTEST_INTERVAL); // TODO obligate????????????????????????????????????????????????????????
         // Request location updates
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
