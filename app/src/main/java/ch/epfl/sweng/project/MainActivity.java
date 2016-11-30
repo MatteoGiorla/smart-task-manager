@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -80,6 +83,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private TableRow unfilledTaskButton;
 
+    // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
@@ -152,7 +156,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         //Default values
         userLocation = getResources().getString(R.string.select_one);
-        userTimeAtDisposal = 60; //1 hour
+        userTimeAtDisposal = 60; // 1 hour
         initializeAdapters();
     }
 
@@ -248,35 +252,27 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        // TODO ENLEVER LES LOGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Log.d("YO","YO");
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            // Check Permissions Now
+            //ask permission to the user.
+            // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-            //return;
         } else {
             // Get last known recent location:
-            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient); 
-            Toast.makeText(this, "This is"+ mCurrentLocation, Toast.LENGTH_LONG).show();
-            // Note that this can be NULL if last location isn't already known.
+            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
                 // Print current location if not null
+                onLocationChanged(mCurrentLocation);
                 Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
-                LatLng latLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             }
             // Begin polling for new location updates.
             startLocationUpdates();
         }
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    /*public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_LOCATION) {
             if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // We can now safely use the API we requested access to
@@ -286,11 +282,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 Log.d("ICI", "MARTIGNY");
             }
         }
-    }
+    }*/
 
     @Override
     public void onConnectionSuspended(int i) {
-        // TODO useful fist part??
         if (i == CAUSE_SERVICE_DISCONNECTED) {
             Toast.makeText(this, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
         } else if (i == CAUSE_NETWORK_LOST) {
@@ -308,20 +303,54 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     @Override
     public void onLocationChanged(Location location) {
         // New location has now been determined
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        double latitude = Math.toRadians(latLng.latitude);
+        double longitude = Math.toRadians(latLng.longitude);
+        // TODO TESTING PART BEGINNING
+        String msg = "Updated Location: " +
+                                Double.toString(location.getLatitude()) + "," +
+                                Double.toString(location.getLongitude());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        // TODO TESTING PART ENDING
+        List<ch.epfl.sweng.project.Location> listLocation = currentUser.getListLocations();
+        Log.d("CACA", "CACA"+ listLocation.size() +" "+ listLocation.get(5).getLatitude());
+        for (ch.epfl.sweng.project.Location loc: listLocation) {
+            // TODO REFACTORING
+            // usage of the Haversine formula. Source: http://www.movable-type.co.uk/scripts/latlong.html
+            double dLatitude = Math.toRadians(loc.getLatitude()) - latitude;
+            double dLongitude = Math.toRadians(loc.getLongitude()) - longitude;
+            // try:
+            Log.d("PIPI", "dLatitude = "+ dLatitude + " dLongitude = "+ dLongitude);
+            double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(latitude)
+                    * Math.cos(Math.toRadians(loc.getLatitude())) * Math.sin(dLongitude/2) * Math.sin(dLongitude/2);
+            Log.d("PIPI", "a = "+ a);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            Log.d("PIPI", "c = "+ c);
+            double distance = 6371000 * c; // in meters
+            Log.d("PIPI", "it's "+ distance);
+            if (distance <= 100) {
+                Log.d("PIPI", "YOUPI");
+                Toast.makeText(this, "YOUPI", Toast.LENGTH_LONG).show();
+            }
+
+            /*c = 2 * Math.asin(1);
+            Log.d("PIPI", "c = "+ c);
+            distance = 6371000 * c; // in meters
+            Log.d("PIPI", "it's "+ distance);*/
+
+
+           /* a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+            c = 2 * math.asin(math.sqrt(a))
+            km = 6367 * c */
+        }
     }
 
     protected void startLocationUpdates() {
         // Create the location request
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL); // TODO obligate????????????????????????????????????????????????????????
+                .setInterval(UPDATE_INTERVAL);
         // Request location updates
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -334,15 +363,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             return;
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-    }
-
-    protected void createLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
-        // Request location precision to within a city block, which is an accuracy of approximately 100 meters.
-        // It is likely to consume less power for a good accuracy.
-        // With this setting, the location services are likely to use WiFi and cell tower positioning.
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-
     }
 
     @Override
