@@ -80,13 +80,15 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private TableRow unfilledTaskButton;
 
+
     // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+
     private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
-    private final String TAG = "Location API";
     private static final int REQUEST_LOCATION = 2;
+
+    private final String TAG = "Location API";
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -153,7 +155,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 60; // 1 hour
-        initializeAdapters();
     }
 
     /**
@@ -264,7 +265,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             // Get last known recent location:
             Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
-                // Print current location if not null
                 onLocationChanged(mCurrentLocation);
             }
             // Begin polling for new location updates.
@@ -307,21 +307,23 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     @Override
     public void onLocationChanged(Location location) {
-        // New location has now been determined
-        // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        // TODO COMMENTS
+
         // calculate the distance between the current location and all the user locations:
         for (ch.epfl.sweng.project.Location userLocation: currentUser.getListLocations()) {
             double distance = haversine(latLng, userLocation);
+            
             if (distance <= 500) { // less than 500 meters
-                // TODO DEMANDER MORALES
+                // set the spinner to the location
+                Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+                mLocation.setSelection(currentUser.getListLocations().indexOf(userLocation));
             }
         }
     }
 
     /**
-     * Haversine formula calculate the distance between two points by their latitudes and longitudes.
+     * Haversine formula calculate the distance in meters between two points by their latitudes
+     * and longitudes.
      *
      * Source: http://www.movable-type.co.uk/scripts/latlong.html
      *
@@ -330,13 +332,15 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @return
      */
     private double haversine(LatLng currentLocation, ch.epfl.sweng.project.Location userLocation) {
-        double dLatitude = Math.toRadians(userLocation.getLatitude()) - currentLocation.latitude;
-        double dLongitude = Math.toRadians(userLocation.getLongitude()) - currentLocation.longitude;
-        double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(currentLocation.latitude)
+        double dLatitude = Math.toRadians(userLocation.getLatitude()) - Math.toRadians(currentLocation.latitude);
+        double dLongitude = Math.toRadians(userLocation.getLongitude()) - Math.toRadians(currentLocation.longitude);
+
+        double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(Math.toRadians(currentLocation.latitude))
                 * Math.cos(Math.toRadians(userLocation.getLatitude())) * Math.sin(dLongitude/2)
                 * Math.sin(dLongitude/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return 6371000 * c; // in meters
+
+        return 6371000 * c;
     }
 
     /**
@@ -349,8 +353,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 .setInterval(UPDATE_INTERVAL);
         // Request location updates
         // Problem if it enters with branch
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -366,6 +371,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+        initializeAdapters();
     }
 
     @Override
@@ -402,8 +408,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * on the image.
      */
     private void initializeAdapters() {
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
+        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
