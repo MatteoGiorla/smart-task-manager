@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project;
 
-import android.*;
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -42,7 +40,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -104,9 +101,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        // Initialize googleApiClient that will trigger the geolocation part
         createGoogleApiClient();
-
-        // createLocationRequest();
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().setIcon(R.mipmap.logo);
@@ -250,11 +246,16 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
 
+    /**
+     * When the GoogleApiClient is connected it goes here to trigger the geolocation.
+     *
+     * @param bundle Required argument
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        // TODO ENLEVER LES LOGS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Log.d("YO","YO");
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             //ask permission to the user.
             // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
             ActivityCompat.requestPermissions(this,
@@ -265,25 +266,17 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             if (mCurrentLocation != null) {
                 // Print current location if not null
                 onLocationChanged(mCurrentLocation);
-                Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
             }
             // Begin polling for new location updates.
             startLocationUpdates();
         }
     }
 
-    /*public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION) {
-            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // We can now safely use the API we requested access to
-                Log.d("ICI", "SION");
-            } else {
-                // Permission was denied or request was cancelled
-                Log.d("ICI", "MARTIGNY");
-            }
-        }
-    }*/
-
+    /**
+     * Called if the connection with the GoogleApiClient is suspended.
+     *
+     * @param i Required argument
+     */
     @Override
     public void onConnectionSuspended(int i) {
         if (i == CAUSE_SERVICE_DISCONNECTED) {
@@ -295,63 +288,67 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Called if the connection with the GoogleApiClient failed
+     *
+     * @param connectionResult Required argument
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
     }
 
+    /**
+     * Called if the location is changed. If it is, it will change the sort if the location is
+     * near one of the user's locations.
+     *
+     * @param location New location
+     */
     @Override
     public void onLocationChanged(Location location) {
         // New location has now been determined
         // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        double latitude = Math.toRadians(latLng.latitude);
-        double longitude = Math.toRadians(latLng.longitude);
-        // TODO TESTING PART BEGINNING
-        String msg = "Updated Location: " +
-                                Double.toString(location.getLatitude()) + "," +
-                                Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        // TODO TESTING PART ENDING
-        List<ch.epfl.sweng.project.Location> listLocation = currentUser.getListLocations();
-        Log.d("CACA", "CACA"+ listLocation.size() +" "+ listLocation.get(5).getLatitude());
-        for (ch.epfl.sweng.project.Location loc: listLocation) {
-            // TODO REFACTORING
-            // usage of the Haversine formula. Source: http://www.movable-type.co.uk/scripts/latlong.html
-            double dLatitude = Math.toRadians(loc.getLatitude()) - latitude;
-            double dLongitude = Math.toRadians(loc.getLongitude()) - longitude;
-            // try:
-            Log.d("PIPI", "dLatitude = "+ dLatitude + " dLongitude = "+ dLongitude);
-            double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(latitude)
-                    * Math.cos(Math.toRadians(loc.getLatitude())) * Math.sin(dLongitude/2) * Math.sin(dLongitude/2);
-            Log.d("PIPI", "a = "+ a);
-            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            Log.d("PIPI", "c = "+ c);
-            double distance = 6371000 * c; // in meters
-            Log.d("PIPI", "it's "+ distance);
-            if (distance <= 100) {
-                Log.d("PIPI", "YOUPI");
-                Toast.makeText(this, "YOUPI", Toast.LENGTH_LONG).show();
+        // TODO COMMENTS
+        // calculate the distance between the current location and all the user locations:
+        for (ch.epfl.sweng.project.Location userLocation: currentUser.getListLocations()) {
+            double distance = haversine(latLng, userLocation);
+            if (distance <= 500) { // less than 500 meters
+                // TODO DEMANDER MORALES
             }
-
-            /*c = 2 * Math.asin(1);
-            Log.d("PIPI", "c = "+ c);
-            distance = 6371000 * c; // in meters
-            Log.d("PIPI", "it's "+ distance);*/
-
-
-           /* a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
-            c = 2 * math.asin(math.sqrt(a))
-            km = 6367 * c */
         }
     }
 
+    /**
+     * Haversine formula calculate the distance between two points by their latitudes and longitudes.
+     *
+     * Source: http://www.movable-type.co.uk/scripts/latlong.html
+     *
+     * @param currentLocation current location of the user
+     * @param userLocation one of the user's locations
+     * @return
+     */
+    private double haversine(LatLng currentLocation, ch.epfl.sweng.project.Location userLocation) {
+        double dLatitude = Math.toRadians(userLocation.getLatitude()) - currentLocation.latitude;
+        double dLongitude = Math.toRadians(userLocation.getLongitude()) - currentLocation.longitude;
+        double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(currentLocation.latitude)
+                * Math.cos(Math.toRadians(userLocation.getLatitude())) * Math.sin(dLongitude/2)
+                * Math.sin(dLongitude/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return 6371000 * c; // in meters
+    }
+
+    /**
+     * start the location update. Fix the priority and the interval of the update.
+     */
     protected void startLocationUpdates() {
         // Create the location request
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL);
         // Request location updates
+        // Problem if it enters with branch
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
