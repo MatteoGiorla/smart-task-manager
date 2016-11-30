@@ -3,9 +3,7 @@ package ch.epfl.sweng.project;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -129,12 +127,6 @@ public final class MainActivity extends AppCompatActivity {
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 60; //1 hour
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onStart() {
-        super.onStart();
         initializeAdapters();
     }
 
@@ -191,7 +183,6 @@ public final class MainActivity extends AppCompatActivity {
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if(newTaskRequestCode == requestCode) {
@@ -231,7 +222,6 @@ public final class MainActivity extends AppCompatActivity {
     /**
      * Trigger the dynamic sort.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void triggerDynamicSort(){
         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
         String select_one_location = getApplicationContext().getString(R.string.select_one);
@@ -243,7 +233,6 @@ public final class MainActivity extends AppCompatActivity {
      * so the spinners attach to them dropdown when we click
      * on the image.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initializeAdapters() {
         Spinner mLocation = (Spinner) findViewById(R.id.location_user);
         Spinner mDuration = (Spinner) findViewById(R.id.time_user);
@@ -279,7 +268,6 @@ public final class MainActivity extends AppCompatActivity {
      * @param locationAdapter The adapter of location
      * @param durationAdapter The adapter of duration
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setListeners(Spinner location, Spinner duration,
                               final ArrayAdapter<String> locationAdapter,
                               final ArrayAdapter<String> durationAdapter) {

@@ -1,8 +1,5 @@
 package ch.epfl.sweng.project.data;
 
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Task;
@@ -34,21 +31,18 @@ public class LocalTaskHelper implements TaskHelper {
         //Nothing to refresh when doing tests
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void addNewTask(Task task) {
         mTaskList.add(task);
         mAdapter.sort(Task.getStaticComparator());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void updateTask(Task original, Task updated) {
         deleteTask(original);
         addNewTask(updated);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void deleteTask(Task task) {
         mAdapter.remove(task);

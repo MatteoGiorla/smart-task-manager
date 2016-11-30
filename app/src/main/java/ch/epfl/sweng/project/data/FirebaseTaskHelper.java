@@ -1,8 +1,6 @@
 package ch.epfl.sweng.project.data;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -43,7 +41,6 @@ public class FirebaseTaskHelper implements TaskHelper {
         mContext = context;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void retrieveAllData(User user) {
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
@@ -60,7 +57,6 @@ public class FirebaseTaskHelper implements TaskHelper {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void refreshData(User user) {
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
@@ -78,7 +74,6 @@ public class FirebaseTaskHelper implements TaskHelper {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void addNewTask(Task task) {
         for (String mail : task.getListOfContributors()) {
@@ -90,7 +85,6 @@ public class FirebaseTaskHelper implements TaskHelper {
         mAdapter.sort(Task.getStaticComparator());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void deleteTask(Task task) {
         for (String mail : task.getListOfContributors()) {
@@ -102,7 +96,6 @@ public class FirebaseTaskHelper implements TaskHelper {
         mAdapter.sort(Task.getStaticComparator());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void updateTask(Task original, Task updated) {
         deleteTask(original);
@@ -114,7 +107,6 @@ public class FirebaseTaskHelper implements TaskHelper {
      *
      * @param dataSnapshot Data recovered from the database
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void retrieveTasks(DataSnapshot dataSnapshot) {
         if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();

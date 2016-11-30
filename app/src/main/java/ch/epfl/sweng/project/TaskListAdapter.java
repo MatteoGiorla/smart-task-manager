@@ -1,34 +1,25 @@
 package ch.epfl.sweng.project;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
-
-import ch.epfl.sweng.project.information.TaskInformationActivity;
-
-import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED;
-import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
 
 
 /**
  * Adapter used to display the task list
  */
-public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
+public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private Context mContext;
     private ArrayList<Task> tasksList;
@@ -44,9 +35,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
         mContext = context;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void sort(Comparator<Task> comparator) {
-        tasksList.sort(comparator);
+        Collections.sort(tasksList, comparator);
         notifyDataSetChanged();
     }
 
@@ -61,7 +51,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     }
 
     @Override
-    public TaskListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_task, parent, false);
@@ -71,7 +61,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(TaskListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Task taskInTheView = tasksList.get(position);
 
         if (taskInTheView != null) {
@@ -141,35 +131,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
             if(Utils.isUnfilled(taskInTheView, mContext)){
                 holder.colorIndicator.setVisibility(View.INVISIBLE);
             }
-        }
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        View colorIndicator;
-        TextView taskDuration;
-        TextView taskLocation;
-        TextView taskRemainingDays;
-        TextView taskTitle;
-
-        ViewHolder(View v, final Context mContext, final ArrayList<Task> tasksList) {
-            super(v);
-
-            colorIndicator = v.findViewById(R.id.list_colored_indicator);
-            taskDuration = (TextView) v.findViewById(R.id.list_item_duration);
-            taskLocation = (TextView) v.findViewById(R.id.list_item_location);
-            taskRemainingDays = (TextView) v.findViewById(R.id.list_remaining_days);
-            taskTitle = (TextView) v.findViewById(R.id.list_entry_title);
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int itemPosition = getAdapterPosition();
-                    Intent intent = new Intent(mContext, TaskInformationActivity.class);
-                    intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, itemPosition);
-                    intent.putParcelableArrayListExtra(TASKS_LIST_KEY, tasksList);
-                    ((Activity)mContext).startActivityForResult(intent, TaskFragment.displayTaskRequestCode);
-                }
-            });
         }
     }
 }

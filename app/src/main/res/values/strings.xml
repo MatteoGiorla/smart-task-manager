@@ -181,4 +181,9 @@
     <string name="skip_button">Skip</string>
     <string name="done_button">Done</string>
 
+    <!--Snack bar-->
+    <string name="undo_action">Undo</string>
+    <string name="has_been_deleted">" has been deleted"</string>
+    <string name="has_been_done">" has been marked as done"</string>
+
 </resources>
