@@ -7,4 +7,6 @@
     <dimen name="task_title_size">23sp</dimen>
     <dimen name="task_subtitle_size">16sp</dimen>
     <dimen name="padding_between_tasks">3dp</dimen>
+
+    <dimen name="item_list_height">100dp</dimen>
 </resources>

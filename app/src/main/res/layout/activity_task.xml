@@ -1,236 +1,433 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/task_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        android:theme="@style/ActionBar">
-
-        <ImageButton
-            android:id="@+id/edit_done_button_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:background="@null"
-            android:contentDescription="@string/done_task_description"
-            android:paddingEnd="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/ic_done_white_36dp"
-            tools:ignore="RtlSymmetry" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <!-- Trick to simulate the toolbar shadow for android pre Lollipop version -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_below="@id/task_toolbar"
-        android:background="@drawable/toolbar_shadow" />
+    <!-- Trick to avoid focus on EditText when opening the activity -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="80dp"
-        android:weightSum="1"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/task_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/ActionBar" >
+
+                <ImageButton
+                    android:id="@+id/edit_done_button_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@null"
+                    android:contentDescription="@string/done_task_description"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:src="@drawable/ic_done_white_36dp"
+                    tools:ignore="RtlSymmetry" />
+            </android.support.v7.widget.Toolbar>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/title_task_containter_information_activity"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/colorPrimary">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/title_task_layout"
                 android:layout_width="match_parent"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:errorTextAppearance="@style/ErrorInputLayoutAppearance">
 
-                <EditText
-                    android:id="@+id/title_task"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_title"
-                    android:inputType="textPersonName|textCapSentences"
-                    android:maxLength="@string/max_length_title" />
+            <EditText
+                android:id="@+id/title_task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="normal"
+                android:theme="@style/ActionBar"
+                android:inputType="textPersonName|textCapSentences"
+                android:maxLength="@string/max_length_title"
+                android:background="@color/colorPrimary" />
+
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
 
-        <View
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            <!-- Trick to simulate the toolbar shadow for android pre Lollipop version -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@drawable/toolbar_shadow" />
 
-            <TextView
-                android:id="@+id/dueDateTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="@string/dueDateTitle"/>
-
-            <Button
-                android:id="@+id/pick_date"
-                android:layout_width="270dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:onClick="showDatePickerDialog"
-                android:text="@string/enter_due_date_hint" />
-
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/durationTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:text="@string/durationTitle"
-                android:textStyle="bold" />
-
-            <Spinner
-                android:id="@+id/durationSpinner"
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:spinnerMode="dialog" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/locationTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:text="@string/locationTitle"
-                android:textStyle="bold" />
-            <Spinner
-                android:id="@+id/locationSpinner"
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:gravity="end"
-                android:spinnerMode="dialog" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/energyTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.14"
-                android:gravity="center_vertical"
-                android:textColor="@color/black"
-                android:text="@string/energyTitle"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/radio_energy"
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <RadioButton android:id="@+id/energy_low"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/low_energy"
-                    android:onClick="onRadioButtonClicked"/>
-                <RadioButton android:id="@+id/energy_normal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/normal_energy"
-                    android:onClick="onRadioButtonClicked"
-                    android:checked="false" />
-                <RadioButton android:id="@+id/energy_high"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/high_energy"
-                    android:onClick="onRadioButtonClicked"/>
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/description_task_layout"
-            android:layout_width="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:baselineAligned="false"
-            android:gravity="center_vertical"
-            android:textColor="@color/black" >
-
-            <EditText
-                android:id="@+id/description_task"
+            <ScrollView
+                android:id="@+id/list_view_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_description"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:gravity="top"
-                android:maxLength="@string/max_length_description" />
-        </android.support.design.widget.TextInputLayout>
+                android:fillViewport="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_list_height"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="10dp"
+                                android:tint="@color/gray"
+                                app:srcCompat="@drawable/calendar_36dp"/>
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:id="@+id/dueDateTitleTextView"
+                                android:gravity="center"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="normal"
+                                android:text="@string/due_date_field"/>
+
+                            <ViewSwitcher
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <Button
+                                    android:id="@+id/pick_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginEnd="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_marginTop="5dp"
+                                    android:onClick="showDatePickerDialog"
+                                    android:text="@string/enter_due_date_hint"
+                                    android:gravity="center"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@color/blue"
+                                    android:textSize="20sp"
+                                    android:text="yooyoyoyoy"/>
+
+                            </ViewSwitcher>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_list_height"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="10dp"
+                                android:tint="@color/gray"
+                                app:srcCompat="@drawable/minutes_needed_36dp"/>
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:id="@+id/durationTitleTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/duration_field"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="normal"
+                                android:gravity="center"/>
+
+                            <Spinner
+                                android:id="@+id/durationSpinner"
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:spinnerMode="dialog"
+                                android:gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="70dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_list_height"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="10dp"
+                                android:tint="@color/gray"
+                                app:srcCompat="@drawable/task_location_36dp"/>
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:id="@+id/locationTitleTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/location_field"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="normal"
+                                android:gravity="center"/>
+
+                            <Spinner
+                                android:id="@+id/locationSpinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:spinnerMode="dialog"
+                                android:gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="70dp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/item_list_height"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="10dp"
+                                android:tint="@color/gray"
+                                app:srcCompat="@drawable/thunder_36dp"/>
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:id="@+id/energyTitleTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/energy_field"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="normal"
+                                android:gravity="center"/>
+
+                            <RadioGroup
+                                android:id="@+id/radio_energy"
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginRight="10dp"
+                                android:spinnerMode="dialog"
+                                android:gravity="center"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginLeft="50dp">
+
+                                <RadioButton android:id="@+id/energy_low"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/low_energy"
+                                    android:onClick="onRadioButtonClicked"/>
+                                <RadioButton android:id="@+id/energy_normal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/normal_energy"
+                                    android:onClick="onRadioButtonClicked"
+                                    android:checked="false" />
+                                <RadioButton android:id="@+id/energy_high"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/high_energy"
+                                    android:onClick="onRadioButtonClicked"/>
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:paddingEnd="10dp"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="10dp"
+                                android:tint="@color/gray"
+                                app:srcCompat="@drawable/description_36dp"/>
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/activity_vertical_margin"
+                            android:paddingTop="@dimen/activity_vertical_margin">
+
+                            <TextView
+                                android:id="@+id/descriptionTitleTextView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/description_field"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20sp"
+                                android:textStyle="normal"
+                                android:gravity="center"/>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/description_task_layout"
+                                android:layout_width="match_parent"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="5dp"
+                                android:baselineAligned="false"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/black" >
+
+                                <EditText
+                                    android:id="@+id/description_task"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                                    android:gravity="top"
+                                    android:maxLength="@string/max_length_description" />
+                            </android.support.design.widget.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </FrameLayout>
+
     </LinearLayout>
+
 </RelativeLayout>
