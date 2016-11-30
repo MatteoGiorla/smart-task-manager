@@ -34,7 +34,10 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
 
     private static final int AWAIT_TIMEOUT_IN_MILLISECONDS = 2000;
 
+    private static final int REQUEST_LOCATION = 2;
+
     private static final String TAG = "Geolocation Test";
+
     private MainActivity mMainActivity;
 
     public GeolocationTest() {
@@ -47,6 +50,7 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
         mMainActivity = getActivity();
         ensureGoogleApiClientConnection();
     }
+
 
     public void testUsingMockLocation() {
         setMockLocation(createNorthPoleLocation());
@@ -96,7 +100,10 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
                                 //                                          int[] grantResults)
                                 // to handle the case where the user grants the permission. See the documentation
                                 // for ActivityCompat#requestPermissions for more details.
-
+                                //ask permission to the user.
+                                // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
+                                ActivityCompat.requestPermissions(mMainActivity,
+                                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
                             }
                             LocationServices.FusedLocationApi.setMockLocation(
                                     mMainActivity.mGoogleApiClient,
