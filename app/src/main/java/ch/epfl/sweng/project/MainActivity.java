@@ -82,8 +82,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
 
     // Geolocation variables:
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    protected Location mCurrentLocation;
 
     private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
     private static final int REQUEST_LOCATION = 2;
@@ -263,7 +264,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             // Get last known recent location:
-            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
                 onLocationChanged(mCurrentLocation);
             }
@@ -280,9 +281,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     @Override
     public void onConnectionSuspended(int i) {
         if (i == CAUSE_SERVICE_DISCONNECTED) {
-            Toast.makeText(this, "Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Disconnected. Please reconnect.", Toast.LENGTH_SHORT).show();
         } else if (i == CAUSE_NETWORK_LOST) {
-            Toast.makeText(this, "Network lost. Please re-connect.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Network lost. Please reconnect.", Toast.LENGTH_SHORT).show();
         }
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
@@ -312,7 +313,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         // calculate the distance between the current location and all the user locations:
         for (ch.epfl.sweng.project.Location userLocation: currentUser.getListLocations()) {
             double distance = haversine(latLng, userLocation);
-            
+
             if (distance <= 500) { // less than 500 meters
                 // set the spinner to the location
                 Spinner mLocation = (Spinner) findViewById(R.id.location_user);
