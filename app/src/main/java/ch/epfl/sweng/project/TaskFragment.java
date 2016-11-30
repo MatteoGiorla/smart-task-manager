@@ -44,10 +44,11 @@ public class TaskFragment extends Fragment {
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
 
+    //TODO : way to do it without static ?
+    private static TaskListAdapter mTaskAdapter;
+    private static ArrayList<Task> taskList;
+    private static TaskHelper mDatabase;
 
-    private TaskListAdapter mTaskAdapter;
-    private ArrayList<Task> taskList;
-    private TaskHelper mDatabase;
     private User currentUser;
 
     /**
@@ -263,7 +264,7 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
-        sortTaskStatically();
+        sortTaskStatically(); //TODO pourquoi pas dynamique ?
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
@@ -355,5 +356,34 @@ public class TaskFragment extends Fragment {
         }else{
             return null;
         }
+    }
+
+    public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
+        //To avoid concurrent modification
+        ArrayList<Task> newTaskList = new ArrayList<>();
+        for(Task task : taskList) {
+            Task newTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+            task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+            if (task.getLocationName().equals(editedLocation.getName())) {
+                newTask.setLocationName(newLocation.getName());
+            }
+            newTaskList.add(newTask);
+        }
+        for(int i = 0; i< taskList.size(); ++i) {
+            Task previousTask = taskList.get(i);
+            if (previousTask.getLocationName().equals(editedLocation.getName())){
+                mDatabase.updateTask(previousTask, newTaskList.get(i));
+            }
+        }
+        mTaskAdapter.notifyDataSetChanged();
+    }
+
+    public static boolean locationIsUsedByTask(Location locationToCheck) {
+        for(Task task : taskList) {
+            if (task.getLocationName().equals(locationToCheck.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 }
