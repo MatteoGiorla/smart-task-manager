@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,6 +13,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
@@ -22,23 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(AndroidJUnit4.class)
 public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    // TODO enable this:
-    /**
-     * Test showing use of mock location data to test code using the Google Play Location APIs. To
-     * run this test, you must first check the "Allow mock locations" setting within
-     * Settings -> Developer options.
-     */
-    /**
-     * The name of the mock location.
-     */
-
-
-
-    
-
-
-
-   /* private static final String NORTH_POLE = "ch.epfl.sweng.project" + ".NORTH_POLE";
+    private static final String NORTH_POLE = "ch.epfl.sweng.project" + ".NORTH_POLE";
 
     private static final float NORTH_POLE_LATITUDE = 90.0f;
 
@@ -49,7 +35,6 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
     private static final int AWAIT_TIMEOUT_IN_MILLISECONDS = 2000;
 
     private static final String TAG = "Geolocation Test";
-
     private MainActivity mMainActivity;
 
     public GeolocationTest() {
@@ -91,7 +76,7 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
         mMainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMainActivity.onConnected(Bundle.EMPTY); // TODO pas sûr sûr
+                mMainActivity.onConnected(Bundle.EMPTY);
             }
         });
     }
@@ -105,7 +90,6 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
                     public void onResult(@NonNull Status status) {
                         if (status.isSuccess()) {
                             if (ActivityCompat.checkSelfPermission(mMainActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mMainActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                // TODO: Consider calling
                                 //    ActivityCompat#requestPermissions
                                 // here to request the missing permissions, and then overriding
                                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -146,5 +130,13 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
         mockLocation.setAccuracy(ACCURACY_IN_METERS);
         mockLocation.setTime(System.currentTimeMillis());
         return mockLocation;
-    }*/
+    }
+
+    @Test
+    public void testOnLocationChanged() {
+        android.location.Location location = new Location("Sion");
+        location.setLatitude(14.00);
+        location.setLongitude(43.00);
+        //mMainActivity.mGoogleApiClient.isConnected();
+    }
 }
