@@ -361,7 +361,7 @@ public class TaskFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         taskList.add(position, mTask);
-                        mTaskAdapter.notifyItemInserted(position); //mBookAdapter is my Adapter class
+                        mTaskAdapter.notifyItemInserted(position);
                         recyclerView.scrollToPosition(position);
                     }
                 })
