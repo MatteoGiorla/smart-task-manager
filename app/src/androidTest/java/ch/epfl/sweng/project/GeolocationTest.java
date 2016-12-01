@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RunWith(AndroidJUnit4.class)
 public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
     private static final String NORTH_POLE = "ch.epfl.sweng.project" + ".NORTH_POLE";
 
     private static final float NORTH_POLE_LATITUDE = 90.0f;
@@ -43,7 +44,7 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
     public GeolocationTest() {
         super(MainActivity.class);
     }
-
+/*
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -137,13 +138,14 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
         mockLocation.setAccuracy(ACCURACY_IN_METERS);
         mockLocation.setTime(System.currentTimeMillis());
         return mockLocation;
-    }
+    }*/
 
     @Test
     public void testOnLocationChanged() {
         android.location.Location location = new Location("Sion");
         location.setLatitude(14.00);
         location.setLongitude(43.00);
+        //testUsingMockLocation();
         //mMainActivity.mGoogleApiClient.isConnected();
     }
 }
