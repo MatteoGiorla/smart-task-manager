@@ -26,7 +26,6 @@ import java.util.List;
 
 import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
-import ch.epfl.sweng.project.information.TaskInformationActivity;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.app.Activity.RESULT_OK;
@@ -42,9 +41,7 @@ import static ch.epfl.sweng.project.EditTaskActivity.TASK_TO_BE_DELETED_INDEX;
 public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
-    public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
     private final int editTaskRequestCode = 2;
-    private final int displayTaskRequestCode = 3;
 
 
     private TaskListAdapter mTaskAdapter;
@@ -227,22 +224,6 @@ public class TaskFragment extends Fragment {
             }
 
            //TODO : to be deleted
-        } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
-            int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
-            if (taskStatus == -1)
-                throw new IllegalArgumentException("Error with the intent form TaskInformationActivity");
-
-            switch (taskStatus) {
-                case TASK_IS_MODIFIED:
-                    onEditTaskActivityResult(data);
-                    break;
-                case TASK_IS_DELETED:
-                    int taskIndex = data.getIntExtra(TaskInformationActivity.TASK_TO_BE_DELETED_INDEX, -1);
-                    if (taskIndex == -1) {
-                        throw new IllegalArgumentException("Error with the task to be deleted index");
-                    }
-                    removeTaskAction(taskIndex, false);
-            }
         }
     }
 
