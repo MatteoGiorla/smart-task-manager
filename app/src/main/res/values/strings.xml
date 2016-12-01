@@ -10,7 +10,7 @@
     <string name="unfinished_tasks">Tasks to fill up</string>
 
     <!-- Menu strings-->
-    <string name="options_menu">Options</string>
+    <string name="settings_menu">Settings</string>
     <string name="logout_menu">Log Out</string>
     <string name="trash">Trash</string>
 
@@ -106,9 +106,7 @@
     <string name="custom_text">Custom</string>
 
     <!-- Unfilled task informations messages-->
-    <string name="unfilled_due_date">Not decided yet</string>
-    <string name="unfilled_duration">Not decided yet</string>
-    <string name="unfilled_location">Not decided yet</string>
+    <string name="unfilled_param">"—"</string>
     <!-- Preference key -->
     <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
     <string name="new_user">FIRST_USER_LOGIN</string>
@@ -133,6 +131,11 @@
     <!-- LocationFragment -->
     <string name="info_deleted">" deleted"</string>
     <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
+    <string name="replace_location">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="location_delete_dialog_message">You have tasks set to this location. Set all these tasks to a new location :</string>
+    <string name="location_delete_dialog_title">Used location</string>
+
     <!-- TaskFragment -->
     <string name="info_updated">" has been updated !"</string>
     <!-- MainActivity ListView texts -->
@@ -171,12 +174,21 @@
     <string name="tutorial_slide_3_description">To sort your tasks, the app needs you to specify 3 essential parameters. Unfilled tasks will be placed in an inbox at the top of your tasks list. Always try to fill up all your tasks to avoid missing an important one.</string>
     <string name="tutorial_slide_4_description">Enter the date at which your task has to be completed and specify how long you estimate having to work on it. A task that takes too long is a bad sign. Always try to split it up into shorter ones. This will also keep you motivated.</string>
     <string name="tutorial_slide_5_description">Specify where your task can be completed. If you can complete it anywhere select "Everywhere". After Log In you will be asked to set your favorite locations for this purpose.</string>
-<!--
+    <!--
     <string name="tutorial_slide_6_description">Allow TaskIt to send you notifications whenever a task needs your attention.</string>
     <string name="tutorial_slide_7_description">Allow TaskIt to get your current position when you open the app so that you don’t need to enter it manually.</string>
 -->
     <string name="skip_button">Skip</string>
     <string name="done_button">Done</string>
+
+    <!-- Settings -->
+    <string name="settings_tips">Tips</string>
+    <string name="settings_tutorial">Tutorial</string>
+    <string name="settings_locations">Locations</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_suggest_a_feature">Suggest a feature</string>
+    <string name="settings_tell_a_friend">Tell a friend</string>
+    <string name="settings_about">About</string>
 
     <!--Snack bar-->
     <string name="undo_action">Undo</string>

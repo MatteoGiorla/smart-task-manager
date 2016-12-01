@@ -286,7 +286,7 @@ public class UnfilledTasksTest {
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_information))
                 .atPosition(1)
-                .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration)))));
+                .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_param)))));
     }
 
     @Test

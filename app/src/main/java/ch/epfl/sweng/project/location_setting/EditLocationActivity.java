@@ -61,6 +61,7 @@ public class EditLocationActivity extends LocationActivity {
         mLocationToBeEdited.setName(name);
         mLocationToBeEdited.setLatitude(latitude);
         mLocationToBeEdited.setLongitude(longitude);
+
         intent.putExtra(RETURNED_EDITED_LOCATION, mLocationToBeEdited);
         intent.putExtra(RETURNED_INDEX_EDITED_LOCATION, mIndexLocationToBeEdited);
     }
@@ -84,5 +85,7 @@ public class EditLocationActivity extends LocationActivity {
         EditText titleEditText = (EditText) findViewById(R.id.locationName);
         titleEditText.setText(mLocationToBeEdited.getName());
         titleEditText.setSelection(titleEditText.getText().length());
+        latitude = mLocationToBeEdited.getLatitude();
+        longitude = mLocationToBeEdited.getLongitude();
     }
 }
