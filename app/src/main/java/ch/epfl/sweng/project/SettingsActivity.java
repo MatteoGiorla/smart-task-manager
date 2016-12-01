@@ -23,7 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+        if(currentUser == null){
+            currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+        }
 
         TextView mTutorial = (TextView) findViewById(R.id.settings_text_tutorial);
         mTutorial.setOnClickListener(

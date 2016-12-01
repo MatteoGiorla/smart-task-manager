@@ -115,20 +115,13 @@ public class LocationSettingActivity extends AppCompatActivity {
     }
 
     private void resultActivity() {
-        if(prefs.getBoolean(getString(R.string.new_user), true)){
+        if(prefs.getBoolean(getString(R.string.new_user), true)) {
             Bundle extras = getIntent().getExtras();
             final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
             User user = new User(userEmail, fragment.getLocationList());
             Utils.addUser(user);
             prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
             Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-        }else{
-            //when accessing Location Settings from the MainActivity
-            Intent intent = new Intent(LocationSettingActivity.this, SettingsActivity.class);
-            intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }

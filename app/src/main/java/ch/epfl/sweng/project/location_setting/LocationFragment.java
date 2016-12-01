@@ -299,14 +299,16 @@ public class LocationFragment extends Fragment {
         if (indexEditedLocation == -1 || editedLocation == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
-            //Replace location edited in all tasks using it
-            TaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
-
+            if (!firstConnection) {
+                if (TaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
+                    //Replace location edited in all tasks using it
+                    TaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
+                }
+            }
             locationList.set(indexEditedLocation, editedLocation);
             mLocationAdapter.notifyDataSetChanged();
             String toast = editedLocation.getName() + getString(R.string.info_updated);
             Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-
             if (!firstConnection) {
                 currentUser = new User(currentUser.getEmail(), getLocationList());
                 Utils.updateUser(currentUser);

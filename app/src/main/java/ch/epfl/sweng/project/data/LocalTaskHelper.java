@@ -34,7 +34,7 @@ public class LocalTaskHelper implements TaskHelper {
     @Override
     public void addNewTask(Task task) {
         mTaskList.add(task);
-        mAdapter.sort(Task.getStaticComparator());
+        //mAdapter.sort(Task.getStaticComparator()); //TODo
     }
 
     @Override
@@ -46,6 +46,6 @@ public class LocalTaskHelper implements TaskHelper {
     @Override
     public void deleteTask(Task task) {
         mAdapter.remove(task);
-        mAdapter.sort(Task.getStaticComparator());
+        //mAdapter.sort(Task.getStaticComparator()); //TODO
     }
 }

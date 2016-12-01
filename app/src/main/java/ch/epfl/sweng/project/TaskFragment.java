@@ -185,6 +185,7 @@ public class TaskFragment extends Fragment {
                 return true;
             case R.id.floating_task_done:
                 removeTask(itemInfo, true);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -226,7 +227,6 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        //sortTaskStatically();
     }
 
     /**
@@ -264,7 +264,6 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
-        sortTaskStatically(); //TODO pourquoi pas dynamique ?
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
@@ -336,13 +335,6 @@ public class TaskFragment extends Fragment {
      */
     public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
         mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
-    }
-
-    /**
-     * Method that launch the static sort on the tasks.
-     */
-    public void sortTaskStatically() {
-        mTaskAdapter.sort(Task.getStaticComparator());
     }
 
     /**

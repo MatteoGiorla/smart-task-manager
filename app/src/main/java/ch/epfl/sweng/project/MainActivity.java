@@ -55,8 +55,8 @@ public final class MainActivity extends AppCompatActivity {
     private static User currentUser;
 
     // Will be used later on
-    private String userLocation;
-    private int userTimeAtDisposal;
+    private static String userLocation;
+    private static int userTimeAtDisposal;
 
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
@@ -193,44 +193,40 @@ public final class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if(newTaskRequestCode == requestCode) {
-                if (resultCode == RESULT_OK) {
-                    // Get result from the result intent.
-                    Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_NEW_TASK);
+        if (newTaskRequestCode == requestCode) {
+            if (resultCode == RESULT_OK) {
+                // Get result from the result intent.
+                Task newTask = data.getParcelableExtra(NewTaskActivity.RETURNED_NEW_TASK);
 
-                    //treat the unfilled case
-                    boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
-                    if(unfilled){
-                        unfilledTasks.add(newTask);
-                    }else{
-                        // Add element to the listTask
-                        mainFragment.addTask(newTask);
-                        // trigger the dynamic sort
-                        triggerDynamicSort();
-                    }
-                }
-            }else{
-                if(requestCode == unfilledTaskRequestCode){
-                    if(resultCode == RESULT_OK){
-                        ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                        for(Task t : newFinishedTasks){
-                            mainFragment.addTask(t);
-                        }
-                        //trigger the dynamic sort
-                        triggerDynamicSort();
-
-                        //update the list of unfilledTasks
-                        unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
-                    }
+                //treat the unfilled case
+                boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
+                if (unfilled) {
+                    unfilledTasks.add(newTask);
+                } else {
+                    // Add element to the listTask
+                    mainFragment.addTask(newTask);
                 }
             }
+        } else {
+            if (requestCode == unfilledTaskRequestCode) {
+                if (resultCode == RESULT_OK) {
+                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
+                    for (Task t : newFinishedTasks) {
+                        mainFragment.addTask(t);
+                    }
+
+                    //update the list of unfilledTasks
+                    unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
+                }
+            }
+        }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
 
     /**
      * Trigger the dynamic sort.
      */
-    private void triggerDynamicSort(){
+    private void triggerDynamicSort() {
         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
         String select_one_location = getApplicationContext().getString(R.string.select_one);
         mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
@@ -289,10 +285,7 @@ public final class MainActivity extends AppCompatActivity {
                 }
 
                 // trigger the dynamic sort
-                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-
-                String select_one_location = getApplicationContext().getString(R.string.select_one);
-                mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+                triggerDynamicSort();
             }
 
             @Override
@@ -305,10 +298,7 @@ public final class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
                 // trigger the dynamic sort
-                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-
-                String select_one_location = getApplicationContext().getString(R.string.select_one);
-                mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+                triggerDynamicSort();
             }
 
             @Override
@@ -318,9 +308,9 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *  initialize the functionnality of the TableRow
+     * initialize the functionnality of the TableRow
      */
-    private void initializeUnfilledTableRow(){
+    private void initializeUnfilledTableRow() {
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -347,21 +337,21 @@ public final class MainActivity extends AppCompatActivity {
      *
      * @param visible if true makes it visible, invisible otherwise
      */
-    private void updateUnfilledTasksTableRow(boolean visible){
-        if(visible){
+    private void updateUnfilledTasksTableRow(boolean visible) {
+        if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
-            if(unfilledTasks != null){
+            if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
                 String numberToDisplay = Integer.toString(taskNum);
-                if(taskNum >= 99){
+                if (taskNum >= 99) {
                     numberToDisplay = "99+";
                 }
                 TextView taskNumRedDot = (TextView) findViewById(R.id.number_of_unfilled_tasks);
                 taskNumRedDot.setText(numberToDisplay);
             }
-        }else{
+        } else {
             unfilledTaskButton.setVisibility(View.GONE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
@@ -495,7 +485,14 @@ public final class MainActivity extends AppCompatActivity {
      *
      * @return boolean the existence of unfilled tasks.
      */
-    private boolean areThereUnfinishedTasks(){
+    private boolean areThereUnfinishedTasks() {
         return (unfilledTasks != null) && (!unfilledTasks.isEmpty());
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        triggerDynamicSort();
     }
 }
