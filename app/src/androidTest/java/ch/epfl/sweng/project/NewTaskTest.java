@@ -25,6 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
@@ -135,9 +136,8 @@ public final class NewTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        /*onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));*/
+        onView(withId(R.id.title_task))
+                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
     }
 
@@ -166,9 +166,8 @@ public final class NewTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        /*onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));*/
+        onView(withId(R.id.title_task))
+                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
         pressBack();
         emptyDatabase(1);

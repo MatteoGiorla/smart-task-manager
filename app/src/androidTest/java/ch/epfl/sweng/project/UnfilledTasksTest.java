@@ -34,7 +34,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -229,6 +228,7 @@ public class UnfilledTasksTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
 
         //add a due date (today due date)
+        onView(withId(R.id.dateLinearLayout)).perform(click());
         onView(withId(R.id.pick_date)).perform(click());
         UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
         try{
@@ -238,6 +238,7 @@ public class UnfilledTasksTest {
         }
 
         //add a duration
+        onView(withId(R.id.durationLinearLayout)).perform(click());
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
@@ -283,9 +284,7 @@ public class UnfilledTasksTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //checking durtion is "not decided yet"
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(1)
-                .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration)))));
+        onView(withId(R.id.text_duration))
+                .check(matches(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration))));
     }
 }
