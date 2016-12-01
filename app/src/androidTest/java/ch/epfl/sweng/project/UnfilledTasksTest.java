@@ -296,5 +296,70 @@ public class UnfilledTasksTest {
                 .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration)))));
     }
 
+    @Test
+    public void testCanDeleteTasks() {
+
+        String[] unfTasksTitle = {"unfTask1", "unfTask2", "unfTask3"};
+
+        for(String title: unfTasksTitle){
+            addIncompleteTask(title);
+        }
+
+        onView(withId(R.id.unfilled_task_button)).perform(click());
+
+        //We delete the tasks
+        for (int i = 0; i < unfTasksTitle.length; i++) {
+            onData(anything())
+                    .inAdapterView(withId(R.id.list_view_tasks))
+                    .atPosition(0).perform(longClick());
+            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+
+            //Test if the tasks are correctly deleted
+            if (i != unfTasksTitle.length-1) {
+                onData(anything())
+                        .inAdapterView(withId(R.id.list_view_tasks))
+                        .atPosition(0).check(matches(hasDescendant(withText(unfTasksTitle[i+1]))));
+            }
+        }
+    }
+
+
+    @Test
+    public void unfilledTaskAppearsAsPreviewOnTheMain(){
+
+        String[] unfTasksTitle = {"unfTask1", "unfTask2", "unfTask3", "unfTask4"};
+
+        for(String title: unfTasksTitle){
+            addIncompleteTask(title);
+        }
+
+        onView(withId(R.id.unfilled_preview_1))
+                .check(matches((withText(unfTasksTitle[0]))));
+
+        onView(withId(R.id.unfilled_preview_2))
+                .check(matches((withText(unfTasksTitle[1]))));
+
+        onView(withId(R.id.unfilled_preview_4))
+                .check(matches((withText(unfTasksTitle[2]))));
+
+        onView(withId(R.id.unfilled_preview_3))
+                .check(matches((withText(unfTasksTitle[3]))));
+    }
+
+    /**
+     * with espresso action add an incomplete task(title only)
+     *
+     * @param title string the name of the task.
+     */
+    private void addIncompleteTask(String title){
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText(title));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+    }
 
 }

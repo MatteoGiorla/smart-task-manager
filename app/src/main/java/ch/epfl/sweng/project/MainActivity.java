@@ -42,6 +42,7 @@ public final class MainActivity extends AppCompatActivity {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
+    public static final int UNFILL_TASKS_DIGEST_NBR = 4;
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
@@ -342,11 +343,11 @@ public final class MainActivity extends AppCompatActivity {
      *
      */
     private void initializeUnfilledPreview(){
-        final int UNFILL_TASKS_DIGEST_NBR = 4;
         final int unfilledNbr = unfilledTasks.size();
         GridLayout gridLayout = (GridLayout) findViewById(R.id.unfilled_preview_grid);
         for(int i = 0; i < UNFILL_TASKS_DIGEST_NBR; ++i){
-            TextView unfText = (TextView) gridLayout.getChildAt(i);
+            int childIndex = ((i<2)?i:((i==2)?3:2));
+            TextView unfText = (TextView) gridLayout.getChildAt(childIndex);
             if(i >= unfilledNbr){
                 unfText.setVisibility(View.INVISIBLE);
             }else{

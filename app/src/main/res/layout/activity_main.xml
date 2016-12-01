@@ -129,15 +129,13 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_gray"
+        android:background="@drawable/unfilled_tab_row"
         android:id="@+id/unfilled_task_button">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="7dp">
-
+            android:layout_height="match_parent">
 
             <TextView
                 android:text="@string/num_unfilled_default"
@@ -149,11 +147,13 @@
                 android:id="@+id/number_of_unfilled_tasks"
                 android:textSize="20sp"
                 android:gravity="center"
+                android:layout_margin="7dp"
                 android:textColor="@color/white" />
 
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dp"
 
                 android:useDefaultMargins="true"
                 android:alignmentMode="alignBounds"
@@ -165,8 +165,11 @@
 
                 <TextView
                     android:id="@+id/unfilled_preview_1"
-                    android:layout_width="150dp"
+                    android:layout_width="145dp"
                     android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
                     android:layout_row="0"
                     android:layout_column="2" />
 
@@ -174,22 +177,31 @@
                     android:id="@+id/unfilled_preview_2"
                     android:layout_row="0"
                     android:layout_column="3"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
                     android:layout_height="wrap_content"
-                    android:layout_width="150dp" />
+                    android:layout_width="145dp" />
 
                 <TextView
                     android:id="@+id/unfilled_preview_3"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
                     android:layout_row="1"
                     android:layout_column="3"
                     android:layout_height="wrap_content"
-                    android:layout_width="150dp" />
+                    android:layout_width="145dp" />
 
                 <TextView
                     android:id="@+id/unfilled_preview_4"
                     android:layout_height="wrap_content"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
                     android:layout_row="1"
                     android:layout_column="2"
-                    android:layout_width="150dp" />
+                    android:layout_width="145dp" />
 
 
             </GridLayout>
