@@ -168,7 +168,10 @@
     <string name="tutorial_slide_3_title">Task parameters</string>
     <string name="tutorial_slide_4_title">Due date and duration</string>
     <string name="tutorial_slide_5_title">Location</string>
-    <!--
+
+    <!-- splash screen text -->
+    <string name="progress_bar_text">Retrieving data…</string>
+<!--
     <string name="tutorial_slide_6_title">Notifications</string>
     <string name="tutorial_slide_7_title">Be located automatically</string>
 -->
