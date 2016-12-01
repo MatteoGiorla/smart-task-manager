@@ -9,6 +9,7 @@ import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -37,5 +38,27 @@ public class FirebaseUserHelper implements UserHelper{
         //Set the list with the user's location list
         currentUser.setListLocations(listLocations);
         return currentUser;
+    }
+
+    /**
+     * Deleter a user in the database
+     *
+     * @param user The user to be deleted
+     */
+    private static void deleteUser(User user) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        userRef.removeValue();
+    }
+
+    public static void addUser(User user) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        userRef.setValue(user);
+    }
+
+    public static void updateUser(User user) {
+        deleteUser(user);
+        addUser(user);
     }
 }

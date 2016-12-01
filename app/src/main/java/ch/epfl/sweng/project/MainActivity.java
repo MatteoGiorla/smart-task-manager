@@ -263,6 +263,22 @@ public final class MainActivity extends AppCompatActivity {
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
+    private void updateAdapters() {
+        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+
+        String[] locationListForAdapter = getLocationTable();
+        for (int i = 0; i < locationListForAdapter.length; i++) {
+            if (locationListForAdapter[i].equals(getString(R.string.everywhere_location))) {
+                locationListForAdapter[i] = getString(R.string.elsewhere_location);
+            }
+        }
+
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+
+        mLocation.setAdapter(locationAdapter);
+    }
+
     /**
      * Set the Listeners in order to have the spinners dropdown when we click
      * on an image button inside the MainActivity layout.
@@ -489,10 +505,19 @@ public final class MainActivity extends AppCompatActivity {
         return (unfilledTasks != null) && (!unfilledTasks.isEmpty());
     }
 
+    public static void setUser(User updatedUser){
+        currentUser = updatedUser;
+    }
+
+    public static User getUser(){
+        return currentUser;
+    }
+
     @Override
     protected void onResume()
     {
         super.onResume();
+        updateAdapters();
         triggerDynamicSort();
     }
 }

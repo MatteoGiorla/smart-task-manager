@@ -23,10 +23,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        if(currentUser == null){
-            currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
-        }
-
         TextView mTutorial = (TextView) findViewById(R.id.settings_text_tutorial);
         mTutorial.setOnClickListener(
                 new View.OnClickListener() {
@@ -43,7 +39,6 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(SettingsActivity.this, LocationSettingActivity.class);
-                        intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
                         startActivity(intent);
                     }
                 });

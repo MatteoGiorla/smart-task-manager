@@ -29,10 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.TaskFragment;
 import ch.epfl.sweng.project.User;
-import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.data.FirebaseUserHelper;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -257,7 +258,8 @@ public class LocationFragment extends Fragment {
                     } else {
                         removeLocation(itemInfo);
                         currentUser = new User(currentUser.getEmail(), getLocationList());
-                        Utils.updateUser(currentUser);
+                        FirebaseUserHelper.updateUser(currentUser);
+                        MainActivity.setUser(currentUser);
                     }
                 } else {
                     removeLocation(itemInfo);
@@ -311,7 +313,8 @@ public class LocationFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
             if (!firstConnection) {
                 currentUser = new User(currentUser.getEmail(), getLocationList());
-                Utils.updateUser(currentUser);
+                FirebaseUserHelper.updateUser(currentUser);
+                MainActivity.setUser(currentUser);
             }
         }
     }
@@ -394,7 +397,8 @@ public class LocationFragment extends Fragment {
             removeLocation(itemInfo);
 
             currentUser = new User(currentUser.getEmail(), getLocationList());
-            Utils.updateUser(currentUser);
+            FirebaseUserHelper.updateUser(currentUser);
+            MainActivity.setUser(currentUser);
         }
     }
 }

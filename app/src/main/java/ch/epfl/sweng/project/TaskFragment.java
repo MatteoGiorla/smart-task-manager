@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -353,21 +354,21 @@ public class TaskFragment extends Fragment {
     public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
+        ArrayList<Task> previousTaskList = new ArrayList<>();
         for(Task task : taskList) {
-            Task newTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-            task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
             if (task.getLocationName().equals(editedLocation.getName())) {
-                newTask.setLocationName(newLocation.getName());
-            }
-            newTaskList.add(newTask);
-        }
-        for(int i = 0; i< taskList.size(); ++i) {
-            Task previousTask = taskList.get(i);
-            if (previousTask.getLocationName().equals(editedLocation.getName())){
-                mDatabase.updateTask(previousTask, newTaskList.get(i));
+                Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                newTaskList.add(newTask);
+                previousTaskList.add(previousTask);
             }
         }
-        mTaskAdapter.notifyDataSetChanged();
+        for(int i = 0; i < newTaskList.size(); ++i) {
+            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i));
+            mTaskAdapter.notifyDataSetChanged();
+        }
     }
 
     public static boolean locationIsUsedByTask(Location locationToCheck) {
