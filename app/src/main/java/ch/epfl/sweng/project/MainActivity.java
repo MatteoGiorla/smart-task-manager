@@ -69,6 +69,13 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private static String userLocation;
     private static int userTimeAtDisposal;
 
+    private Spinner mLocation;
+    private Spinner mDuration;
+
+    private ArrayAdapter<String> locationAdapter;
+    private ArrayAdapter<String> durationAdapter;
+
+
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
     public static Map<Integer, String> START_DURATION_MAP;
@@ -153,8 +160,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         //Default values
         userLocation = getResources().getString(R.string.select_one);
-
         userTimeAtDisposal = 120; //2 hours
+
         initializeAdapters();
     }
 
@@ -316,7 +323,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
             if (distance <= 500) { // less than 500 meters
                 // set the spinner to the location
-                Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+                mLocation = (Spinner) findViewById(R.id.location_user);
                 mLocation.setSelection(currentUser.getListLocations().indexOf(userLocation));
             }
         }
@@ -409,8 +416,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * on the image.
      */
     private void initializeAdapters() {
-        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        mDuration = (Spinner) findViewById(R.id.time_user);
+        mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -418,24 +425,25 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+        locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
-        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
+        durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
         //set default value to the spinner
-        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
+        int spinnerPosition = durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal));
         mDuration.setSelection(spinnerPosition);
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
 
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
     private void updateAdapters() {
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -444,7 +452,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
 
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+        locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
         mLocation.setAdapter(locationAdapter);
@@ -689,6 +697,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     {
         super.onResume();
         updateAdapters();
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
+        mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
     }
 }

@@ -50,7 +50,6 @@ public class TaskFragment extends Fragment {
     public static final int editTaskRequestCode = 2;
     public static final int displayTaskRequestCode = 3;
 
-    //TODO : way to do it without static ?
     private static TaskListAdapter mTaskAdapter;
     private static ArrayList<Task> taskList;
     private static TaskHelper mDatabase;
@@ -362,7 +361,9 @@ public class TaskFragment extends Fragment {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
         ArrayList<Task> previousTaskList = new ArrayList<>();
-        for(Task task : taskList) {
+        ArrayList<Integer> taskPosition = new ArrayList<>();
+        for(int i = 0; i < taskList.size(); ++i) {
+            Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
                         task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
@@ -370,10 +371,11 @@ public class TaskFragment extends Fragment {
                         task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
+                taskPosition.add(i);
             }
         }
         for(int i = 0; i < newTaskList.size(); ++i) {
-            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i));
+            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
             mTaskAdapter.notifyDataSetChanged();
         }
     }
