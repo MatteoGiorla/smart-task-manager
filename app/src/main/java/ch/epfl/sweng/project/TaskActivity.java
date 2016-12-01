@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -193,7 +194,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 } else {
                     duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString()).longValue();
                 }
-
+                Log.e("taskActivity", "duration is : " + duration);
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
                 int index = radioGroup.indexOfChild(findViewById(radioGroup.getCheckedRadioButtonId()));

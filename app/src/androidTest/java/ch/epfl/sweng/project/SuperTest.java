@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -16,6 +17,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -101,7 +103,7 @@ class SuperTest {
     /**
      * Utilitary method to wait until we can check which activity was launched.
      */
-    static void waitForrActivity(){
+    static void waitForActivity(){
         try{
             Thread.sleep(3000);
         }catch(java.lang.InterruptedException i){
@@ -114,10 +116,8 @@ class SuperTest {
      */
     void emptyDatabase(int size) {
         for (int i = 0; i < size; i++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(0).perform(longClick());
-            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+            onView(withId(R.id.list_view_tasks))
+                    .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
         }
     }
 }

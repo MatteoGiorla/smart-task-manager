@@ -1,10 +1,10 @@
 package ch.epfl.sweng.project;
 
-import android.icu.text.DateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +32,6 @@ public class EditTaskActivity extends TaskActivity {
 
     private Task mTaskToBeEdited;
     private int mIndexTaskToBeEdited;
-    private String text_to_set_on_date_button;
     private int taskStatus;
 
     private static final int TASK_DUE_DATE = 3;
@@ -66,11 +65,6 @@ public class EditTaskActivity extends TaskActivity {
 
         final Calendar c = Calendar.getInstance();
         c.setTime(date);
-        int year = c.get(Calendar.YEAR);
-        text_to_set_on_date_button = getString(R.string.enter_due_date_hint);
-        if(year != 1899){
-            text_to_set_on_date_button = dateFormat.format(date.getTime());
-        }
 
         setSwitchers();
 
@@ -129,6 +123,7 @@ public class EditTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
+        Log.e("duration editActivity", "duration to be set : " + duration);
         mTaskToBeEdited.setName(title);
         mTaskToBeEdited.setDescription(description);
         mTaskToBeEdited.setDueDate(date);
@@ -245,8 +240,6 @@ public class EditTaskActivity extends TaskActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateTextViewInformation() {
-        DateFormat dateFormat = DateFormat.getDateInstance();
-
         TextView nameTextView = (TextView) findViewById(R.id.text_name);
         nameTextView.setText(title);
 
@@ -299,7 +292,7 @@ public class EditTaskActivity extends TaskActivity {
                 radioGroup.check(R.id.energy_normal);
                 break;
             case HIGH:
-                radioGroup.check(R.id.energy_high  );
+                radioGroup.check(R.id.energy_high);
                 break;
             default:
                 radioGroup.check(R.id.energy_normal);
@@ -335,7 +328,7 @@ public class EditTaskActivity extends TaskActivity {
                 }
                 return result;
             case TASK_DURATION:
-                String duration_text = MainActivity.DURATION_MAP.get((int)duration.intValue());
+                String duration_text = MainActivity.DURATION_MAP.get(duration.intValue());
                 if(Utils.isDurationUnfilled(task)){
                     result = getString(R.string.unfilled_duration);
                 }else{
