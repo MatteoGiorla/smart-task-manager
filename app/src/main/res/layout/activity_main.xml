@@ -139,10 +139,6 @@
         android:background="@drawable/unfilled_tab_row"
         android:id="@+id/unfilled_task_button">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <TextView
                 android:text="@string/num_unfilled_default"
@@ -210,10 +206,7 @@
                     android:layout_column="2"
                     android:layout_width="145dp" />
 
-
             </GridLayout>
-
-        </LinearLayout>
 
     </TableRow>
 

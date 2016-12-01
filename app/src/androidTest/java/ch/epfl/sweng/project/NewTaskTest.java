@@ -36,8 +36,6 @@ import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -116,7 +114,7 @@ public final class NewTaskTest extends SuperTest {
         onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("days left"))));
     }
 
-    //@Test
+    @Test
     public void lateTaskDisplayDays(){
         UiDevice mUiDevice = getInstance(getInstrumentation());
 
@@ -143,7 +141,8 @@ public final class NewTaskTest extends SuperTest {
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
-        onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("days late"))));
+        //to add "s" after day after the two of december
+        onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("day late"))));
     }
 
     @Test
