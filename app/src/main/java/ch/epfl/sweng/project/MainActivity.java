@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -108,7 +106,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         createGoogleApiClient();
 
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setIcon(R.mipmap.new_logo);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //If we are not in test mode
@@ -211,7 +209,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -230,11 +227,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     triggerDynamicSort();
                 }
             }
-        } else {
-            if (requestCode == unfilledTaskRequestCode) {
-                if (resultCode == RESULT_OK) {
+        }else if(requestCode == unfilledTaskRequestCode){
+                if(resultCode == RESULT_OK){
                     ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                    for (Task t : newFinishedTasks) {
+                    for(Task t : newFinishedTasks){
                         mainFragment.addTask(t);
                     }
                     //trigger the dynamic sort
@@ -243,7 +239,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
-            }
+        } else {
+                mainFragment.onActivityResult(requestCode, resultCode, data);
         }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }

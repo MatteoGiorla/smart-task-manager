@@ -56,7 +56,6 @@ public class SynchronizationActivity extends Activity {
 
             case UserProvider.TEST_PROVIDER:
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
 

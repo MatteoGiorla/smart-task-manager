@@ -29,7 +29,6 @@
     <!-- floating context menu values -->
     <string name="flt_ctx_menu_delete">Delete</string>
     <string name="flt_ctx_menu_edit">Edit</string>
-    <string name="flt_ctx_menu_done">Done</string>
 
     <!-- Maximum lengths -->
     <string name="max_length_title">30</string>
@@ -100,7 +99,6 @@
     <string name="select_one">Select one</string>
 
     <string name="location_enter_name">Enter the location name</string>
-    <string name="location_place_picker">LOCATION (Optional)</string>
     <string name="location_enter_address_button_text">Pick a place</string>
     <string name="location_gps_coordinates_explanation">(Optional) Choosing the address corresponding to this location allows the app to automatically sort your tasks according to your current location using your GPS coordinates</string>
     <string name="location_set_text">Set your locations</string>
@@ -125,7 +123,6 @@
 
 
     <!-- Notification -->
-    <string name="notification_title_task">A task needs your attention</string>
     <string name="notification_content_task">\'s due date is close !</string>
     <string name="notification_detail_date">"Due date: "</string>
     <string name="notification_detail_location">"Location: "</string>
@@ -138,9 +135,6 @@
     <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
     <!-- TaskFragment -->
     <string name="info_updated">" has been updated !"</string>
-    <string name="info_done">" is done"</string>
-    <!-- LocationActivity -->
-    <string name="info_place_fixed">"Place: "</string>
     <!-- MainActivity ListView texts -->
     <string name="due_today">Due today !</string>
     <string name="days_left">" days left"</string>
@@ -183,5 +177,10 @@
 -->
     <string name="skip_button">Skip</string>
     <string name="done_button">Done</string>
+
+    <!--Snack bar-->
+    <string name="undo_action">Undo</string>
+    <string name="has_been_deleted">" has been deleted"</string>
+    <string name="has_been_done">" has been marked as done"</string>
 
 </resources>
