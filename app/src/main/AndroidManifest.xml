@@ -19,7 +19,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-    <meta-data
+        <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
@@ -38,13 +38,12 @@
 
         <activity
             android:name=".EntryActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".NewTaskActivity"
             android:label="@string/new_task"
@@ -82,7 +81,6 @@
             android:name=".synchronization.SynchronizationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -100,13 +98,19 @@
 
         <receiver android:name=".receiver.NotificationReceiver" />
 
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_menu"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

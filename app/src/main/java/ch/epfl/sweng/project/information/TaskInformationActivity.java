@@ -223,7 +223,7 @@ public class TaskInformationActivity extends AppCompatActivity {
         switch(reqCode){
             case TASK_DUE_DATE:
                 if(Utils.isDueDateUnfilled(task)){
-                    result = getString(R.string.unfilled_due_date);
+                    result = getString(R.string.unfilled_param);
                 }else{
                     result = task.dueDateToString();
                 }
@@ -231,14 +231,14 @@ public class TaskInformationActivity extends AppCompatActivity {
             case TASK_DURATION:
                 String duration_text = MainActivity.DURATION_MAP.get((int)task.getDurationInMinutes());
                 if(Utils.isDurationUnfilled(task)){
-                    result = getString(R.string.unfilled_duration);
+                    result = getString(R.string.unfilled_param);
                 }else{
                     result = String.valueOf(duration_text);
                 }
                 return result;
             case TASK_LOCATION:
                 if(Utils.isLocationUnfilled(task, getApplicationContext())){
-                    result = getString(R.string.unfilled_location);
+                    result = getString(R.string.unfilled_param);
                 }else{
                     result = task.getLocationName();
                 }

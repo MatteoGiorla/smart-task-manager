@@ -12,6 +12,7 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,10 +50,10 @@ public class TaskFragment extends Fragment {
     public static final int editTaskRequestCode = 2;
     public static final int displayTaskRequestCode = 3;
 
+    private static TaskListAdapter mTaskAdapter;
+    private static ArrayList<Task> taskList;
+    private static TaskHelper mDatabase;
 
-    private TaskListAdapter mTaskAdapter;
-    private ArrayList<Task> taskList;
-    private TaskHelper mDatabase;
     private User currentUser;
     private RecyclerView recyclerView;
     private Paint p = new Paint();
@@ -149,7 +150,6 @@ public class TaskFragment extends Fragment {
 
     private void initSwipe(){
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -235,7 +235,6 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        //sortTaskStatically();
     }
 
     /**
@@ -275,7 +274,6 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task, taskList.size());
-        sortTaskStatically();
 
         //Update notifications
         if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
@@ -347,13 +345,6 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-     * Method that launch the static sort on the tasks.
-     */
-    public void sortTaskStatically() {
-        mTaskAdapter.sort(Task.getStaticComparator());
-    }
-
-    /**
      * Getter for the taskList
      *
      * @return an immutable copy of taskList
@@ -364,5 +355,37 @@ public class TaskFragment extends Fragment {
         }else{
             return null;
         }
+    }
+
+    public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
+        //To avoid concurrent modification
+        ArrayList<Task> newTaskList = new ArrayList<>();
+        ArrayList<Task> previousTaskList = new ArrayList<>();
+        ArrayList<Integer> taskPosition = new ArrayList<>();
+        for(int i = 0; i < taskList.size(); ++i) {
+            Task task = taskList.get(i);
+            if (task.getLocationName().equals(editedLocation.getName())) {
+                Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                newTaskList.add(newTask);
+                previousTaskList.add(previousTask);
+                taskPosition.add(i);
+            }
+        }
+        for(int i = 0; i < newTaskList.size(); ++i) {
+            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
+            mTaskAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public static boolean locationIsUsedByTask(Location locationToCheck) {
+        for(Task task : taskList) {
+            if (task.getLocationName().equals(locationToCheck.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 }

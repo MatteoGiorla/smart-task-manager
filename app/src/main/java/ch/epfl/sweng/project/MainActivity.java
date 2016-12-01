@@ -66,8 +66,15 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private static User currentUser;
 
     // Will be used later on
-    private String userLocation;
-    private int userTimeAtDisposal;
+    private static String userLocation;
+    private static int userTimeAtDisposal;
+
+    private Spinner mLocation;
+    private Spinner mDuration;
+
+    private ArrayAdapter<String> locationAdapter;
+    private ArrayAdapter<String> durationAdapter;
+
 
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
@@ -153,7 +160,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         //Default values
         userLocation = getResources().getString(R.string.select_one);
-        userTimeAtDisposal = 60; // 1 hour
+        userTimeAtDisposal = 120; //2 hours
+
+        initializeAdapters();
     }
 
     /**
@@ -181,6 +190,11 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+                return true;
+            case R.id.menu_item_settings:
+                Intent intent_settings = new Intent(this, SettingsActivity.class);
+                intent_settings.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
+                startActivity(intent_settings);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -223,8 +237,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
-                    // trigger the dynamic sort
-                    triggerDynamicSort();
                 }
             }
         }else if(requestCode == unfilledTaskRequestCode){
@@ -233,9 +245,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     for(Task t : newFinishedTasks){
                         mainFragment.addTask(t);
                     }
-                    //trigger the dynamic sort
-                    triggerDynamicSort();
-
+                    
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
@@ -313,7 +323,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
             if (distance <= 500) { // less than 500 meters
                 // set the spinner to the location
-                Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+                mLocation = (Spinner) findViewById(R.id.location_user);
                 mLocation.setSelection(currentUser.getListLocations().indexOf(userLocation));
             }
         }
@@ -394,7 +404,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     /**
      * Trigger the dynamic sort.
      */
-    private void triggerDynamicSort(){
+    private void triggerDynamicSort() {
         String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
         String select_one_location = getApplicationContext().getString(R.string.select_one);
         mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
@@ -406,8 +416,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * on the image.
      */
     private void initializeAdapters() {
-        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        mDuration = (Spinner) findViewById(R.id.time_user);
+        mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -415,20 +425,37 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+        locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
-        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
+        durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
         //set default value to the spinner
-        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
+        int spinnerPosition = durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal));
         mDuration.setSelection(spinnerPosition);
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
 
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
+    }
+
+    private void updateAdapters() {
+        mLocation = (Spinner) findViewById(R.id.location_user);
+
+        String[] locationListForAdapter = getLocationTable();
+        for (int i = 0; i < locationListForAdapter.length; i++) {
+            if (locationListForAdapter[i].equals(getString(R.string.everywhere_location))) {
+                locationListForAdapter[i] = getString(R.string.elsewhere_location);
+            }
+        }
+
+        locationAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+
+        mLocation.setAdapter(locationAdapter);
     }
 
     /**
@@ -453,10 +480,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 }
 
                 // trigger the dynamic sort
-                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-
-                String select_one_location = getApplicationContext().getString(R.string.select_one);
-                mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+                triggerDynamicSort();
             }
 
             @Override
@@ -469,10 +493,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userTimeAtDisposal = REVERSE_START_DURATION.get(durationAdapter.getItem(position));
                 // trigger the dynamic sort
-                String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-
-                String select_one_location = getApplicationContext().getString(R.string.select_one);
-                mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+                triggerDynamicSort();
             }
 
             @Override
@@ -482,9 +503,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     *  initialize the functionnality of the TableRow
+     * initialize the functionnality of the TableRow
      */
-    private void initializeUnfilledTableRow(){
+    private void initializeUnfilledTableRow() {
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -511,21 +532,21 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *
      * @param visible if true makes it visible, invisible otherwise
      */
-    private void updateUnfilledTasksTableRow(boolean visible){
-        if(visible){
+    private void updateUnfilledTasksTableRow(boolean visible) {
+        if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
-            if(unfilledTasks != null){
+            if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
                 String numberToDisplay = Integer.toString(taskNum);
-                if(taskNum >= 99){
+                if (taskNum >= 99) {
                     numberToDisplay = "99+";
                 }
                 TextView taskNumRedDot = (TextView) findViewById(R.id.number_of_unfilled_tasks);
                 taskNumRedDot.setText(numberToDisplay);
             }
-        }else{
+        } else {
             unfilledTaskButton.setVisibility(View.GONE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
@@ -659,7 +680,25 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *
      * @return boolean the existence of unfilled tasks.
      */
-    private boolean areThereUnfinishedTasks(){
+    private boolean areThereUnfinishedTasks() {
         return (unfilledTasks != null) && (!unfilledTasks.isEmpty());
+    }
+
+    public static void setUser(User updatedUser){
+        currentUser = updatedUser;
+    }
+
+    public static User getUser(){
+        return currentUser;
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        updateAdapters();
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
+        mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
+        triggerDynamicSort();
     }
 }

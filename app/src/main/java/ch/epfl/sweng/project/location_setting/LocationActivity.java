@@ -229,7 +229,7 @@ public abstract class LocationActivity extends AppCompatActivity {
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
-            }
         }
+    }
 
 }
