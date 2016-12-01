@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -44,10 +45,11 @@ public class TaskFragment extends Fragment {
     private final int editTaskRequestCode = 2;
     private final int displayTaskRequestCode = 3;
 
+    //TODO : way to do it without static ?
+    private static TaskListAdapter mTaskAdapter;
+    private static ArrayList<Task> taskList;
+    private static TaskHelper mDatabase;
 
-    private TaskListAdapter mTaskAdapter;
-    private ArrayList<Task> taskList;
-    private TaskHelper mDatabase;
     private User currentUser;
 
     /**
@@ -184,6 +186,7 @@ public class TaskFragment extends Fragment {
                 return true;
             case R.id.floating_task_done:
                 removeTask(itemInfo, true);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -225,7 +228,6 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        //sortTaskStatically();
     }
 
     /**
@@ -263,7 +265,6 @@ public class TaskFragment extends Fragment {
             throw new IllegalArgumentException();
         }
         mDatabase.addNewTask(task);
-        sortTaskStatically();
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
@@ -338,13 +339,6 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-     * Method that launch the static sort on the tasks.
-     */
-    public void sortTaskStatically() {
-        mTaskAdapter.sort(Task.getStaticComparator());
-    }
-
-    /**
      * Getter for the taskList
      *
      * @return an immutable copy of taskList
@@ -355,5 +349,34 @@ public class TaskFragment extends Fragment {
         }else{
             return null;
         }
+    }
+
+    public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
+        //To avoid concurrent modification
+        ArrayList<Task> newTaskList = new ArrayList<>();
+        ArrayList<Task> previousTaskList = new ArrayList<>();
+        for(Task task : taskList) {
+            if (task.getLocationName().equals(editedLocation.getName())) {
+                Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                newTaskList.add(newTask);
+                previousTaskList.add(previousTask);
+            }
+        }
+        for(int i = 0; i < newTaskList.size(); ++i) {
+            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i));
+            mTaskAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public static boolean locationIsUsedByTask(Location locationToCheck) {
+        for(Task task : taskList) {
+            if (task.getLocationName().equals(locationToCheck.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 }

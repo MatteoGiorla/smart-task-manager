@@ -11,11 +11,13 @@ import android.widget.ImageButton;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.SettingsActivity;
 import ch.epfl.sweng.project.User;
-import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.FirebaseUserHelper;
+import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
@@ -36,9 +38,10 @@ public class LocationSettingActivity extends AppCompatActivity {
         fragment = new LocationFragment();
         firstConnection = prefs.contains(getString(R.string.new_user))
                 && prefs.getBoolean(getString(R.string.new_user), true);
+
         if(!firstConnection) {
             //if accessed from settings, load custom locations
-            currentUser = getIntent().getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
+            currentUser = MainActivity.getUser();
             Bundle bundle = new Bundle();
             bundle.putParcelable(USER_KEY, currentUser);
             fragment.setArguments(bundle);
@@ -91,7 +94,8 @@ public class LocationSettingActivity extends AppCompatActivity {
                 fragment.addLocation(newLocation);
                 if (!firstConnection) {
                     currentUser = new User(currentUser.getEmail(), fragment.getLocationList());
-                    Utils.updateUser(currentUser);
+                    FirebaseUserHelper.updateUser(currentUser);
+                    MainActivity.setUser(currentUser);
                 }
             }
         }
@@ -113,20 +117,13 @@ public class LocationSettingActivity extends AppCompatActivity {
     }
 
     private void resultActivity() {
-        if(prefs.getBoolean(getString(R.string.new_user), true)){
+        if(prefs.getBoolean(getString(R.string.new_user), true)) {
             Bundle extras = getIntent().getExtras();
             final String userEmail = extras.getString(LoginActivity.USER_EMAIL_KEY);
             User user = new User(userEmail, fragment.getLocationList());
-            Utils.addUser(user);
+            FirebaseUserHelper.addUser(user);
             prefs.edit().putBoolean(getString(R.string.new_user), false).apply();
             Intent intent = new Intent(LocationSettingActivity.this, SynchronizationActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-        }else{
-            //when accessing Location Settings from the MainActivity
-            Intent intent = new Intent(LocationSettingActivity.this, SettingsActivity.class);
-            intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }

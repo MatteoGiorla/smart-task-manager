@@ -2,7 +2,6 @@ package ch.epfl.sweng.project.location_setting;
 
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,17 +25,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.SettingsActivity;
+import ch.epfl.sweng.project.TaskFragment;
 import ch.epfl.sweng.project.User;
-import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.data.FirebaseUserHelper;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -56,6 +54,9 @@ public class LocationFragment extends Fragment {
     private SharedPreferences prefs;
     private boolean firstConnection;
 
+    private Spinner locationSpinnerForReplacement;
+    private String newLocationName;
+
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -69,6 +70,10 @@ public class LocationFragment extends Fragment {
         }
         locationList.add(location);
         mLocationAdapter.notifyDataSetChanged();
+        if(!firstConnection){
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+        }
     }
 
     public void addDefaultLocation(Location location) {
@@ -213,17 +218,14 @@ public class LocationFragment extends Fragment {
      * @return Return false to allow normal context menu processing to proceed,
      * true to consume it here
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
         final AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
                 if (!firstConnection) {
-                    //TODO : test if other locations use it
-                    boolean locationUsedByTasks = true;
-
-
-                    if (locationUsedByTasks) {
+                    if (TaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         // Add the buttons
                         builder.setPositiveButton(R.string.replace_location, new MyOnClickListener(itemInfo));
@@ -234,18 +236,34 @@ public class LocationFragment extends Fragment {
                         builder.setMessage(R.string.location_delete_dialog_message).setTitle(R.string.location_delete_dialog_title);
                         //Create spinner
                         ArrayList<String> listOfLocationForSpinner = (ArrayList) currentUser.getListNamesLocations();
-                        listOfLocationForSpinner.remove(itemInfo.position);
+                        if(listOfLocationForSpinner.contains(locationList.get(itemInfo.position).getName())) {
+                            listOfLocationForSpinner.remove(itemInfo.position + 3);
+                        }
+                        String[] spinnerList = listOfLocationForSpinner.toArray(new String[listOfLocationForSpinner.size()]);
+                        for (int i = 0; i < spinnerList.length; i++) {
+                            if (spinnerList[i].equals(getString(R.string.select_one))) {
+                                spinnerList[i] = getString(R.string.unfilled_param);
+                            }
+                        }
                         final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
-                                android.R.layout.simple_spinner_dropdown_item, listOfLocationForSpinner.toArray(new String[listOfLocationForSpinner.size()]));
-                        final Spinner locationSpinnerForReplacement = new Spinner(getApplicationContext());
+                                android.R.layout.simple_spinner_dropdown_item, spinnerList);
+                        locationSpinnerForReplacement = new Spinner(getApplicationContext());
                         locationSpinnerForReplacement.setAdapter(adp);
+
+                        //TODO : (not working) add margin to spinner
+                        LinearLayout.LayoutParams spinnerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        spinnerLayoutParams.setMargins(100, 0, 100, 0);
+                        locationSpinnerForReplacement.setLayoutParams(spinnerLayoutParams);
+                        locationSpinnerForReplacement.setGravity(Gravity.CENTER);
+
                         builder.setView(locationSpinnerForReplacement);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     } else {
                         removeLocation(itemInfo);
                         currentUser = new User(currentUser.getEmail(), getLocationList());
-                        Utils.updateUser(currentUser);
+                        FirebaseUserHelper.updateUser(currentUser);
+                        MainActivity.setUser(currentUser);
                     }
                 } else {
                     removeLocation(itemInfo);
@@ -287,16 +305,20 @@ public class LocationFragment extends Fragment {
         if (indexEditedLocation == -1 || editedLocation == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
+            if (!firstConnection) {
+                if (TaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
+                    //Replace location edited in all tasks using it
+                    TaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
+                }
+            }
             locationList.set(indexEditedLocation, editedLocation);
             mLocationAdapter.notifyDataSetChanged();
             String toast = editedLocation.getName() + getString(R.string.info_updated);
             Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-
-            //TODO : Replace location edited in all tasks using it
-
             if (!firstConnection) {
                 currentUser = new User(currentUser.getEmail(), getLocationList());
-                Utils.updateUser(currentUser);
+                FirebaseUserHelper.updateUser(currentUser);
+                MainActivity.setUser(currentUser);
             }
         }
     }
@@ -367,13 +389,20 @@ public class LocationFragment extends Fragment {
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            // TODO : Replace locations
+            newLocationName = locationSpinnerForReplacement.getSelectedItem().toString();
+            if (getString(R.string.unfilled_param).equals(newLocationName)) {
+                newLocationName = getString(R.string.select_one);
+            }
 
+            //Replace locations
+            //Create a location from which coordinates don't matter because only the title is stored in the tasks
+            TaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
 
             removeLocation(itemInfo);
 
             currentUser = new User(currentUser.getEmail(), getLocationList());
-            Utils.updateUser(currentUser);
+            FirebaseUserHelper.updateUser(currentUser);
+            MainActivity.setUser(currentUser);
         }
     }
 }
