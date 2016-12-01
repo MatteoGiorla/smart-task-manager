@@ -70,6 +70,10 @@ public class LocationFragment extends Fragment {
         }
         locationList.add(location);
         mLocationAdapter.notifyDataSetChanged();
+        if(!firstConnection){
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+        }
     }
 
     public void addDefaultLocation(Location location) {
