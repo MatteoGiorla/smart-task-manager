@@ -160,7 +160,8 @@
                 android:columnOrderPreserved="false"
 
                 android:rowCount="5"
-                android:columnCount="5">
+                android:columnCount="5"
+                android:id="@+id/unfilled_preview_grid">
 
                 <TextView
                     android:id="@+id/unfilled_preview_1"
