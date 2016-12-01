@@ -151,27 +151,47 @@
                 android:gravity="center"
                 android:textColor="@color/white" />
 
-            <TextView
-                android:text="@string/start_by_filling_up_your_tasks_main_activity"
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="15dp"
-                android:paddingStart="15dp"
-                android:paddingRight="1dp"
-                android:paddingEnd="1dp"
-                android:gravity="center_vertical"
-                android:id="@+id/tasks_to_fill_up"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_weight="0.5"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/right_arrow"
-                android:id="@+id/imageView4"
-                android:layout_weight="0.1"
-                android:contentDescription="@string/right_arrow_content_description"/>
+                android:useDefaultMargins="true"
+                android:alignmentMode="alignBounds"
+                android:columnOrderPreserved="false"
+
+                android:rowCount="5"
+                android:columnCount="5">
+
+                <TextView
+                    android:id="@+id/unfilled_preview_1"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="2" />
+
+                <TextView
+                    android:id="@+id/unfilled_preview_2"
+                    android:layout_row="0"
+                    android:layout_column="3"
+                    android:layout_height="wrap_content"
+                    android:layout_width="150dp" />
+
+                <TextView
+                    android:id="@+id/unfilled_preview_3"
+                    android:layout_row="1"
+                    android:layout_column="3"
+                    android:layout_height="wrap_content"
+                    android:layout_width="150dp" />
+
+                <TextView
+                    android:id="@+id/unfilled_preview_4"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_width="150dp" />
+
+
+            </GridLayout>
 
         </LinearLayout>
 
