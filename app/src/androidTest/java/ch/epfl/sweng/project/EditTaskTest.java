@@ -150,4 +150,31 @@ public final class EditTaskTest extends SuperTest {
         //empty the database for the next test
         emptyDatabase(1);
     }
+
+    @Test
+    public void canDeleteATaskInInformationActivity() {
+        String taskToDeleteTitle = "Task1";
+        String taskToCheckTitle = "Task2";
+        String taskToDeleteDescr = "Description1";
+        String taskToCheckDescr = "Description2";
+
+        //create two tasks
+        createATask(taskToDeleteTitle,taskToDeleteDescr);
+        createATask(taskToCheckTitle, taskToCheckDescr);
+
+        //open information settings
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0)
+                .perform(click());
+
+        onView(withId(R.id.trash_menu)).perform(click());
+
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_tasks))
+                .atPosition(0).check(matches(hasDescendant(withText(taskToCheckTitle))));
+
+        //empty the database for the next test
+        emptyDatabase(1);
+    }
 }

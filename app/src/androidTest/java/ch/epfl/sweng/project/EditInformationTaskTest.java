@@ -82,4 +82,5 @@ public class EditInformationTaskTest extends SuperTest {
 
         emptyDatabase(1);
     }
+
 }
