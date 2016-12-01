@@ -52,7 +52,7 @@ public class IntroActivity extends AppIntro {
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
     }
-    
+
     private void goToNextActivity() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
 
