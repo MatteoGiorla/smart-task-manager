@@ -3,7 +3,7 @@
     android:pivotX="50%" android:pivotY="50%" android:fromDegrees="0"
     android:toDegrees="360">
     <shape android:shape="ring" android:innerRadiusRatio="3"
-        android:thicknessRatio="8" android:useLevel="false">
+        android:thicknessRatio="14" android:useLevel="false">
 
         <size android:width="76dip" android:height="76dip" />
         <gradient android:type="sweep" android:useLevel="false"
@@ -13,37 +13,3 @@
             />
     </shape>
 </rotate>
-
-
-
-
-    <!-- <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-        <item android:id="@android:id/background">
-            <shape>
-                <gradient
-                    android:startColor="#FFFF"
-                    android:centerColor="#0b131e"
-                    android:centerY="1.0"
-                    android:endColor="#0d1522"
-                    android:angle="270"
-                    />
-            </shape>
-        </item>
-
-
-        <item android:id="@android:id/progress">
-            <clip>
-                <shape>
-                    <gradient
-                        android:startColor="#FFFF"
-                        android:centerColor="#FFFF"
-                        android:centerY="1.0"
-                        android:endColor="#06101d"
-                        android:angle="270"
-                        />
-                </shape>
-            </clip>
-        </item>
-    </layer-list> -->

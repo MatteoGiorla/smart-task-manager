@@ -1,48 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <LinearLayout
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity"> -->
-    <!--
-        <RelativeLayout
-            android:id="@+id/loading_circle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"> -->
+    tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity">
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        tools:context="ch.epfl.sweng.project.synchronization.SynchronizationActivity">
+    <TextView
+        android:text="Retrieving data..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/cardview_light_background"
+        android:textStyle="normal|bold" />
 
-        <TextView
-            android:text="Retrieving data..."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:textSize="24sp"
-            android:textAlignment="center"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/cardview_light_background"
-            android:textStyle="normal|bold" />
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/progress_bar_style"
-            android:indeterminate="true"
-            android:layout_alignBottom="@+id/textView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp" />
-    </RelativeLayout>
-
-    <!-- </RelativeLayout> -->
-
-<!-- </LinearLayout> -->
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/progress_bar_style"
+        android:indeterminate="true"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp" />
+</RelativeLayout>
