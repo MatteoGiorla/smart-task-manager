@@ -75,29 +75,27 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void addNewTask(Task task) {
+    public void addNewTask(Task task, int position) {
         for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
-        mTaskList.add(task);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.add(task, position);
     }
 
     @Override
-    public void deleteTask(Task task) {
+    public void deleteTask(Task task, int position) {
         for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.removeValue();
         }
-        mAdapter.remove(task);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.remove(position);
     }
 
     @Override
-    public void updateTask(Task original, Task updated) {
-        deleteTask(original);
-        addNewTask(updated);
+    public void updateTask(Task original, Task updated, int position) {
+        deleteTask(original, position);
+        addNewTask(updated, position);
     }
 
     /**

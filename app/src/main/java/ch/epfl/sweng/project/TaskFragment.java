@@ -2,24 +2,29 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.ContextMenu;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,8 +47,8 @@ public class TaskFragment extends Fragment {
     public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_EDITED";
     public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
     public static final String INDEX_TASK_TO_BE_DISPLAYED = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED";
-    private final int editTaskRequestCode = 2;
-    private final int displayTaskRequestCode = 3;
+    public static final int editTaskRequestCode = 2;
+    public static final int displayTaskRequestCode = 3;
 
     //TODO : way to do it without static ?
     private static TaskListAdapter mTaskAdapter;
@@ -51,6 +56,8 @@ public class TaskFragment extends Fragment {
     private static TaskHelper mDatabase;
 
     private User currentUser;
+    private RecyclerView recyclerView;
+    private Paint p = new Paint();
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -58,7 +65,6 @@ public class TaskFragment extends Fragment {
      * @param savedInstanceState If the fragment is being re-created from a previous saved state,
      *                           this is the state
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,15 +80,7 @@ public class TaskFragment extends Fragment {
             throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
         }
         taskList = new ArrayList<>();
-        mTaskAdapter = new TaskListAdapter(
-                getActivity(),
-                R.layout.list_item_task,
-                taskList
-        );
-
-        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
-        mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);
+        mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
     }
 
     /**
@@ -126,70 +124,81 @@ public class TaskFragment extends Fragment {
      *                           from a previous saved state as given here
      * @return the view of the list to be displayed
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_tasks);
-        listView.setAdapter(mTaskAdapter);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.list_view_tasks);
 
-        registerForContextMenu(listView);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-                startActivityForResult(intent, displayTaskRequestCode);
-            }
-        });
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+
+        recyclerView.setAdapter(mTaskAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        initSwipe();
+
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
+        mDatabase = provider.getTaskProvider();
+        mDatabase.retrieveAllData(currentUser);
 
         return rootView;
     }
 
-    /**
-     * Override the onCreateContextMenu method.
-     * This method creates a floating context menu.
-     *
-     * @param menu     The context menu that is being built.
-     * @param v        The view for which the context menu is being built.
-     * @param menuInfo Extra information about the item
-     *                 for which the context menu should be shown
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.floating_context_menu, menu);
-    }
+    private void initSwipe(){
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
 
-    /**
-     * Override the onContextItemSelected.
-     * This method decides what to do depending of the context menu's item
-     * selected by the user.
-     *
-     * @param item The context menu item that was selected
-     * @return Return false to allow normal context menu processing to proceed,
-     * true to consume it here
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.floating_task_delete:
-                removeTask(itemInfo, false);
-                return true;
-            case R.id.floating_task_edit:
-                startEditTaskActivity(itemInfo);
-                return true;
-            case R.id.floating_task_done:
-                removeTask(itemInfo, true);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
+            @RequiresApi(Build.VERSION_CODES.M)
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+
+                if (direction == ItemTouchHelper.LEFT){
+                    createSnackBar(position, false);
+                } else {
+                    createSnackBar(position, true);
+                }
+            }
+
+            @RequiresApi(Build.VERSION_CODES.M)
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    if(dX > 0){
+                        p.setColor(getResources().getColor(R.color.green_swipe,null));
+                        RectF background = new RectF((float) itemView.getLeft(), (float) itemView.getTop(), dX,(float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_done_white_36dp);
+                        RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                    } else {
+                        p.setColor(getResources().getColor(R.color.colorPrimary,null));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.trash_36dp);
+                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                        c.drawBitmap(icon,null,icon_dest,p);
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -205,7 +214,6 @@ public class TaskFragment extends Fragment {
      *                                  invalid
      * @throws SQLiteException          if more that one row was changed when editing a task.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
@@ -242,7 +250,7 @@ public class TaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
+            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
@@ -250,7 +258,9 @@ public class TaskFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+                new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            }
         }
     }
 
@@ -264,40 +274,47 @@ public class TaskFragment extends Fragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        mDatabase.addNewTask(task);
+        mDatabase.addNewTask(task, taskList.size());
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        }
     }
 
-    /**
-     * Start the EditTaskActivity for result when the user press the edit button.
-     * The task index and the taskList are passed as extras to the intent.
-     *
-     * @param itemInfo Extra information about the item
-     *                 for which the context menu should be shown
-     */
-    private void startEditTaskActivity(AdapterView.AdapterContextMenuInfo itemInfo) {
-        int position = itemInfo.position;
-        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+    @RequiresApi(Build.VERSION_CODES.M)
+    private void createSnackBar(final int position, final Boolean isDone) {
+        FloatingActionButton add_button = (FloatingActionButton) getActivity().findViewById(R.id.add_task_button);
 
-        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
+        final Task mTask = taskList.get(position);
+        String title;
+        if(isDone) {
+            title = mTask.getName() + getString(R.string.has_been_done);
+        }else{
+            title = mTask.getName() + getString(R.string.has_been_deleted);
+        }
 
-        startActivityForResult(intent, editTaskRequestCode);
-    }
-
-    /**
-     * Remove a task from the database and the taskList.
-     *
-     * @param itemInfo Extra information about the item
-     *                 for which the context menu should be shown
-     * @param isDone   true if the task is done, otherwise false.
-     * @throws SQLiteException if an error occurred
-     */
-    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
-        int position = itemInfo.position;
-        removeTaskAction(position, isDone);
+        Snackbar snackbar = Snackbar
+                .make(add_button, title, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo_action, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mTaskAdapter.add(mTask, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+                })
+                .setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if (event != DISMISS_EVENT_ACTION) {
+                            taskList.add(position, mTask);
+                            removeTaskAction(position, isDone);
+                        }
+                    }
+                });
+        snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
+        snackbar.show();
+        mTaskAdapter.remove(position);
     }
 
     /**
@@ -310,22 +327,12 @@ public class TaskFragment extends Fragment {
     private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
 
-        String taskName = taskToBeDeleted.getName();
-
-        mDatabase.deleteTask(taskToBeDeleted);
-
-        Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE;
-        if (isDone) {
-            TOAST_MESSAGE = taskName + getString(R.string.info_done);
-        } else {
-            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
-        }
-        int duration = Toast.LENGTH_SHORT;
-        Toast.makeText(context, TOAST_MESSAGE, duration).show();
+        mDatabase.deleteTask(taskToBeDeleted, position);
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        }
     }
 
     /**
