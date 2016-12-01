@@ -4,6 +4,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,6 +30,8 @@ public class NewTaskActivity extends TaskActivity {
         date = cal.getTime();
 
         energy = Task.Energy.NORMAL;
+
+        getEditableView();
     }
 
     /**
@@ -71,5 +74,14 @@ public class NewTaskActivity extends TaskActivity {
         }else{
             intent.putExtra(IS_UNFILLED, false);
         }
+    }
+
+    private void getEditableView() {
+        ((ViewSwitcher) findViewById(R.id.switcher_name)).showNext();
+        ((ViewSwitcher) findViewById(R.id.switcher_description)).showNext();
+        ((ViewSwitcher) findViewById(R.id.switcher_energy)).showNext();
+        ((ViewSwitcher) findViewById(R.id.switcher_location)).showNext();
+        ((ViewSwitcher) findViewById(R.id.switcher_duration)).showNext();
+        ((ViewSwitcher) findViewById(R.id.switcher_date)).showNext();
     }
 }

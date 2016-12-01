@@ -137,10 +137,10 @@ public class TaskFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, position);
+                Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+                intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
                 intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-                startActivityForResult(intent, displayTaskRequestCode);
+                startActivityForResult(intent, editTaskRequestCode);
             }
         });
 

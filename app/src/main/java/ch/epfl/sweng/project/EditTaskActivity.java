@@ -4,10 +4,14 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import java.util.Arrays;
 
@@ -54,8 +58,13 @@ public class EditTaskActivity extends TaskActivity {
             text_to_set_on_date_button = dateFormat.format(date.getTime());
         }
 
+        setSwitchers();
+
         //Populate the layout activity_task
+        populateTextViewInformation();
+
         populateLayout();
+
     }
 
     /**
@@ -75,6 +84,9 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
+    /**
+     *
+     */
     @Override
     void resultActivity() {
         mTaskToBeEdited.setName(title);
@@ -88,6 +100,52 @@ public class EditTaskActivity extends TaskActivity {
     }
 
     /**
+     *
+     */
+    private void setSwitchers() {
+        //Set switch on name
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.nameLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_name),
+                findViewById(R.id.title_task));
+
+        //Set switch on date
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.dateLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_date),
+                findViewById(R.id.pick_date));
+
+        //Set switch on duration
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.durationLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_duration),
+                findViewById(R.id.durationSpinner));
+
+        //Set switch on location
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.locationLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_location),
+                findViewById(R.id.locationSpinner));
+
+        //Set switch on energy
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.energyLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_energy),
+                findViewById(R.id.radio_energy));
+
+        //Set switch on description
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.descriptionLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_description),
+                findViewById(R.id.description_task));
+    }
+
+    private void setSwitcherOnClick(LinearLayout container, final ViewSwitcher switcher, final View secondView) {
+        container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(switcher.getCurrentView() != secondView) {
+                    switcher.showNext();
+                }
+            }
+        });
+    }
+
+    /**
      * Check that the 'task to be edited' 's index is valid
      *
      * @throws IllegalArgumentException If there is an error with the intent passed
@@ -97,6 +155,27 @@ public class EditTaskActivity extends TaskActivity {
         if (mIndexTaskToBeEdited == -1) {
             throw new IllegalArgumentException("Error on the index passed with the intent !");
         }
+    }
+
+    private void populateTextViewInformation() {
+        TextView nameTextView = (TextView) findViewById(R.id.text_name);
+        nameTextView.setText(mTaskToBeEdited.getName());
+
+        TextView dateTextView = (TextView) findViewById(R.id.text_date);
+        dateTextView.setText(mTaskToBeEdited.dueDateToString());
+
+        Long duration = mTaskToBeEdited.getDurationInMinutes();
+        TextView durationTextView = (TextView) findViewById(R.id.text_duration);
+        durationTextView.setText(MainActivity.DURATION_MAP.get(duration.intValue()));
+
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        locationTextView.setText(mTaskToBeEdited.getLocationName());
+
+        TextView energyTextView = (TextView) findViewById(R.id.text_energy);
+        energyTextView.setText(MainActivity.ENERGY_MAP.get(mTaskToBeEdited.getEnergy().ordinal()));
+
+        TextView decriptionTextView = (TextView) findViewById(R.id.text_description);
+        decriptionTextView.setText(mTaskToBeEdited.getDescription());
     }
 
     /**

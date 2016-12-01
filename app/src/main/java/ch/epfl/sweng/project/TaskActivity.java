@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,15 +44,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
-    long startDuration;
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
-    private TextInputLayout textInputLayoutTitle;
     private ImageButton doneEditButton;
     static Date date;
     static final DateFormat dateFormat = DateFormat.getDateInstance();
     public static final String IS_UNFILLED = "ch.epfl.sweng.TaskActivity.UNFILLED_TASK";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +61,6 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Initialize the toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.task_toolbar);
         initializeToolbar(mToolbar);
-
-        textInputLayoutTitle = (TextInputLayout) findViewById(R.id.title_task_layout);
 
         //Check the validity of the intent
         intent = getIntent();
@@ -98,6 +94,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
         mLocation.setAdapter(spinnerLocationAdapter);
+
     }
 
     /**
@@ -152,7 +149,6 @@ public abstract class TaskActivity extends AppCompatActivity {
          */
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            textInputLayoutTitle.setErrorEnabled(false);
         }
 
         @Override
@@ -166,15 +162,13 @@ public abstract class TaskActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
             if (titleIsNotUnique(s.toString())) {
                 doneEditButton.setVisibility(View.INVISIBLE);
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_duplicated));
+                titleEditText.setError(getResources().getText(R.string.error_title_duplicated));
             } else if (s.toString().isEmpty()) {
                 doneEditButton.setVisibility(View.INVISIBLE);
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
+                titleEditText.setError(getResources().getText(R.string.error_title_empty));
+
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
-                textInputLayoutTitle.setErrorEnabled(false);
             }
         }
 
@@ -186,8 +180,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         public void onClick(View v) {
             title = titleEditText.getText().toString();
             if (title.isEmpty()) {
-                textInputLayoutTitle.setErrorEnabled(true);
-                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
+                titleEditText.setError(getResources().getText(R.string.error_title_empty));
             } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
