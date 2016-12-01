@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -29,7 +30,6 @@ import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -58,10 +58,8 @@ public final class SortTaskTest extends SuperTest{
     public void testDynamicSortWithMoreThan2Hours() {
 
         //Open task information
-        onData(anything())
-            .inAdapterView(withId(R.id.list_view_tasks))
-            .atPosition(0)
-            .perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         pressBack();
 
@@ -70,29 +68,23 @@ public final class SortTaskTest extends SuperTest{
         onData(allOf(is(instanceOf(String.class)))).atPosition(4).perform(click());
 
         // check if sorted correctly
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .check(matches(hasDescendant(withText(taskNames.get(2)))));
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(1)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(1))
                 .check(matches(hasDescendant(withText(taskNames.get(1)))));
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(2)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(2))
                 .check(matches(hasDescendant(withText(taskNames.get(0)))));
-
     }
 
     @Test
     public void testDynamicSortWithMoreThan30Min() {
 
         //Open task information
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
-                .perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         pressBack();
 
@@ -100,17 +92,14 @@ public final class SortTaskTest extends SuperTest{
         onView(withId(R.id.time_user)).perform(click());
         onData(allOf(is(instanceOf(String.class)))).atPosition(2).perform(click());
 
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .check(matches(hasDescendant(withText(taskNames.get(1)))));
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(1)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(1))
                 .check(matches(hasDescendant(withText(taskNames.get(0)))));
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(2)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(2))
                 .check(matches(hasDescendant(withText(taskNames.get(2)))));
 
     }

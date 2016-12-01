@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -21,7 +22,8 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -75,9 +77,8 @@ public final class NewTaskTest extends SuperTest {
         for (int i = 0; i < createdTask; i++) {
             createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(i)
+            onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                    .atPosition(i))
                     .check(matches(hasDescendant(withText(mTitleToBeTyped + i))));
         }
 
@@ -154,16 +155,14 @@ public final class NewTaskTest extends SuperTest {
 
         //We delete the tasks
         for (int i = 0; i < createdTask; i++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(0).perform(longClick());
-            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
+            onView(withId(R.id.list_view_tasks))
+                    .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
 
             //Test if the tasks are correctly deleted
             if (i != createdTask-1) {
-                onData(anything())
-                        .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
+                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                        .atPosition(0))
+                        .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
         }
     }
@@ -177,16 +176,14 @@ public final class NewTaskTest extends SuperTest {
 
         //We mark done the task
         for (int i = 0; i < createdTask; i++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(0).perform(longClick());
-            onView(withText(R.string.flt_ctx_menu_done)).perform(click());
+            onView(withId(R.id.list_view_tasks))
+                    .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
 
             //Test if the tasks are correctly removed
             if (i != createdTask-1) {
-                onData(anything())
-                        .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(mTitleToBeTyped + (i + 1)))));
+                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                        .atPosition(0))
+                        .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
         }
     }

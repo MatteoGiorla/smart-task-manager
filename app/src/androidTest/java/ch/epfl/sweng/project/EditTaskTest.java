@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -15,7 +16,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -59,14 +59,15 @@ public final class EditTaskTest extends SuperTest {
         }
 
         //Try to edit the first task to put the same title as the first task
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.edit_task_button)).perform(click());
 
         //Update the title with an existing one
         onView(withId(R.id.title_task)).perform(clearText());
         onView(withId(R.id.title_task)).perform(typeText(mOldTitle + 1));
+        pressBack();
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -96,10 +97,12 @@ public final class EditTaskTest extends SuperTest {
         createATask(mOldTitle, mOldDescription);
 
         //Try to edit the first task to put the same title as the first task
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.edit_task_button)).perform(click());
+
+
         //Update the title with empty string
         onView(withId(R.id.title_task)).perform(clearText());
 
@@ -115,6 +118,7 @@ public final class EditTaskTest extends SuperTest {
                 .check(matches(ErrorTextInputLayoutMatcher
                         .withErrorText(containsString(errorMessage))));
         pressBack();
+        pressBack();
         emptyDatabase(1);
     }
 
@@ -127,10 +131,11 @@ public final class EditTaskTest extends SuperTest {
         createATask(mOldTitle, mOldDescription);
 
         //Try to edit the first task to put the same title as the first task
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withId(R.id.edit_task_button)).perform(click());
+
         //Update the title and the description
         onView(withId(R.id.title_task)).perform(clearText());
         onView(withId(R.id.description_task)).perform(clearText());
@@ -142,11 +147,10 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         //Check that the title has been updated
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
-                .check(matches(hasDescendant(withText(mEditedTitle))));
+        onView(withId(R.id.title_task_information_activity))
+                .check(matches(withText(mEditedTitle)));
 
+        pressBack();
         //empty the database for the next test
         emptyDatabase(1);
     }

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -37,10 +38,8 @@ public class EditInformationTaskTest extends SuperTest {
 
     @Before
     public void openInformationTaskActivity() {
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
-                .perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
 
     @Test

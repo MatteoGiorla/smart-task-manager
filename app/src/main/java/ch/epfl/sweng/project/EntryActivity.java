@@ -13,8 +13,6 @@ import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 
-import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
-
 /**
  * Activity launched at opening an app. This activity decides
  * whether the log in activity (if the user isn't logged in)
@@ -52,7 +50,7 @@ public class EntryActivity extends Activity {
             launchActivity = SynchronizationActivity.class;
         }
         launchIntent.setClass(getApplicationContext(), launchActivity);
-        launchIntent.addFlags(FLAG_ACTIVITY_NO_HISTORY);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(launchIntent);
 
         finish();

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.project;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -23,6 +24,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -171,9 +174,8 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .check(matches(hasDescendant(withText(titre))));
     }
 
@@ -199,15 +201,12 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-        onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
 
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
 
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 
     }
@@ -218,7 +217,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).perform(click());
 
         //add title
-        String titleToCheck = "unfTask";
+        String titleToCheck = "unfTaskTEST";
         onView(withId(R.id.title_task)).perform(typeText(titleToCheck));
         pressBack();
 
@@ -227,10 +226,8 @@ public class UnfilledTasksTest {
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
         //editing the unfilled task
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(longClick());
-        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
 
         //add a due date (today due date)
         onView(withId(R.id.pick_date)).perform(click());
@@ -262,9 +259,8 @@ public class UnfilledTasksTest {
         }
 
         //checking the title of the task appears.
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 
     }
@@ -284,10 +280,8 @@ public class UnfilledTasksTest {
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
         //opening taskInformation
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).perform(click());
-
+        onView(withId(R.id.list_view_tasks))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         //checking durtion is "not decided yet"
         onData(anything())
@@ -295,34 +289,6 @@ public class UnfilledTasksTest {
                 .atPosition(1)
                 .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration)))));
     }
-
-    @Test
-    public void testCanDeleteTasks() {
-
-        String[] unfTasksTitle = {"unfTask1", "unfTask2", "unfTask3"};
-
-        for(String title: unfTasksTitle){
-            addIncompleteTask(title);
-        }
-
-        onView(withId(R.id.unfilled_task_button)).perform(click());
-
-        //We delete the tasks
-        for (int i = 0; i < unfTasksTitle.length; i++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_tasks))
-                    .atPosition(0).perform(longClick());
-            onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
-
-            //Test if the tasks are correctly deleted
-            if (i != unfTasksTitle.length-1) {
-                onData(anything())
-                        .inAdapterView(withId(R.id.list_view_tasks))
-                        .atPosition(0).check(matches(hasDescendant(withText(unfTasksTitle[i+1]))));
-            }
-        }
-    }
-
 
     @Test
     public void unfilledTaskAppearsAsPreviewOnTheMain(){
@@ -361,5 +327,4 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
-
 }
