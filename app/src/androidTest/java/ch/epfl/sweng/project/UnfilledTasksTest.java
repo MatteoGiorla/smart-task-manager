@@ -216,7 +216,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).perform(click());
 
         //add title
-        String titleToCheck = "unfTask";
+        String titleToCheck = "unfTaskTEST";
         onView(withId(R.id.title_task)).perform(typeText(titleToCheck));
         pressBack();
 

@@ -226,7 +226,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     // trigger the dynamic sort
                     triggerDynamicSort();
                 }
-            }else if(requestCode == unfilledTaskRequestCode){
+            }
+        }else if(requestCode == unfilledTaskRequestCode){
                 if(resultCode == RESULT_OK){
                     ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
                     for(Task t : newFinishedTasks){
@@ -238,9 +239,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
-            } else {
+        } else {
                 mainFragment.onActivityResult(requestCode, resultCode, data);
-            }
         }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
