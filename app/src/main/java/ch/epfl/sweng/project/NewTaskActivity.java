@@ -74,6 +74,8 @@ public class NewTaskActivity extends TaskActivity {
         }else{
             intent.putExtra(IS_UNFILLED, false);
         }
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void getEditableView() {

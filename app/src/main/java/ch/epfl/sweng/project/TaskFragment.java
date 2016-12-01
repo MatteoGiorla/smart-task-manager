@@ -30,9 +30,11 @@ import ch.epfl.sweng.project.information.TaskInformationActivity;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_MODIFIED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_DELETED;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_MODIFIED;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_STATUS_KEY;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_TO_BE_DELETED_INDEX;
+
 
 /**
  * Class that represents the inflated fragment located in the activity_main
@@ -207,7 +209,24 @@ public class TaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
         if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
-            onEditTaskActivityResult(data);
+            int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
+            if (taskStatus == -1)
+                throw new IllegalArgumentException("Error with the intent form EditTaskActivity");
+
+            switch (taskStatus) {
+                case TASK_IS_MODIFIED:
+                    onEditTaskActivityResult(data);
+                    break;
+                case TASK_IS_DELETED:
+                    int taskIndex = data.getIntExtra(TASK_TO_BE_DELETED_INDEX, -1);
+                    if (taskIndex == -1) {
+                        throw new IllegalArgumentException("Error with the task to be deleted index");
+                    }
+                    removeTaskAction(taskIndex, false);
+                    break;
+            }
+
+           //TODO : to be deleted
         } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
             if (taskStatus == -1)
@@ -225,7 +244,6 @@ public class TaskFragment extends Fragment {
                     removeTaskAction(taskIndex, false);
             }
         }
-        //sortTaskStatically();
     }
 
     /**

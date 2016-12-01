@@ -149,7 +149,7 @@ public class TaskInformationActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.trash_menu, menu);
+        menuInflater.inflate(R.menu.edit_task_menu, menu);
         return true;
     }
 

@@ -21,9 +21,12 @@ import java.util.List;
 import ch.epfl.sweng.project.information.TaskInformationActivity;
 
 import static android.app.Activity.RESULT_OK;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_DELETED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_IS_MODIFIED;
-import static ch.epfl.sweng.project.information.TaskInformationActivity.TASK_STATUS_KEY;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_TO_BE_DELETED_INDEX;
+import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
+import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_DELETED;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_MODIFIED;
+import static ch.epfl.sweng.project.EditTaskActivity.TASK_STATUS_KEY;
 
 /**
  * Class that represents the inflated fragment located in the unfilled_task_activity
@@ -83,10 +86,10 @@ public class UnfilledTaskFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TaskInformationActivity.class);
-                intent.putExtra(TaskFragment.INDEX_TASK_TO_BE_DISPLAYED, position);
-                intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, unfilledTaskList);
-                startActivityForResult(intent, displayTaskRequestCode);
+                Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+                intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
+                startActivityForResult(intent, editTaskRequestCode);
             }
         });
 
@@ -153,8 +156,27 @@ public class UnfilledTaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
         if (requestCode == editTaskRequestCode && resultCode == RESULT_OK) {
-            onEditTaskActivityResult(data);
-        } else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
+            int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
+            if (taskStatus == -1)
+                throw new IllegalArgumentException("Error with the intent form EditTaskActivity");
+
+            switch (taskStatus) {
+                case TASK_IS_MODIFIED:
+                    onEditTaskActivityResult(data);
+                    break;
+                case TASK_IS_DELETED:
+                    int taskIndex = data.getIntExtra(TASK_TO_BE_DELETED_INDEX, -1);
+                    if (taskIndex == -1) {
+                        throw new IllegalArgumentException("Error with the task to be deleted index");
+                    }
+                    unfilledTaskList.remove(taskIndex);
+                    break;
+            }
+        }
+
+
+
+        else if (requestCode == displayTaskRequestCode && resultCode == RESULT_OK) {
             int taskStatus = data.getIntExtra(TASK_STATUS_KEY, -1);
             if (taskStatus == -1)
                 throw new IllegalArgumentException("Error with the intent form TaskInformationActivity");
@@ -208,8 +230,8 @@ public class UnfilledTaskFragment extends Fragment {
         int position = itemInfo.position;
         Intent intent = new Intent(getActivity(), EditTaskActivity.class);
 
-        intent.putExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, unfilledTaskList);
+        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
 
         startActivityForResult(intent, editTaskRequestCode);
     }

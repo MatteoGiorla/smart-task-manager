@@ -40,7 +40,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     ArrayList<Task> taskList;
     String title;
     String description;
-    long duration;
+    Long duration;
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
@@ -107,6 +107,10 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     abstract void resultActivity();
 
+    ImageButton getDoneEditButton() {
+        return doneEditButton;
+    }
+
     /**
      * Check that the intent is valid
      */
@@ -166,7 +170,6 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (s.toString().isEmpty()) {
                 doneEditButton.setVisibility(View.INVISIBLE);
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));
-
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
             }
@@ -185,7 +188,11 @@ public abstract class TaskActivity extends AppCompatActivity {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
-                duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString());
+                if(mDuration.getSelectedItem() == null) {
+                    duration = 0L;
+                } else {
+                    duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString()).longValue();
+                }
 
                 // to set correctly the energy from the radio button
                 RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
@@ -206,8 +213,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 }
 
                 resultActivity();
-                setResult(RESULT_OK, intent);
-                finish();
             }
         }
     }
@@ -298,7 +303,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else {
                 c.setTime(date);
                 year = c.get(Calendar.YEAR);
-                month = c.get(Calendar.MONTH) + 1;
+                month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
             }
 
