@@ -174,9 +174,9 @@ public final class EditTaskTest extends SuperTest {
 
         onView(withId(R.id.trash_menu)).perform(click());
 
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0).check(matches(hasDescendant(withText(taskToCheckTitle))));
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
+                .check(matches(hasDescendant(withText(taskToCheckTitle))));
 
         //empty the database for the next test
         emptyDatabase(1);
