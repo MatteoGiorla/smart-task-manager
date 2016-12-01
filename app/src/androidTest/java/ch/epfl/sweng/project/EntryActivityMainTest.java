@@ -45,7 +45,7 @@ public class EntryActivityMainTest {
 
     @Test
     public void inAlreadyLoggedCaseLaunchMainActivity() {
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 }

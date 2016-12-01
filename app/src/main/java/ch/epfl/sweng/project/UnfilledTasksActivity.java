@@ -13,6 +13,7 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
     public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
     private UnfilledTaskFragment unfilledFragment;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -21,7 +22,7 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_unfilled_tasks);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
         initializeToolbar(mToolbar);
         mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
 
@@ -40,6 +41,10 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        unfilledFragment.onActivityResult(requestCode,resultCode,data);
+    }
 
     /**
      * OnClickListener on the return arrow.
@@ -53,7 +58,6 @@ public class UnfilledTasksActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-
             Intent intent = getIntent();
             intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
             intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());

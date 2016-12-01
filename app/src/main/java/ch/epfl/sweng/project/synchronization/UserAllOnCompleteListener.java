@@ -42,7 +42,6 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         if (task.isSuccessful()) {
             final Map<Query, DataSnapshot> UserResult = task.getResult();
             retrieveUserInformation(UserResult.get(userRef).getChildren());
-//            retrieveUserTask();
             launchNextActivity();
         } else {
             try {

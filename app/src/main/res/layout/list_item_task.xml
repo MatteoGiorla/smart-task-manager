@@ -2,30 +2,30 @@
 
 <!-- TODO test the design on different devices -->
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="1">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="horizontal">
 
-        <LinearLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/list_entry_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:textColor="@color/black"
-        android:textSize="@dimen/task_title_size"
-        android:paddingTop="5dp"
-        android:paddingBottom="@dimen/padding_between_tasks"
-        android:textStyle="normal"/>
+        <TextView
+            android:id="@+id/list_entry_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:textColor="@color/black"
+            android:textSize="@dimen/task_title_size"
+            android:paddingTop="5dp"
+            android:paddingBottom="@dimen/padding_between_tasks"
+            android:textStyle="normal"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -54,18 +54,7 @@
                 android:textSize="@dimen/task_subtitle_size"
                 android:gravity="center"
                 android:layout_weight="1" />
-<!--
-            <TextView
-                android:id="@+id/list_item_energy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:ellipsize="end"
-                android:paddingBottom="3dp"
-                android:textSize="@dimen/task_subtitle_size"
-                android:gravity="center"
-                android:layout_weight="1" />
--->
+
             <TextView
                 android:id="@+id/list_item_duration"
                 android:layout_width="match_parent"
@@ -80,10 +69,9 @@
                 android:textSize="@dimen/task_subtitle_size"
                 android:gravity="end"
                 android:layout_weight="1" />
-
         </LinearLayout>
 
-        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/list_colored_indicator"
@@ -91,4 +79,4 @@
         android:layout_height="match_parent"
         android:background="#33ff4f" />
 
-    </LinearLayout>
+</LinearLayout>

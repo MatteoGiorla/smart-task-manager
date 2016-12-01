@@ -2,12 +2,16 @@ package ch.epfl.sweng.project;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,10 +22,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -37,7 +48,7 @@ import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 /**
  * MainActivity
  */
-public final class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
@@ -58,6 +69,13 @@ public final class MainActivity extends AppCompatActivity {
     private static String userLocation;
     private static int userTimeAtDisposal;
 
+    private Spinner mLocation;
+    private Spinner mDuration;
+
+    private ArrayAdapter<String> locationAdapter;
+    private ArrayAdapter<String> durationAdapter;
+
+
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
     public static Map<Integer, String> START_DURATION_MAP;
@@ -66,6 +84,17 @@ public final class MainActivity extends AppCompatActivity {
     public static Map<String, Integer> REVERSE_ENERGY;
 
     private TableRow unfilledTaskButton;
+
+
+    // Geolocation variables:
+    protected GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    protected Location mCurrentLocation;
+
+    private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
+    private static final int REQUEST_LOCATION = 2;
+
+    private final String TAG = "Location API";
 
     /**
      * Override the onCreate method to create a TaskFragment
@@ -80,8 +109,11 @@ public final class MainActivity extends AppCompatActivity {
         // Initialize Facebook SDK, in order to logout correctly
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        // Initialize googleApiClient that will trigger the geolocation part
+        createGoogleApiClient();
+
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setIcon(R.mipmap.logo);
+        getSupportActionBar().setIcon(R.mipmap.new_logo);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //If we are not in test mode
@@ -129,6 +161,7 @@ public final class MainActivity extends AppCompatActivity {
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
+
         initializeAdapters();
     }
 
@@ -190,7 +223,6 @@ public final class MainActivity extends AppCompatActivity {
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -207,20 +239,166 @@ public final class MainActivity extends AppCompatActivity {
                     mainFragment.addTask(newTask);
                 }
             }
-        } else {
-            if (requestCode == unfilledTaskRequestCode) {
-                if (resultCode == RESULT_OK) {
+        }else if(requestCode == unfilledTaskRequestCode){
+                if(resultCode == RESULT_OK){
                     ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                    for (Task t : newFinishedTasks) {
+                    for(Task t : newFinishedTasks){
                         mainFragment.addTask(t);
                     }
-
+                    
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
-            }
+        } else {
+                mainFragment.onActivityResult(requestCode, resultCode, data);
         }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+    }
+
+    /**
+     * When the GoogleApiClient is connected it goes here to trigger the geolocation.
+     *
+     * @param bundle Required argument
+     */
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            //ask permission to the user.
+            // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+        } else {
+            // Get last known recent location:
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mCurrentLocation != null) {
+                onLocationChanged(mCurrentLocation);
+            }
+            // Begin polling for new location updates.
+            startLocationUpdates();
+        }
+    }
+
+    /**
+     * Called if the connection with the GoogleApiClient is suspended.
+     *
+     * @param i Required argument
+     */
+    @Override
+    public void onConnectionSuspended(int i) {
+        if (i == CAUSE_SERVICE_DISCONNECTED) {
+            Toast.makeText(this, "Disconnected. Please reconnect.", Toast.LENGTH_SHORT).show();
+        } else if (i == CAUSE_NETWORK_LOST) {
+            Toast.makeText(this, "Network lost. Please reconnect.", Toast.LENGTH_SHORT).show();
+        }
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
+    }
+
+    /**
+     * Called if the connection with the GoogleApiClient failed
+     *
+     * @param connectionResult Required argument
+     */
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
+                + connectionResult.getErrorCode());
+    }
+
+    /**
+     * Called if the location is changed. If it is, it will change the sort if the location is
+     * near one of the user's locations.
+     *
+     * @param location New location
+     */
+    @Override
+    public void onLocationChanged(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        // calculate the distance between the current location and all the user locations:
+        for (ch.epfl.sweng.project.Location userLocation: currentUser.getListLocations()) {
+            double distance = haversine(latLng, userLocation);
+
+            if (distance <= 500) { // less than 500 meters
+                // set the spinner to the location
+                mLocation = (Spinner) findViewById(R.id.location_user);
+                mLocation.setSelection(currentUser.getListLocations().indexOf(userLocation));
+            }
+        }
+    }
+
+    /**
+     * Haversine formula calculate the distance in meters between two points by their latitudes
+     * and longitudes.
+     *
+     * Source: http://www.movable-type.co.uk/scripts/latlong.html
+     *
+     * @param currentLocation current location of the user
+     * @param userLocation one of the user's locations
+     * @return
+     */
+    private double haversine(LatLng currentLocation, ch.epfl.sweng.project.Location userLocation) {
+        double dLatitude = Math.toRadians(userLocation.getLatitude()) - Math.toRadians(currentLocation.latitude);
+        double dLongitude = Math.toRadians(userLocation.getLongitude()) - Math.toRadians(currentLocation.longitude);
+
+        double a = Math.sin(dLatitude/2) * Math.sin(dLatitude/2) + Math.cos(Math.toRadians(currentLocation.latitude))
+                * Math.cos(Math.toRadians(userLocation.getLatitude())) * Math.sin(dLongitude/2)
+                * Math.sin(dLongitude/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return 6371000 * c;
+    }
+
+    /**
+     * start the location update. Fix the priority and the interval of the update.
+     */
+    protected void startLocationUpdates() {
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL);
+        // Request location updates
+        // Problem if it enters with branch
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+        initializeAdapters();
+    }
+
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+    private void createGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     /**
@@ -238,8 +416,8 @@ public final class MainActivity extends AppCompatActivity {
      * on the image.
      */
     private void initializeAdapters() {
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
-        Spinner mDuration = (Spinner) findViewById(R.id.time_user);
+        mDuration = (Spinner) findViewById(R.id.time_user);
+        mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -247,24 +425,25 @@ public final class MainActivity extends AppCompatActivity {
                 locationListForAdapter[i] = getString(R.string.elsewhere_location);
             }
         }
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+        locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
-        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(this,
+        durationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
 
         //set default value to the spinner
-        int spinnerPosition = durationAdapter.getPosition(getString(R.string.duration2hstartTime));
+        int spinnerPosition = durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal));
         mDuration.setSelection(spinnerPosition);
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
 
         setListeners(mLocation, mDuration, locationAdapter, durationAdapter);
     }
 
     private void updateAdapters() {
-        Spinner mLocation = (Spinner) findViewById(R.id.location_user);
+        mLocation = (Spinner) findViewById(R.id.location_user);
 
         String[] locationListForAdapter = getLocationTable();
         for (int i = 0; i < locationListForAdapter.length; i++) {
@@ -273,7 +452,7 @@ public final class MainActivity extends AppCompatActivity {
             }
         }
 
-        ArrayAdapter<String> locationAdapter = new ArrayAdapter<>(this,
+        locationAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
 
         mLocation.setAdapter(locationAdapter);
@@ -518,6 +697,8 @@ public final class MainActivity extends AppCompatActivity {
     {
         super.onResume();
         updateAdapters();
+        mLocation.setSelection(locationAdapter.getPosition(userLocation));
+        mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
     }
 }

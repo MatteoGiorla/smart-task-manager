@@ -25,7 +25,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Tips"
+            android:text="@string/settings_tips"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -40,7 +40,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Tutorial"
+            android:text="@string/settings_tutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -65,7 +65,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Locations"
+            android:text="@string/settings_locations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -80,7 +80,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Notifications"
+            android:text="@string/settings_notifications"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -105,7 +105,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Suggest a feature"
+            android:text="@string/settings_suggest_a_feature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -120,7 +120,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Tell a friend"
+            android:text="@string/settings_tell_a_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -135,7 +135,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="About"
+            android:text="@string/settings_about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -160,7 +160,7 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="Log Out"
+            android:text="@string/logout_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
