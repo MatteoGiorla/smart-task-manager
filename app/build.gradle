@@ -71,6 +71,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:9.6.1'
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support.test.espresso:espresso-contrib:2.2.2'
 }
 
 // Do not change the below code unless you're sure you know what you're doing

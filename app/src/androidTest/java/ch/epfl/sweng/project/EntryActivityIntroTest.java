@@ -41,7 +41,7 @@ public class EntryActivityIntroTest {
 
     @Test
     public void inFirstLaunchCaseLaunchIntroActivity(){
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.next)).check(matches(isDisplayed()));
     }
 }

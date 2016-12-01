@@ -43,7 +43,7 @@ public class EntryActivityLoginTest {
 
     @Test
     public void inFirstLoginCaseLaunchLoginActivity(){
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.google_sign_in_button)).check(matches(isDisplayed()));
     }
 }

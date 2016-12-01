@@ -58,7 +58,6 @@ public class UnfilledTasksActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-
             Intent intent = getIntent();
             intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
             intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());

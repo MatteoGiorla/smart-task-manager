@@ -12,16 +12,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -65,6 +62,15 @@ public class UnfilledTaskFragment extends Fragment {
         mTaskAdapter = new TaskListAdapter(getActivity(), unfilledTaskList);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_refresh);
+
+        swipeLayout.setEnabled(false);
+    }
+
     /**
      * Override the onCreateView method to initialize the adapter of
      * the ListView.
@@ -76,6 +82,7 @@ public class UnfilledTaskFragment extends Fragment {
      *                           from a previous saved state as given here
      * @return the view of the list to be displayed
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -85,55 +92,14 @@ public class UnfilledTaskFragment extends Fragment {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+
         recyclerView.setAdapter(mTaskAdapter);
         initSwipe();
-
-        registerForContextMenu(recyclerView);
 
         return rootView;
     }
 
-    /**
-     * Override the onCreateContextMenu method.
-     * This method creates a floating context menu.
-     *
-     * @param menu     The context menu that is being built.
-     * @param v        The view for which the context menu is being built.
-     * @param menuInfo Extra information about the item
-     *                 for which the context menu should be shown
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.floating_context_menu, menu);
-    }
-
-    /**
-     * Override the onContextItemSelected.
-     * This method decides what to do depending of the context menu's item
-     * selected by the user.
-     *
-     * @param item The context menu item that was selected
-     * @return Return false to allow normal context menu processing to proceed,
-     * true to consume it here
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.floating_task_delete:
-                int position = itemInfo.position;
-                unfilledTaskList.remove(position);
-                mTaskAdapter.notifyDataSetChanged();
-                return true;
-            case R.id.floating_task_edit:
-                startEditTaskActivity(itemInfo.position);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
 
     /**
      * Method called when an activity launch inside UnfilledTaskActivity,
@@ -274,14 +240,13 @@ public class UnfilledTaskFragment extends Fragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        unfilledTaskList.add(position, mTask);
-                        mTaskAdapter.notifyItemInserted(position);
+                        mTaskAdapter.add(mTask, position);
                         recyclerView.scrollToPosition(position);
                     }
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(mTask);
+        mTaskAdapter.remove(position);
     }
 
     /**

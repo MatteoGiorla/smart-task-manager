@@ -40,9 +40,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public void remove(Task task) {
-        tasksList.remove(task);
-        notifyDataSetChanged();
+    public void remove(int position) {
+        tasksList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void add(Task task, int position) {
+        tasksList.add(position, task);
+        notifyItemInserted(position);
     }
 
     @Override

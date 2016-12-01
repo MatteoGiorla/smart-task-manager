@@ -2,7 +2,6 @@ package ch.epfl.sweng.project;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
@@ -22,13 +21,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -145,8 +140,6 @@ public class TaskFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initSwipe();
 
-        registerForContextMenu(recyclerView);
-
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
@@ -208,48 +201,6 @@ public class TaskFragment extends Fragment {
     }
 
     /**
-     * Override the onCreateContextMenu method.
-     * This method creates a floating context menu.
-     *
-     * @param menu     The context menu that is being built.
-     * @param v        The view for which the context menu is being built.
-     * @param menuInfo Extra information about the item
-     *                 for which the context menu should be shown
-     */
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.floating_context_menu, menu);
-    }
-
-    /**
-     * Override the onContextItemSelected.
-     * This method decides what to do depending of the context menu's item
-     * selected by the user.
-     *
-     * @param item The context menu item that was selected
-     * @return Return false to allow normal context menu processing to proceed,
-     * true to consume it here
-     */
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.floating_task_delete:
-                removeTask(itemInfo, false);
-                return true;
-            case R.id.floating_task_edit:
-                startEditTaskActivity(itemInfo.position);
-                return true;
-            case R.id.floating_task_done:
-                removeTask(itemInfo, true);
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    /**
      * Method called when an activity launch inside MainActivity,
      * is finished. This method is triggered only if we use
      * startActivityForResult.
@@ -299,7 +250,7 @@ public class TaskFragment extends Fragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask);
+            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
@@ -307,7 +258,9 @@ public class TaskFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+                new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            }
         }
     }
 
@@ -321,26 +274,13 @@ public class TaskFragment extends Fragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        mDatabase.addNewTask(task);
+        mDatabase.addNewTask(task, taskList.size());
         sortTaskStatically();
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
-    }
-
-    /**
-     * Start the EditTaskActivity for result when the user press the edit button.
-     * The task index and the taskList are passed as extras to the intent.
-     *
-     * @param position Position of the task in the list
-     */
-    private void startEditTaskActivity(int position) {
-        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-
-        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, taskList);
-
-        startActivityForResult(intent, editTaskRequestCode);
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -360,8 +300,7 @@ public class TaskFragment extends Fragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        taskList.add(position, mTask);
-                        mTaskAdapter.notifyItemInserted(position);
+                        mTaskAdapter.add(mTask, position);
                         recyclerView.scrollToPosition(position);
                     }
                 })
@@ -376,20 +315,7 @@ public class TaskFragment extends Fragment {
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(mTask);
-    }
-
-    /**
-     * Remove a task from the database and the taskList.
-     *
-     * @param itemInfo Extra information about the item
-     *                 for which the context menu should be shown
-     * @param isDone   true if the task is done, otherwise false.
-     * @throws SQLiteException if an error occurred
-     */
-    private void removeTask(AdapterView.AdapterContextMenuInfo itemInfo, Boolean isDone) {
-        int position = itemInfo.position;
-        removeTaskAction(position, isDone);
+        mTaskAdapter.remove(position);
     }
 
     /**
@@ -402,22 +328,12 @@ public class TaskFragment extends Fragment {
     private void removeTaskAction(int position, Boolean isDone) {
         Task taskToBeDeleted = taskList.get(position);
 
-        String taskName = taskToBeDeleted.getName();
-
-        mDatabase.deleteTask(taskToBeDeleted);
-
-        Context context = getActivity().getApplicationContext();
-        String TOAST_MESSAGE;
-        if (isDone) {
-            TOAST_MESSAGE = taskName + getString(R.string.info_done);
-        } else {
-            TOAST_MESSAGE = taskName + getString(R.string.info_deleted);
-        }
-        int duration = Toast.LENGTH_SHORT;
-        Toast.makeText(context, TOAST_MESSAGE, duration).show();
+        mDatabase.deleteTask(taskToBeDeleted, position);
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        }
     }
 
     /**
