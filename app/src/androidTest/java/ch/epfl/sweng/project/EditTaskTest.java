@@ -17,10 +17,10 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
-
 
 /**
  * Unit tests!
@@ -145,6 +145,32 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.text_name)).check(matches(withText(mEditedTitle)));
 
         pressBack();
+        //empty the database for the next test
+        emptyDatabase(1);
+    }
+
+    @Test
+    public void canDeleteATaskInInformationActivity() {
+        String taskToDeleteTitle = "Task1";
+        String taskToCheckTitle = "Task2";
+        String taskToDeleteDescr = "Description1";
+        String taskToCheckDescr = "Description2";
+
+        //create two tasks
+        createATask(taskToDeleteTitle,taskToDeleteDescr);
+        createATask(taskToCheckTitle, taskToCheckDescr);
+
+        //open information settings
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
+                .perform(click());
+
+        onView(withId(R.id.trash_menu)).perform(click());
+
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
+                .check(matches(hasDescendant(withText(taskToCheckTitle))));
+
         //empty the database for the next test
         emptyDatabase(1);
     }

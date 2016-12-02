@@ -146,7 +146,6 @@
     <string name="day_late">" day late"</string>
     <string name="current_location_main_activity_text">Current location</string>
     <string name="time_at_disposal_main_activity_text">Time at disposal</string>
-    <string name="start_by_filling_up_your_tasks_main_activity">Start by filling up your tasks</string>
     <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
     <string name="custom_location_subtitle">These are your favorite locations. Feel free to add, rename or remove locations. They will be useful to sort the tasks according to your current location.</string>
     <string name="padlock_image_description">padlock</string>
@@ -154,7 +153,6 @@
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="stop_watch_icon_content_description">stop watch icon</string>
-    <string name="right_arrow_content_description">right arrow</string>
 
     <!-- Tutorial texts -->
     <string name="tutorial_slide_1_title">Welcome !</string>

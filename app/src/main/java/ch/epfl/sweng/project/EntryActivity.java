@@ -76,6 +76,7 @@ public class EntryActivity extends Activity {
             activity = IntroActivity.class.getName();
         } else if ((user != null || testCase) && !firstConnection) {
             // if the user is already logged in the MainActivity with the tasks list is displayed
+            //has to go to synchronization before to be sure every data is present.
             activity = SynchronizationActivity.class.getName();
         } else {
             // else, if the user isn't logged in, the LoginActivity will be displayed

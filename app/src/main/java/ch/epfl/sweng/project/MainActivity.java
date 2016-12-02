@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -52,12 +53,12 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
+    public static final int UNFILL_TASKS_DIGEST_NBR = 4;
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
     private TaskFragment mainFragment;
     private Context mContext;
-    private static String filePath;
 
     //stock unfilledTasks
     private ArrayList<Task> unfilledTasks;
@@ -525,6 +526,26 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
+     * take care of displaying the 4 most recent unfilled task
+     * on the tableRow
+     *
+     */
+    private void initializeUnfilledPreview(){
+        final int unfilledNbr = unfilledTasks.size();
+        GridLayout gridLayout = (GridLayout) findViewById(R.id.unfilled_preview_grid);
+        for(int i = 0; i < UNFILL_TASKS_DIGEST_NBR; ++i){
+            int childIndex = ((i<2)?i:((i==2)?3:2));
+            TextView unfText = (TextView) gridLayout.getChildAt(childIndex);
+            if(i >= unfilledNbr){
+                unfText.setVisibility(View.INVISIBLE);
+            }else{
+                unfText.setVisibility(View.VISIBLE);
+                unfText.setText(unfilledTasks.get(i).getName());
+            }
+        }
+    }
+
+    /**
      * Set the visibility of the TableRow displaying undone tasks's presence,
      * and update also the number of tasks to be tried.
      *
@@ -543,6 +564,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 }
                 TextView taskNumRedDot = (TextView) findViewById(R.id.number_of_unfilled_tasks);
                 taskNumRedDot.setText(numberToDisplay);
+                initializeUnfilledPreview();
             }
         } else {
             unfilledTaskButton.setVisibility(View.GONE);

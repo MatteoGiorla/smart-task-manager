@@ -4,7 +4,12 @@ import android.content.Context;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -22,10 +28,15 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
+import static android.support.test.uiautomator.UiDevice.getInstance;
+import static junit.framework.Assert.fail;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
 
@@ -72,6 +83,68 @@ public final class NewTaskTest extends SuperTest {
         emptyDatabase(createdTask);
     }
 
+
+    @Test
+    public void futureTaskDisplayDays(){
+        UiDevice mUiDevice = getInstance(getInstrumentation());
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText("task"));
+        pressBack();
+
+        //add a due date !!! Warning, test only working on 30 days month and only if they are launch before the 29
+        onView(withId(R.id.pick_date)).perform(click());
+        UiObject thirtyButton = mUiDevice.findObject(new UiSelector().text("30"));
+        UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
+        try{
+            thirtyButton.click();
+            okButton.click();
+        }catch(UiObjectNotFoundException u){
+            fail("Could not confirm date selection "+u.getMessage());
+        }
+
+        //add a duration
+        onView(withId(R.id.durationSpinner)).perform(click());
+        onData(allOf(Matchers.is(instanceOf(String.class)), Matchers.is("1 hour"))).perform(click());
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("days left"))));
+    }
+
+    @Test
+    public void lateTaskDisplayDays(){
+        UiDevice mUiDevice = getInstance(getInstrumentation());
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText("task"));
+        pressBack();
+
+        //add a due date !!! Warning, test only working launched after the first of every month
+        onView(withId(R.id.pick_date)).perform(click());
+        UiObject thirtyButton = mUiDevice.findObject(new UiSelector().text("1"));
+        UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
+        try{
+            thirtyButton.click();
+            okButton.click();
+        }catch(UiObjectNotFoundException u){
+            fail("Could not confirm date selection "+u.getMessage());
+        }
+
+        //add a duration
+        onView(withId(R.id.durationSpinner)).perform(click());
+        onData(allOf(Matchers.is(instanceOf(String.class)), Matchers.is("1 hour"))).perform(click());
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+
+        //to add "s" after day after the two of december
+        onView(withContentDescription("represent the remaining days"))
+                .check(matches(withText(containsString("day late"))));
+    }
 
     @Test
     public void testCanDeleteTasks() {

@@ -100,7 +100,7 @@ public class PlacePickerTest {
             SuperTest.checkALocation(EPFL, 3);
 
         }catch(UiObjectNotFoundException u){
-            fail("Something went wrong with UiAutomator actions.");
+            fail("Something went wrong with UiAutomator actions : "+ u.getMessage());
         }catch(java.lang.InterruptedException i){
             fail(i.getMessage());
         }

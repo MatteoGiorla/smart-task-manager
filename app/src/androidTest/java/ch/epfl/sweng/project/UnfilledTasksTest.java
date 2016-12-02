@@ -288,4 +288,42 @@ public class UnfilledTasksTest {
                 .check(matches(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration))));
 
     }
+
+    @Test
+    public void unfilledTaskAppearsAsPreviewOnTheMain(){
+
+        String[] unfTasksTitle = {"unfTask1", "unfTask2", "unfTask3", "unfTask4"};
+
+        for(String title: unfTasksTitle){
+            addIncompleteTask(title);
+        }
+
+        onView(withId(R.id.unfilled_preview_1))
+                .check(matches((withText(unfTasksTitle[0]))));
+
+        onView(withId(R.id.unfilled_preview_2))
+                .check(matches((withText(unfTasksTitle[1]))));
+
+        onView(withId(R.id.unfilled_preview_4))
+                .check(matches((withText(unfTasksTitle[2]))));
+
+        onView(withId(R.id.unfilled_preview_3))
+                .check(matches((withText(unfTasksTitle[3]))));
+    }
+
+    /**
+     * with espresso action add an incomplete task(title only)
+     *
+     * @param title string the name of the task.
+     */
+    private void addIncompleteTask(String title){
+
+        onView(withId(R.id.add_task_button)).perform(click());
+
+        //add title
+        onView(withId(R.id.title_task)).perform(typeText(title));
+        pressBack();
+
+        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+    }
 }
