@@ -127,10 +127,13 @@
                                 android:layout_width="80dp"
                                 android:layout_height="80dp"
                                 android:paddingLeft="5dp"
+                                android:paddingStart="5dp"
                                 android:paddingRight="10dp"
+                                android:paddingEnd="10dp"
                                 android:tint="@color/gray"
                                 app:srcCompat="@drawable/calendar_36dp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/date_image_content_description"/>
                         </FrameLayout>
 
                         <LinearLayout
@@ -202,7 +205,8 @@
                                 android:paddingRight="5dp"
                                 android:tint="@color/gray"
                                 app:srcCompat="@drawable/minutes_needed_36dp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/duration_image_content_description"/>
                         </FrameLayout>
 
                         <LinearLayout
@@ -271,7 +275,8 @@
                                 android:paddingRight="5dp"
                                 android:tint="@color/gray"
                                 app:srcCompat="@drawable/task_location_36dp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/location_image_content_description"/>
 
                         </FrameLayout>
 
@@ -342,7 +347,8 @@
                                 android:paddingRight="5dp"
                                 android:tint="@color/gray"
                                 app:srcCompat="@drawable/thunder_36dp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/energy_image_content_description"/>
 
                         </FrameLayout>
 
@@ -431,7 +437,8 @@
                                 android:paddingRight="5dp"
                                 android:tint="@color/gray"
                                 app:srcCompat="@drawable/description_36dp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:contentDescription="@string/description_image_content_description"/>
 
                         </FrameLayout>
 
@@ -470,76 +477,14 @@
                                     android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                                     android:gravity="top"
                                     android:maxLength="@string/max_length_description"
-                                    android:layout_marginRight="20dp"/>
+                                    android:layout_marginRight="20dp"
+                                    android:layout_marginEnd="20dp"/>
                             </ViewSwitcher>
 
 
                         </LinearLayout>
 
                     </LinearLayout>
-
-                    <!--
-
-                 <View
-                     android:layout_width="match_parent"
-                     android:layout_height="1dp"
-                     android:background="@color/light_gray" />
-
-
-
-
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:orientation="horizontal"
-                     android:id="@+id/contributorLinearLayout"
-                     android:layout_marginTop="@dimen/margin_top_linear_layout"
-                     android:layout_marginBottom="@dimen/margin_bottom_linear_layout">
-
-
-                     <FrameLayout
-                         android:layout_width="wrap_content"
-                         android:layout_height="match_parent">
-
-                         <ImageView
-                             android:layout_width="80dp"
-                             android:layout_height="80dp"
-                             android:paddingLeft="5dp"
-                             android:paddingRight="5dp"
-                             android:tint="@color/gray"
-                             app:srcCompat="@drawable/author_36dp"
-                             android:layout_gravity="center_vertical"/>
-
-                     </FrameLayout>
-
-                     <LinearLayout
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent"
-                         android:orientation="vertical">
-
-                         <TextView
-                             android:id="@+id/contributorTitleTextView"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"
-                             android:text="@string/contributors_field"
-                             android:textColor="@color/colorPrimary"
-                             android:textSize="@dimen/text_size_title_text_view"
-                             android:textStyle="normal"
-                             android:paddingTop="@dimen/padding_top_title_text_view" />
-
-                         <TextView
-                             android:id="@+id/text_contributor"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"
-                             android:textColor="@color/black"
-                             android:textSize="@dimen/text_size_title_text_view"
-                             android:layout_marginTop="7dp"/>
-
-                     </LinearLayout>
-
-                 </LinearLayout>
-
-                 -->
 
                 </LinearLayout>
 

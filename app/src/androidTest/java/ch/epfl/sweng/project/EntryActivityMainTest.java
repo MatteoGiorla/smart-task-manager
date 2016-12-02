@@ -21,8 +21,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class EntryActivityMainTest {
 
-    private SharedPreferences prefs;
-
 
     @BeforeClass
     public static void setUserProvider() {
@@ -36,7 +34,7 @@ public class EntryActivityMainTest {
         @Override
         protected void beforeActivityLaunched() {
             Context actualContext = InstrumentationRegistry.getTargetContext();
-            prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
+            SharedPreferences prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
             prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
             prefs.edit().putBoolean(actualContext.getString(R.string.new_user), false).apply();
             super.beforeActivityLaunched();

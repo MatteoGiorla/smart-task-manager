@@ -14,11 +14,10 @@ import ch.epfl.sweng.project.User;
 public class LocalTaskHelper implements TaskHelper {
 
     private final TaskListAdapter mAdapter;
-    private final ArrayList<Task> mTaskList;
 
     public LocalTaskHelper(TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
-        mTaskList = taskList;
+        ArrayList<Task> mTaskList = taskList;
     }
 
     @Override

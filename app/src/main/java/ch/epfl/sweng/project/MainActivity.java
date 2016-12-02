@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -81,10 +81,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     // Geolocation variables:
     protected GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
     protected Location mCurrentLocation;
 
-    private long UPDATE_INTERVAL = 30 * 1000;  /* 30 secs */
     private static final int REQUEST_LOCATION = 2;
 
     private final String TAG = "Location API";
@@ -327,7 +325,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *
      * @param currentLocation current location of the user
      * @param userLocation one of the user's locations
-     * @return
      */
     private double haversine(LatLng currentLocation, ch.epfl.sweng.project.Location userLocation) {
         double dLatitude = Math.toRadians(userLocation.getLatitude()) - Math.toRadians(currentLocation.latitude);
@@ -346,7 +343,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     protected void startLocationUpdates() {
         // Create the location request
-        mLocationRequest = LocationRequest.create()
+        long UPDATE_INTERVAL = 30 * 1000;
+        LocationRequest mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL);
         // Request location updates

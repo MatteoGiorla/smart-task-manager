@@ -183,4 +183,11 @@
     <string name="has_been_deleted">" has been deleted"</string>
     <string name="has_been_done">" has been marked as done"</string>
 
+    <!--Content description Task Activity-->
+    <string name="date_image_content_description">Date icon</string>
+    <string name="location_image_content_description">Location icon</string>
+    <string name="duration_image_content_description">Duration icon</string>
+    <string name="energy_image_content_description">Energy icon</string>
+    <string name="description_image_content_description">Description icon</string>
+
 </resources>
