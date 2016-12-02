@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -167,10 +168,12 @@ public abstract class TaskActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {
             if (titleIsNotUnique(s.toString())) {
                 doneEditButton.setVisibility(View.INVISIBLE);
-                titleEditText.setError(getResources().getText(R.string.error_title_duplicated));
+                titleEditText.setError(getResources().getText(R.string.error_title_duplicated),
+                        ContextCompat.getDrawable(getApplicationContext(), R.drawable.error_18dp));
             } else if (s.toString().isEmpty()) {
                 doneEditButton.setVisibility(View.INVISIBLE);
-                titleEditText.setError(getResources().getText(R.string.error_title_empty));
+                titleEditText.setError(getResources().getText(R.string.error_title_empty),
+                        ContextCompat.getDrawable(getApplicationContext(), R.drawable.error_18dp));
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
             }

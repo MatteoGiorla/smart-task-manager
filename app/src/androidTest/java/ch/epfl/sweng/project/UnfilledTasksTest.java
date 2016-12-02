@@ -167,7 +167,7 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titre))));
     }
@@ -198,7 +198,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 
@@ -254,7 +254,7 @@ public class UnfilledTasksTest {
         }
 
         //checking the title of the task appears.
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 

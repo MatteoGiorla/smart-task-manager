@@ -68,13 +68,13 @@ public final class SortTaskTest extends SuperTest{
         onData(allOf(is(instanceOf(String.class)))).atPosition(4).perform(click());
 
         // check if sorted correctly
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(taskNames.get(2)))));
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(1))
                 .check(matches(hasDescendant(withText(taskNames.get(1)))));
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(2))
                 .check(matches(hasDescendant(withText(taskNames.get(0)))));
     }
@@ -92,13 +92,13 @@ public final class SortTaskTest extends SuperTest{
         onView(withId(R.id.time_user)).perform(click());
         onData(allOf(is(instanceOf(String.class)))).atPosition(2).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(taskNames.get(1)))));
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(1))
                 .check(matches(hasDescendant(withText(taskNames.get(0)))));
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(2))
                 .check(matches(hasDescendant(withText(taskNames.get(2)))));
 

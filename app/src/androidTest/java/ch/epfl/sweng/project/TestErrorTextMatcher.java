@@ -6,7 +6,7 @@ import android.widget.EditText;
 
 import org.hamcrest.Description;
 
-final class ErrorTextMatcher  {
+final class TestErrorTextMatcher {
     /**
      * Define and return a matcher that matches EditText to
      * test the error messages displayed by a EditText.

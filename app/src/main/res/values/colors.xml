@@ -13,4 +13,5 @@
     <color name="tutorial_background">#EB342E</color>
     <color name="green_swipe">#388E3C</color>
     <color name="orange_yellow">#E3B221</color>
+    <color name="transparent_white">#7cffffff</color>
 </resources>

@@ -74,7 +74,7 @@ public final class EditTaskTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.title_task))
-                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
 
         //Go back to the main activity for the next test
         pressBack();
@@ -108,7 +108,7 @@ public final class EditTaskTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.title_task))
-                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
 
         pressBack();
         emptyDatabase(1);
@@ -155,13 +155,13 @@ public final class EditTaskTest extends SuperTest {
         createATask(taskToCheckTitle, taskToCheckDescr);
 
         //open information settings
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .perform(click());
 
         onView(withId(R.id.trash_menu)).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(taskToCheckTitle))));
 

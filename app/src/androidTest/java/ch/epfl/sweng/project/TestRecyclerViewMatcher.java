@@ -8,10 +8,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class RecyclerViewMatcher {
+class TestRecyclerViewMatcher {
     private final int recyclerViewId;
 
-    RecyclerViewMatcher(int recyclerViewId) {
+    TestRecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 

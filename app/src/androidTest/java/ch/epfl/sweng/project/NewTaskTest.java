@@ -75,7 +75,7 @@ public final class NewTaskTest extends SuperTest {
         for (int i = 0; i < createdTask; i++) {
             createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
-            onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+            onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                     .atPosition(i))
                     .check(matches(hasDescendant(withText(mTitleToBeTyped + i))));
         }
@@ -160,7 +160,7 @@ public final class NewTaskTest extends SuperTest {
 
             //Test if the tasks are correctly deleted
             if (i != createdTask-1) {
-                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                         .atPosition(0))
                         .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
@@ -181,7 +181,7 @@ public final class NewTaskTest extends SuperTest {
 
             //Test if the tasks are correctly removed
             if (i != createdTask-1) {
-                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                         .atPosition(0))
                         .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
@@ -210,7 +210,7 @@ public final class NewTaskTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.title_task))
-                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
     }
 
@@ -239,7 +239,7 @@ public final class NewTaskTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.title_task))
-                .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
         emptyDatabase(1);
     }
