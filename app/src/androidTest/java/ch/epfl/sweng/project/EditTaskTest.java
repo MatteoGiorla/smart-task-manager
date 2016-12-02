@@ -167,9 +167,8 @@ public final class EditTaskTest extends SuperTest {
         createATask(taskToCheckTitle, taskToCheckDescr);
 
         //open information settings
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_tasks))
-                .atPosition(0)
+        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                .atPosition(0))
                 .perform(click());
 
         onView(withId(R.id.trash_menu)).perform(click());
