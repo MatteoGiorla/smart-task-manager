@@ -218,7 +218,7 @@ public class LocationFragment extends Fragment {
      * @return Return false to allow normal context menu processing to proceed,
      * true to consume it here
      */
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
         final AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -249,13 +249,9 @@ public class LocationFragment extends Fragment {
                                 android.R.layout.simple_spinner_dropdown_item, spinnerList);
                         locationSpinnerForReplacement = new Spinner(getApplicationContext());
                         locationSpinnerForReplacement.setAdapter(adp);
-
-                        //TODO : (not working) add margin to spinner
-                        LinearLayout.LayoutParams spinnerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        spinnerLayoutParams.setMargins(100, 0, 100, 0);
-                        locationSpinnerForReplacement.setLayoutParams(spinnerLayoutParams);
-                        locationSpinnerForReplacement.setGravity(Gravity.CENTER);
-
+                        locationSpinnerForReplacement.setPadding(50, 0 , 50, 0);
+                        locationSpinnerForReplacement.setPopupBackgroundResource(R.color.white);
+                        
                         builder.setView(locationSpinnerForReplacement);
                         AlertDialog dialog = builder.create();
                         dialog.show();

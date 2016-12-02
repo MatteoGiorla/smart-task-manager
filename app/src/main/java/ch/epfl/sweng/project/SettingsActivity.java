@@ -3,6 +3,7 @@ package ch.epfl.sweng.project;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.information.TaskInformationActivity;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
@@ -22,6 +24,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        setToolBar();
 
         TextView mTutorial = (TextView) findViewById(R.id.settings_text_tutorial);
         mTutorial.setOnClickListener(
@@ -59,5 +63,44 @@ public class SettingsActivity extends AppCompatActivity {
                 });
 
 
+    }
+
+    /**
+     * Set the tool bar with the return arrow on top left.
+     */
+    private void setToolBar() {
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.settings_toolbar);
+        initializeToolbar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new SettingsActivity.OnReturnArrowClickListener());
+    }
+
+    /**
+     * Start the toolbar and enable that back button on the toolbar.
+     *
+     * @param mToolbar the toolbar of the activity
+     */
+    private void initializeToolbar(Toolbar mToolbar) {
+        setSupportActionBar(mToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    /**
+     * OnClickListener on the return arrow.
+     */
+    private class OnReturnArrowClickListener implements View.OnClickListener {
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
     }
 }

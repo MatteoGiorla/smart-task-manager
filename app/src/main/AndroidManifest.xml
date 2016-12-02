@@ -111,7 +111,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_menu"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>
