@@ -114,6 +114,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).perform(click());
 
         //add title
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText("unfTask"));
         pressBack();
 
@@ -131,9 +132,6 @@ public class UnfilledTasksTest {
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
         */
-        //add the description
-        onView(withId(R.id.description_task)).perform(typeText("my beautiful task"));
-        pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 

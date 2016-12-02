@@ -196,8 +196,8 @@ public final class NewTaskTest extends SuperTest {
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task with empty titles
         onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(""));
-        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
@@ -226,7 +226,6 @@ public final class NewTaskTest extends SuperTest {
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
         pressBack();
-        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
 
@@ -241,7 +240,6 @@ public final class NewTaskTest extends SuperTest {
         //Check that the error message is displayed
         onView(withId(R.id.title_task))
                 .check(matches(ErrorTextMatcher.withErrorText(containsString(errorMessage))));
-        pressBack();
         pressBack();
         emptyDatabase(1);
     }
