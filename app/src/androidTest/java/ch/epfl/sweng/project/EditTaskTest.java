@@ -62,6 +62,7 @@ public final class EditTaskTest extends SuperTest {
 
         //Update the title with an existing one
         onView(withId(R.id.nameLinearLayout)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(clearText());
         onView(withId(R.id.title_task)).perform(typeText(mOldTitle + 1));
         pressBack();
@@ -96,7 +97,9 @@ public final class EditTaskTest extends SuperTest {
 
         //Update the title with empty string
         onView(withId(R.id.nameLinearLayout)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(clearText());
+        pressBack();
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -150,7 +153,7 @@ public final class EditTaskTest extends SuperTest {
     }
 
     @Test
-    public void canDeleteATaskInInformationActivity() {
+    public void canDeleteATask() {
         String taskToDeleteTitle = "Task1";
         String taskToCheckTitle = "Task2";
         String taskToDeleteDescr = "Description1";
