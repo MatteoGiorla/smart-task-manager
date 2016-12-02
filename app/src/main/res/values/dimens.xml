@@ -7,4 +7,9 @@
     <dimen name="task_title_size">23sp</dimen>
     <dimen name="task_subtitle_size">16sp</dimen>
     <dimen name="padding_between_tasks">3dp</dimen>
+
+    <dimen name="padding_top_title_text_view">5dp</dimen>
+    <dimen name="text_size_title_text_view">20sp</dimen>
+    <dimen name="margin_top_linear_layout">10dp</dimen>
+    <dimen name="margin_bottom_linear_layout">5dp</dimen>
 </resources>

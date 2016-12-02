@@ -33,9 +33,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -75,7 +75,7 @@ public final class NewTaskTest extends SuperTest {
         for (int i = 0; i < createdTask; i++) {
             createATask(mTitleToBeTyped + i, mDescriptionToBeTyped + i);
             //Check title name inside listView
-            onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+            onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                     .atPosition(i))
                     .check(matches(hasDescendant(withText(mTitleToBeTyped + i))));
         }
@@ -142,7 +142,8 @@ public final class NewTaskTest extends SuperTest {
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
         //to add "s" after day after the two of december
-        onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("day late"))));
+        onView(withContentDescription("represent the remaining days"))
+                .check(matches(withText(containsString("day late"))));
     }
 
     @Test
@@ -159,7 +160,7 @@ public final class NewTaskTest extends SuperTest {
 
             //Test if the tasks are correctly deleted
             if (i != createdTask-1) {
-                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                         .atPosition(0))
                         .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
@@ -180,7 +181,7 @@ public final class NewTaskTest extends SuperTest {
 
             //Test if the tasks are correctly removed
             if (i != createdTask-1) {
-                onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+                onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                         .atPosition(0))
                         .check(matches(hasDescendant(withText(mTitleToBeTyped + (i+1)))));
             }
@@ -195,8 +196,8 @@ public final class NewTaskTest extends SuperTest {
     public void testCannotAddTaskWithEmptyTitle() {
         //Create a task with empty titles
         onView(withId(R.id.add_task_button)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(""));
-        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
@@ -208,9 +209,8 @@ public final class NewTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));
+        onView(withId(R.id.title_task))
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
     }
 
@@ -226,7 +226,6 @@ public final class NewTaskTest extends SuperTest {
         onView(withId(R.id.add_task_button)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText(mTitleToBeTyped));
         pressBack();
-        onView(withId(R.id.description_task)).perform(typeText(mDescriptionToBeTyped));
         //Check that the done editing button is not displayed
         onView(withId(R.id.edit_done_button_toolbar)).check(matches(not(isDisplayed())));
 
@@ -239,10 +238,8 @@ public final class NewTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));
-        pressBack();
+        onView(withId(R.id.title_task))
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
         pressBack();
         emptyDatabase(1);
     }

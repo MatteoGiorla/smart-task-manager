@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
-    tools:context="ch.epfl.sweng.project.SettingsActivity">
+    tools:context="ch.epfl.sweng.project.SettingsActivity"
+    android:theme="@style/AppTheme">
 
     <LinearLayout
         android:orientation="vertical"
@@ -42,8 +40,7 @@
             android:padding="10dp"
             android:background="@color/white"
             android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size"
-            android:id="@+id/settings_text_tips" />
+            android:textSize="@dimen/task_title_size" />
 
         <View
             android:layout_width="match_parent"
@@ -97,8 +94,7 @@
             android:padding="10dp"
             android:textColor="@color/black"
             android:background="@color/white"
-            android:textSize="@dimen/task_title_size"
-            android:id="@+id/settings_text_notifications" />
+            android:textSize="@dimen/task_title_size" />
 
         <View
             android:layout_width="match_parent"
@@ -122,8 +118,7 @@
             android:padding="10dp"
             android:background="@color/white"
             android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size"
-            android:id="@+id/settings_text_suggest_feature" />
+            android:textSize="@dimen/task_title_size" />
 
         <View
             android:layout_width="match_parent"
@@ -137,8 +132,7 @@
             android:padding="10dp"
             android:background="@color/white"
             android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size"
-            android:id="@+id/settings_text_tell_friend" />
+            android:textSize="@dimen/task_title_size" />
 
         <View
             android:layout_width="match_parent"
@@ -152,8 +146,7 @@
             android:padding="10dp"
             android:background="@color/white"
             android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size"
-            android:id="@+id/settings_text_about" />
+            android:textSize="@dimen/task_title_size" />
 
         <View
             android:layout_width="match_parent"

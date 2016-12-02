@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 /**
  * Class in which we create a Matcher.
  */
-final class ErrorTextInputLayoutMatcher {
+final class TestErrorTextInputLayoutMatcher {
 
     /**
      * Define and return a matcher that matches TextInputLayout to

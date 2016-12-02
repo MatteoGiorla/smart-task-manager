@@ -12,9 +12,7 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
-import ch.epfl.sweng.project.information.TaskInformationActivity;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
-import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -23,8 +23,8 @@ import ch.epfl.sweng.project.receiver.NotificationReceiver;
  * Task which create notifications. It also handle the deletion of a notification.
  */
 public class TaskNotification extends AsyncTask<Integer, Void, Void> {
-    private ArrayList<Task> taskList;
-    private Context mContext;
+    private final ArrayList<Task> taskList;
+    private final Context mContext;
 
     /**
      * Public constructor of TaskNotification which take the list of tasks

@@ -4,10 +4,18 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import java.util.Arrays;
 
@@ -15,11 +23,20 @@ import java.util.Arrays;
  * Class that represents the inflated activity_task under the edit case
  */
 public class EditTaskActivity extends TaskActivity {
+    public static final int TASK_IS_DELETED = 1;
+    public static final int TASK_IS_MODIFIED = 2;
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
+    public static final String TASK_STATUS_KEY = "ch.epfl.sweng.EditTaskActivity.TASK_STATUS_KEY";
+    public static final String TASK_TO_BE_DELETED_INDEX = "ch.epfl.sweng.EditTaskActivity.TASK_TO_BE_DELETED_INDEX";
+
     private Task mTaskToBeEdited;
     private int mIndexTaskToBeEdited;
-    private String text_to_set_on_date_button;
+    private int taskStatus;
+
+    private static final int TASK_DUE_DATE = 3;
+    private static final int TASK_DURATION = 4;
+    private static final int TASK_LOCATION = 5;
 
     /**
      * Override the onCreate method
@@ -48,14 +65,39 @@ public class EditTaskActivity extends TaskActivity {
 
         final Calendar c = Calendar.getInstance();
         c.setTime(date);
-        int year = c.get(Calendar.YEAR);
-        text_to_set_on_date_button = getString(R.string.enter_due_date_hint);
-        if(year != 1899){
-            text_to_set_on_date_button = dateFormat.format(date.getTime());
-        }
 
+        setSwitchers();
+
+        initialisationFields();
         //Populate the layout activity_task
+        populateTextViewInformation();
+
         populateLayout();
+
+        getDoneEditButton().setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.edit_task_menu, menu);
+        return true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.trash_menu :
+                taskStatus = TASK_IS_DELETED;
+                setResultIntent();
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -75,16 +117,103 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
+    /**
+     *
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
+        Log.e("duration editActivity", "duration to be set : " + duration);
         mTaskToBeEdited.setName(title);
         mTaskToBeEdited.setDescription(description);
         mTaskToBeEdited.setDueDate(date);
         mTaskToBeEdited.setDurationInMinutes(duration);
         mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
-        intent.putExtra(RETURNED_EDITED_TASK, mTaskToBeEdited);
-        intent.putExtra(RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
+        setResultIntent();
+    }
+
+    /**
+     * Set the result intent.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void setResultIntent() {
+        if(taskStatus == TASK_IS_MODIFIED) {
+            allEditViewToReadView();
+            populateTextViewInformation();
+            getDoneEditButton().setVisibility(View.GONE);
+            intent.putExtra(TASK_STATUS_KEY, taskStatus);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, mTaskToBeEdited);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
+            setResult(RESULT_OK, intent);
+        } else if(taskStatus == TASK_IS_DELETED) {
+            intent.putExtra(TASK_STATUS_KEY, taskStatus);
+            intent.putExtra(TASK_TO_BE_DELETED_INDEX, mIndexTaskToBeEdited);
+            setResult(RESULT_OK, intent);
+        }
+    }
+
+    /**
+     *
+     */
+    private void setSwitchers() {
+        //Set switch on name
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.nameLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_name),
+                findViewById(R.id.title_task));
+
+        //Set switch on date
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.dateLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_date),
+                findViewById(R.id.pick_date));
+
+        //Set switch on duration
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.durationLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_duration),
+                findViewById(R.id.durationSpinner));
+
+        //Set switch on location
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.locationLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_location),
+                findViewById(R.id.locationSpinner));
+
+        //Set switch on energy
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.energyLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_energy),
+                findViewById(R.id.radio_energy));
+
+        //Set switch on description
+        setSwitcherOnClick((LinearLayout) findViewById(R.id.descriptionLinearLayout),
+                (ViewSwitcher) findViewById(R.id.switcher_description),
+                findViewById(R.id.description_task));
+    }
+
+    private void setSwitcherOnClick(LinearLayout container, final ViewSwitcher switcher, final View secondView) {
+        container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(switcher.getCurrentView() != secondView) {
+                    getDoneEditButton().setVisibility(View.VISIBLE);
+                    taskStatus = TASK_IS_MODIFIED;
+                    switcher.showNext();
+                }
+            }
+        });
+    }
+
+    private void allEditViewToReadView() {
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_name), findViewById(R.id.text_name));
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_date), findViewById(R.id.text_date));
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_duration), findViewById(R.id.text_duration));
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_location), findViewById(R.id.text_location));
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_energy), findViewById(R.id.text_energy));
+        switchToReadView((ViewSwitcher) findViewById(R.id.switcher_description), findViewById(R.id.text_description));
+    }
+
+    private void switchToReadView(final ViewSwitcher switcher, final View firstView) {
+        if(switcher.getCurrentView() != firstView) {
+            switcher.showPrevious();
+        }
     }
 
     /**
@@ -99,29 +228,58 @@ public class EditTaskActivity extends TaskActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void initialisationFields() {
+        title = mTaskToBeEdited.getName();
+        energy = mTaskToBeEdited.getEnergy();
+        description = mTaskToBeEdited.getDescription();
+        date = mTaskToBeEdited.getDueDate();
+        locationName = mTaskToBeEdited.getLocationName();
+        duration  = mTaskToBeEdited.getDurationInMinutes();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void populateTextViewInformation() {
+        TextView nameTextView = (TextView) findViewById(R.id.text_name);
+        nameTextView.setText(title);
+
+        TextView dateTextView = (TextView) findViewById(R.id.text_date);
+        dateTextView.setText(safeTaskInformationGetter(TASK_DUE_DATE, mTaskToBeEdited));
+
+        TextView durationTextView = (TextView) findViewById(R.id.text_duration);
+        durationTextView.setText(safeTaskInformationGetter(TASK_DURATION, mTaskToBeEdited));
+
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        locationTextView.setText(safeTaskInformationGetter(TASK_LOCATION, mTaskToBeEdited));
+
+        TextView energyTextView = (TextView) findViewById(R.id.text_energy);
+        energyTextView.setText(MainActivity.ENERGY_MAP.get(energy.ordinal()));
+
+        TextView descriptionTextView = (TextView) findViewById(R.id.text_description);
+        descriptionTextView.setText(description);
+    }
+
     /**
      * Fill the layout with the old values of the task to be edited.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.title_task);
-        titleEditText.setText(mTaskToBeEdited.getName());
+        titleEditText.setText(title);
         titleEditText.setSelection(titleEditText.getText().length()); //put cursor at the end
 
         Button mButton = (Button) findViewById(R.id.pick_date);
-        mButton.setText(text_to_set_on_date_button);
+        mButton.setText(safeTaskInformationGetter(TASK_DUE_DATE, mTaskToBeEdited));
 
         EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
-        descriptionEditText.setText(mTaskToBeEdited.getDescription());
+        descriptionEditText.setText(description);
         descriptionEditText.setSelection(descriptionEditText.getText().length()); //put cursor at the end
 
         Spinner durationSpinner = (Spinner) findViewById(R.id.durationSpinner);
-        Long duration = mTaskToBeEdited.getDuration();
-        populateSpinner(durationSpinner, MainActivity.getDurationTable(),
-                MainActivity.DURATION_MAP.get(duration.intValue()));
+        populateSpinner(durationSpinner, MainActivity.getDurationTable(), safeTaskInformationGetter(TASK_DURATION, mTaskToBeEdited));
 
         Spinner locationSpinner = (Spinner) findViewById(R.id.locationSpinner);
-        populateSpinner(locationSpinner, MainActivity.getLocationTable(),
-                mTaskToBeEdited.getLocationName());
+        populateSpinner(locationSpinner, MainActivity.getLocationTable(), safeTaskInformationGetter(TASK_LOCATION, mTaskToBeEdited));
 
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radio_energy);
 
@@ -134,7 +292,7 @@ public class EditTaskActivity extends TaskActivity {
                 radioGroup.check(R.id.energy_normal);
                 break;
             case HIGH:
-                radioGroup.check(R.id.energy_high  );
+                radioGroup.check(R.id.energy_high);
                 break;
             default:
                 radioGroup.check(R.id.energy_normal);
@@ -145,5 +303,47 @@ public class EditTaskActivity extends TaskActivity {
     private void populateSpinner(Spinner spinner, String[] nameList, String defaultItemName) {
         int position = Arrays.asList(nameList).indexOf(defaultItemName);
         spinner.setSelection(position);
+    }
+
+    /**
+     * According to which information we're looking at, will retrieve the correct task's information
+     * or if the task is unfilled, will give back a message to display on the taskInformationActivity
+     * noting this fact. IT is "safe" because it prevents default internal values from appearing
+     * on the taskInformationActivity.
+     *
+     * @param reqCode identifier to decide which information is needed
+     * @param task the task to retrieve the information and then transform it to String
+     *
+     * @return the String corresponding to the information requested
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private String safeTaskInformationGetter(int reqCode, Task task){
+        String result;
+        switch(reqCode){
+            case TASK_DUE_DATE:
+                if(Utils.isDueDateUnfilled(task)){
+                    result = getString(R.string.unfilled_due_date);
+                }else{
+                    result = dateFormat.format(date.getTime());
+                }
+                return result;
+            case TASK_DURATION:
+                String duration_text = MainActivity.DURATION_MAP.get(duration.intValue());
+                if(Utils.isDurationUnfilled(task)){
+                    result = getString(R.string.unfilled_duration);
+                }else{
+                    result = String.valueOf(duration_text);
+                }
+                return result;
+            case TASK_LOCATION:
+                if(Utils.isLocationUnfilled(task, getApplicationContext())){
+                    result = getString(R.string.unfilled_location);
+                }else{
+                    result = locationName;
+                }
+                return result;
+            default:
+                throw new IllegalArgumentException("An incorrect code was passed to safely retrieve the task's information.");
+        }
     }
 }

@@ -13,13 +13,10 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.SettingsActivity;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.FirebaseUserHelper;
-import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
-import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 public class LocationSettingActivity extends AppCompatActivity {
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";

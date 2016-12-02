@@ -9,19 +9,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.project.information.TaskInformationActivity;
-
-import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_DISPLAYED;
+import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
 import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
 
 public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private Context mContext;
-    private ArrayList<Task> tasksList;
-    public View colorIndicator;
-    public TextView taskDuration;
-    public TextView taskLocation;
-    public TextView taskRemainingDays;
-    public TextView taskTitle;
+    private final Context mContext;
+    private final ArrayList<Task> tasksList;
+    public final View colorIndicator;
+    public final TextView taskDuration;
+    public final TextView taskLocation;
+    public final TextView taskRemainingDays;
+    public final TextView taskTitle;
 
 
     public ViewHolder(View v, Context context, ArrayList<Task> tasksList) {
@@ -40,10 +38,10 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     @Override
     public void onClick(View v) {
         int itemPosition = getAdapterPosition();
-        Intent intent = new Intent(mContext, TaskInformationActivity.class);
-        intent.putExtra(INDEX_TASK_TO_BE_DISPLAYED, itemPosition);
+        Intent intent = new Intent(mContext, EditTaskActivity.class);
+        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, itemPosition);
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, tasksList);
-        ((Activity)mContext).startActivityForResult(intent, TaskFragment.displayTaskRequestCode);
+        ((Activity)mContext).startActivityForResult(intent, TaskFragment.editTaskRequestCode);
     }
 
 }

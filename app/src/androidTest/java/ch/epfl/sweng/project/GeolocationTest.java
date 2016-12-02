@@ -1,23 +1,11 @@
 package ch.epfl.sweng.project;
 
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.ActivityCompat;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Unit tests!
@@ -102,7 +90,7 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
                                 // to handle the case where the user grants the permission. See the documentation
                                 // for ActivityCompat#requestPermissions for more details.
                                 //ask permission to the user.
-                                // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
+                                // Sufficient to ask just for ACCESS_FINE_LOCATION to have permission for both.
                                 ActivityCompat.requestPermissions(mMainActivity,
                                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
                             }

@@ -6,9 +6,6 @@ import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class Utils {
 
     private Utils() {
@@ -31,7 +28,7 @@ public class Utils {
      *
      * @param task    the task to Test
      * @param context the context which serves as getting the good String values.
-     * @return a boolean wether the task in unfilled or not
+     * @return a boolean whether the task in unfilled or not
      */
     public static boolean isUnfilled(Task task, Context context) {
 

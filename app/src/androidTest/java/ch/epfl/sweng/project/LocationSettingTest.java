@@ -131,7 +131,7 @@ public final class LocationSettingTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.location_name_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
+                .check(matches(TestErrorTextInputLayoutMatcher
                         .withErrorText(containsString(errorMessage))));
         pressBack();
     }*/
@@ -192,7 +192,7 @@ public final class LocationSettingTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.location_name_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
+                .check(matches(TestErrorTextInputLayoutMatcher
                         .withErrorText(containsString(errorMessage))));
 
         //Go back to the main activity for the next test
@@ -224,7 +224,7 @@ public final class LocationSettingTest extends SuperTest {
 
         //Check that the error message is displayed
         onView(withId(R.id.location_name_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
+                .check(matches(TestErrorTextInputLayoutMatcher
                         .withErrorText(containsString(errorMessage))));
         pressBack();
     }

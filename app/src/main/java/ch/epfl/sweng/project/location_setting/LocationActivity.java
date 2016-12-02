@@ -161,18 +161,11 @@ public abstract class LocationActivity extends AppCompatActivity {
         try {
             Intent intent = intentBuilder.build(this);
             startActivityForResult(intent, PLACE_REQUEST_CODE);
-        } catch (GooglePlayServicesRepairableException e) {
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             // Indicates that Google Play Services is either not installed or not up to date. Prompt
             // the user to correct the issue.
            // GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
             //        0 ).show();
-            Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // Indicates that Google Play Services is not available and the problem is not easily
-            // resolvable.
-           // String message = "Google Play Services is not available: " +
-            //        GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
-            //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, R.string.warning_google_serv_error, Toast.LENGTH_LONG).show();
         }
     }
@@ -217,7 +210,7 @@ public abstract class LocationActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the place longitude and latitude when the user choosed a location
+     * Get the place longitude and latitude when the user chose a location
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
