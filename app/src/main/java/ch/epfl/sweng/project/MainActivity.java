@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
+
+import android.os.Build;
 import android.os.Bundle;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -68,6 +71,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     // Will be used later on
     private static String userLocation;
+    private static String detectedUserLocation = "";
     private static int userTimeAtDisposal;
 
     private Spinner mLocation;
@@ -238,7 +242,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     mainFragment.addTask(newTask);
                 }
             }
-         } else if(requestCode == unfilledTaskRequestCode){
+         } else if(requestCode == unfilledTaskRequestCode) {
                 if(resultCode == RESULT_OK){
                     ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
                     for(Task t : newFinishedTasks){
@@ -248,6 +252,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
+
         } else if(requestCode == TaskFragment.editTaskRequestCode){
                 mainFragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -316,6 +321,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
+        detectedUserLocation = "";
+
         // calculate the distance between the current location and all the user locations:
         for (ch.epfl.sweng.project.Location userLocation: currentUser.getListLocations()) {
             double distance = haversine(latLng, userLocation);
@@ -324,6 +331,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 // set the spinner to the location
                 mLocation = (Spinner) findViewById(R.id.location_user);
                 mLocation.setSelection(currentUser.getListLocations().indexOf(userLocation));
+                detectedUserLocation = userLocation.getName();
             }
         }
     }
@@ -470,12 +478,16 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                               final ArrayAdapter<String> locationAdapter,
                               final ArrayAdapter<String> durationAdapter) {
         location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (getString(R.string.elsewhere_location).equals(locationAdapter.getItem(position))) {
                     userLocation = getString(R.string.everywhere_location);
                 } else {
                     userLocation = locationAdapter.getItem(position);
+                }
+                if(detectedUserLocation.equals(locationAdapter.getItem(position))) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(getColor(R.color.flat_green));
                 }
 
                 // trigger the dynamic sort
