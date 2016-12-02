@@ -42,7 +42,7 @@ public class SettingsTest {
 
     @Test
     public void CheckIfOpenTutorialFromSettings(){
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.settings_text_tutorial)).perform(click());
         onView(withId(R.id.next)).check(matches(isDisplayed()));
 
@@ -50,7 +50,7 @@ public class SettingsTest {
 
     @Test
     public void AfterOpenTutoFromSettingsGoBackToSettings(){
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.settings_text_tutorial)).perform(click());
         onView(withId(R.id.next)).check(matches(isDisplayed()));
         onView(withId(R.id.skip)).perform(click());

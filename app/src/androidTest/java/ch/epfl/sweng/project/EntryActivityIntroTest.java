@@ -48,7 +48,7 @@ public class EntryActivityIntroTest {
 
     @Test
     public void inFirstLaunchCaseIfSkipTutoGoToEntryActivity(){
-        SuperTest.waitForrActivity();
+        SuperTest.waitForActivity();
         onView(withId(R.id.skip)).perform(click());
         onView(withId(R.id.google_sign_in_button)).check(matches(isDisplayed()));
     }
