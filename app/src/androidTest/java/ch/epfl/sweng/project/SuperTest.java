@@ -86,9 +86,11 @@ class SuperTest {
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
         */
+
         //add the description
         /*onView(withId(R.id.description_task)).perform(typeText(taskDescription));
         pressBack();*/
+        //For now, create task with empty description
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 

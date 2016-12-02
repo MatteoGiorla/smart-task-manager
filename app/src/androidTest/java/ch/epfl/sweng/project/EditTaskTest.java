@@ -120,7 +120,7 @@ public final class EditTaskTest extends SuperTest {
      *
      */
     @Test
-    public void testCanEditTaskTitleAndDescription() {
+    public void testCanEditTaskTitle() {
         //Create a task
         createATask(mOldTitle, mOldDescription);
 
@@ -134,13 +134,6 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.title_task)).perform(clearText());
         pressBack();
         onView(withId(R.id.title_task)).perform(typeText(mEditedTitle));
-        pressBack();
-
-        onView(withId(R.id.descriptionLinearLayout)).perform(click());
-        onView(withId(R.id.description_task)).perform(click());
-        onView(withId(R.id.description_task)).perform(clearText());
-        pressBack();
-        onView(withId(R.id.description_task)).perform(typeText(mEditedDescription));
         pressBack();
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
