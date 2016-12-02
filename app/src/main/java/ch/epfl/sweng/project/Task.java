@@ -305,16 +305,6 @@ public class Task implements Parcelable {
         return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location);
     }
 
-    /**
-     * Convert the energy to int. It's to compute the number of point of each task
-     * used for sorting them.
-     *
-     * @return integer representing the energy needed
-     */
-    private int getEnergyToInt() {
-        return energyNeeded.ordinal() + 1;
-    }
-
     private double computeStaticSortValue() {
         Calendar c = Calendar.getInstance();
         int delay = Math.max(0, daysBetween(c.getTime(), dueDate));
@@ -324,7 +314,7 @@ public class Task implements Parcelable {
         return this.getDuration()/(2*delay+0.1);
     }
 
-    public double getStaticSortValue(){
+    double getStaticSortValue(){
         return computeStaticSortValue();
     }
 
@@ -386,8 +376,8 @@ public class Task implements Parcelable {
      */
     private static class DynamicComparator implements Comparator<Task> {
         private static final int SHORT_DELAY_COEFFICIENT = 100000;
-        private static final int TIME_COEFFICIENT = 100000000;
-        private static final int LOCATION_COEFFICIENT = 1000000000;
+        private static final int TIME_COEFFICIENT = 1000000;
+        private static final int LOCATION_COEFFICIENT = 10000000;
         private static final int TIME_LIMIT = 120;
         private String currentLocation;
         private int currentTimeDisposal;
@@ -444,6 +434,7 @@ public class Task implements Parcelable {
                     dynamicSortValue += TIME_COEFFICIENT;
                 }
             }
+
             return dynamicSortValue;
         }
     }

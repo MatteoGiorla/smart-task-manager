@@ -1,8 +1,10 @@
 package ch.epfl.sweng.project.location_setting;
 
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
@@ -10,20 +12,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.project.Location;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.TaskFragment;
+import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.data.FirebaseUserHelper;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -40,6 +50,13 @@ public class LocationFragment extends Fragment {
     private LocationListAdapter mDefaultLocationAdapter;
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
+    private static User currentUser;
+    private SharedPreferences prefs;
+    private boolean firstConnection;
+
+    private Spinner locationSpinnerForReplacement;
+    private String newLocationName;
+
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -53,6 +70,10 @@ public class LocationFragment extends Fragment {
         }
         locationList.add(location);
         mLocationAdapter.notifyDataSetChanged();
+        if(!firstConnection){
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+        }
     }
 
     public void addDefaultLocation(Location location) {
@@ -63,13 +84,13 @@ public class LocationFragment extends Fragment {
         mDefaultLocationAdapter.notifyDataSetChanged();
     }
 
-    private void addDefaultLocations(){
-        addDefaultLocation(new Location(getString(R.string.everywhere_location),0,0));
-        addDefaultLocation(new Location(getString(R.string.downtown_location),0,0));
+    private void addDefaultLocations() {
+        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
 
-        addLocation(new Location(getString(R.string.home_location),0,0));
-        addLocation(new Location(getString(R.string.office_location),0,0));
-        addLocation(new Location(getString(R.string.school_location),0,0));
+        addLocation(new Location(getString(R.string.home_location), 0, 0));
+        addLocation(new Location(getString(R.string.office_location), 0, 0));
+        addLocation(new Location(getString(R.string.school_location), 0, 0));
     }
 
     /**
@@ -97,9 +118,32 @@ public class LocationFragment extends Fragment {
                 R.layout.list_item_location,
                 defaultLocationList
         );
-        SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
-        if(prefs.getBoolean(getString(R.string.new_user), true)){
+
+        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        firstConnection = prefs.contains(getString(R.string.new_user))
+                && prefs.getBoolean(getString(R.string.new_user), true);
+
+        if (prefs.getBoolean(getString(R.string.new_user), true)) {
             addDefaultLocations();
+        } else if (!firstConnection) {
+            //If accessed from settings, load default locations
+            addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+            addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
+
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                currentUser = bundle.getParcelable(LocationSettingActivity.USER_KEY);
+                if (currentUser == null) {
+                    throw new IllegalArgumentException("User passed with the intend is null");
+                } else {
+                    List<Location> listOfCurrentUserLocations = currentUser.getListLocations();
+                    for(int i = 3; i < listOfCurrentUserLocations.size(); ++i){
+                        addLocation(listOfCurrentUserLocations.get(i));
+                    }
+                }
+            } else {
+                throw new NullPointerException("User was badly passed from LocationSettingsActivity to LocationFragment !");
+            }
         }
     }
 
@@ -131,17 +175,17 @@ public class LocationFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(getActivity(), EditLocationActivity.class);
-            intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
-            intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
-            startActivityForResult(intent, editLocationRequestCode);
+                Intent intent = new Intent(getActivity(), EditLocationActivity.class);
+                intent.putExtra(INDEX_LOCATION_TO_BE_EDITED_KEY, position);
+                intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
+                startActivityForResult(intent, editLocationRequestCode);
             }
         });
 
         listViewDefault.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.info_cant_edit_delete, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -174,12 +218,56 @@ public class LocationFragment extends Fragment {
      * @return Return false to allow normal context menu processing to proceed,
      * true to consume it here
      */
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    public boolean onContextItemSelected(final MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo itemInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
-                removeLocation(itemInfo);
+                if (!firstConnection) {
+                    if (TaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        // Add the buttons
+                        builder.setPositiveButton(R.string.replace_location, new MyOnClickListener(itemInfo));
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                        builder.setMessage(R.string.location_delete_dialog_message).setTitle(R.string.location_delete_dialog_title);
+                        //Create spinner
+                        ArrayList<String> listOfLocationForSpinner = (ArrayList) currentUser.getListNamesLocations();
+                        if(listOfLocationForSpinner.contains(locationList.get(itemInfo.position).getName())) {
+                            listOfLocationForSpinner.remove(itemInfo.position + 3);
+                        }
+                        String[] spinnerList = listOfLocationForSpinner.toArray(new String[listOfLocationForSpinner.size()]);
+                        for (int i = 0; i < spinnerList.length; i++) {
+                            if (spinnerList[i].equals(getString(R.string.select_one))) {
+                                spinnerList[i] = getString(R.string.unfilled_param);
+                            }
+                        }
+                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                                android.R.layout.simple_spinner_dropdown_item, spinnerList);
+                        locationSpinnerForReplacement = new Spinner(getApplicationContext());
+                        locationSpinnerForReplacement.setAdapter(adp);
+
+                        //TODO : (not working) add margin to spinner
+                        LinearLayout.LayoutParams spinnerLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        spinnerLayoutParams.setMargins(100, 0, 100, 0);
+                        locationSpinnerForReplacement.setLayoutParams(spinnerLayoutParams);
+                        locationSpinnerForReplacement.setGravity(Gravity.CENTER);
+
+                        builder.setView(locationSpinnerForReplacement);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        removeLocation(itemInfo);
+                        currentUser = new User(currentUser.getEmail(), getLocationList());
+                        FirebaseUserHelper.updateUser(currentUser);
+                        MainActivity.setUser(currentUser);
+                    }
+                } else {
+                    removeLocation(itemInfo);
+                }
                 return true;
             case R.id.floating_location_edit:
                 startEditLocationActivity(itemInfo);
@@ -217,10 +305,21 @@ public class LocationFragment extends Fragment {
         if (indexEditedLocation == -1 || editedLocation == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
+            if (!firstConnection) {
+                if (TaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
+                    //Replace location edited in all tasks using it
+                    TaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
+                }
+            }
             locationList.set(indexEditedLocation, editedLocation);
             mLocationAdapter.notifyDataSetChanged();
             String toast = editedLocation.getName() + getString(R.string.info_updated);
             Toast.makeText(getActivity().getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+            if (!firstConnection) {
+                currentUser = new User(currentUser.getEmail(), getLocationList());
+                FirebaseUserHelper.updateUser(currentUser);
+                MainActivity.setUser(currentUser);
+            }
         }
     }
 
@@ -273,9 +372,37 @@ public class LocationFragment extends Fragment {
      * @return an immutable copy of locationList
      */
     public List<Location> getLocationList() {
-        defaultLocationList.add(0, new Location(getString(R.string.select_one),0,0));
         ArrayList<Location> tmp = new ArrayList<>(defaultLocationList);
+        tmp.add(0, new Location(getString(R.string.select_one), 0, 0));
         tmp.addAll(locationList);
         return tmp;
+    }
+
+
+    public class MyOnClickListener implements DialogInterface.OnClickListener {
+
+        AdapterView.AdapterContextMenuInfo itemInfo;
+
+        MyOnClickListener(AdapterView.AdapterContextMenuInfo itemInfo) {
+            this.itemInfo = itemInfo;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            newLocationName = locationSpinnerForReplacement.getSelectedItem().toString();
+            if (getString(R.string.unfilled_param).equals(newLocationName)) {
+                newLocationName = getString(R.string.select_one);
+            }
+
+            //Replace locations
+            //Create a location from which coordinates don't matter because only the title is stored in the tasks
+            TaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
+
+            removeLocation(itemInfo);
+
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+            MainActivity.setUser(currentUser);
+        }
     }
 }

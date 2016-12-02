@@ -25,18 +25,6 @@ public class Utils {
     }
 
 
-    public static void addUser(User user) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
-        userRef.setValue(user);
-    }
-
-    public static void updateUser(User user) {
-        deleteUser(user);
-        addUser(user);
-    }
-
-
     /**
      * Look at the fields of the task and determines if the task is not completely filled,
      * and thus need to finish in the inbox of unfinished tasks
@@ -65,17 +53,5 @@ public class Utils {
         c.setTime(task.getDueDate());
         int year = c.get(Calendar.YEAR);
         return year == 1899;
-    }
-
-
-    /**
-     * Deleter a user in the database
-     *
-     * @param user The user to be deleted
-     */
-    private static void deleteUser(User user) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
-        userRef.removeValue();
     }
 }

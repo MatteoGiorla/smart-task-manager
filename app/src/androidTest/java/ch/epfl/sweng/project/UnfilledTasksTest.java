@@ -286,5 +286,6 @@ public class UnfilledTasksTest {
         //checking durtion is "not decided yet"
         onView(withId(R.id.text_duration))
                 .check(matches(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration))));
+
     }
 }

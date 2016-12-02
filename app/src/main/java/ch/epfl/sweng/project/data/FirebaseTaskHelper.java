@@ -81,7 +81,6 @@ public class FirebaseTaskHelper implements TaskHelper {
             taskRef.setValue(task);
         }
         mAdapter.add(task, position);
-        mAdapter.sort(Task.getStaticComparator());
     }
 
     @Override
@@ -91,7 +90,6 @@ public class FirebaseTaskHelper implements TaskHelper {
             taskRef.removeValue();
         }
         mAdapter.remove(position);
-        mAdapter.sort(Task.getStaticComparator());
     }
 
     @Override
@@ -131,6 +129,5 @@ public class FirebaseTaskHelper implements TaskHelper {
             }
         }
         mAdapter.notifyDataSetChanged();
-        mAdapter.sort(Task.getStaticComparator());
     }
 }
