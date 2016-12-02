@@ -11,7 +11,6 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -55,7 +54,7 @@ public class TaskFragment extends Fragment {
 
     private User currentUser;
     private RecyclerView recyclerView;
-    private Paint p = new Paint();
+    private final Paint p = new Paint();
 
     /**
      * Override the onCreate method. It retrieves all the task of the user

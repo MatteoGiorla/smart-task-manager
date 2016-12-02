@@ -51,11 +51,9 @@ public class LocationFragment extends Fragment {
     private ArrayList<Location> locationList;
     private ArrayList<Location> defaultLocationList;
     private static User currentUser;
-    private SharedPreferences prefs;
     private boolean firstConnection;
 
     private Spinner locationSpinnerForReplacement;
-    private String newLocationName;
 
 
     /**
@@ -119,7 +117,7 @@ public class LocationFragment extends Fragment {
                 defaultLocationList
         );
 
-        prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         firstConnection = prefs.contains(getString(R.string.new_user))
                 && prefs.getBoolean(getString(R.string.new_user), true);
 
@@ -381,7 +379,7 @@ public class LocationFragment extends Fragment {
 
     public class MyOnClickListener implements DialogInterface.OnClickListener {
 
-        AdapterView.AdapterContextMenuInfo itemInfo;
+        final AdapterView.AdapterContextMenuInfo itemInfo;
 
         MyOnClickListener(AdapterView.AdapterContextMenuInfo itemInfo) {
             this.itemInfo = itemInfo;
@@ -389,7 +387,7 @@ public class LocationFragment extends Fragment {
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            newLocationName = locationSpinnerForReplacement.getSelectedItem().toString();
+            String newLocationName = locationSpinnerForReplacement.getSelectedItem().toString();
             if (getString(R.string.unfilled_param).equals(newLocationName)) {
                 newLocationName = getString(R.string.select_one);
             }

@@ -41,7 +41,6 @@
                     android:paddingStart="5dp"
                     android:paddingRight="1dp"
                     android:paddingEnd="1dp"
-                    android:id="@+id/location_user_spinner_text"
                     android:textColor="@color/black" />
 
                 <LinearLayout
@@ -57,7 +56,6 @@
                         android:paddingRight="0dp"
                         android:paddingEnd="0dp"
                         app:srcCompat="@drawable/task_location_36dp"
-                        android:id="@+id/imageView"
                         android:layout_weight="1"
                         android:contentDescription="@string/location_logo_content_description"/>
 
@@ -93,7 +91,6 @@
                     android:paddingStart="5dp"
                     android:paddingRight="1dp"
                     android:paddingEnd="1dp"
-                    android:id="@+id/time_user_spinner_text"
                     android:textColor="@color/black" />
 
                 <LinearLayout
@@ -109,7 +106,6 @@
                         android:paddingRight="0dp"
                         android:paddingEnd="0dp"
                         app:srcCompat="@drawable/minutes_needed_36dp"
-                        android:id="@+id/imageView3"
                         android:layout_weight="1"
                         android:contentDescription="@string/stop_watch_icon_content_description"/>
 

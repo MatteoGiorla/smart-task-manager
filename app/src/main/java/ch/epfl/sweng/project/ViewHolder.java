@@ -13,13 +13,13 @@ import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
 import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
 
 public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private Context mContext;
-    private ArrayList<Task> tasksList;
-    public View colorIndicator;
-    public TextView taskDuration;
-    public TextView taskLocation;
-    public TextView taskRemainingDays;
-    public TextView taskTitle;
+    private final Context mContext;
+    private final ArrayList<Task> tasksList;
+    public final View colorIndicator;
+    public final TextView taskDuration;
+    public final TextView taskLocation;
+    public final TextView taskRemainingDays;
+    public final TextView taskTitle;
 
 
     public ViewHolder(View v, Context context, ArrayList<Task> tasksList) {

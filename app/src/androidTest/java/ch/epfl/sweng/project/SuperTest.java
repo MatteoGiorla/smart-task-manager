@@ -81,7 +81,7 @@ class SuperTest {
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
@@ -103,7 +103,7 @@ class SuperTest {
 
 
     /**
-     * Utilitary method to wait until we can check which activity was launched.
+     * Utility method to wait until we can check which activity was launched.
      */
     static void waitForActivity(){
         try{

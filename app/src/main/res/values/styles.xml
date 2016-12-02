@@ -29,7 +29,6 @@
 
     <style name="ErrorInputLayoutAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
-
     </style>
 
 </resources>

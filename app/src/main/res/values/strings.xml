@@ -16,7 +16,6 @@
 
     <!-- Hint strings-->
     <string name="hint_title">Title</string>
-    <string name="hint_description">Description</string>
 
     <!-- Log in screen values -->
     <string name="sign_in_text">Sign in with Google or Facebook</string>
@@ -49,7 +48,6 @@
     <string name="done_location_description">Done !</string>
 
 
-    <string name="image_information_field_description">Image</string>
     <string name="num_unfilled_default">0</string>
 
     <!-- Fields titles of task information activity -->
@@ -58,14 +56,9 @@
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
-    <string name="contributors_field">Contributor</string>
 
     <!-- Fields titles of new/edit task activity -->
-    <string name="locationTitle">LOCATION</string>
-    <string name="energyTitle">ENERGY</string>
-    <string name="durationTitle">DURATION</string>
     <string name="enter_due_date_hint">Enter due date</string>
-    <string name="dueDateTitle">DUE DATE</string>
 
     <string name="title_activity_maps">Map</string>
 
@@ -105,19 +98,21 @@
     <string name="default_text">Default</string>
     <string name="custom_text">Custom</string>
 
-    <!-- Unfilled task informations messages-->
+    <!-- Unfilled task information messages-->
     <string name="unfilled_param">"—"</string>
     <!-- Preference key -->
     <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
     <string name="new_user">FIRST_USER_LOGIN</string>
     <string name="first_launch">FIRST_LAUNCH</string>
 
+    <string name="unfilled_due_date">Not decided yet</string>
+    <string name="unfilled_duration">Not decided yet</string>
+    <string name="unfilled_location">Not decided yet</string>
+
 
     <!-- Energy description -->
     <string name="description_remaining_days">represent the remaining days</string>
     <string name="elsewhere_location">Elsewhere</string>
-
-    <string name="logo_mini_description">Smaller version of the official Taskit logo</string>
 
 
     <!-- Notification -->
@@ -200,9 +195,5 @@
     <string name="energy_image_content_description">Energy icon</string>
     <string name="description_image_content_description">Description icon</string>
 
-    <!-- Unfilled task informations messages-->
-    <string name="unfilled_due_date">Not decided yet</string>
-    <string name="unfilled_duration">Not decided yet</string>
-    <string name="unfilled_location">Not decided yet</string>
 
 </resources>

@@ -255,8 +255,8 @@ public class EditTaskActivity extends TaskActivity {
         TextView energyTextView = (TextView) findViewById(R.id.text_energy);
         energyTextView.setText(MainActivity.ENERGY_MAP.get(energy.ordinal()));
 
-        TextView decriptionTextView = (TextView) findViewById(R.id.text_description);
-        decriptionTextView.setText(description);
+        TextView descriptionTextView = (TextView) findViewById(R.id.text_description);
+        descriptionTextView.setText(description);
     }
 
     /**
@@ -308,7 +308,7 @@ public class EditTaskActivity extends TaskActivity {
     /**
      * According to which information we're looking at, will retrieve the correct task's information
      * or if the task is unfilled, will give back a message to display on the taskInformationActivity
-     * noting this fact. IT is "safe" because it prevents defaultinternal values from appearing
+     * noting this fact. IT is "safe" because it prevents default internal values from appearing
      * on the taskInformationActivity.
      *
      * @param reqCode identifier to decide which information is needed
@@ -343,7 +343,7 @@ public class EditTaskActivity extends TaskActivity {
                 }
                 return result;
             default:
-                throw new IllegalArgumentException("An incorrect code was passed to safely retrieve the informations of the task. ");
+                throw new IllegalArgumentException("An incorrect code was passed to safely retrieve the task's information.");
         }
     }
 }

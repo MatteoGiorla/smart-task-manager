@@ -33,14 +33,12 @@ public final class EditTaskTest extends SuperTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
     private String mEditedTitle;
-    private String mEditedDescription;
     private String mOldTitle;
     private String mOldDescription;
 
     @Before
     public void init() {
         mEditedTitle = "Edited Title";
-        mEditedDescription = "Edited description";
         mOldTitle = "title number ";
         mOldDescription = "description number ";
     }

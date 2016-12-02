@@ -97,7 +97,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
@@ -124,7 +124,7 @@ public class UnfilledTasksTest {
             fail("Could not confirm date selection "+u.getMessage());
         }
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
@@ -237,7 +237,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
@@ -278,7 +278,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        //checking durtion is "not decided yet"
+        //checking duration is "not decided yet"
         onView(withId(R.id.text_duration))
                 .check(matches(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration))));
 

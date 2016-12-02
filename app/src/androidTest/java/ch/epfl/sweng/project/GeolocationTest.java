@@ -90,7 +90,7 @@ public class GeolocationTest extends ActivityInstrumentationTestCase2<MainActivi
                                 // to handle the case where the user grants the permission. See the documentation
                                 // for ActivityCompat#requestPermissions for more details.
                                 //ask permission to the user.
-                                // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
+                                // Sufficient to ask just for ACCESS_FINE_LOCATION to have permission for both.
                                 ActivityCompat.requestPermissions(mMainActivity,
                                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
                             }

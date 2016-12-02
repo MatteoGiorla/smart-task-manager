@@ -43,7 +43,7 @@ public class UnfilledTaskFragment extends Fragment {
     private ArrayList<Task> unfilledTaskList;
     private ArrayList<Task> filledTaskList;
     private RecyclerView recyclerView;
-    private Paint p = new Paint();
+    private final Paint p = new Paint();
 
     /**
      * Override the onCreate method. It retrieves all the task of the user

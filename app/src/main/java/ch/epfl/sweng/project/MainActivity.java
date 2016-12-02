@@ -53,7 +53,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     public static final String UNFILLED_TASKS = "ch.epfl.sweng.MainActivity.UNFILLED_TASKS";
-    public static final int UNFILL_TASKS_DIGEST_NBR = 4;
+    private static final int UNFILLED_TASKS_DIGEST_NBR = 4;
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
@@ -79,17 +79,17 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
-    public static Map<Integer, String> START_DURATION_MAP;
-    public static Map<String, Integer> REVERSE_START_DURATION;
+    private static Map<Integer, String> START_DURATION_MAP;
+    private static Map<String, Integer> REVERSE_START_DURATION;
     public static Map<Integer, String> ENERGY_MAP;
-    public static Map<String, Integer> REVERSE_ENERGY;
+    private static Map<String, Integer> REVERSE_ENERGY;
 
     private TableRow unfilledTaskButton;
 
 
     // Geolocation variables:
-    protected GoogleApiClient mGoogleApiClient;
-    protected Location mCurrentLocation;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mCurrentLocation;
 
     private static final int REQUEST_LOCATION = 2;
 
@@ -265,7 +265,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             //ask permission to the user.
-            // Sufficient to ask juste for ACCESS_FINE_LOCATION to have permission for both.
+            // Sufficient to ask just for ACCESS_FINE_LOCATION to have permission for both.
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
@@ -352,7 +352,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     /**
      * start the location update. Fix the priority and the interval of the update.
      */
-    protected void startLocationUpdates() {
+    private void startLocationUpdates() {
         // Create the location request
         long UPDATE_INTERVAL = 30 * 1000;
         LocationRequest mLocationRequest = LocationRequest.create()
@@ -502,7 +502,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * initialize the functionnality of the TableRow
+     * initialize the functionality of the TableRow
      */
     private void initializeUnfilledTableRow() {
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
@@ -533,7 +533,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private void initializeUnfilledPreview(){
         final int unfilledNbr = unfilledTasks.size();
         GridLayout gridLayout = (GridLayout) findViewById(R.id.unfilled_preview_grid);
-        for(int i = 0; i < UNFILL_TASKS_DIGEST_NBR; ++i){
+        for(int i = 0; i < UNFILLED_TASKS_DIGEST_NBR; ++i){
             int childIndex = ((i<2)?i:((i==2)?3:2));
             TextView unfText = (TextView) gridLayout.getChildAt(childIndex);
             if(i >= unfilledNbr){
@@ -672,7 +672,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *
      * @return String[] the array containing the start durations.
      */
-    public static String[] getStartDurationTable() {
+    private static String[] getStartDurationTable() {
         return START_DURATION_MAP.values().toArray(new String[START_DURATION_MAP.values().size()]);
     }
 

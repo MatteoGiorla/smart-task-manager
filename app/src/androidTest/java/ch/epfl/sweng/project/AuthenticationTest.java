@@ -46,11 +46,11 @@ public class AuthenticationTest {
     private static String mGoogleEmail;
     private static String mGooglePassword;
     private static long untilTimeout;
-    private static String TAG = "AuthenticationTest";
+    private static final String TAG = "AuthenticationTest";
     private UiDevice mUiDevice;
 
     @Rule
-    public ActivityTestRule<LoginActivity> mActivityRule =
+    public final ActivityTestRule<LoginActivity> mActivityRule =
             new ActivityTestRule<>(LoginActivity.class);
 
     @Before
