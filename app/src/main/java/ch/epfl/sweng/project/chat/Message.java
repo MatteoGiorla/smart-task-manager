@@ -39,6 +39,10 @@ public class Message implements Parcelable {
         this.time = time;
     }
 
+    public Message() {
+        this("","",0);
+    }
+
     private Message(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readLong());
     }

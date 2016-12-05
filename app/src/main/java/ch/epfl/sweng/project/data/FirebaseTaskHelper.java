@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -115,7 +116,11 @@ public class FirebaseTaskHelper implements TaskHelper {
                 String description = (String) task.child("description").getValue();
                 Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
                 String energy = (String) task.child("energy").getValue();
-                List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
+
+                //Define a GenericTypeIndicator to get back properly typed collection
+                GenericTypeIndicator<List<String>> stringListTypeIndicator =
+                        new GenericTypeIndicator<List<String>>() {};
+                List<String> contributors = task.child("listOfContributors").getValue(stringListTypeIndicator);
 
                 //Construct Location object
                 String locationName = (String) task.child("locationName").getValue();
@@ -123,8 +128,10 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Long date = (Long) task.child("dueDate").child("time").getValue();
                 Date dueDate = new Date(date);
 
+                //Define a GenericTypeIndicator to get back properly typed collection
+                GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
                 //Construct list of message
-                List<Message> listOfMessages = (List<Message>) task.child("listOfMessages").getValue(Message.class);
+                List<Message> listOfMessages = task.child("listOfMessages").getValue(messageListTypeIndicator);
                 Task newTask;
 
                 if(listOfMessages == null) {
