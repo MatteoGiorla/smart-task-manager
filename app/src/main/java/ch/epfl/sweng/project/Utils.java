@@ -2,16 +2,25 @@ package ch.epfl.sweng.project;
 
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 
 
-public class Utils {
+public class Utils extends Application {
 
-    private Utils() {
+    private static Context mContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
     }
 
+    public static Context getContext(){
+        return mContext;
+    }
     /**
      * Encode a given mail to be compatible with keys in firebase
      *
@@ -58,28 +67,16 @@ public class Utils {
      * the suffix (@@{creator}@@{sharer}) from the title.
      *
      * @param title the title whom we want to separe the suffix
-     * @param separatorSequence the sequence of the separator of contributors to segue the title
      * @return an array which element at zero is the title,
      *          and at index 1 is the suffix if it exists,
      *          otherwise the empty string.
      */
-    public static String[] separateTitleAndSuffix(String title, String separatorSequence){
+    public static String[] separateTitleAndSuffix(String title){
         int charIndex = 0;
-        boolean hasFoundSeparator = title.isEmpty();
-        while(!hasFoundSeparator && charIndex < title.length()){
-            if(charIndex + separatorSequence.length() < title.length()){
-                boolean sequenceIsIdentical = true;
-                for(int i = 0; i < separatorSequence.length(); ++i){
-                    sequenceIsIdentical = sequenceIsIdentical &&
-                            (title.charAt(charIndex+i) == separatorSequence.charAt(i));
-                }
-                hasFoundSeparator = sequenceIsIdentical;
-            }
-        }
-
+        String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
         String[] stringAndSuffix = new String[2];
-        if(hasFoundSeparator){
-            stringAndSuffix[0] = title.substring(0, charIndex-1);
+        if(title.contains(separatorSequence)){
+            stringAndSuffix[0] = title.substring(0, title.indexOf(separatorSequence));
             stringAndSuffix[1] = title.substring(charIndex);
         }else{
             stringAndSuffix[0] = title;

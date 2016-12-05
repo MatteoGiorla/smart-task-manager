@@ -70,7 +70,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         Task taskInTheView = tasksList.get(position);
 
         if (taskInTheView != null) {
-            holder.taskTitle.setText(taskInTheView.getName());
+            String titleWoutSuffix = Utils.separateTitleAndSuffix(taskInTheView.getName())[0];
+            holder.taskTitle.setText(titleWoutSuffix);
 
             Calendar c = Calendar.getInstance();
             int days = taskInTheView.daysBetween(c.getTime(), taskInTheView.getDueDate());
