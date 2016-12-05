@@ -113,10 +113,13 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     /**
-     * A user shouldn't be allowed to type "@@"
+     * A user shouldn't be allowed to type "@@", which
+     * is the dedicated separator put in the title to signifiy
+     * the creator of a task, and the person with which the task
+     * is shared.
      *
      * @param title the new title of the task
-     * @return
+     * @return true if the title contains
      */
     private boolean titleContainsContributorsSeparators(String title){
         return title.contains(getString(R.string.contributors_separator));
@@ -183,7 +186,9 @@ public abstract class TaskActivity extends AppCompatActivity {
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));
             } else if(titleContainsContributorsSeparators(s.toString())) {
                 doneEditButton.setVisibility(View.INVISIBLE);
-                titleEditText.setError(getResources().getText(R.string.error_title_contains_contributors_separator));
+                String errorAtAt =getResources().getText(R.string.error_title_contains_contributors_separator).toString()
+                        + getResources().getText(R.string.contributors_separator).toString();
+                titleEditText.setError(errorAtAt);
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
             }

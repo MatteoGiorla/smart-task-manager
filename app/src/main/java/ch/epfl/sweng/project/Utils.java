@@ -6,6 +6,7 @@ import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 
+
 public class Utils {
 
     private Utils() {
@@ -50,5 +51,41 @@ public class Utils {
         c.setTime(task.getDueDate());
         int year = c.get(Calendar.YEAR);
         return year == 1899;
+    }
+
+    /**
+     * for a task shared with contributors, take care of separating
+     * the suffix (@@{creator}@@{sharer}) from the title.
+     *
+     * @param title the title whom we want to separe the suffix
+     * @param separatorSequence the sequence of the separator of contributors to segue the title
+     * @return an array which element at zero is the title,
+     *          and at index 1 is the suffix if it exists,
+     *          otherwise the empty string.
+     */
+    public static String[] separateTitleAndSuffix(String title, String separatorSequence){
+        int charIndex = 0;
+        boolean hasFoundSeparator = title.isEmpty();
+        while(!hasFoundSeparator && charIndex < title.length()){
+            if(charIndex + separatorSequence.length() < title.length()){
+                boolean sequenceIsIdentical = true;
+                for(int i = 0; i < separatorSequence.length(); ++i){
+                    sequenceIsIdentical = sequenceIsIdentical &&
+                            (title.charAt(charIndex+i) == separatorSequence.charAt(i));
+                }
+                hasFoundSeparator = sequenceIsIdentical;
+            }
+        }
+
+        String[] stringAndSuffix = new String[2];
+        if(hasFoundSeparator){
+            stringAndSuffix[0] = title.substring(0, charIndex-1);
+            stringAndSuffix[1] = title.substring(charIndex);
+        }else{
+            stringAndSuffix[0] = title;
+            stringAndSuffix[1] = "";
+        }
+
+        return stringAndSuffix;
     }
 }

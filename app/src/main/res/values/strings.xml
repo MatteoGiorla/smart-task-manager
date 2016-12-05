@@ -36,7 +36,7 @@
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
     <string name="error_title_duplicated">This title is already taken !</string>
-    <string name="error_title_contains_contributors_separator">You cannot enter a title containing </string>
+    <string name="error_title_contains_contributors_separator">"You cannot enter a title containing "</string>
     <string name="error_location_name_empty">The location name can not be empty !</string>
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
     <string name="info_any_tasks">You have no task !</string>
@@ -50,7 +50,7 @@
 
 
     <string name="num_unfilled_default">0</string>
-    <string name="contributors_separator">/&#64;&#64;</string>
+    <string name="contributors_separator">"@@"</string>
 
     <!-- Fields titles of task information activity -->
     <string name="description_field">Description</string>
