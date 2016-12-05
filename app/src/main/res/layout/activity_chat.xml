@@ -60,7 +60,8 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            app:fabSize="mini" />
+            app:fabSize="mini"
+            app:backgroundTint="@color/colorPrimary" />
     </RelativeLayout>
 
 </LinearLayout>

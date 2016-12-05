@@ -4,14 +4,17 @@ package ch.epfl.sweng.project.data;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.epfl.sweng.project.Utils;
+
+import static ch.epfl.sweng.project.Utils.FIREBASE_PROVIDER;
+import static ch.epfl.sweng.project.Utils.TEST_PROVIDER;
+
 /**
  * Class that decide which provider the app use in
  * order to manipulate users in the database
  */
 public class UserProvider {
-    public static final String FIREBASE_PROVIDER = "Firebase";
-    public static final String TEST_PROVIDER = "Tests";
-    public static String mProvider = FIREBASE_PROVIDER;
+    public static String mProvider = Utils.FIREBASE_PROVIDER;
 
     /**
      * Getter that return the Proxy to reach
@@ -20,9 +23,9 @@ public class UserProvider {
      */
     public UserHelper getUserProvider() {
         switch (mProvider) {
-            case FIREBASE_PROVIDER:
+            case Utils.FIREBASE_PROVIDER:
                 return new FirebaseUserHelper();
-            case TEST_PROVIDER:
+            case Utils.TEST_PROVIDER:
                 return new LocalUserHelper();
             default:
                 throw new IllegalArgumentException("This provider does not exists !");
@@ -31,9 +34,9 @@ public class UserProvider {
 
     public FirebaseUser getFirebaseAuthUser(){
         switch (mProvider){
-            case FIREBASE_PROVIDER:
+            case Utils.FIREBASE_PROVIDER:
                 return FirebaseAuth.getInstance().getCurrentUser();
-            case TEST_PROVIDER:
+            case Utils.TEST_PROVIDER:
                 //for some reason the jenkins emulator doesn't allow to do this,
                 //so little hack to make this work anyway.
                 /*FirebaseAuth.getInstance().signInAnonymously();

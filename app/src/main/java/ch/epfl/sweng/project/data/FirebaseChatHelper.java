@@ -2,6 +2,7 @@ package ch.epfl.sweng.project.data;
 
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
+import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
@@ -46,7 +48,8 @@ public class FirebaseChatHelper implements ChatHelper {
     }
 
     @Override
-    public void updateChat(Task task) {
+    public void updateChat(Task task, Message newMessage) {
+        task.addMessage(newMessage);
         for (String mail : task.getListOfContributors()) {
             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
@@ -54,6 +57,9 @@ public class FirebaseChatHelper implements ChatHelper {
     }
 
     private void retrieveListOfMessages(DataSnapshot dataSnapshot, Task task) {
+        if(dataSnapshot.getChildrenCount() == 0 || dataSnapshot == null) {
+            Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
+        }
         for(DataSnapshot t : dataSnapshot.getChildren()) {
             List<Message> newListOfMessages = (List<Message>) t.child("listOfMessages").getValue(Message.class);
             task.setListOfMessages(newListOfMessages);

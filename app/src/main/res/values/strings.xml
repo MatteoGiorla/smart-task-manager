@@ -195,6 +195,8 @@
     <string name="energy_image_content_description">Energy icon</string>
     <string name="description_image_content_description">Description icon</string>
 
+    <!--Chat-->
     <string name="input_message">Type a message</string>
+    <string name="no_messages">There is no messages</string>
 
 </resources>

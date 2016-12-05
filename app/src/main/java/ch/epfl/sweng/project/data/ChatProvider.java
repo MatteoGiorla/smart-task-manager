@@ -2,13 +2,12 @@ package ch.epfl.sweng.project.data;
 
 import android.content.Context;
 
+import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.chat.MessageAdapter;
 
 public class ChatProvider {
-    public static final String FIREBASE_PROVIDER = "Firebase";
-    public static final String TEST_PROVIDER = "Tests";
 
-    public static String mProvider = FIREBASE_PROVIDER;
+    public static String mProvider = Utils.FIREBASE_PROVIDER;
     private final MessageAdapter mAdapter;
     private final Context mContext;
 
@@ -18,11 +17,11 @@ public class ChatProvider {
         mContext = context;
     }
 
-    public ChatHelper getTaskProvider() {
+    public ChatHelper getChatProvider() {
         switch (mProvider) {
-            case FIREBASE_PROVIDER:
+            case Utils.FIREBASE_PROVIDER:
                 return new FirebaseChatHelper(mContext, mAdapter);
-            case TEST_PROVIDER:
+            case Utils.TEST_PROVIDER:
                 return new LocalChatHelper(mContext, mAdapter);
             default:
                 throw new IllegalArgumentException("This provider does not exists !");

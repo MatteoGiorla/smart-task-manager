@@ -8,8 +8,8 @@ import android.os.Build;
 
 public class Utils {
 
-    private Utils() {
-    }
+    public static final String FIREBASE_PROVIDER = "Firebase";
+    public static final String TEST_PROVIDER = "Tests";
 
     /**
      * Encode a given mail to be compatible with keys in firebase
