@@ -45,7 +45,6 @@ public abstract class TaskActivity extends AppCompatActivity {
     String locationName;
     Task.Energy energy;
     List<String> listOfContributors;
-    long startDuration;
     private EditText titleEditText;
     private Spinner mLocation;
     private Spinner mDuration;
@@ -111,6 +110,16 @@ public abstract class TaskActivity extends AppCompatActivity {
     abstract void resultActivity();
 
     /**
+     * A user shouldn't be allowed to type "@@"
+     *
+     * @param title the new title of the task
+     * @return
+     */
+    private boolean titleContainsContributorsSeparators(String title){
+        return title.contains(getString(R.string.contributors_separator));
+    }
+
+    /**
      * Check that the intent is valid
      */
     private void checkIntent() {
@@ -168,10 +177,14 @@ public abstract class TaskActivity extends AppCompatActivity {
                 doneEditButton.setVisibility(View.INVISIBLE);
                 textInputLayoutTitle.setErrorEnabled(true);
                 textInputLayoutTitle.setError(getResources().getText(R.string.error_title_duplicated));
-            } else if (s.toString().isEmpty()) {
+            } else if (s.toString().isEmpty())
                 doneEditButton.setVisibility(View.INVISIBLE);
                 textInputLayoutTitle.setErrorEnabled(true);
                 textInputLayoutTitle.setError(getResources().getText(R.string.error_title_empty));
+            } else if(titleContainsContributorsSeparators(s.toString())) {
+                doneEditButton.setVisibility(View.INVISIBLE);
+                textInputLayoutTitle.setErrorEnabled(true);
+                textInputLayoutTitle.setError(getResources().getText(R.string.error_title_contains_contributors_separator));
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
                 textInputLayoutTitle.setErrorEnabled(false);
