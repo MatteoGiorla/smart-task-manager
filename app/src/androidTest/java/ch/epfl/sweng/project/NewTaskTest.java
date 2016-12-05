@@ -143,7 +143,7 @@ public final class NewTaskTest extends SuperTest {
 
         //to add "s" after day after the two of december
         onView(withContentDescription("represent the remaining days"))
-                .check(matches(withText(containsString("day late"))));
+                .check(matches(withText(containsString("days late"))));
     }
 
     @Test
