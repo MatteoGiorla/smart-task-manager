@@ -158,9 +158,9 @@ public class TaskFragment extends Fragment {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 if (direction == ItemTouchHelper.LEFT){
-                    createSnackBar(viewHolder, position, false);
+                    createSnackBar(position, false);
                 } else {
-                    createSnackBar(viewHolder, position, true);
+                    createSnackBar(position, true);
                 }
             }
 
@@ -277,7 +277,7 @@ public class TaskFragment extends Fragment {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private void createSnackBar(RecyclerView.ViewHolder viewHolder, final int position, final Boolean isDone) {
+    private void createSnackBar(final int position, final Boolean isDone) {
         FloatingActionButton add_button = (FloatingActionButton) getActivity().findViewById(R.id.add_task_button);
 
         final Task mTask = taskList.get(position);
@@ -297,6 +297,7 @@ public class TaskFragment extends Fragment {
                         recyclerView.scrollToPosition(position);
                     }
                 });
+
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
         mDatabase.deleteTask(mTask, position);
