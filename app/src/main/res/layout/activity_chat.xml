@@ -36,7 +36,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_alignRight="@+id/send_message_button"
-            android:layout_alignLeft="@+id/send_message_button">
+            android:layout_alignEnd="@+id/send_message_button">
 
         <EditText
             android:layout_width="match_parent"
