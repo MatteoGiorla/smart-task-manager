@@ -4,7 +4,7 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.chat.Message;
 
-interface ChatHelper {
+public interface ChatHelper {
 
     void updateChat(Task task, Message newMessage);
 

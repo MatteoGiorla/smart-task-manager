@@ -15,12 +15,15 @@ import java.util.Date;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.data.ChatHelper;
+import ch.epfl.sweng.project.data.ChatProvider;
 
 public class ChatActivity extends AppCompatActivity {
     public static final String TASK_CHAT_KEY = "ch.epfl.sweng.project.chat.TASK_CHAT_KEY";
 
     private Intent intent;
     private Task task;
+    private ChatHelper chatHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,13 +33,6 @@ public class ChatActivity extends AppCompatActivity {
         //Initialise the Task and check its validity
         getAndCheckIntent();
 
-        setAdapter();
-
-        Button sendMssgButton = (Button) findViewById(R.id.send_message_button);
-        sendMssgButton.setOnClickListener(new SendMessageOnClickListener());
-    }
-
-    private void setAdapter() {
         //Initialise the MessageAdapter
         MessageAdapter mAdapter = new MessageAdapter(this,
                 R.layout.list_item_chat,
@@ -46,6 +42,18 @@ public class ChatActivity extends AppCompatActivity {
         ListView mssgListView = (ListView) findViewById(R.id.list_of_messages);
         //Bind the adapter to the listView
         mssgListView.setAdapter(mAdapter);
+
+        Button sendMssgButton = (Button) findViewById(R.id.send_message_button);
+        sendMssgButton.setOnClickListener(new SendMessageOnClickListener());
+
+        //Instantiation of the ChatHelper
+        chatHelper = new ChatProvider(this, mAdapter).getChatProvider();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        chatHelper.removeListener();
     }
 
     private void getAndCheckIntent() {
@@ -81,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
                     long time = new Date().getTime();
                     Message newMessage = new Message(userName, mssgText, time);
                     task.addMessage(newMessage);
+                    chatHelper.updateChat(task, newMessage);
                 }
             }
         }
