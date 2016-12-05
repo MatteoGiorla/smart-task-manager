@@ -69,14 +69,14 @@ public class Utils extends Application {
      * @param title the title whom we want to separe the suffix
      * @return an array which element at zero is the title,
      *          and at index 1 is the suffix if it exists,
-     *          otherwise the empty string.
+     *          or the empty string otherwise.
      */
     public static String[] separateTitleAndSuffix(String title){
-        int charIndex = 0;
         String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
         String[] stringAndSuffix = new String[2];
         if(title.contains(separatorSequence)){
-            stringAndSuffix[0] = title.substring(0, title.indexOf(separatorSequence));
+            int charIndex = title.indexOf(separatorSequence);
+            stringAndSuffix[0] = title.substring(0, charIndex);
             stringAndSuffix[1] = title.substring(charIndex);
         }else{
             stringAndSuffix[0] = title;

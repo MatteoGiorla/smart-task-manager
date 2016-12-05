@@ -114,7 +114,7 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     /**
      * A user shouldn't be allowed to type "@@", which
-     * is the dedicated separator put in the title to signifiy
+     * is the dedicated separator put in the title to signal
      * the creator of a task, and the person with which the task
      * is shared.
      *
