@@ -23,7 +23,7 @@ public class SettingsTest {
 
     @BeforeClass
     public static void setUserProvider() {
-        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
+        UserProvider.setProvider(Utils.TEST_PROVIDER);
     }
 
     @Rule

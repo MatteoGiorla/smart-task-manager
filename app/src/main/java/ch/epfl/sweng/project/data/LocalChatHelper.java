@@ -29,4 +29,9 @@ public class LocalChatHelper implements ChatHelper {
     public void updateChat(Task task, Message newMessage) {
         task.addMessage(newMessage);
     }
+
+    @Override
+    public void removeListener() {
+        // Nothing to remove
+    }
 }
