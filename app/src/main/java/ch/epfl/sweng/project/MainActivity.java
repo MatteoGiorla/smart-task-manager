@@ -59,7 +59,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
-    private TaskFragment mainFragment;
+    private static TaskFragment mainFragment;
     private Context mContext;
 
     //stock unfilledTasks
@@ -86,6 +86,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private static Map<String, Integer> REVERSE_START_DURATION;
     public static Map<Integer, String> ENERGY_MAP;
     private static Map<String, Integer> REVERSE_ENERGY;
+
+    private static String everywhere_location;
+    private static String select_one_location;
+
 
     private TableRow unfilledTaskButton;
 
@@ -163,6 +167,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
+
+        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+        select_one_location = getApplicationContext().getString(R.string.select_one);
 
         initializeAdapters();
     }
@@ -410,9 +417,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     /**
      * Trigger the dynamic sort.
      */
-    private void triggerDynamicSort() {
-        String everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        String select_one_location = getApplicationContext().getString(R.string.select_one);
+    public static void triggerDynamicSort() {
         mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
     }
 
@@ -728,6 +733,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     {
         super.onResume();
         updateAdapters();
+        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
+        select_one_location = getApplicationContext().getString(R.string.select_one);
         mLocation.setSelection(locationAdapter.getPosition(userLocation));
         mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
