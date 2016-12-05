@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
  *  Class representing the message in the char.
  */
 public class Message implements Parcelable {
-    
+
     public static final Creator<Message> CREATOR = new Creator<Message>() {
         @Override
         public Message createFromParcel(Parcel in) {
