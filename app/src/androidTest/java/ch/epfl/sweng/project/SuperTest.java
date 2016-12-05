@@ -8,6 +8,7 @@ import android.support.test.uiautomator.UiSelector;
 
 import org.junit.BeforeClass;
 
+import ch.epfl.sweng.project.data.ChatProvider;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.data.UserProvider;
 
@@ -42,6 +43,11 @@ class SuperTest {
     @BeforeClass
     public static void setUserProvider() {
         UserProvider.setProvider(Utils.TEST_PROVIDER);
+    }
+
+    @BeforeClass
+    public static void setChatProvider() {
+        ChatProvider.setProvider(Utils.TEST_PROVIDER);
     }
 
     static void checkALocation(String locationTitle, int locationPos){

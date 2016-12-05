@@ -22,6 +22,9 @@ import ch.epfl.sweng.project.chat.MessageAdapter;
 
 public class FirebaseChatHelper implements ChatHelper {
 
+    private Query mQuery;
+    private ValueEventListener mListener;
+
     private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private final MessageAdapter mAdapter;
     private final Context mContext;
@@ -33,11 +36,13 @@ public class FirebaseChatHelper implements ChatHelper {
 
     @Override
     public void retrieveMessages(User user, final Task task) {
-        Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
         if(mChat != null) {
             mChat.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    mQuery = mChat;
+                    mListener = this;
                     retrieveListOfMessages(dataSnapshot, task);
                 }
 
@@ -54,16 +59,26 @@ public class FirebaseChatHelper implements ChatHelper {
             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     private void retrieveListOfMessages(DataSnapshot dataSnapshot, Task task) {
         if(dataSnapshot.getChildrenCount() == 0 || dataSnapshot == null) {
             Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
+        }else {
+            for (DataSnapshot t : dataSnapshot.getChildren()) {
+                mAdapter.clear();
+                List<Message> newListOfMessages = (List<Message>) t.child("listOfMessages").getValue(Message.class);
+                task.setListOfMessages(newListOfMessages);
+                mAdapter.addAll(newListOfMessages);
+            }
+            mAdapter.notifyDataSetChanged();
         }
-        for(DataSnapshot t : dataSnapshot.getChildren()) {
-            List<Message> newListOfMessages = (List<Message>) t.child("listOfMessages").getValue(Message.class);
-            task.setListOfMessages(newListOfMessages);
+    }
+
+    public void removeListener() {
+        if(mQuery != null && mListener != null) {
+            mQuery.removeEventListener(mListener);
         }
-        mAdapter.notifyDataSetChanged();
     }
 }
