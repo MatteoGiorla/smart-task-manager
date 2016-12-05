@@ -62,6 +62,13 @@ public class FirebaseChatHelper implements ChatHelper {
         mAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void removeListener() {
+        if(mQuery != null && mListener != null) {
+            mQuery.removeEventListener(mListener);
+        }
+    }
+
     private void retrieveListOfMessages(DataSnapshot dataSnapshot, Task task) {
         if(dataSnapshot.getChildrenCount() == 0 || dataSnapshot == null) {
             Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
@@ -73,12 +80,6 @@ public class FirebaseChatHelper implements ChatHelper {
                 mAdapter.addAll(newListOfMessages);
             }
             mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    public void removeListener() {
-        if(mQuery != null && mListener != null) {
-            mQuery.removeEventListener(mListener);
         }
     }
 }

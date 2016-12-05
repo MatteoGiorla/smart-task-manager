@@ -49,12 +49,12 @@ public class UnfilledTasksTest {
 
     @BeforeClass
     public static void setTaskProvider() {
-        TaskProvider.setProvider(TaskProvider.TEST_PROVIDER);
+        TaskProvider.setProvider(Utils.TEST_PROVIDER);
     }
 
     @BeforeClass
     public static void setUserProvider() {
-        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
+        UserProvider.setProvider(Utils.TEST_PROVIDER);
     }
 
     @Before

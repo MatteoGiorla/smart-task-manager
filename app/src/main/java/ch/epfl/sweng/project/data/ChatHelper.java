@@ -9,4 +9,6 @@ public interface ChatHelper {
     void updateChat(Task task, Message newMessage);
 
     void retrieveMessages(User user, Task task);
+
+    void removeListener();
 }
