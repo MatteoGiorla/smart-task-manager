@@ -11,7 +11,6 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/default_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
@@ -24,7 +23,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/default_location_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
@@ -56,7 +54,6 @@
             android:layout_height="20dp" />
 
         <TextView
-            android:id="@+id/custom_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
@@ -69,7 +66,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/custom_location_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"

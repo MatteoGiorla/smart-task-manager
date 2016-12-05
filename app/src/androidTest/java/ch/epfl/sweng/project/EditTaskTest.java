@@ -11,7 +11,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -21,8 +20,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.containsString;
 
 /**
  * Unit tests!
@@ -35,14 +33,12 @@ public final class EditTaskTest extends SuperTest {
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
     private String mEditedTitle;
-    private String mEditedDescription;
     private String mOldTitle;
     private String mOldDescription;
 
     @Before
     public void init() {
         mEditedTitle = "Edited Title";
-        mEditedDescription = "Edited description";
         mOldTitle = "title number ";
         mOldDescription = "description number ";
     }
@@ -62,9 +58,9 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.edit_task_button)).perform(click());
-
         //Update the title with an existing one
+        onView(withId(R.id.nameLinearLayout)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(clearText());
         onView(withId(R.id.title_task)).perform(typeText(mOldTitle + 1));
         pressBack();
@@ -77,14 +73,11 @@ public final class EditTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));
+        onView(withId(R.id.title_task))
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
 
         //Go back to the main activity for the next test
         pressBack();
-        pressBack();
-
         emptyDatabase(createdTask);
     }
 
@@ -100,11 +93,11 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.edit_task_button)).perform(click());
-
-
         //Update the title with empty string
+        onView(withId(R.id.nameLinearLayout)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(clearText());
+        pressBack();
 
         //Get the error message
         String errorMessage = getInstrumentation()
@@ -114,10 +107,9 @@ public final class EditTaskTest extends SuperTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.title_task_layout))
-                .check(matches(ErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));
-        pressBack();
+        onView(withId(R.id.title_task))
+                .check(matches(TestErrorTextMatcher.withErrorText(containsString(errorMessage))));
+
         pressBack();
         emptyDatabase(1);
     }
@@ -126,7 +118,7 @@ public final class EditTaskTest extends SuperTest {
      *
      */
     @Test
-    public void testCanEditTaskTitleAndDescription() {
+    public void testCanEditTaskTitle() {
         //Create a task
         createATask(mOldTitle, mOldDescription);
 
@@ -134,21 +126,17 @@ public final class EditTaskTest extends SuperTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        onView(withId(R.id.edit_task_button)).perform(click());
-
         //Update the title and the description
+        onView(withId(R.id.nameLinearLayout)).perform(click());
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(clearText());
-        onView(withId(R.id.description_task)).perform(clearText());
-        onView(withId(R.id.title_task)).perform(typeText(mEditedTitle));
         pressBack();
-        onView(withId(R.id.description_task)).perform(typeText(mEditedDescription));
+        onView(withId(R.id.title_task)).perform(typeText(mEditedTitle));
         pressBack();
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
-        //Check that the title has been updated
-        onView(withId(R.id.title_task_information_activity))
-                .check(matches(withText(mEditedTitle)));
+        onView(withId(R.id.text_name)).check(matches(withText(mEditedTitle)));
 
         pressBack();
         //empty the database for the next test
@@ -156,7 +144,7 @@ public final class EditTaskTest extends SuperTest {
     }
 
     @Test
-    public void canDeleteATaskInInformationActivity() {
+    public void canDeleteATask() {
         String taskToDeleteTitle = "Task1";
         String taskToCheckTitle = "Task2";
         String taskToDeleteDescr = "Description1";
@@ -167,13 +155,13 @@ public final class EditTaskTest extends SuperTest {
         createATask(taskToCheckTitle, taskToCheckDescr);
 
         //open information settings
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .perform(click());
 
         onView(withId(R.id.trash_menu)).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(taskToCheckTitle))));
 

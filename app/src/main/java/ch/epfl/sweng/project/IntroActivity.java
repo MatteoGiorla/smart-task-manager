@@ -38,13 +38,13 @@ public class IntroActivity extends AppIntro {
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-        goToEntryActivity();
+        goToNextActivity();
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        goToEntryActivity();
+        goToNextActivity();
     }
 
     @Override
@@ -53,11 +53,21 @@ public class IntroActivity extends AppIntro {
         // Do something when the slide changes.
     }
 
-    private void goToEntryActivity() {
+    private void goToNextActivity() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
-        prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
-        Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+
+        // for the special case when the tuto is open at the first utilisation
+        if(prefs.getBoolean(getString(R.string.first_launch), true)){
+            prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
+            Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+        }
+        else // if not then we return to the settings
+        {
+            Intent intent = new Intent(IntroActivity.this, SettingsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+        }
     }
 }

@@ -70,10 +70,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
-            android:name=".information.TaskInformationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
             android:name=".location_setting.EditLocationActivity"
             android:label="@string/edit_location"
             android:screenOrientation="portrait"
@@ -111,7 +107,8 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings_menu"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>

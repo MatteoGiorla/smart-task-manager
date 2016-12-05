@@ -24,16 +24,15 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
     public static final String CURRENT_USER_KEY =
             "ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener.CURRENT_USER_KEY";
 
-    private Query userRef;
-    private User currentUser;
-    private Context synchronizationActivityContext;
+    private final Query userRef;
+    private final User currentUser;
+    private final Context synchronizationActivityContext;
 
     public UserAllOnCompleteListener(@NonNull Query userRef, @NonNull User currentUser, @NonNull SynchronizedQueries synchronizedQueries,
                                      @NonNull Context synchronizationActivityContext) {
         super();
         this.userRef = userRef;
         this.currentUser = currentUser;
-        SynchronizedQueries synchronizedQueries1 = synchronizedQueries;
         this.synchronizationActivityContext = synchronizationActivityContext;
     }
 

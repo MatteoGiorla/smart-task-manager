@@ -62,8 +62,6 @@ public class LoginActivity
     private FirebaseAuth.AuthStateListener mAuthListener;
     private SharedPreferences prefs;
     private Button facebookButton;
-    private ImageButton facebookImageButton;
-    private ImageButton googleImageButton;
 
     /**
      * Override the onCreate method
@@ -86,7 +84,7 @@ public class LoginActivity
         setContentView(R.layout.activity_login);
 
         // Sign In Buttons:
-        googleImageButton = (ImageButton) findViewById(R.id.google_sign_in_button);
+        ImageButton googleImageButton = (ImageButton) findViewById(R.id.google_sign_in_button);
         googleImageButton.setOnClickListener(this);
 
 
@@ -95,7 +93,7 @@ public class LoginActivity
         facebookButton.setEnabled(false);
         facebookButton.setVisibility(View.INVISIBLE);
 
-        facebookImageButton = (ImageButton) findViewById(R.id.facebook_sign_in_button);
+        ImageButton facebookImageButton = (ImageButton) findViewById(R.id.facebook_sign_in_button);
         facebookImageButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

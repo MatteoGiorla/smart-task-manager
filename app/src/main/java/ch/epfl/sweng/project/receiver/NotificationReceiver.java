@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 
 public class NotificationReceiver extends BroadcastReceiver{
-    public static String NOTIFICATION_ID = "notification-id";
-    public static String NOTIFICATION_KEY = "notification";
+    public static final String NOTIFICATION_ID = "notification-id";
+    public static final String NOTIFICATION_KEY = "notification";
 
     @Override
     public void onReceive(Context context, Intent intent) {
