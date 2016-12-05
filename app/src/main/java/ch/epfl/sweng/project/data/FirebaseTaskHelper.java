@@ -19,6 +19,7 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.chat.Message;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -122,9 +123,15 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Long date = (Long) task.child("dueDate").child("time").getValue();
                 Date dueDate = new Date(date);
 
-                Long startDuration = (Long) task.child("startDuration").getValue();
+                //Construct list of message
+                List<Message> listOfMessages = (List<Message>) task.child("listOfMessages").getValue(Message.class);
+                Task newTask;
 
-                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                if(listOfMessages == null) {
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                }else{
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, listOfMessages);
+                }
                 mTaskList.add(newTask);
             }
         }

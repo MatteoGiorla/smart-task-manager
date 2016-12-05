@@ -86,6 +86,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
+        this.listOfMessages = new ArrayList<>();
     }
 
     /**
@@ -132,6 +133,7 @@ public class Task implements Parcelable {
         this.listOfContributors = in.createStringArrayList();
         List<Message> listMessages = new ArrayList<>();
         in.readTypedList(listMessages, Message.CREATOR);
+        this.listOfMessages = new ArrayList<>(listMessages);
     }
 
     /**
@@ -166,7 +168,7 @@ public class Task implements Parcelable {
      * Getter returning the task's list of messages
      */
     public List<Message> getListOfMessages() {
-        return new ArrayList<>(listOfMessages);
+        return listOfMessages;
     }
 
     /**
@@ -203,6 +205,16 @@ public class Task implements Parcelable {
         if (newLocationName == null)
             throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
         locationName = newLocationName;
+    }
+
+    /**
+     * Setter to modifiy the list of message
+     */
+    public void setListOfMessages(List<Message> listMessages) {
+        if(listMessages == null) {
+            throw new IllegalArgumentException("listMessage passed to the Task's setter is null");
+        }
+        listOfMessages = new ArrayList<>(listMessages);
     }
 
     /**
