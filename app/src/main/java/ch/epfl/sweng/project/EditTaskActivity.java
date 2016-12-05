@@ -124,7 +124,7 @@ public class EditTaskActivity extends TaskActivity {
     @Override
     void resultActivity() {
         Log.e("duration editActivity", "duration to be set : " + duration);
-        mTaskToBeEdited.setName(title);
+        mTaskToBeEdited.setName(title[0] + title[1]);
         mTaskToBeEdited.setDescription(description);
         mTaskToBeEdited.setDueDate(date);
         mTaskToBeEdited.setDurationInMinutes(duration);
@@ -230,7 +230,7 @@ public class EditTaskActivity extends TaskActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisationFields() {
-        title = mTaskToBeEdited.getName();
+        title = Utils.separateTitleAndSuffix(mTaskToBeEdited.getName());
         energy = mTaskToBeEdited.getEnergy();
         description = mTaskToBeEdited.getDescription();
         date = mTaskToBeEdited.getDueDate();
@@ -241,7 +241,7 @@ public class EditTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateTextViewInformation() {
         TextView nameTextView = (TextView) findViewById(R.id.text_name);
-        nameTextView.setText(title);
+        nameTextView.setText(title[0]);
 
         TextView dateTextView = (TextView) findViewById(R.id.text_date);
         dateTextView.setText(safeTaskInformationGetter(TASK_DUE_DATE, mTaskToBeEdited));
@@ -265,7 +265,7 @@ public class EditTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.title_task);
-        titleEditText.setText(title);
+        titleEditText.setText(title[0]);
         titleEditText.setSelection(titleEditText.getText().length()); //put cursor at the end
 
         Button mButton = (Button) findViewById(R.id.pick_date);

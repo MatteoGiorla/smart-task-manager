@@ -66,7 +66,8 @@ public class NewTaskActivity extends TaskActivity {
         }
 
         listOfContributors.add(contributor);
-        Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
+        //TODO : it is here that the creation of the suffix need to happen.
+        Task newTask = new Task(title[0], description, locationName, date, duration, energy.toString(), listOfContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){

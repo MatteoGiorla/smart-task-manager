@@ -39,7 +39,7 @@ import java.util.List;
 public abstract class TaskActivity extends AppCompatActivity {
     Intent intent;
     ArrayList<Task> taskList;
-    String title;
+    String[] title;
     String description;
     Long duration;
     String locationName;
@@ -122,7 +122,9 @@ public abstract class TaskActivity extends AppCompatActivity {
      * @return true if the title contains
      */
     private boolean titleContainsContributorsSeparators(String title){
-        return title.contains(getString(R.string.contributors_separator));
+        char lastChar = title.charAt(title.length() -1);
+        return title.contains(getString(R.string.contributors_separator))
+                || lastChar == getString(R.string.contributors_separator).charAt(0);
     }
 
     /**
@@ -200,10 +202,14 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            title = titleEditText.getText().toString();
-            if (title.isEmpty()) {
+            //need this null check on the case of NewTaskActivity
+            if(title == null){
+                title = new String[2];
+            }
+            title[0] = titleEditText.getText().toString();
+            if (title[0].isEmpty()) {
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));
-            } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
+            } else if (!title[0].isEmpty() && !titleIsNotUnique(title[0])) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
