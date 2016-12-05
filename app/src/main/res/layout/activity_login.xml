@@ -25,7 +25,6 @@
             <ImageView
                 android:layout_width="match_parent"
                 app:srcCompat="@drawable/login_lock_image"
-                android:id="@+id/loginLockImage"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/padlock_image_description"/>
@@ -36,7 +35,6 @@
             android:layout_height="30dp"/>
 
         <TextView
-            android:id="@+id/appNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
@@ -46,7 +44,6 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/singInText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Class that allow us to retrieve the user's data before executing the remaining code of the app.
  */
-public class SynchronizedQueries {
+class SynchronizedQueries {
 
     private final Query reference;
     private final HashMap<Query, DataSnapshot> refsToSnaps = new HashMap<>();

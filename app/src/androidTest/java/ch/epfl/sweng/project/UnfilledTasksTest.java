@@ -34,7 +34,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -98,14 +97,11 @@ public class UnfilledTasksTest {
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
         */
-        //add the description
-        onView(withId(R.id.description_task)).perform(typeText("my beautiful task"));
-        pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 
@@ -115,6 +111,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.add_task_button)).perform(click());
 
         //add title
+        onView(withId(R.id.title_task)).perform(click());
         onView(withId(R.id.title_task)).perform(typeText("unfTask"));
         pressBack();
 
@@ -127,14 +124,11 @@ public class UnfilledTasksTest {
             fail("Could not confirm date selection "+u.getMessage());
         }
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
         */
-        //add the description
-        onView(withId(R.id.description_task)).perform(typeText("my beautiful task"));
-        pressBack();
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
     }
 
@@ -173,7 +167,7 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.unfilled_task_button)).perform(click());
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titre))));
     }
@@ -204,7 +198,7 @@ public class UnfilledTasksTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeLeft()));
 
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 
@@ -229,6 +223,7 @@ public class UnfilledTasksTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
 
         //add a due date (today due date)
+        onView(withId(R.id.dateLinearLayout)).perform(click());
         onView(withId(R.id.pick_date)).perform(click());
         UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
         try{
@@ -238,10 +233,11 @@ public class UnfilledTasksTest {
         }
 
         //add a duration
+        onView(withId(R.id.durationLinearLayout)).perform(click());
         onView(withId(R.id.durationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
 
-        //TODO: When the issue of the location spinner during the test is solved, decomment this.
+        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
         //add a location
         /*onView(withId(R.id.locationSpinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
@@ -258,7 +254,7 @@ public class UnfilledTasksTest {
         }
 
         //checking the title of the task appears.
-        onView(new RecyclerViewMatcher(R.id.list_view_tasks)
+        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
                 .atPosition(0))
                 .check(matches(hasDescendant(withText(titleToCheck))));
 
@@ -282,11 +278,10 @@ public class UnfilledTasksTest {
         onView(withId(R.id.list_view_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        //checking durtion is "not decided yet"
-        onData(anything())
-                .inAdapterView(withId(R.id.list_view_information))
-                .atPosition(1)
-                .check(matches(hasDescendant(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_param)))));
+        //checking duration is "not decided yet"
+        onView(withId(R.id.text_duration))
+                .check(matches(withText(InstrumentationRegistry.getTargetContext().getString(R.string.unfilled_duration))));
+
     }
 
     @Test

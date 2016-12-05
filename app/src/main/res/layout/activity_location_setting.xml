@@ -3,8 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_location_setting"
-        android:layout_width="match_parent"
+    android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="ch.epfl.sweng.project.location_setting.LocationSettingActivity"
         android:orientation="vertical">
@@ -36,7 +35,6 @@
         android:layout_height="30dp" />
 
     <ImageView
-        android:id="@+id/imageView1"
         android:layout_width="91dp"
         android:layout_height="79dp"
         android:src="@drawable/task_location_36dp"

@@ -21,8 +21,8 @@ import java.util.Locale;
  */
 public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    private Context mContext;
-    private ArrayList<Task> tasksList;
+    private final Context mContext;
+    private final ArrayList<Task> tasksList;
 
     /**
      * Constructor of the class

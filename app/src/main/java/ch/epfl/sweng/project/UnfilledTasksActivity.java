@@ -13,7 +13,6 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
     public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
     private UnfilledTaskFragment unfilledFragment;
-    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -22,7 +21,7 @@ public class UnfilledTasksActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_unfilled_tasks);
 
-        mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.unfilled_tasks_toolbar);
         initializeToolbar(mToolbar);
         mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
 

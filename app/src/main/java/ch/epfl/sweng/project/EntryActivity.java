@@ -22,7 +22,7 @@ import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
  */
 public class EntryActivity extends Activity {
 
-    public static boolean isAlreadyPersistent = false;
+    private static boolean isAlreadyPersistent = false;
     private static SharedPreferences prefs;
 
     @Override
