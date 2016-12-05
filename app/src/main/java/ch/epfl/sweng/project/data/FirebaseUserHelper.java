@@ -40,6 +40,12 @@ public class FirebaseUserHelper implements UserHelper{
         return currentUser;
     }
 
+    @Override
+    public boolean userExists(String userEmail){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        return mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(userEmail)) != null;
+    }
+
     /**
      * Deleter a user in the database
      *

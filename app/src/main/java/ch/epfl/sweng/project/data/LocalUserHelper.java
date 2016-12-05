@@ -15,4 +15,9 @@ public class LocalUserHelper implements UserHelper{
     public User retrieveUserInformation(User currentUser, Iterable<DataSnapshot> snapshots) {
         return new User(User.DEFAULT_EMAIL);
     }
+
+    @Override
+    public boolean userExists(String userEmail){
+        return userEmail.equals(User.CONTRIBUTOR_EMAIL) || userEmail.equals(User.DEFAULT_EMAIL);
+    }
 }
