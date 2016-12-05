@@ -293,23 +293,13 @@ public class TaskFragment extends Fragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mTaskAdapter.add(mTask, position);
+                        mDatabase.addNewTask(mTask, position);
                         recyclerView.scrollToPosition(position);
                     }
-                })
-                .setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        if (event != DISMISS_EVENT_ACTION) {
-                            taskList.add(position, mTask);
-                            removeTaskAction(position, isDone);
-                        }
-                    }
-
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(position);
+        mDatabase.deleteTask(mTask, position);
     }
 
     /**
