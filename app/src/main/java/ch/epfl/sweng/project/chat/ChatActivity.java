@@ -1,8 +1,10 @@
 package ch.epfl.sweng.project.chat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +28,7 @@ public class ChatActivity extends AppCompatActivity {
     private Task task;
     private ChatHelper chatHelper;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,8 +112,8 @@ public class ChatActivity extends AppCompatActivity {
                     String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     long time = new Date().getTime();
                     Message newMessage = new Message(userName, mssgText, time);
-                    task.addMessage(newMessage);
                     chatHelper.updateChat(task, newMessage);
+                    editMssg.getText().clear();
                 }
             }
         }

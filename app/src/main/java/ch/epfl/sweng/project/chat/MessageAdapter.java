@@ -1,7 +1,10 @@
 package ch.epfl.sweng.project.chat;
 
 import android.content.Context;
+import android.icu.text.DateFormat;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,8 @@ import ch.epfl.sweng.project.R;
 
 
 public class MessageAdapter extends ArrayAdapter<Message> {
+
+    private DateFormat dateFormat;
     /**
      * Constructor
      *
@@ -22,8 +27,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
      *                 instantiating views.
      * @param objects  The objects to represent in the ListView.
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public MessageAdapter(Context context, int resource, List<Message> objects) {
         super(context, resource, objects);
+        dateFormat = DateFormat.getDateInstance();
     }
 
     @NonNull
@@ -50,7 +57,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             }
 
             if(messageDate != null) {
-                messageDate.setText(String.valueOf(messageToDisplay.getTime()));
+                messageDate.setText(dateFormat.format(messageToDisplay.getTime()));
             }
         }
 
