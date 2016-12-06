@@ -19,6 +19,7 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -76,8 +77,26 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     @Override
     public void addNewTask(Task task, int position) {
-        for (String mail : task.getListOfContributors()) {
-            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+        if(Utils.hasContributors(task)){
+            //in this case, it is the duty of newTask/editTaskActivity
+            //to give a title with the correct format (title@@email@@email
+            for (String mail : task.getListOfContributors()) {
+                String[] title = Utils.separateTitleAndSuffix(task.getName());
+                String[] suffix = Utils.getCreatorAndSharer(title[1]);
+                Task toAdd;
+                if(suffix[1].equals(mail)){
+                    //in the case where we add the task to the creator, nothing to preprocess.
+                    toAdd = task;
+                }else{
+                    String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
+                    String locationName = Utils.getEverywhereLocation();
+                    toAdd = new Task(newTitle,task.getDescription(),locationName,task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors());
+                }
+                DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+                taskRef.setValue(toAdd);
+            }
+        }else{
+            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(task.getListOfContributors().get(0))).child(task.getName()).getRef();
             taskRef.setValue(task);
         }
         mAdapter.add(task, position);
@@ -97,6 +116,7 @@ public class FirebaseTaskHelper implements TaskHelper {
         deleteTask(original, position);
         addNewTask(updated, position);
     }
+
 
     /**
      * Reconstruct the tasks form the DataSnapshot given.
