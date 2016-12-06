@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 import ch.epfl.sweng.project.R;
@@ -33,6 +35,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         dateFormat = DateFormat.getDateInstance();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -59,6 +62,12 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             if(messageDate != null) {
                 messageDate.setText(dateFormat.format(messageToDisplay.getTime()));
             }
+
+            /*if(messageToDisplay.getUserName().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())) {
+                resultView.setBackground(getContext().getResources().getDrawable(R.drawable.right_chat_buble));
+            } else {
+                resultView.setBackground(getContext().getResources().getDrawable(R.drawable.left_chat_bubble));
+            }*/
         }
 
         return resultView;
