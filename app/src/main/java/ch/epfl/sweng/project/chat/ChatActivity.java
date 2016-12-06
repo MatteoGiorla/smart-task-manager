@@ -18,6 +18,7 @@ import java.util.Date;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.data.ChatHelper;
 import ch.epfl.sweng.project.data.ChatProvider;
 
@@ -34,10 +35,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        /*Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
         initializeToolbar(mToolbar);
 
-        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());*/
+        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
 
 
         //Initialise the Task and check its validity
@@ -58,6 +59,16 @@ public class ChatActivity extends AppCompatActivity {
 
         //Instantiation of the ChatHelper
         chatHelper = new ChatProvider(this, mAdapter).getChatProvider();
+
+        //Retrieve user email
+        String mail;
+        try {
+            mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }catch (NullPointerException e) {
+            mail = User.DEFAULT_EMAIL;
+        }
+        //Initiate the listener
+        chatHelper.retrieveMessages(mail, task);
     }
 
     @Override

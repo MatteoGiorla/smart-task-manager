@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -15,7 +16,6 @@ import java.util.List;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
-import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.chat.Message;
 import ch.epfl.sweng.project.chat.MessageAdapter;
@@ -35,8 +35,8 @@ public class FirebaseChatHelper implements ChatHelper {
     }
 
     @Override
-    public void retrieveMessages(User user, final Task task) {
-        final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+    public void retrieveMessages(String mail, final Task task) {
+        final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).getRef();
         if(mChat != null) {
             mChat.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -70,12 +70,13 @@ public class FirebaseChatHelper implements ChatHelper {
     }
 
     private void retrieveListOfMessages(DataSnapshot dataSnapshot, Task task) {
-        if(dataSnapshot.getChildrenCount() == 0 || dataSnapshot == null) {
+        if(dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
         }else {
             for (DataSnapshot t : dataSnapshot.getChildren()) {
                 mAdapter.clear();
-                List<Message> newListOfMessages = (List<Message>) t.child("listOfMessages").getValue(Message.class);
+                GenericTypeIndicator<List<Message>> gen = new GenericTypeIndicator<List<Message>>() {};
+                List<Message> newListOfMessages = t.child("listOfMessages").getValue(gen);
                 task.setListOfMessages(newListOfMessages);
                 mAdapter.addAll(newListOfMessages);
             }

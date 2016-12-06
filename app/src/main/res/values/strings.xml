@@ -8,6 +8,7 @@
     <string name="edit_location">Edit location</string>
     <string name="new_location">New location</string>
     <string name="unfinished_tasks">Tasks to fill up</string>
+    <string name="chat_activity">Chat</string>
 
     <!-- Menu strings-->
     <string name="settings_menu">Settings</string>

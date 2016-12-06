@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
-import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.chat.Message;
 import ch.epfl.sweng.project.chat.MessageAdapter;
 
@@ -20,7 +19,7 @@ public class LocalChatHelper implements ChatHelper {
     }
 
     @Override
-    public void retrieveMessages(User user, Task task) {
+    public void retrieveMessages(String mail, Task task) {
         // Nothing to retrieve
         Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
     }
