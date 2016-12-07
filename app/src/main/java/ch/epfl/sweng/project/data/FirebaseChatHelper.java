@@ -77,10 +77,12 @@ public class FirebaseChatHelper implements ChatHelper {
                 mAdapter.clear();
                 GenericTypeIndicator<List<Message>> gen = new GenericTypeIndicator<List<Message>>() {};
                 List<Message> newListOfMessages = t.child("listOfMessages").getValue(gen);
-                task.setListOfMessages(newListOfMessages);
-                mAdapter.addAll(newListOfMessages);
+                if(newListOfMessages != null) {
+                    task.setListOfMessages(newListOfMessages);
+                    mAdapter.addAll(newListOfMessages);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
-            mAdapter.notifyDataSetChanged();
         }
     }
 }
