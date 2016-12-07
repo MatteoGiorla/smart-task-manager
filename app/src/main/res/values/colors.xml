@@ -10,8 +10,9 @@
     <color name="light_gray">#ECECEC</color>
     <color name="flat_orange">#E47E30</color>
     <color name="flat_green">#37c26d</color>
-    <color name="tutorial_background">#EB342E</color>
+    <color name="tutorial_background">#eb342e</color>
     <color name="green_swipe">#388E3C</color>
     <color name="orange_yellow">#E3B221</color>
     <color name="transparent_white">#7cffffff</color>
+    <color name="bubble_message_color">#c6cec5c5</color>
 </resources>

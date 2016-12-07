@@ -5,10 +5,12 @@ import android.icu.text.DateFormat;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import ch.epfl.sweng.project.R;
 public class MessageAdapter extends ArrayAdapter<Message> {
 
     private DateFormat dateFormat;
+    private String currentUserName;
     /**
      * Constructor
      *
@@ -28,15 +31,16 @@ public class MessageAdapter extends ArrayAdapter<Message> {
      * @param objects  The objects to represent in the ListView.
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public MessageAdapter(Context context, int resource, List<Message> objects) {
+    MessageAdapter(Context context, int resource, List<Message> objects,  String currentUserName) {
         super(context, resource, objects);
+        this.currentUserName = currentUserName;
         dateFormat = DateFormat.getDateInstance();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
         if(resultView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -61,11 +65,15 @@ public class MessageAdapter extends ArrayAdapter<Message> {
                 messageDate.setText(dateFormat.format(messageToDisplay.getTime()));
             }
 
-            /*if(messageToDisplay.getUserName().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())) {
-                resultView.setBackground(getContext().getResources().getDrawable(R.drawable.right_chat_buble));
-            } else {
-                resultView.setBackground(getContext().getResources().getDrawable(R.drawable.left_chat_bubble));
-            }*/
+            LinearLayout messageContainer = (LinearLayout) resultView.findViewById(R.id.message_container);
+            if(messageContainer != null) {
+                if(messageToDisplay.getUserName().equals(currentUserName)) {
+                    messageContainer.setGravity(Gravity.END);
+                } else {
+                    messageContainer.setGravity(Gravity.START);
+                }
+            }
+
         }
 
         return resultView;

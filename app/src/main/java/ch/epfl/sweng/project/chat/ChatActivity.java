@@ -28,6 +28,7 @@ public class ChatActivity extends AppCompatActivity {
     private Intent intent;
     private Task task;
     private ChatHelper chatHelper;
+    private String currentUserName;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -44,10 +45,13 @@ public class ChatActivity extends AppCompatActivity {
         //Initialise the Task and check its validity
         getAndCheckIntent();
 
+        currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
         //Initialise the MessageAdapter
         MessageAdapter mAdapter = new MessageAdapter(this,
                 R.layout.list_item_chat,
-                task.getListOfMessages());
+                task.getListOfMessages(),
+                currentUserName);
 
         //Get the listView
         ListView mssgListView = (ListView) findViewById(R.id.list_of_messages);
@@ -120,9 +124,8 @@ public class ChatActivity extends AppCompatActivity {
                 String mssgText = editMssg.getText().toString();
 
                 if(!mssgText.isEmpty()) {
-                    String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     long time = new Date().getTime();
-                    Message newMessage = new Message(userName, mssgText, time);
+                    Message newMessage = new Message(currentUserName, mssgText, time);
                     chatHelper.updateChat(task, newMessage);
                     editMssg.getText().clear();
                 }
