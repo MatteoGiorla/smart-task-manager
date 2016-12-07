@@ -82,7 +82,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             //in this case, it is the duty of newTask/editTaskActivity
             //to give a title with the correct format (title@@email@@email
             for (String mail : task.getListOfContributors()) {
-                toAdd = sharedTaskPreProcessing(task, mail, Utils.getEverywhereLocation());
+                toAdd = sharedTaskPreProcessing(task, mail);
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(toAdd.getName()).getRef();
                 taskRef.setValue(toAdd);
             }
@@ -95,14 +95,14 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     /**
      * Takes care of preparing a shared task given the email of the shared user, its personal choosen
-     * location and the original task.
+     * location and the original task. Since we can't yet put locations on a shared task,
+     * it forces the location to be everywhere.
      *
      * @param task the task to process
      * @param mail the mail of the person shared
-     * @param locationName the custom location of the person.
      * @return a newly created task having the correct name and location according to the name.
      */
-    public Task sharedTaskPreProcessing(Task task, String mail, String locationName){
+    public Task sharedTaskPreProcessing(Task task, String mail){
         String[] title = Utils.separateTitleAndSuffix(task.getName());
         String[] suffix = Utils.getCreatorAndSharer(title[1]);
         Task toAdd;
@@ -111,7 +111,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             toAdd = task;
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),locationName,task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors());
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors());
         }
         return toAdd;
     }
@@ -120,7 +120,7 @@ public class FirebaseTaskHelper implements TaskHelper {
     public void deleteTask(Task task, int position) {
         if(Utils.hasContributors(task)){
             for (String mail : task.getListOfContributors()) {
-                String taskTitle = sharedTaskPreProcessing(task, mail, Utils.getEverywhereLocation()).getName();
+                String taskTitle = sharedTaskPreProcessing(task, mail).getName();
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(taskTitle).getRef();
                 taskRef.removeValue();
             }
@@ -138,15 +138,9 @@ public class FirebaseTaskHelper implements TaskHelper {
                 String locationName;
                 if(original.getListOfContributors().contains(mail)){
 
-                    //This is risky, might not work
-                    DatabaseReference locationRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(original.getName()).child("locationName");
-                    locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String locationName = (String) dataSnapshot.getValue();
-                            String oldName =  sharedTaskPreProcessing(original, mail, locationName).getName();
+                            String oldName =  sharedTaskPreProcessing(original, mail).getName();
 
-                            Task updatedTask = sharedTaskPreProcessing(updated, mail, locationName);
+                            Task updatedTask = sharedTaskPreProcessing(updated, mail);
                             //removing the old task
                             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
                             taskRef.removeValue();
@@ -154,14 +148,10 @@ public class FirebaseTaskHelper implements TaskHelper {
                             //adding the new task.
                             DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
                             taskReference.setValue(updatedTask);
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {}
-                    });
                 }else{
                     locationName = Utils.getEverywhereLocation();
-                    Task updatedTask = sharedTaskPreProcessing(updated, mail, locationName);
+                    Task updatedTask = sharedTaskPreProcessing(updated, mail);
                     DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
                     taskRef.setValue(updatedTask);
                 }
