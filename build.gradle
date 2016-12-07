@@ -17,7 +17,6 @@ allprojects {
         jcenter()
         // added for Facebook SDK:
         mavenCentral()
-        maven { url 'http://clojars.org/repo' }
     }
 }
 
