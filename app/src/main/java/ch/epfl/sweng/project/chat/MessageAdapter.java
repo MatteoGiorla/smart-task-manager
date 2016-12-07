@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.chat;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +39,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         dateFormat = DateFormat.getDateInstance();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @NonNull
     @Override
@@ -66,12 +69,20 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             }
 
             LinearLayout messageContainer = (LinearLayout) resultView.findViewById(R.id.message_container);
+            FrameLayout.LayoutParams params = new FrameLayout.
+                    LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
             if(messageContainer != null) {
                 if(messageToDisplay.getUserName().equals(currentUserName)) {
                     messageContainer.setGravity(Gravity.END);
+                    params.gravity = Gravity.END;
+
                 } else {
                     messageContainer.setGravity(Gravity.START);
+                    params.gravity = Gravity.START;
                 }
+
+                messageContainer.setLayoutParams(params);
             }
 
         }

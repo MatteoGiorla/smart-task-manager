@@ -19,7 +19,9 @@
             android:textStyle="normal|bold"
             android:paddingTop="10dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"/>
+            android:paddingRight="15dp"
+            android:layout_gravity="start"
+            android:textColor="@color/green"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,7 +31,9 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="18sp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
+            android:paddingRight="15dp"
+            android:layout_gravity="start"
+            android:maxWidth="300dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +42,8 @@
             android:gravity="end"
             android:paddingBottom="3dp"
             android:paddingRight="2dp"
-            android:paddingLeft="2dp"/>
+            android:paddingLeft="2dp"
+            android:layout_gravity="end"/>
 
     </LinearLayout>
 
