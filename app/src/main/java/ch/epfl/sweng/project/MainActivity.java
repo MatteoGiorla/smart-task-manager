@@ -37,6 +37,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.pusher.android.PusherAndroid;
+import com.pusher.android.notifications.ManifestValidator;
+import com.pusher.android.notifications.PushNotificationRegistration;
+import com.pusher.android.notifications.tokens.PushNotificationRegistrationListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -165,6 +169,31 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         userTimeAtDisposal = 120; //2 hours
 
         initializeAdapters();
+
+
+        // TODO DONE HERE FOR THE MOMENT:
+        PusherAndroid pusher = new PusherAndroid("4b3258f8bab36f96984c");
+        PushNotificationRegistration nativePusher = pusher.nativePusher();
+        try {
+            nativePusher.registerFCM(this, new PushNotificationRegistrationListener() {
+                @Override
+                public void onSuccessfulRegistration() {
+                    System.out.println("REGISTRATION SUCCESSFUL!!! YEEEEEHAWWWWW!");
+                }
+
+                @Override
+                public void onFailedRegistration(int statusCode, String response) {
+                    System.out.println(
+                            "A real sad day. Registration failed with code " + statusCode +
+                                    " " + response
+                    );
+                }
+            });
+        } catch (ManifestValidator.InvalidManifestException e) {
+            e.printStackTrace();
+        }
+
+        pusher.subscribe("kittens");
     }
 
     /**
