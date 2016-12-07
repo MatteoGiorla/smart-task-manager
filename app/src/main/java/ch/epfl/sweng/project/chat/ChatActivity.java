@@ -36,12 +36,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
-        initializeToolbar(mToolbar);
-
-        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
-
-
         //Initialise the Task and check its validity
         getAndCheckIntent();
 
@@ -63,6 +57,13 @@ public class ChatActivity extends AppCompatActivity {
 
         //Instantiation of the ChatHelper
         chatHelper = new ChatProvider(this, mAdapter).getChatProvider();
+
+        //Set toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
+
+        mToolbar.setTitle(task.getName());
+        initializeToolbar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
 
         //Retrieve user email
         String mail;

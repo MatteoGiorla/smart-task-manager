@@ -111,7 +111,6 @@
             android:theme="@style/AppThemeNoActionBar"/>
         <activity
             android:name=".chat.ChatActivity"
-            android:label="@string/chat_activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
     </application>

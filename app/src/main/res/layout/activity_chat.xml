@@ -6,14 +6,16 @@
     android:layout_height="match_parent"
     android:paddingBottom="5dp"
     android:orientation="vertical"
-    android:background="@drawable/background_chat">
+    android:background="@drawable/background_chat"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/chat_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_marginBottom="6dp"
-        android:theme="@style/ActionBar" />
+        android:theme="@style/ActionBar"/>
 
     <ListView
         android:id="@+id/list_of_messages"
@@ -54,10 +56,7 @@
                 android:maxLines="5"
                 android:maxLength="512"
                 android:id="@+id/input"
-                android:textColorHint="@color/gray"
-                android:focusable="false"
-                android:focusableInTouchMode="true"/>
-
+                android:textColorHint="@color/gray"/>
 
         <FrameLayout
             android:layout_width="0dp"
