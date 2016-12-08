@@ -305,7 +305,7 @@ public class Task implements Parcelable {
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                        int currentTimeDisposal, String everywhere_location, String select_one_location) {
+                                                 int currentTimeDisposal, String everywhere_location, String select_one_location) {
         return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location);
     }
 
@@ -342,14 +342,15 @@ public class Task implements Parcelable {
         return ifNewContributor;
     }
 
-    public void setIfNewContributor(long newContributor){
+    public Task setIfNewContributor(long newContributor){
         ifNewContributor = newContributor;
+        return this;
     }
 
     /**
      * Method returning the number of day between two days.
      *
-      * @param startDate the first day
+     * @param startDate the first day
      * @param endDate the last day
      * @return number of days between startDate and endDate
      */

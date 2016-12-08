@@ -37,6 +37,7 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
+
         testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, 0);
     }
 
@@ -57,6 +58,7 @@ public class TaskTest {
         listContributorsTest.add(authorTest);
 
         Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L);
+
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());

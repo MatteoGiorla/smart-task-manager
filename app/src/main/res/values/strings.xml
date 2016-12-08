@@ -209,6 +209,10 @@
     <string name="contributor_dialog_duplicate_warning_message">This user has already been added !</string>
     <string name="delete_contributor_dialog_message">Choose the contributor to remove :</string>
     <string name="delete_contributor_dialog_title">Remove a contributor</string>
+    <string name="added_as_contributor_on_multiple_tasks">"You have been added as a contributor to "</string>
+    <string name="added_as_contributor_on_one_task">You have been added as a contributor to task \"</string>
+    <string name="ending_of_added_as_contributor_on_one_text">\".</string>
+    <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
 
 
 </resources>
