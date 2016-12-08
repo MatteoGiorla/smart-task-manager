@@ -13,6 +13,7 @@
     <string name="settings_menu">Settings</string>
     <string name="logout_menu">Log Out</string>
     <string name="trash">Trash</string>
+    <string name="chat_menu">Chat</string>
 
     <!-- Hint strings-->
     <string name="hint_title">Enter title</string>
@@ -214,5 +215,8 @@
     <string name="ending_of_added_as_contributor_on_one_text">\".</string>
     <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
 
+    <!--Chat-->
+    <string name="input_message">Type a message</string>
+    <string name="no_messages">There is no messages</string>
 
 </resources>

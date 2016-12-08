@@ -57,12 +57,19 @@ public class UnfilledTasksActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
-            Intent intent = getIntent();
-            intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
-            intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());
-            setResult(RESULT_OK, intent);
+            setResultIntent();
             finish();
         }
+    }
+
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        setResultIntent();
+        finish();
     }
 
     /**
@@ -78,5 +85,15 @@ public class UnfilledTasksActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
+    }
+
+    /**
+     *  Private method that set the resulting intent
+     */
+    private void setResultIntent() {
+        Intent intent = getIntent();
+        intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
+        intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());
+        setResult(RESULT_OK, intent);
     }
 }
