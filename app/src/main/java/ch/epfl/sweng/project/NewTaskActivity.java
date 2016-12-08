@@ -82,10 +82,17 @@ public class NewTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
-
-
-        //TODO : it is here that the creation of the suffix need to happen.
-        Task newTask = new Task(title[0], description, locationName, date, duration, energy.toString(), listOfContributors);
+        String titleToType;
+        int newContributors;
+        if(listOfContributors.size() > 1){
+            String creatorEmail = listOfContributors.get(0);
+            titleToType = Utils.constructSharedTitle(title[0], creatorEmail, creatorEmail);
+            newContributors = 1;
+        }else{
+            titleToType = title[0];
+            newContributors = 0;
+        }
+        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, newContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){

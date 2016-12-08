@@ -126,9 +126,9 @@ public class Utils extends Application {
     public static String constructSharedTitle(String title, String creatorEmail, String sharerEmail){
         StringBuilder s = new StringBuilder(title);
         s.append(mContext.getResources().getString(R.string.contributors_separator));
-        s.append(creatorEmail);
+        s.append(encodeMailAsFirebaseKey(creatorEmail));
         s.append(mContext.getResources().getString(R.string.contributors_separator));
-        s.append(sharerEmail);
+        s.append(encodeMailAsFirebaseKey(sharerEmail));
         return s.toString();
     }
 
