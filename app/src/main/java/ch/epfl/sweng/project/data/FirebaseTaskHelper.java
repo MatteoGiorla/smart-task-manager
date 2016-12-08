@@ -27,6 +27,7 @@ import ch.epfl.sweng.project.chat.Message;
 
 import static ch.epfl.sweng.project.Utils.separateTitleAndSuffix;
 
+
 /**
  * Proxy that does all the work between the app and the firebase real time database.
  * It allows the user to fetch task from the database, he can also remove/edit or
@@ -265,7 +266,6 @@ public class FirebaseTaskHelper implements TaskHelper {
                 //Construct the date
                 Long date = task.child("dueDate").child("time").getValue(Long.class);
                 Date dueDate = new Date(date);
-<<<<<<< HEAD
                 long newContributor;
                 if(task.child("ifNewContributor").getValue() != null){
                      newContributor  = (long) task.child("ifNewContributor").getValue();
@@ -273,7 +273,6 @@ public class FirebaseTaskHelper implements TaskHelper {
                     newContributor = 0;
                 }
                 Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
-=======
 
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
@@ -286,7 +285,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 }else{
                     newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, listOfMessages);
                 }
->>>>>>> master
+
                 mTaskList.add(newTask);
             }
         }

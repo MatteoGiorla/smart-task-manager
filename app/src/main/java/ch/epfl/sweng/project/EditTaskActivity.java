@@ -26,6 +26,10 @@ import ch.epfl.sweng.project.chat.ChatActivity;
 
 import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
 
+import ch.epfl.sweng.project.chat.ChatActivity;
+
+import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
+
 /**
  * Class that represents the inflated activity_task under the edit case
  */
