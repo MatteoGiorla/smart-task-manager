@@ -41,7 +41,6 @@
         <activity
             android:name=".EntryActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -112,12 +111,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
+=======
+>>>>>>> master
         <activity
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
+<<<<<<< HEAD
+>>>>>>> master
+=======
 >>>>>>> master
     </application>
 
