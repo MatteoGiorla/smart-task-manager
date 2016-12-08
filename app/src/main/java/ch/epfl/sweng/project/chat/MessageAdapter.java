@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.chat;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.os.Build;
@@ -38,6 +39,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         dateFormat = DateFormat.getDateInstance();
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     @Override
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
