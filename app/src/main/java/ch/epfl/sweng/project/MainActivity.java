@@ -174,48 +174,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         userTimeAtDisposal = 120; //2 hours
 
         initializeAdapters();
-
-        // TODO TEST
-        /*
-        https://fcm.googleapis.com/fcm/send
-        Content-Type:application/json
-        Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA
-
-{
-  "to": "/topics/foo-bar",
-  "data": {
-    "message": "This is a Firebase Cloud Messaging Topic Message!",
-   }
-}
-         */
-        URL url = null;
-        try {
-            url = new URL("https://fcm.googleapis.com/fcm/send");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("Authorization", "AAAA5SSCQbg:APA91bF8Kd9YfdlNNXQTct3QQHQKEv83fxJnwCxPQJbOKx0q0hq9yJ7P0B1Zgtj2qBuTeNqMtojpK70F2J_dPSjnZcJUFyWLxsphhTgiENhnezuaJz6Q9iX4VCRxTTEjnnyS9NA8mKvdmuoqxPWZRB7FFEAXkhrABA");
-            JSONObject jsonObject = new JSONObject();
-            JSONObject inside = new JSONObject();
-            inside.put("message", "This is a Firebase Cloud Messaging Topic Message!");
-            jsonObject.put("to", "/topics/foo-bar");
-            jsonObject.put("data", inside.toString());
-            OutputStreamWriter wr = new OutputStreamWriter(urlConnection.getOutputStream());
-            wr.write(jsonObject.toString());
-            OutputStream os = urlConnection.getOutputStream();
-            os.write(jsonObject.toString().getBytes("UTF-8"));
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     /**
