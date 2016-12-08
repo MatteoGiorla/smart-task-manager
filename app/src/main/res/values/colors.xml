@@ -15,4 +15,5 @@
     <color name="orange_yellow">#E3B221</color>
     <color name="transparent_white">#7cffffff</color>
     <color name="bubble_message_color">#cfffffff</color>
+    <color name="send_button_disable">#beacacac</color>
 </resources>
