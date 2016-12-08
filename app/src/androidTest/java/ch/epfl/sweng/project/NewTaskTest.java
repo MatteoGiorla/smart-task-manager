@@ -11,7 +11,6 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.util.Log;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -132,13 +131,8 @@ public final class NewTaskTest extends SuperTest {
         onView(withId(R.id.title_task)).perform(typeText("task"));
         pressBack();
 
-        String dayToSelect = "1";
         final Calendar c = Calendar.getInstance();
         final int currentDay = c.get(Calendar.DAY_OF_MONTH);
-        Log.e("current day ", "current day =  " + currentDay);
-        if(currentDay == 1) {
-            dayToSelect = String.valueOf(currentDay - 1);
-        }
 
         onView(withId(R.id.pick_date)).perform(click());
         UiObject thirtyButton = mUiDevice.findObject(new UiSelector().text("1"));
