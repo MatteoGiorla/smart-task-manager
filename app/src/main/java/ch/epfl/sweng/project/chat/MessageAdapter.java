@@ -21,8 +21,8 @@ import ch.epfl.sweng.project.R;
 
 public class MessageAdapter extends ArrayAdapter<Message> {
 
-    private DateFormat dateFormat;
-    private String currentUserName;
+    private final DateFormat dateFormat;
+    private final String currentUserName;
     /**
      * Constructor
      *
@@ -38,6 +38,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         dateFormat = DateFormat.getDateInstance();
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
