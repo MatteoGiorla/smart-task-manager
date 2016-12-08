@@ -342,8 +342,9 @@ public class Task implements Parcelable {
         return ifNewContributor;
     }
 
-    public void setIfNewContributor(long newContributor){
+    public Task setIfNewContributor(long newContributor){
         ifNewContributor = newContributor;
+        return this;
     }
 
     /**

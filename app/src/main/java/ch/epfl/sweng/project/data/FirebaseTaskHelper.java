@@ -218,17 +218,15 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
 
         // TODO TRY HERE
-        List<Task> taskToNotify = new ArrayList<Task>();
+        final List<Task> taskToNotify = new ArrayList<Task>();
         for (Task t : mTaskList) {
            if (t.getIfNewContributor() == 1L) {
                taskToNotify.add(t);
            }
         }
-        Log.d("caca", "caca");
-        if (!taskToNotify.isEmpty()) {
-            Log.d("Bonjour", "Bonjour");
 
-            // TODO NOTIFICATION
+        if (!taskToNotify.isEmpty()) {
+            // NOTIFICATION
             //Notification builder
             /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
             builder.setSmallIcon(R.drawable.ic_event_notification);
@@ -245,16 +243,19 @@ public class FirebaseTaskHelper implements TaskHelper {
             mNotifyMgr.notify(mNotificationId, builder.build());*/
 
 
-            // TODO DIALOG
+            // DIALOG
+            // TODO add see me option button
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // TODO delete from firebase
-                    
+                    for (Task t : taskToNotify) {
+                        updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
+                    }
                 }
             });
 
-            builder.setMessage("You were added to "+ taskToNotify.size() + "new Task.");
+            builder.setMessage("You were added to "+ taskToNotify.size() + " new Task.");
             AlertDialog dialog = builder.create();
             dialog.show();
 
