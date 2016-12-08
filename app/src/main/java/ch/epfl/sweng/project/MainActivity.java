@@ -551,7 +551,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 unfText.setVisibility(View.INVISIBLE);
             }else{
                 unfText.setVisibility(View.VISIBLE);
-                unfText.setText(unfilledTasks.get(i).getName());
+                unfText.setText(Utils.separateTitleAndSuffix(unfilledTasks.get(i).getName())[0]);
             }
         }
     }

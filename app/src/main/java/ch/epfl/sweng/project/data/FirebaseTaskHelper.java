@@ -134,7 +134,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
                 }else{
                     Task updatedTask = Utils.sharedTaskPreProcessing(updated, mail);
-                    DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
+                    DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updatedTask.getName()).getRef();
                     taskRef.setValue(updatedTask);
                 }
             }
