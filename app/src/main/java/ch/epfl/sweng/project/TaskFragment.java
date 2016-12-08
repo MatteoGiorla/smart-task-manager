@@ -353,9 +353,9 @@ public class TaskFragment extends Fragment {
             Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
                 Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
                 taskPosition.add(i);

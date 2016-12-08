@@ -33,6 +33,12 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -405,6 +411,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             //EditText for new contributor
             editTextNewContributor = new EditText(getApplicationContext());
             editTextNewContributor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            editTextNewContributor.setTextColor(getColor(R.color.black));
             builder.setView(editTextNewContributor);
 
             //Show dialog
@@ -416,21 +423,31 @@ public abstract class TaskActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v)
                 {
-                    String enteredText = editTextNewContributor.getText().toString();
-                    if(!FirebaseUserHelper.userExists(enteredText)) { //TODO : userExists always returns true
-                        dialog.setMessage(getString(R.string.contributor_dialog_warning_message));
-                    } else {
-                        if(listOfContributors.contains(enteredText)){
-                            dialog.setMessage(getString(R.string.contributor_dialog_duplicate_warning_message));
-                        } else {
-                            addContributorInTask(enteredText);
-                            if(MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
-                                editContributorButton.setVisibility(View.VISIBLE);
+                    final String enteredText = editTextNewContributor.getText().toString();
+
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                    mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(enteredText)).addListenerForSingleValueEvent(
+                            new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if(!dataSnapshot.exists()){
+                                        dialog.setMessage(getString(R.string.contributor_dialog_warning_message));
+                                    }else{
+                                        addContributorInTask(enteredText);
+                                        if(MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
+                                            editContributorButton.setVisibility(View.VISIBLE);
+                                        }
+                                        setContributorsTextView();
+                                        dialog.dismiss();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
                             }
-                            setContributorsTextView();
-                            dialog.dismiss();
-                        }
-                    }
+                    );
                 }
             });
         }

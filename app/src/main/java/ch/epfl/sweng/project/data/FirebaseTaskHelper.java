@@ -111,7 +111,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             toAdd = task;
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors());
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor());
         }
         return toAdd;
     }
@@ -135,22 +135,20 @@ public class FirebaseTaskHelper implements TaskHelper {
     public void updateTask(final Task original, final Task updated, int position) {
         if(Utils.hasContributors(original)){
             for(final String mail : updated.getListOfContributors()){
-                String locationName;
                 if(original.getListOfContributors().contains(mail)){
 
-                            String oldName =  sharedTaskPreProcessing(original, mail).getName();
+                        String oldName =  sharedTaskPreProcessing(original, mail).getName();
 
-                            Task updatedTask = sharedTaskPreProcessing(updated, mail);
-                            //removing the old task
-                            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
-                            taskRef.removeValue();
+                        Task updatedTask = sharedTaskPreProcessing(updated, mail);
+                        //removing the old task
+                        DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
+                        taskRef.removeValue();
 
-                            //adding the new task.
-                            DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
-                            taskReference.setValue(updatedTask);
+                        //adding the new task.
+                        DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
+                        taskReference.setValue(updatedTask);
 
                 }else{
-                    locationName = Utils.getEverywhereLocation();
                     Task updatedTask = sharedTaskPreProcessing(updated, mail);
                     DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
                     taskRef.setValue(updatedTask);
@@ -192,10 +190,13 @@ public class FirebaseTaskHelper implements TaskHelper {
                 //Construct the date
                 Long date = (Long) task.child("dueDate").child("time").getValue();
                 Date dueDate = new Date(date);
-
-                Long startDuration = (Long) task.child("startDuration").getValue();
-
-                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                long newContributor;
+                if(task.child("ifNewContributor").getValue() != null){
+                     newContributor  = (long) task.child("ifNewContributor").getValue();
+                }else{
+                    newContributor = 0;
+                }
+                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
                 mTaskList.add(newTask);
             }
         }

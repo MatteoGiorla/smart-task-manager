@@ -54,6 +54,7 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
+    private long ifNewContributor;
 
     /**
      * Enum representing the values of energy needed.
@@ -71,10 +72,11 @@ public class Task implements Parcelable {
      * @param durationInMinutes           Task's durationInMinutes in minutes
      * @param energyNeeded       Task's energy needed
      * @param listOfContributors Task's list of contributors
+     * @param ifNewContributor   signal if this task has been added onto the user from a different user.
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -82,6 +84,7 @@ public class Task implements Parcelable {
         this.dueDate = dueDate;
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
+        this.ifNewContributor = ifNewContributor;
         dateFormat = DateFormat.getDateInstance();
     }
 
@@ -94,7 +97,7 @@ public class Task implements Parcelable {
     private Task(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
-                in.createStringArrayList());
+                in.createStringArrayList(), in.readLong());
     }
 
     /**
@@ -282,6 +285,7 @@ public class Task implements Parcelable {
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
+        dest.writeLong(ifNewContributor);
     }
 
     /**
@@ -332,6 +336,14 @@ public class Task implements Parcelable {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal;
+    }
+
+    public long getIfNewContributor(){
+        return ifNewContributor;
+    }
+
+    public void setIfNewContributor(long newContributor){
+        ifNewContributor = newContributor;
     }
 
     /**
