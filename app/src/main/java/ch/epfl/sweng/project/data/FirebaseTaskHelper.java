@@ -94,13 +94,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
-     * Takes care of preparing a shared task given the email of the shared user, its personal choosen
-     * location and the original task. Since we can't yet put locations on a shared task,
+     * Takes care of preparing a shared task given the email of the shared user,
+     * and the original task. Since we can't put personal locations on a shared task,
      * it forces the location to be everywhere.
      *
      * @param task the task to process
      * @param mail the mail of the person shared
-     * @return a newly created task having the correct name and location according to the name.
+     * @return a newly created task having the correct name and the default location.
      */
     public Task sharedTaskPreProcessing(Task task, String mail){
         String[] title = Utils.separateTitleAndSuffix(task.getName());
@@ -134,24 +134,42 @@ public class FirebaseTaskHelper implements TaskHelper {
     @Override
     public void updateTask(final Task original, final Task updated, int position) {
         if(Utils.hasContributors(original)){
+            /**
+             * This for loop takes care of updating the tasks according to the new
+             * contributor list of the updated task.
+             * If a new contributor has been added, it will
+             * add the updated task to this new contributor.
+             */
             for(final String mail : updated.getListOfContributors()){
                 if(original.getListOfContributors().contains(mail)){
 
-                        String oldName =  sharedTaskPreProcessing(original, mail).getName();
+                    String oldName =  sharedTaskPreProcessing(original, mail).getName();
 
-                        Task updatedTask = sharedTaskPreProcessing(updated, mail);
-                        //removing the old task
-                        DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
-                        taskRef.removeValue();
+                    Task updatedTask = sharedTaskPreProcessing(updated, mail);
+                    //removing the old task
+                    DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
+                    taskRef.removeValue();
 
-                        //adding the new task.
-                        DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
-                        taskReference.setValue(updatedTask);
+                    //adding the new task.
+                    DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
+                    taskReference.setValue(updatedTask);
 
                 }else{
                     Task updatedTask = sharedTaskPreProcessing(updated, mail);
                     DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updated.getName()).getRef();
                     taskRef.setValue(updatedTask);
+                }
+            }
+            /**
+             * Now this for loop takes care of removing the task from the contributor that have been
+             * removed from the shared task.
+             */
+            for(final String mail : original.getListOfContributors()){
+                if(!updated.getListOfContributors().contains(mail)){
+                    String oldName =  sharedTaskPreProcessing(original, mail).getName();
+                    //removing the old task
+                    DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(oldName).getRef();
+                    taskRef.removeValue();
                 }
             }
 
