@@ -85,4 +85,14 @@ public class Utils extends Application {
 
         return stringAndSuffix;
     }
+
+    /**
+     * tells whether a task has contributors (i.e. task is shared across people)
+     *
+     * @param task the task to test
+     * @return true if the task is shared, false otherwise.
+     */
+    public static boolean hasContributors(Task task){
+        return task.getListOfContributors().size() > 1;
+    }
 }
