@@ -37,7 +37,6 @@ public class TaskTest {
         long duration = 60;
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
-        long startDuration = 30;
         testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, 0);
     }
 
@@ -56,7 +55,6 @@ public class TaskTest {
         String authorTest = "A test author";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
-        long startDuration= 30;
 
         Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L);
 

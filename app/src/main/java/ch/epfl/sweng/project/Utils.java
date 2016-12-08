@@ -132,6 +132,30 @@ public class Utils extends Application {
         return s.toString();
     }
 
+
+    /**
+     * Takes care of preparing a shared task given the email of the shared user,
+     * and the original task. Since we can't put personal locations on a shared task,
+     * it forces the location to be everywhere.
+     *
+     * @param task the task to process
+     * @param mail the mail of the person shared
+     * @return a newly created task having the correct name and the default location.
+     */
+    public static Task sharedTaskPreProcessing(Task task, String mail){
+        String[] title = Utils.separateTitleAndSuffix(task.getName());
+        String[] suffix = Utils.getCreatorAndSharer(title[1]);
+        Task toAdd;
+        if(suffix[0].equals(mail)){
+            //in the case where we add the task to the creator, nothing to preprocess.
+            toAdd = task;
+        }else{
+            String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor());
+        }
+        return toAdd;
+    }
+
     public static String getEverywhereLocation(){
         return mContext.getResources().getString(R.string.everywhere_location);
     }
