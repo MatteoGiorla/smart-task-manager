@@ -31,6 +31,7 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseChatHelper chatHelper;
     private String currentUserName;
     private FloatingActionButton sendMssgButton;
+    private String mail;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -40,6 +41,8 @@ public class ChatActivity extends AppCompatActivity {
 
         //Initialise the Task and check its validity
         getAndCheckIntent();
+
+        initializeToolbar();
 
         try {
             currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
@@ -70,21 +73,19 @@ public class ChatActivity extends AppCompatActivity {
         //Instantiation of the ChatHelper
         chatHelper = new FirebaseChatHelper(this, mAdapter);
 
-        //Set toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
-
-        mToolbar.setTitle(task.getName());
-        initializeToolbar(mToolbar);
-        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
-
         //Retrieve user email
-        String mail;
         try {
             mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
         //Initiate the listener
+        chatHelper.retrieveMessages(mail, task);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         chatHelper.retrieveMessages(mail, task);
     }
 
@@ -112,15 +113,17 @@ public class ChatActivity extends AppCompatActivity {
     /**
      * Start the toolbar and enable that back button on the toolbar.
      *
-     * @param mToolbar the toolbar of the activity
      */
-    private void initializeToolbar(Toolbar mToolbar) {
+    private void initializeToolbar() {
+        //Set toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
+        mToolbar.setTitle(task.getName());
         setSupportActionBar(mToolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        mToolbar.setNavigationOnClickListener(new ReturnArrowListener());
     }
 
     private class SendMessageOnClickListener implements View.OnClickListener {

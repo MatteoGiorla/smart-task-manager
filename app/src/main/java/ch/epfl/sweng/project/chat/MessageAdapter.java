@@ -2,10 +2,10 @@ package ch.epfl.sweng.project.chat;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.icu.text.DateFormat;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.project.R;
@@ -22,7 +24,6 @@ import ch.epfl.sweng.project.R;
 
 public class MessageAdapter extends ArrayAdapter<Message> {
 
-    private final DateFormat dateFormat;
     private final String currentUserName;
     /**
      * Constructor
@@ -36,7 +37,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     MessageAdapter(Context context, int resource, List<Message> objects,  String currentUserName) {
         super(context, resource, objects);
         this.currentUserName = currentUserName;
-        dateFormat = DateFormat.getDateInstance();
     }
 
     @TargetApi(Build.VERSION_CODES.N)
@@ -64,6 +64,14 @@ public class MessageAdapter extends ArrayAdapter<Message> {
             }
 
             if(messageDate != null) {
+                DateFormat dateFormat;
+                Date mssgDate = new Date(messageToDisplay.getTime());
+
+                if(DateUtils.isToday(mssgDate.getTime())) {
+                    dateFormat = android.text.format.DateFormat.getTimeFormat(getContext());
+                } else {
+                    dateFormat = android.text.format.DateFormat.getMediumDateFormat(getContext());
+                }
                 messageDate.setText(dateFormat.format(messageToDisplay.getTime()));
             }
 
