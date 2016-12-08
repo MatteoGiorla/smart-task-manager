@@ -288,7 +288,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             }
         }
 
-         mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
 
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);

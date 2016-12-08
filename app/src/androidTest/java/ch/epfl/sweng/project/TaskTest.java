@@ -157,7 +157,9 @@ public class TaskTest {
     @Test
     public void testTaskConstructorException() {
         thrownException.expect(NullPointerException.class);
+
         new Task(null, null, null, null, 0, null, null, 0L);
+
     }
 
     /**
