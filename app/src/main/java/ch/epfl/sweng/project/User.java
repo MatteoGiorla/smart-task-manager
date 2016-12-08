@@ -14,6 +14,8 @@ import java.util.List;
 public class User implements Parcelable {
     public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
     public static final String CONTRIBUTOR_EMAIL = "cirdec3961@gmail.com";
+    public static final String DEFAULT_NAME = "Trixy";
+
     private String email;
     private List<Location> listLocations;
 

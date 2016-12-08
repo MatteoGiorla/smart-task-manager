@@ -27,7 +27,7 @@ public class FirebaseUserHelper implements UserHelper{
         List<Location> listLocations = new ArrayList<>();
         //Construct each user's location
         for (DataSnapshot data : snapshots) {
-            String name = (String) data.child("name").getValue();
+            String name = data.child("name").getValue(String.class);
             Double latitude = data.child("latitude").getValue(Double.class);
             Double longitude = data.child("longitude").getValue(Double.class);
             //Create location

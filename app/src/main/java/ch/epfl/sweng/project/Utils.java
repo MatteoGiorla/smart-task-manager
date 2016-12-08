@@ -18,6 +18,9 @@ public class Utils extends Application {
         mContext = this;
     }
 
+    public static final String FIREBASE_PROVIDER = "Firebase";
+    public static final String TEST_PROVIDER = "Tests";
+
     public static Context getContext(){
         return mContext;
     }

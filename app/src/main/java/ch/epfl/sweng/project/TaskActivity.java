@@ -118,7 +118,6 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation.setAdapter(spinnerLocationAdapter);
 
-
         addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
         addContributorButton.setOnClickListener(new OnAddContributorButtonClickListener());
 
@@ -240,11 +239,12 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (!title[0].isEmpty() && !titleIsNotUnique(title[0])) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
-                locationName = mLocation.getSelectedItem().toString();
-                if(mDuration.getSelectedItem() == null) {
-                    duration = 0L;
-                } else {
-                    duration = MainActivity.REVERSE_DURATION.get(mDuration.getSelectedItem().toString()).longValue();
+                if(mLocation.getSelectedItem() != null) {
+                    locationName = mLocation.getSelectedItem().toString();
+                }
+                if(mDuration.getSelectedItem() != null) {
+                    duration = MainActivity.REVERSE_DURATION
+                            .get(mDuration.getSelectedItem().toString()).longValue();
                 }
                 Log.e("taskActivity", "duration is : " + duration);
                 // to set correctly the energy from the radio button
@@ -348,7 +348,8 @@ public abstract class TaskActivity extends AppCompatActivity {
             int month;
             int day;
 
-            if(mButton.getText().equals(getString(R.string.enter_due_date_hint))){
+            if(mButton.getText().equals(getString(R.string.enter_due_date_hint))
+                    || date.getTime() == NewTaskActivity.UNFILLED_TASK_TIME){
                 // Use the current date as the default date in the picker
                 year = c.get(Calendar.YEAR);
                 month = c.get(Calendar.MONTH);

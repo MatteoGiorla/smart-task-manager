@@ -110,7 +110,20 @@
             android:label="@string/settings_menu"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+=======
+>>>>>>> master
+        <activity
+            android:name=".chat.ChatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
+<<<<<<< HEAD
+>>>>>>> master
+=======
+>>>>>>> master
     </application>
 
 </manifest>
