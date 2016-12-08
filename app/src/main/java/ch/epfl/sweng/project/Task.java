@@ -165,6 +165,7 @@ public class Task implements Parcelable {
         this.durationInMinutes = in.readLong();
         this.energyNeeded = Energy.valueOf(in.readString());
         this.listOfContributors = in.createStringArrayList();
+        this.ifNewContributor = in.readLong();
         List<Message> listMessages = new ArrayList<>();
         in.readTypedList(listMessages, Message.CREATOR);
         this.listOfMessages = new ArrayList<>(listMessages);

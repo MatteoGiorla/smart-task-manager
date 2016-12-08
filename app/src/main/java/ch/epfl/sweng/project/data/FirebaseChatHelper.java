@@ -54,7 +54,8 @@ public class FirebaseChatHelper {
     public void updateChat(Task task, Message newMessage) {
         task.addMessage(newMessage);
         for (String mail : task.getListOfContributors()) {
-            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+            Task updateTask = Utils.sharedTaskPreProcessing(task, mail);
+            DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updateTask.getName()).getRef();
             taskRef.setValue(task);
         }
         mAdapter.notifyDataSetChanged();
