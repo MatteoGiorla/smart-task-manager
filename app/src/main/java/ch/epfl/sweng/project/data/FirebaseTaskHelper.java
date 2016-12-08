@@ -7,6 +7,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -19,6 +20,7 @@ import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.chat.Message;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -110,21 +112,33 @@ public class FirebaseTaskHelper implements TaskHelper {
         mTaskList.clear();
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             if (task != null) {
-                String title = (String) task.child("name").getValue();
-                String description = (String) task.child("description").getValue();
-                Long durationInMinutes = (Long) task.child("durationInMinutes").getValue();
-                String energy = (String) task.child("energy").getValue();
-                List<String> contributors = (List<String>) task.child("listOfContributors").getValue();
+                String title = task.child("name").getValue(String.class);
+                String description = task.child("description").getValue(String.class);
+                Long durationInMinutes = task.child("durationInMinutes").getValue(Long.class);
+                String energy = task.child("energy").getValue(String.class);
+
+                //Define a GenericTypeIndicator to get back properly typed collection
+                GenericTypeIndicator<List<String>> stringListTypeIndicator =
+                        new GenericTypeIndicator<List<String>>() {};
+                List<String> contributors = task.child("listOfContributors").getValue(stringListTypeIndicator);
 
                 //Construct Location object
-                String locationName = (String) task.child("locationName").getValue();
+                String locationName = task.child("locationName").getValue(String.class);
                 //Construct the date
-                Long date = (Long) task.child("dueDate").child("time").getValue();
+                Long date = task.child("dueDate").child("time").getValue(Long.class);
                 Date dueDate = new Date(date);
 
-                Long startDuration = (Long) task.child("startDuration").getValue();
+                //Define a GenericTypeIndicator to get back properly typed collection
+                GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
+                //Construct list of message
+                List<Message> listOfMessages = task.child("listOfMessages").getValue(messageListTypeIndicator);
+                Task newTask;
 
-                Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                if(listOfMessages == null) {
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors);
+                }else{
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, listOfMessages);
+                }
                 mTaskList.add(newTask);
             }
         }

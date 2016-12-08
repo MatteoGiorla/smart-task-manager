@@ -13,8 +13,11 @@ import java.util.ArrayList;
 /**
  * Class that represents the inflated activity_new_task
  */
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_NEW_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
+    public static final long UNFILLED_TASK_TIME = 0;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -24,9 +27,7 @@ public class NewTaskActivity extends TaskActivity {
 
         //Set default values
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, 1899);
-        cal.set(Calendar.MONTH, 0);
-        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.setTimeInMillis(UNFILLED_TASK_TIME);
         date = cal.getTime();
 
         energy = Task.Energy.NORMAL;
