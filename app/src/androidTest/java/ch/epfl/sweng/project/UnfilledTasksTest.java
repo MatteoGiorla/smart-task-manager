@@ -49,12 +49,12 @@ public class UnfilledTasksTest {
 
     @BeforeClass
     public static void setTaskProvider() {
-        TaskProvider.setProvider(Utils.TEST_PROVIDER);
+        TaskProvider.setProvider(TaskProvider.TEST_PROVIDER);
     }
 
     @BeforeClass
     public static void setUserProvider() {
-        UserProvider.setProvider(Utils.TEST_PROVIDER);
+        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
     }
 
     @Before
@@ -245,16 +245,13 @@ public class UnfilledTasksTest {
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
-        pressBack();
-
         //Going back to MainActivity
-       /* UiObject returnButton = mUiDevice.findObject(new UiSelector().className(LEFT_ARROW_CLASSN).index(0));
+        UiObject returnButton = mUiDevice.findObject(new UiSelector().className(LEFT_ARROW_CLASSN).index(0));
         try{
             returnButton.clickAndWaitForNewWindow();
         }catch(UiObjectNotFoundException u){
             fail("Could not find the return arrow with UiAutomator actions");
-        }*/
-        pressBack();
+        }
 
         //checking the title of the task appears.
         onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)

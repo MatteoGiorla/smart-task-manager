@@ -17,6 +17,7 @@ public class LocalTaskHelper implements TaskHelper {
 
     public LocalTaskHelper(TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
+        ArrayList<Task> mTaskList = taskList;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package ch.epfl.sweng.project;
 
 import android.content.Context;
-import android.icu.util.Calendar;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -117,12 +114,8 @@ public final class NewTaskTest extends SuperTest {
         onView(withContentDescription("represent the remaining days")).check(matches(withText(containsString("days left"))));
     }
 
-    /**
-     * Test which indicator is displayed in listView (late or due today)
-     */
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Test
-    public void dueTaskDisplayDays(){
+    public void lateTaskDisplayDays(){
         UiDevice mUiDevice = getInstance(getInstrumentation());
 
         onView(withId(R.id.add_task_button)).perform(click());
@@ -131,9 +124,7 @@ public final class NewTaskTest extends SuperTest {
         onView(withId(R.id.title_task)).perform(typeText("task"));
         pressBack();
 
-        final Calendar c = Calendar.getInstance();
-        final int currentDay = c.get(Calendar.DAY_OF_MONTH);
-
+        //add a due date !!! Warning, test only working launched after the first of every month
         onView(withId(R.id.pick_date)).perform(click());
         UiObject thirtyButton = mUiDevice.findObject(new UiSelector().text("1"));
         UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
@@ -150,13 +141,9 @@ public final class NewTaskTest extends SuperTest {
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
 
-        if(currentDay == 1) {
-            onView(withContentDescription("represent the remaining days"))
-                    .check(matches(withText(containsString("today"))));
-        } else {
-            onView(withContentDescription("represent the remaining days"))
-                    .check(matches(withText(containsString("late"))));
-        }
+        //to add "s" after day after the two of december
+        onView(withContentDescription("represent the remaining days"))
+                .check(matches(withText(containsString("day late"))));
     }
 
     @Test

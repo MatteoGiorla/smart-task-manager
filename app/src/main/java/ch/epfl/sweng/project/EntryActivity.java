@@ -30,7 +30,7 @@ public class EntryActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //Make the database persistent, must be called before anything is done in the database.
-        if(!isAlreadyPersistent && TaskProvider.mProvider.equals(Utils.FIREBASE_PROVIDER)) {
+        if(!isAlreadyPersistent && TaskProvider.mProvider.equals(TaskProvider.FIREBASE_PROVIDER)) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             isAlreadyPersistent = true;
         }

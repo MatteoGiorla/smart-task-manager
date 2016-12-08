@@ -6,15 +6,16 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
-import ch.epfl.sweng.project.Utils;
 
 /**
  * Class that decide which provider the app use in
  * order to manipulate tasks in the database
  */
 public class TaskProvider {
+    public static final String FIREBASE_PROVIDER = "Firebase";
+    public static final String TEST_PROVIDER = "Tests";
 
-    public static String mProvider = Utils.FIREBASE_PROVIDER;
+    public static String mProvider = FIREBASE_PROVIDER;
     private final TaskListAdapter mAdapter;
     private final ArrayList<Task> mTaskList;
     private final Context mContext;
@@ -39,9 +40,9 @@ public class TaskProvider {
      */
     public TaskHelper getTaskProvider() {
         switch (mProvider) {
-            case Utils.FIREBASE_PROVIDER:
+            case FIREBASE_PROVIDER:
                 return new FirebaseTaskHelper(mContext, mAdapter, mTaskList);
-            case Utils.TEST_PROVIDER:
+            case TEST_PROVIDER:
                 return new LocalTaskHelper(mAdapter, mTaskList);
             default:
                 throw new IllegalArgumentException("This provider does not exists !");

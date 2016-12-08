@@ -21,7 +21,7 @@ public class EntryActivityIntroTest {
 
     @BeforeClass
     public static void setUserProvider() {
-        UserProvider.setProvider(Utils.TEST_PROVIDER);
+        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
     }
 
     @Rule

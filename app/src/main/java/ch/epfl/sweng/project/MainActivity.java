@@ -121,14 +121,14 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         //If we are not in test mode
         //We get the user that was loaded in SynchronisationActivity
         switch (UserProvider.mProvider) {
-            case Utils.FIREBASE_PROVIDER:
+            case UserProvider.FIREBASE_PROVIDER:
                 intent = getIntent();
                 checkIntent();
                 currentUser = intent.getParcelableExtra(UserAllOnCompleteListener.CURRENT_USER_KEY);
                 checkIntentExtra();
                 break;
 
-            case Utils.TEST_PROVIDER:
+            case UserProvider.TEST_PROVIDER:
                 currentUser = new User(User.DEFAULT_EMAIL);
                 break;
 

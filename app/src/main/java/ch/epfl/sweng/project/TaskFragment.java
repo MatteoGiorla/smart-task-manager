@@ -78,8 +78,6 @@ public class TaskFragment extends Fragment {
         }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
-
-        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -159,6 +157,7 @@ public class TaskFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
+
                 if (direction == ItemTouchHelper.LEFT){
                     createSnackBar(position, false);
                 } else {
@@ -254,7 +253,9 @@ public class TaskFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+                new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+            }
         }
     }
 
@@ -271,7 +272,9 @@ public class TaskFragment extends Fragment {
         mDatabase.addNewTask(task, taskList.size());
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -291,11 +294,10 @@ public class TaskFragment extends Fragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mDatabase.addNewTask(mTask, position);
+                        mTaskAdapter.add(mTask, position);
                         recyclerView.scrollToPosition(position);
                     }
                 });
-
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
         mDatabase.deleteTask(mTask, position);
@@ -314,7 +316,9 @@ public class TaskFragment extends Fragment {
         mDatabase.deleteTask(taskToBeDeleted, position);
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
+            new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        }
     }
 
     /**

@@ -14,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import ch.epfl.sweng.project.chat.Message;
-
 /**
  * Task is the class representing a task
  */
@@ -57,7 +55,6 @@ public class Task implements Parcelable {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private long ifNewContributor;
-    private List<Message> listOfMessages;
 
     /**
      * Enum representing the values of energy needed.
@@ -89,35 +86,7 @@ public class Task implements Parcelable {
         this.locationName = locationName;
         this.ifNewContributor = ifNewContributor;
         dateFormat = DateFormat.getDateInstance();
-        this.listOfMessages = new ArrayList<>();
     }
-
-    /**
-     * Constructor of the class
-     *
-     * @param name               Task's name
-     * @param description        Task's description
-     * @param locationName       Task's locationName
-     * @param dueDate            Task's due date
-     * @param durationInMinutes           Task's durationInMinutes in minutes
-     * @param energyNeeded       Task's energy needed
-     * @param listOfContributors Task's list of contributors
-     * @param listOfMessages     Task's list of messages
-     * @throws IllegalArgumentException if one parameter is invalid (null)
-     */
-    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull List<Message> listOfMessages) {
-        this.name = name;
-        this.description = description;
-        this.durationInMinutes = durationInMinutes;
-        this.listOfContributors = new ArrayList<>(listOfContributors);
-        this.dueDate = dueDate;
-        this.energyNeeded = Energy.valueOf(energyNeeded);
-        this.locationName = locationName;
-        dateFormat = DateFormat.getDateInstance();
-        this.listOfMessages = new ArrayList<>(listOfMessages);
-    }
-
 
     /**
      * Private constructor used to recreate a Task when
@@ -129,17 +98,6 @@ public class Task implements Parcelable {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
                 in.createStringArrayList(), in.readLong());
-        this.name = in.readString();
-        this.description = in.readString();
-        this.locationName = in.readString();
-        this.dueDate = new Date(in.readLong());
-        dateFormat = DateFormat.getDateInstance();
-        this.durationInMinutes = in.readLong();
-        this.energyNeeded = Energy.valueOf(in.readString());
-        this.listOfContributors = in.createStringArrayList();
-        List<Message> listMessages = new ArrayList<>();
-        in.readTypedList(listMessages, Message.CREATOR);
-        this.listOfMessages = new ArrayList<>(listMessages);
     }
 
     /**
@@ -168,13 +126,6 @@ public class Task implements Parcelable {
      */
     public long getDurationInMinutes() {
         return durationInMinutes;
-    }
-
-    /**
-     * Getter returning the task's list of messages
-     */
-    public List<Message> getListOfMessages() {
-        return listOfMessages;
     }
 
     /**
@@ -211,16 +162,6 @@ public class Task implements Parcelable {
         if (newLocationName == null)
             throw new IllegalArgumentException("newLocation passed to the Task's setter is null");
         locationName = newLocationName;
-    }
-
-    /**
-     * Setter to modify the list of message
-     */
-    public void setListOfMessages(List<Message> listMessages) {
-        if(listMessages == null) {
-            throw new IllegalArgumentException("listMessage passed to the Task's setter is null");
-        }
-        listOfMessages = new ArrayList<>(listMessages);
     }
 
     /**
@@ -311,28 +252,11 @@ public class Task implements Parcelable {
      *
      * @param contributor Email of the contributor
      * @throws IllegalArgumentException if the argument is null
-     *
-     * @return true if the contributor has been deleted, otherwise false
      */
     public boolean deleteContributor(String contributor) {
         if (contributor == null || !listOfContributors.contains(contributor))
             throw new IllegalArgumentException("Contributor to be deleted invalid");
         return listOfContributors.remove(contributor);
-    }
-
-    /**
-     * Add a given message to the list of messages
-     *
-     * @param newMessage The message to be added
-     * @throws IllegalArgumentException if the argument is null
-     *
-     * @return true if the message has been added, otherwise false
-     */
-    public boolean addMessage(Message newMessage) {
-        if(newMessage == null) {
-          throw new IllegalArgumentException("Trying to add an invalid message !");
-        }
-        return listOfMessages.add(newMessage);
     }
 
     /**
@@ -362,7 +286,6 @@ public class Task implements Parcelable {
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
         dest.writeLong(ifNewContributor);
-        dest.writeTypedList(listOfMessages);
     }
 
     /**
