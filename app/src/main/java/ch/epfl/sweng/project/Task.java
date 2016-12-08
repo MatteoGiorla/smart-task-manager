@@ -105,7 +105,7 @@ public class Task implements Parcelable {
      * @param listOfMessages     Task's list of messages
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
+   /* public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
                 long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull List<Message> listOfMessages) {
         this.name = name;
         this.description = description;
@@ -116,7 +116,7 @@ public class Task implements Parcelable {
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
         this.listOfMessages = new ArrayList<>();
-    }
+    }*/
 
     /**
      * Constructor of the class
@@ -132,7 +132,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull List<Message> listOfMessages) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull List<Message> listOfMessages) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -141,6 +141,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
+        this.ifNewContributor = ifNewContributor;
         this.listOfMessages = new ArrayList<>(listOfMessages);
     }
 
@@ -152,9 +153,9 @@ public class Task implements Parcelable {
      * @param in Container of a Task
      */
     private Task(@NonNull Parcel in) {
-        this(in.readString(), in.readString(), in.readString(),
+        /*this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
-                in.createStringArrayList(), in.readLong());
+                in.createStringArrayList(), in.readLong());*/
 
         this.name = in.readString();
         this.description = in.readString();
