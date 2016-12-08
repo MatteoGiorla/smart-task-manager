@@ -1,18 +1,10 @@
 package ch.epfl.sweng.project.data;
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.renderscript.RenderScript;
-import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,19 +16,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.EntryActivity;
-import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
-import ch.epfl.sweng.project.location_setting.LocationFragment;
-import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
-import ch.epfl.sweng.project.notification.TaskNotification;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static ch.epfl.sweng.project.Utils.getContext;
 import static ch.epfl.sweng.project.Utils.separateTitleAndSuffix;
 
 /**
@@ -221,6 +206,8 @@ public class FirebaseTaskHelper implements TaskHelper {
 
         // Manage the dialog that warn the user that he was added to a task:
         final List<Task> taskAddedAsContributor = new ArrayList<Task>();
+
+        // search task that has been added by someone else:
         for (Task t : mTaskList) {
            if (t.getIfNewContributor() == 1L) {
                taskAddedAsContributor.add(t);
@@ -246,7 +233,6 @@ public class FirebaseTaskHelper implements TaskHelper {
 
 
             // DIALOG
-            // TODO add see me option button
             // Build the Dialog:
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
