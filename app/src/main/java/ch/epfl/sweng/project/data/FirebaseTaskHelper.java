@@ -3,6 +3,7 @@ package ch.epfl.sweng.project.data;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -169,6 +170,71 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
     }
 
+    /**
+     *
+     *
+     * @param mTaskList
+     */
+    private void warnContributor(List<Task> mTaskList) {
+        List<Task> taskAddedAsContributor = new ArrayList<Task>();
+
+        // search task that has been added by someone else:
+        for (Task t : mTaskList) {
+            if (t.getIfNewContributor() == 1L) {
+                taskAddedAsContributor.add(t);
+            }
+        }
+
+        if (!taskAddedAsContributor.isEmpty()) {
+            // NOTIFICATION
+            //Notification builder
+            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+            builder.setSmallIcon(R.drawable.ic_event_notification);
+            builder.setContentTitle(taskToNotify.get(0).getName() + mContext.getString(R.string.notification_content_task));
+            builder.setContentText("Tu es mon héros <3");
+            builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
+
+            //mAdapter.notifyDataSetChanged();
+            // Sets an ID for the notification
+            int mNotificationId = 001;
+            // Gets an instance of the NotificationManager service
+            NotificationManager mNotifyMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            // Builds the notification and issues it.
+            mNotifyMgr.notify(mNotificationId, builder.build());*/
+
+
+            // DIALOG
+            // Build the Dialog:
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+
+            if (taskAddedAsContributor.size() != 1) {
+                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_multiple_tasks)+ taskAddedAsContributor.size()
+                        + mContext.getString(R.string.ending_of_added_as_contributor_on_multiple_tasks));
+            } else {
+                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_one_task)
+                        + separateTitleAndSuffix(taskAddedAsContributor.get(0).getName())[0]
+                        + mContext.getString(R.string.ending_of_added_as_contributor_on_one_text));
+            }
+
+            // Set IfNewContributor on Firebase to 0:
+            for (Task t : taskAddedAsContributor) {
+                if (mTaskList.indexOf(t) >= 0) {
+                    updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
+                }
+            }
+
+            // Create the Dialog:
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+    }
+
 
     /**
      * Reconstruct the tasks from the DataSnapshot given.
@@ -205,62 +271,7 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
 
         // Manage the dialog that warn the user that he was added to a task:
-        final List<Task> taskAddedAsContributor = new ArrayList<Task>();
-
-        // search task that has been added by someone else:
-        for (Task t : mTaskList) {
-           if (t.getIfNewContributor() == 1L) {
-               taskAddedAsContributor.add(t);
-           }
-        }
-
-        if (!taskAddedAsContributor.isEmpty()) {
-            // NOTIFICATION
-            //Notification builder
-            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
-            builder.setSmallIcon(R.drawable.ic_event_notification);
-            builder.setContentTitle(taskToNotify.get(0).getName() + mContext.getString(R.string.notification_content_task));
-            builder.setContentText("Tu es mon héros <3");
-            builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
-
-            //mAdapter.notifyDataSetChanged();
-            // Sets an ID for the notification
-            int mNotificationId = 001;
-            // Gets an instance of the NotificationManager service
-            NotificationManager mNotifyMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            // Builds the notification and issues it.
-            mNotifyMgr.notify(mNotificationId, builder.build());*/
-
-
-            // DIALOG
-            // Build the Dialog:
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
-            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // Set IfNewContributor on Firebase to 0:
-                    for (Task t : taskAddedAsContributor) {
-                        if (mTaskList.indexOf(t) >= 0) {
-                            updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
-                        }
-                    }
-                }
-            });
-
-            if (taskAddedAsContributor.size() == 1) {
-                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_one_task)
-                        + separateTitleAndSuffix(taskAddedAsContributor.get(0).getName())[0] 
-                        + mContext.getString(R.string.ending_of_added_as_contributor_on_one_text));
-            } else {
-                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_multiple_tasks)+ taskAddedAsContributor.size() 
-                        + mContext.getString(R.string.ending_of_added_as_contributor_on_multiple_tasks));
-            }
-
-            // Create the Dialog:
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-        }
+        warnContributor(mTaskList);
 
     }
 }
