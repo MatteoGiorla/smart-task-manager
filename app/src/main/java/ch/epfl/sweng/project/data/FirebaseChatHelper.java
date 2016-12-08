@@ -20,7 +20,7 @@ import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.chat.Message;
 import ch.epfl.sweng.project.chat.MessageAdapter;
 
-public class FirebaseChatHelper implements ChatHelper {
+public class FirebaseChatHelper {
 
     private Query mQuery;
     private ValueEventListener mListener;
@@ -34,7 +34,6 @@ public class FirebaseChatHelper implements ChatHelper {
         mContext = context;
     }
 
-    @Override
     public void retrieveMessages(String mail, final Task task) {
         final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).getRef();
         if(mChat != null) {
@@ -52,7 +51,6 @@ public class FirebaseChatHelper implements ChatHelper {
         }
     }
 
-    @Override
     public void updateChat(Task task, Message newMessage) {
         task.addMessage(newMessage);
         for (String mail : task.getListOfContributors()) {
@@ -62,7 +60,6 @@ public class FirebaseChatHelper implements ChatHelper {
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
     public void removeListener() {
         if(mQuery != null && mListener != null) {
             mQuery.removeEventListener(mListener);

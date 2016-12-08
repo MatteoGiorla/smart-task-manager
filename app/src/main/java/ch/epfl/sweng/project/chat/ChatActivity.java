@@ -21,15 +21,14 @@ import java.util.Date;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
-import ch.epfl.sweng.project.data.ChatHelper;
-import ch.epfl.sweng.project.data.ChatProvider;
+import ch.epfl.sweng.project.data.FirebaseChatHelper;
 
 public class ChatActivity extends AppCompatActivity {
     public static final String TASK_CHAT_KEY = "ch.epfl.sweng.project.chat.TASK_CHAT_KEY";
 
     private Intent intent;
     private Task task;
-    private ChatHelper chatHelper;
+    private FirebaseChatHelper chatHelper;
     private String currentUserName;
     private FloatingActionButton sendMssgButton;
 
@@ -69,7 +68,7 @@ public class ChatActivity extends AppCompatActivity {
         editMssg.addTextChangedListener(new SendButtonWatcher());
 
         //Instantiation of the ChatHelper
-        chatHelper = new ChatProvider(this, mAdapter).getChatProvider();
+        chatHelper = new FirebaseChatHelper(this, mAdapter);
 
         //Set toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
