@@ -55,6 +55,8 @@ public class LocationTaskTest extends SuperTest {
     }
     private UiDevice mUiDevice;
     private List<String> taskNames;
+    private String LOCATION_EVEREST = "Everest";
+    private String LOCATION_MARS = "Mars";
 
     @Before
     public void setup() {
@@ -76,8 +78,8 @@ public class LocationTaskTest extends SuperTest {
     };
 
     public void addNewLocation() {
-        createALocation("Mars");
-        createALocation("Everest");
+        createALocation(LOCATION_MARS);
+        createALocation(LOCATION_EVEREST);
     }
 
     public void addNewTask() {
