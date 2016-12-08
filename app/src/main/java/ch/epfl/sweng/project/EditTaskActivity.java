@@ -17,7 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -25,6 +27,7 @@ import java.util.Arrays;
 public class EditTaskActivity extends TaskActivity {
     public static final int TASK_IS_DELETED = 1;
     public static final int TASK_IS_MODIFIED = 2;
+    public static final int CONTRIBUTOR_MODIFIED = 6;
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     public static final String TASK_STATUS_KEY = "ch.epfl.sweng.EditTaskActivity.TASK_STATUS_KEY";
@@ -66,6 +69,10 @@ public class EditTaskActivity extends TaskActivity {
         final Calendar c = Calendar.getInstance();
         c.setTime(date);
 
+        contributorsListTextView = (TextView) findViewById(R.id.text_contributors);
+        listOfContributors = mTaskToBeEdited.getListOfContributors();
+        setContributorsTextView();
+
         setSwitchers();
 
         initialisationFields();
@@ -75,7 +82,11 @@ public class EditTaskActivity extends TaskActivity {
         populateLayout();
 
         getDoneEditButton().setVisibility(View.GONE);
-
+        if(listOfContributors.size() > 1 && MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
+            editContributorButton.setVisibility(View.VISIBLE);
+        } else {
+            editContributorButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -133,6 +144,26 @@ public class EditTaskActivity extends TaskActivity {
         setResultIntent();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    void addContributorInTask(String contributor){
+        listOfContributors.add(contributor);
+        mTaskToBeEdited.addContributor(contributor);
+        taskStatus = CONTRIBUTOR_MODIFIED;
+        setResultIntent();
+        taskStatus = TASK_IS_MODIFIED;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    void deleteContributorInTask(String contributor){
+        listOfContributors.remove(contributor);
+        mTaskToBeEdited.deleteContributor(contributor);
+        taskStatus = CONTRIBUTOR_MODIFIED;
+        setResultIntent();
+        taskStatus = TASK_IS_MODIFIED;
+    }
+
     /**
      * Set the result intent.
      */
@@ -149,6 +180,11 @@ public class EditTaskActivity extends TaskActivity {
         } else if(taskStatus == TASK_IS_DELETED) {
             intent.putExtra(TASK_STATUS_KEY, taskStatus);
             intent.putExtra(TASK_TO_BE_DELETED_INDEX, mIndexTaskToBeEdited);
+            setResult(RESULT_OK, intent);
+        } else if(taskStatus == CONTRIBUTOR_MODIFIED){
+            intent.putExtra(TASK_STATUS_KEY, TASK_IS_MODIFIED);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, mTaskToBeEdited);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
             setResult(RESULT_OK, intent);
         }
     }

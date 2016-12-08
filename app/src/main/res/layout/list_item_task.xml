@@ -4,6 +4,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:orientation="horizontal">
@@ -16,16 +17,33 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/list_entry_title"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size"
-            android:paddingTop="5dp"
-            android:paddingBottom="@dimen/padding_between_tasks"
-            android:textStyle="normal"/>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/list_entry_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:textSize="@dimen/task_title_size"
+                android:paddingTop="5dp"
+                android:paddingBottom="@dimen/padding_between_tasks"
+                android:textStyle="normal"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/author_36dp"
+                android:id="@+id/imageSharedTask"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/contributors_image_content_description" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"

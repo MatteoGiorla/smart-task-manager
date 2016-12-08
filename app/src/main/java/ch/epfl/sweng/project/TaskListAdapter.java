@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -136,6 +137,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
             }
             if(Utils.isUnfilled(taskInTheView, mContext)){
                 holder.colorIndicator.setVisibility(View.INVISIBLE);
+            }
+            if(!Utils.hasContributors(taskInTheView)) {
+                holder.imageSharedTask.setVisibility(View.INVISIBLE);
+            } else {
+                holder.imageSharedTask.setVisibility(View.VISIBLE);
             }
         }
     }

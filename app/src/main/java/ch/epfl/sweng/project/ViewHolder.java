@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public final TextView taskLocation;
     public final TextView taskRemainingDays;
     public final TextView taskTitle;
-
+    public final ImageView imageSharedTask;
 
     public ViewHolder(View v, Context context, ArrayList<Task> tasksList) {
         super(v);
@@ -31,6 +32,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         taskLocation = (TextView) v.findViewById(R.id.list_item_location);
         taskRemainingDays = (TextView) v.findViewById(R.id.list_remaining_days);
         taskTitle = (TextView) v.findViewById(R.id.list_entry_title);
+        imageSharedTask = (ImageView) v.findViewById(R.id.imageSharedTask);
 
         v.setOnClickListener(this);
     }
