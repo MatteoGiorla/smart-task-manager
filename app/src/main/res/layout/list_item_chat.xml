@@ -41,8 +41,10 @@
             android:id="@+id/message_date"
             android:gravity="end"
             android:paddingBottom="3dp"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
+            android:paddingRight="4dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="3dp"
+            android:paddingStart="3dp"
             android:layout_gravity="end"/>
 
     </LinearLayout>
