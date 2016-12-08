@@ -332,7 +332,7 @@ public class EditTaskActivity extends TaskActivity {
         switch(reqCode){
             case TASK_DUE_DATE:
                 if(Utils.isDueDateUnfilled(task)){
-                    result = getString(R.string.unfilled_due_date);
+                    result = getString(R.string.enter_due_date_hint);
                 }else{
                     result = dateFormat.format(date.getTime());
                 }
