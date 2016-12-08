@@ -270,7 +270,7 @@ public class FirebaseTaskHelper implements TaskHelper {
             }
         }
 
-        // Manage the dialog that warn the user that he was added to a task:
+        // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
 
     }

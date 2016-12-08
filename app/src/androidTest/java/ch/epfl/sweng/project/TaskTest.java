@@ -38,7 +38,7 @@ public class TaskTest {
         List<String> listOfContributors = new ArrayList<>();
         listOfContributors.add(author);
         long startDuration = 30;
-        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors);
+        testTask = new Task(taskName, taskDescription, location, dueDate, duration, energy.toString(), listOfContributors, 0);
     }
 
     /**
@@ -58,7 +58,7 @@ public class TaskTest {
         listContributorsTest.add(authorTest);
         long startDuration= 30;
 
-        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest);
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0);
 
         assertEquals(nameTest, newTaskTest.getName());
         assertEquals(descriptionTest, newTaskTest.getDescription());
@@ -156,7 +156,7 @@ public class TaskTest {
     @Test
     public void testTaskConstructorException() {
         thrownException.expect(NullPointerException.class);
-        new Task(null, null, null, null, 0, null, null);
+        new Task(null, null, null, null, 0, null, null, 0);
     }
 
     /**
