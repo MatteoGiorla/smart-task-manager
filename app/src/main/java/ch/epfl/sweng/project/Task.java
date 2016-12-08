@@ -208,7 +208,7 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Setter to modifiy the list of message
+     * Setter to modify the list of message
      */
     public void setListOfMessages(List<Message> listMessages) {
         if(listMessages == null) {
