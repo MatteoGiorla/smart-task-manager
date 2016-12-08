@@ -106,7 +106,7 @@ public class FirebaseTaskHelper implements TaskHelper {
         String[] title = Utils.separateTitleAndSuffix(task.getName());
         String[] suffix = Utils.getCreatorAndSharer(title[1]);
         Task toAdd;
-        if(suffix[1].equals(mail)){
+        if(suffix[0].equals(mail)){
             //in the case where we add the task to the creator, nothing to preprocess.
             toAdd = task;
         }else{
