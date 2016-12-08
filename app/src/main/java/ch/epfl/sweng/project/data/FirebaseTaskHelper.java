@@ -1,6 +1,15 @@
 package ch.epfl.sweng.project.data;
 
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.renderscript.RenderScript;
+import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,12 +23,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.project.EntryActivity;
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
+import ch.epfl.sweng.project.location_setting.LocationFragment;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
+import ch.epfl.sweng.project.notification.TaskNotification;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static ch.epfl.sweng.project.Utils.getContext;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -193,13 +209,56 @@ public class FirebaseTaskHelper implements TaskHelper {
                 long newContributor;
                 if(task.child("ifNewContributor").getValue() != null){
                      newContributor  = (long) task.child("ifNewContributor").getValue();
-                }else{
+                } else {
                     newContributor = 0;
                 }
                 Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
                 mTaskList.add(newTask);
             }
         }
-        mAdapter.notifyDataSetChanged();
+
+        // TODO TRY HERE
+        List<Task> taskToNotify = new ArrayList<Task>();
+        for (Task t : mTaskList) {
+           if (t.getIfNewContributor() == 1L) {
+               taskToNotify.add(t);
+           }
+        }
+        Log.d("caca", "caca");
+        if (!taskToNotify.isEmpty()) {
+            Log.d("Bonjour", "Bonjour");
+
+            // TODO NOTIFICATION
+            //Notification builder
+            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+            builder.setSmallIcon(R.drawable.ic_event_notification);
+            builder.setContentTitle(taskToNotify.get(0).getName() + mContext.getString(R.string.notification_content_task));
+            builder.setContentText("Tu es mon héros <3");
+            builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
+
+            //mAdapter.notifyDataSetChanged();
+            // Sets an ID for the notification
+            int mNotificationId = 001;
+            // Gets an instance of the NotificationManager service
+            NotificationManager mNotifyMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            // Builds the notification and issues it.
+            mNotifyMgr.notify(mNotificationId, builder.build());*/
+
+
+            // TODO DIALOG
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // TODO delete from firebase
+                    
+                }
+            });
+
+            builder.setMessage("You were added to "+ taskToNotify.size() + "new Task.");
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
+
     }
 }
