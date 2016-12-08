@@ -39,6 +39,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     }
 
     @Override
+    @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View resultView = convertView;
         if(resultView == null) {
