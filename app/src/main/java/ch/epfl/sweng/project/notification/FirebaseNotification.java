@@ -21,9 +21,9 @@ import ch.epfl.sweng.project.R;
 
 
 public class FirebaseNotification extends FirebaseMessagingService {
-    /*
-    private static final String TAG = "MyFirebaseMsgService";
 
+    private static final String TAG = "MyFirebaseMsgService";
+/*
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Displaying data in log
@@ -55,5 +55,5 @@ public class FirebaseNotification extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0, notificationBuilder.build());
-    } */
+    }*/
 }
