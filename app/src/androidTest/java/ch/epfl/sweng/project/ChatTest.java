@@ -7,20 +7,25 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.not;
 
 public class ChatTest extends SuperTest {
+
+    private String message = "Hello";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
             MainActivity.class);
 
-   public void openChat() {
+   private void openChat() {
        final String name = "Piano";
        final String description = "Clavecin";
        createATask(name, description);
@@ -33,8 +38,32 @@ public class ChatTest extends SuperTest {
     @Test
     public void messageSendIsDisplayed() {
         openChat();
-        onView(withId(R.id.input)).perform(typeText("Hello"));
+        onView(withId(R.id.input)).perform(typeText(message));
         onView(withId(R.id.send_message_button)).perform(click());
-        onView(withId(R.id.list_of_messages)).check(matches(hasDescendant(withText("Hello"))));
+        onView(withId(R.id.list_of_messages)).check(matches(hasDescendant(withText(message))));
+    }
+
+    @Test
+    public void buttonIsDisableByDefault() {
+        openChat();
+        onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
+    }
+
+    @Test
+    public void buttonIsEnableWhenWriting() {
+        openChat();
+        onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input)).perform(typeText(message));
+        onView(withId(R.id.send_message_button)).check(matches(isEnabled()));
+    }
+
+    @Test
+    public void buttonDisableWithEmptyText() {
+        openChat();
+        onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.input)).perform(typeText(message));
+        onView(withId(R.id.send_message_button)).check(matches(isEnabled()));
+        onView(withId(R.id.input)).perform(clearText());
+        onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
     }
 }
