@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,10 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import java.util.Arrays;
+
+import ch.epfl.sweng.project.chat.ChatActivity;
+
+import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -94,6 +99,11 @@ public class EditTaskActivity extends TaskActivity {
                 setResultIntent();
                 finish();
                 return true;
+
+            case R.id.chat_menu :
+                Intent intentToChat = new Intent(this, ChatActivity.class);
+                intentToChat.putExtra(TASK_CHAT_KEY, mTaskToBeEdited);
+                startActivity(intentToChat);
 
             default:
                 return super.onOptionsItemSelected(item);
