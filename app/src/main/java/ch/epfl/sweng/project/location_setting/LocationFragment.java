@@ -123,7 +123,7 @@ public class LocationFragment extends Fragment {
                 defaultLocationList
         );
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         firstConnection = prefs.contains(getString(R.string.new_user))
                 && prefs.getBoolean(getString(R.string.new_user), true);
 
