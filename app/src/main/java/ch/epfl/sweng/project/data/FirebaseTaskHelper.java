@@ -37,6 +37,7 @@ import ch.epfl.sweng.project.notification.TaskNotification;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static ch.epfl.sweng.project.Utils.getContext;
+import static ch.epfl.sweng.project.Utils.separateTitleAndSuffix;
 
 /**
  * Proxy that does all the work between the app and the firebase real time database.
@@ -120,7 +121,7 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @return a newly created task having the correct name and location according to the name.
      */
     public Task sharedTaskPreProcessing(Task task, String mail){
-        String[] title = Utils.separateTitleAndSuffix(task.getName());
+        String[] title = separateTitleAndSuffix(task.getName());
         String[] suffix = Utils.getCreatorAndSharer(title[1]);
         Task toAdd;
         if(suffix[1].equals(mail)){
@@ -218,15 +219,15 @@ public class FirebaseTaskHelper implements TaskHelper {
             }
         }
 
-        // TODO TRY HERE
-        final List<Task> taskToNotify = new ArrayList<Task>();
+        // Manage the dialog that warn the user that he was added to a task:
+        final List<Task> taskAddedAsContributor = new ArrayList<Task>();
         for (Task t : mTaskList) {
            if (t.getIfNewContributor() == 1L) {
-               taskToNotify.add(t);
+               taskAddedAsContributor.add(t);
            }
         }
 
-        if (!taskToNotify.isEmpty()) {
+        if (!taskAddedAsContributor.isEmpty()) {
             // NOTIFICATION
             //Notification builder
             /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
@@ -246,11 +247,13 @@ public class FirebaseTaskHelper implements TaskHelper {
 
             // DIALOG
             // TODO add see me option button
+            // Build the Dialog:
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
             builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    // Set IfNewContributor on Firebase to 0
-                    for (Task t : taskToNotify) {
+                    // Set IfNewContributor on Firebase to 0:
+                    for (Task t : taskAddedAsContributor) {
                         if (mTaskList.indexOf(t) >= 0) {
                             updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
                         }
@@ -258,7 +261,16 @@ public class FirebaseTaskHelper implements TaskHelper {
                 }
             });
 
-            builder.setMessage("You were added to "+ taskToNotify.size() + " new Task.");
+            if (taskAddedAsContributor.size() == 1) {
+                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_one_task)
+                        + separateTitleAndSuffix(taskAddedAsContributor.get(0).getName())[0] 
+                        + mContext.getString(R.string.ending_of_added_as_contributor_on_one_text));
+            } else {
+                builder.setMessage(mContext.getString(R.string.added_as_contributor_on_multiple_tasks)+ taskAddedAsContributor.size() 
+                        + mContext.getString(R.string.ending_of_added_as_contributor_on_multiple_tasks));
+            }
+
+            // Create the Dialog:
             AlertDialog dialog = builder.create();
             dialog.show();
 
