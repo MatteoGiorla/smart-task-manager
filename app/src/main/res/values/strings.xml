@@ -36,6 +36,7 @@
     <!-- Error messages -->
     <string name="error_title_empty">The title can not be empty !</string>
     <string name="error_title_duplicated">This title is already taken !</string>
+    <string name="error_title_contains_contributors_separator">"You cannot enter a title containing "</string>
     <string name="error_location_name_empty">The location name can not be empty !</string>
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
     <string name="info_any_tasks">You have no task !</string>
@@ -49,6 +50,7 @@
 
 
     <string name="num_unfilled_default">0</string>
+    <string name="contributors_separator">"@@"</string>
 
     <!-- Fields titles of task information activity -->
     <string name="description_field">Description</string>
@@ -56,6 +58,7 @@
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
+    <string name="contributors_field">Contributors</string>
 
     <!-- Fields titles of new/edit task activity -->
     <string name="enter_due_date_hint">Enter due date</string>
@@ -100,6 +103,7 @@
 
     <!-- Unfilled task information messages-->
     <string name="unfilled_param">"—"</string>
+
     <!-- Preference key -->
     <string name="application_prefs_name">ch.epfl.sweng.TaskIt</string>
     <string name="new_user">FIRST_USER_LOGIN</string>
@@ -126,7 +130,7 @@
     <!-- LocationFragment -->
     <string name="info_deleted">" deleted"</string>
     <string name="info_cant_edit_delete">You can\'t edit or delete the default locations</string>
-    <string name="replace_location">OK</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="location_delete_dialog_message">You have tasks set to this location. Set all these tasks to a new location :</string>
     <string name="location_delete_dialog_title">Used location</string>
@@ -194,6 +198,17 @@
     <string name="duration_image_content_description">Duration icon</string>
     <string name="energy_image_content_description">Energy icon</string>
     <string name="description_image_content_description">Description icon</string>
+    <string name="contributors_image_content_description">Contributors icon</string>
+    <string name="edit_contributors_image_content_description">Edit contributors icon</string>
+    <string name="add_contributor_image_content_description">Add contributor icon</string>
+
+    <!-- Contributors in TaskActivity -->
+    <string name="contributor_dialog_message">Enter the email address of the new contributor :</string>
+    <string name="contributor_dialog_title">Add a contributor</string>
+    <string name="contributor_dialog_warning_message">This user does not exist or you do not have any internet connection!</string>
+    <string name="contributor_dialog_duplicate_warning_message">This user has already been added !</string>
+    <string name="delete_contributor_dialog_message">Choose the contributor to remove :</string>
+    <string name="delete_contributor_dialog_title">Remove a contributor</string>
 
 
 </resources>

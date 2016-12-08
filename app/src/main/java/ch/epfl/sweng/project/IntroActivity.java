@@ -60,13 +60,13 @@ public class IntroActivity extends AppIntro {
         if(prefs.getBoolean(getString(R.string.first_launch), true)){
             prefs.edit().putBoolean(getString(R.string.first_launch), false).apply();
             Intent intent = new Intent(IntroActivity.this, EntryActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
         else // if not then we return to the settings
         {
             Intent intent = new Intent(IntroActivity.this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
     }

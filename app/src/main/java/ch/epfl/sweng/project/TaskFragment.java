@@ -297,19 +297,10 @@ public class TaskFragment extends Fragment {
                         mTaskAdapter.add(mTask, position);
                         recyclerView.scrollToPosition(position);
                     }
-                })
-                .setCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar snackbar, int event) {
-                        if (event != DISMISS_EVENT_ACTION) {
-                            taskList.add(position, mTask);
-                            removeTaskAction(position, isDone);
-                        }
-                    }
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(position);
+        mDatabase.deleteTask(mTask, position);
     }
 
     /**

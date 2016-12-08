@@ -17,7 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class that represents the inflated activity_task under the edit case
@@ -25,6 +27,7 @@ import java.util.Arrays;
 public class EditTaskActivity extends TaskActivity {
     public static final int TASK_IS_DELETED = 1;
     public static final int TASK_IS_MODIFIED = 2;
+    public static final int CONTRIBUTOR_MODIFIED = 6;
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     public static final String TASK_STATUS_KEY = "ch.epfl.sweng.EditTaskActivity.TASK_STATUS_KEY";
@@ -66,6 +69,10 @@ public class EditTaskActivity extends TaskActivity {
         final Calendar c = Calendar.getInstance();
         c.setTime(date);
 
+        contributorsListTextView = (TextView) findViewById(R.id.text_contributors);
+        listOfContributors = mTaskToBeEdited.getListOfContributors();
+        setContributorsTextView();
+
         setSwitchers();
 
         initialisationFields();
@@ -75,7 +82,11 @@ public class EditTaskActivity extends TaskActivity {
         populateLayout();
 
         getDoneEditButton().setVisibility(View.GONE);
-
+        if(listOfContributors.size() > 1 && MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
+            editContributorButton.setVisibility(View.VISIBLE);
+        } else {
+            editContributorButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -124,13 +135,33 @@ public class EditTaskActivity extends TaskActivity {
     @Override
     void resultActivity() {
         Log.e("duration editActivity", "duration to be set : " + duration);
-        mTaskToBeEdited.setName(title);
+        mTaskToBeEdited.setName(title[0] + title[1]);
         mTaskToBeEdited.setDescription(description);
         mTaskToBeEdited.setDueDate(date);
         mTaskToBeEdited.setDurationInMinutes(duration);
         mTaskToBeEdited.setLocationName(locationName);
         mTaskToBeEdited.setEnergyNeeded(energy);
         setResultIntent();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    void addContributorInTask(String contributor){
+        listOfContributors.add(contributor);
+        mTaskToBeEdited.addContributor(contributor);
+        taskStatus = CONTRIBUTOR_MODIFIED;
+        setResultIntent();
+        taskStatus = TASK_IS_MODIFIED;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    void deleteContributorInTask(String contributor){
+        listOfContributors.remove(contributor);
+        mTaskToBeEdited.deleteContributor(contributor);
+        taskStatus = CONTRIBUTOR_MODIFIED;
+        setResultIntent();
+        taskStatus = TASK_IS_MODIFIED;
     }
 
     /**
@@ -149,6 +180,11 @@ public class EditTaskActivity extends TaskActivity {
         } else if(taskStatus == TASK_IS_DELETED) {
             intent.putExtra(TASK_STATUS_KEY, taskStatus);
             intent.putExtra(TASK_TO_BE_DELETED_INDEX, mIndexTaskToBeEdited);
+            setResult(RESULT_OK, intent);
+        } else if(taskStatus == CONTRIBUTOR_MODIFIED){
+            intent.putExtra(TASK_STATUS_KEY, TASK_IS_MODIFIED);
+            intent.putExtra(EditTaskActivity.RETURNED_EDITED_TASK, mTaskToBeEdited);
+            intent.putExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, mIndexTaskToBeEdited);
             setResult(RESULT_OK, intent);
         }
     }
@@ -230,7 +266,7 @@ public class EditTaskActivity extends TaskActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisationFields() {
-        title = mTaskToBeEdited.getName();
+        title = Utils.separateTitleAndSuffix(mTaskToBeEdited.getName());
         energy = mTaskToBeEdited.getEnergy();
         description = mTaskToBeEdited.getDescription();
         date = mTaskToBeEdited.getDueDate();
@@ -241,7 +277,7 @@ public class EditTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateTextViewInformation() {
         TextView nameTextView = (TextView) findViewById(R.id.text_name);
-        nameTextView.setText(title);
+        nameTextView.setText(title[0]);
 
         TextView dateTextView = (TextView) findViewById(R.id.text_date);
         dateTextView.setText(safeTaskInformationGetter(TASK_DUE_DATE, mTaskToBeEdited));
@@ -265,7 +301,7 @@ public class EditTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateLayout() {
         EditText titleEditText = (EditText) findViewById(R.id.title_task);
-        titleEditText.setText(title);
+        titleEditText.setText(title[0]);
         titleEditText.setSelection(titleEditText.getText().length()); //put cursor at the end
 
         Button mButton = (Button) findViewById(R.id.pick_date);

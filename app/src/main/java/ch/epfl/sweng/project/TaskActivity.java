@@ -1,8 +1,10 @@
 package ch.epfl.sweng.project;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.icu.util.Calendar;
@@ -14,6 +16,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,14 +27,20 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import ch.epfl.sweng.project.data.FirebaseUserHelper;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Class which represents an activity regarding a task
@@ -39,7 +48,7 @@ import java.util.List;
 public abstract class TaskActivity extends AppCompatActivity {
     Intent intent;
     ArrayList<Task> taskList;
-    String title;
+    String[] title;
     String description;
     Long duration;
     String locationName;
@@ -52,6 +61,13 @@ public abstract class TaskActivity extends AppCompatActivity {
     static Date date;
     static final DateFormat dateFormat = DateFormat.getDateInstance();
     public static final String IS_UNFILLED = "ch.epfl.sweng.TaskActivity.UNFILLED_TASK";
+
+    ImageView addContributorButton;
+    EditText editTextNewContributor;
+    TextView contributorsListTextView;
+
+    ImageView editContributorButton;
+    private Spinner contributorsSpinner;
 
 
     @Override
@@ -96,6 +112,12 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         mLocation.setAdapter(spinnerLocationAdapter);
 
+
+        addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
+        addContributorButton.setOnClickListener(new OnAddContributorButtonClickListener());
+
+        editContributorButton = (ImageView) findViewById(R.id.editContributorButton);
+        editContributorButton.setOnClickListener(new OnEditContributorButtonClickListener());
     }
 
     /**
@@ -110,6 +132,21 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     ImageButton getDoneEditButton() {
         return doneEditButton;
+    }
+
+    /**
+     * A user shouldn't be allowed to type "@@", which
+     * is the dedicated separator put in the title to signal
+     * the creator of a task, and the person with which the task
+     * is shared.
+     *
+     * @param title the new title of the task
+     * @return true if the title contains
+     */
+    private boolean titleContainsContributorsSeparators(String title){
+        char lastChar = title.charAt(title.length() -1);
+        return title.contains(getString(R.string.contributors_separator))
+                || lastChar == getString(R.string.contributors_separator).charAt(0);
     }
 
     /**
@@ -171,6 +208,11 @@ public abstract class TaskActivity extends AppCompatActivity {
             } else if (s.toString().isEmpty()) {
                 doneEditButton.setVisibility(View.INVISIBLE);
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));
+            } else if(titleContainsContributorsSeparators(s.toString())) {
+                doneEditButton.setVisibility(View.INVISIBLE);
+                String errorAtAt =getResources().getText(R.string.error_title_contains_contributors_separator).toString()
+                        + getResources().getText(R.string.contributors_separator).toString();
+                titleEditText.setError(errorAtAt);
             } else {
                 doneEditButton.setVisibility(View.VISIBLE);
             }
@@ -182,10 +224,14 @@ public abstract class TaskActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            title = titleEditText.getText().toString();
-            if (title.isEmpty()) {
+            //need this null check on the case of NewTaskActivity
+            if(title == null){
+                title = new String[2];
+            }
+            title[0] = titleEditText.getText().toString();
+            if (title[0].isEmpty()) {
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));
-            } else if (!title.isEmpty() && !titleIsNotUnique(title)) {
+            } else if (!title[0].isEmpty() && !titleIsNotUnique(title[0])) {
                 EditText descriptionEditText = (EditText) findViewById(R.id.description_task);
                 description = descriptionEditText.getText().toString();
                 locationName = mLocation.getSelectedItem().toString();
@@ -323,5 +369,109 @@ public abstract class TaskActivity extends AppCompatActivity {
             mButton.setText(dateFormat.format(date.getTime()));
         }
 
+    }
+
+    void setContributorsTextView(){
+        String listOfContributorsString = "";
+        for(String ct : listOfContributors) {
+            listOfContributorsString += (ct + "\n");
+        }
+        contributorsListTextView.setText(listOfContributorsString);
+        contributorsListTextView.setVisibility(View.GONE);
+        contributorsListTextView.setVisibility(View.VISIBLE);
+    }
+
+
+    abstract void addContributorInTask(String contributor);
+
+    abstract void deleteContributorInTask(String contributor);
+
+    private class OnAddContributorButtonClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+            // Add the buttons
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+            builder.setMessage(R.string.contributor_dialog_message).setTitle(R.string.contributor_dialog_title);
+
+            //EditText for new contributor
+            editTextNewContributor = new EditText(getApplicationContext());
+            editTextNewContributor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            builder.setView(editTextNewContributor);
+
+            //Show dialog
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    String enteredText = editTextNewContributor.getText().toString();
+                    if(!FirebaseUserHelper.userExists(enteredText)) { //TODO : userExists always returns true
+                        dialog.setMessage(getString(R.string.contributor_dialog_warning_message));
+                    } else {
+                        if(listOfContributors.contains(enteredText)){
+                            dialog.setMessage(getString(R.string.contributor_dialog_duplicate_warning_message));
+                        } else {
+                            addContributorInTask(enteredText);
+                            if(MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
+                                editContributorButton.setVisibility(View.VISIBLE);
+                            }
+                            setContributorsTextView();
+                            dialog.dismiss();
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    private class OnEditContributorButtonClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+            // Add the buttons
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    String contributorToDelete = contributorsSpinner.getSelectedItem().toString();
+                    deleteContributorInTask(contributorToDelete);
+                    setContributorsTextView();
+                    if (listOfContributors.size() == 1) {
+                        editContributorButton.setVisibility(View.GONE);
+                    }
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                }
+            });
+            builder.setMessage(R.string.delete_contributor_dialog_message).setTitle(R.string.delete_contributor_dialog_title);
+
+            //Spinner
+            ArrayList<String> listOfContributorsForSpinner = new ArrayList<>(listOfContributors);
+            listOfContributorsForSpinner.remove(0);
+            String[] spinnerList = listOfContributorsForSpinner.toArray(new String[listOfContributorsForSpinner.size()]);
+            final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                    android.R.layout.simple_spinner_dropdown_item, spinnerList);
+            contributorsSpinner = new Spinner(getApplicationContext());
+            contributorsSpinner.setAdapter(adp);
+            contributorsSpinner.setPadding(50, 0 , 50, 0);
+            builder.setView(contributorsSpinner);
+
+            //Show dialog
+            final AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 }

@@ -16,12 +16,4 @@ public interface UserHelper {
      * @return the User recovered from the database
      */
     User retrieveUserInformation(User currentUser, Iterable<DataSnapshot> snapshots);
-
-    /**
-     * Test if a user is present in the database
-     *
-     * @param userEmail the email of the user we are looking to
-     * @return true if the user exists in the database, false otherwise.
-     */
-    boolean userExists(String userEmail);
 }

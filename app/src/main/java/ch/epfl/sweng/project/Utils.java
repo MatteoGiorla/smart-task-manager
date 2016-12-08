@@ -2,15 +2,25 @@ package ch.epfl.sweng.project;
 
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.Build;
 
-public class Utils {
 
-    private Utils() {
+public class Utils extends Application {
+
+    private static Context mContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
     }
 
+    public static Context getContext(){
+        return mContext;
+    }
     /**
      * Encode a given mail to be compatible with keys in firebase
      *
@@ -50,5 +60,79 @@ public class Utils {
         c.setTime(task.getDueDate());
         int year = c.get(Calendar.YEAR);
         return year == 1899;
+    }
+
+    /**
+     * tells whether a task has contributors (i.e. task is shared across people)
+     *
+     * @param task the task to test
+     * @return true if the task is shared, false otherwise.
+     */
+    public static boolean hasContributors(Task task){
+        return task.getListOfContributors().size() > 1;
+    }
+
+    /**
+     * for a task shared with contributors, take care of separating
+     * the suffix (@@{creator}@@{sharer}) from the title.
+     *
+     * @param title the title whom we want to separe the suffix
+     * @return an array which element at zero is the title,
+     *          and at index 1 is the suffix if it exists,
+     *          or the empty string otherwise.
+     */
+    public static String[] separateTitleAndSuffix(String title){
+        String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
+        String[] stringAndSuffix = new String[2];
+        if(title.contains(separatorSequence)){
+            int charIndex = title.indexOf(separatorSequence);
+            stringAndSuffix[0] = title.substring(0, charIndex);
+            stringAndSuffix[1] = title.substring(charIndex);
+        }else{
+            stringAndSuffix[0] = title;
+            stringAndSuffix[1] = "";
+        }
+
+        return stringAndSuffix;
+    }
+
+    /**
+     * Given the suffix of a title of shared task, gives back an array containing
+     * in the first index the creator of the task, and in its second cell,
+     * the person whom this task is shared.
+     *
+     * @param suffix the suffix to separate the creator and sharer
+     * @return and Array containing the creator and the sharer
+     */
+    public static String[] getCreatorAndSharer(String suffix){
+        String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
+        String[] creatorAndSharer = new String[2];
+        String removedFirstSeparator = suffix.substring(separatorSequence.length());
+        creatorAndSharer[0] = removedFirstSeparator.substring(0, removedFirstSeparator.indexOf(separatorSequence));
+        creatorAndSharer[1] = removedFirstSeparator.substring(removedFirstSeparator.indexOf(separatorSequence) + separatorSequence.length());
+        return creatorAndSharer;
+    }
+
+    /**
+     * Create a shared task title in the forme of :
+     * title--separatorSequence--creatorEmail--separatorSequence--sharerEmail
+     *
+     * @param title the visible to the user title of the task
+     * @param creatorEmail the email of the person who first created the shared task
+     * @param sharerEmail the email of the person possessing the current version of the task.
+     *
+     * @return the database ready constructed shared task's title.
+     */
+    public static String constructSharedTitle(String title, String creatorEmail, String sharerEmail){
+        StringBuilder s = new StringBuilder(title);
+        s.append(mContext.getResources().getString(R.string.contributors_separator));
+        s.append(creatorEmail);
+        s.append(mContext.getResources().getString(R.string.contributors_separator));
+        s.append(sharerEmail);
+        return s.toString();
+    }
+
+    public static String getEverywhereLocation(){
+        return mContext.getResources().getString(R.string.everywhere_location);
     }
 }

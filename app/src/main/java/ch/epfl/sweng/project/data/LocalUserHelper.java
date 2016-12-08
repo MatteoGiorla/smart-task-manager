@@ -16,8 +16,7 @@ public class LocalUserHelper implements UserHelper{
         return new User(User.DEFAULT_EMAIL);
     }
 
-    @Override
-    public boolean userExists(String userEmail){
+    public static boolean userExists(String userEmail){
         return userEmail.equals(User.CONTRIBUTOR_EMAIL) || userEmail.equals(User.DEFAULT_EMAIL);
     }
 }

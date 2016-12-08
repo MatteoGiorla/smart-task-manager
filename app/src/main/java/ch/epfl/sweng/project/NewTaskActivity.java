@@ -4,6 +4,8 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +33,33 @@ public class NewTaskActivity extends TaskActivity {
 
         energy = Task.Energy.NORMAL;
 
+        //prepare contributors
+        listOfContributors = new ArrayList<>();
+        String contributor;
+
+        try {
+            contributor = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            contributor = User.DEFAULT_EMAIL;
+        }
+
+        listOfContributors.add(contributor);
+        editContributorButton.setVisibility(View.GONE);
+
+        contributorsListTextView = (TextView) findViewById(R.id.text_contributors);
+        setContributorsTextView();
+
         getEditableView();
+    }
+
+    @Override
+    void addContributorInTask(String contributor){
+        listOfContributors.add(contributor);
+    }
+
+    @Override
+    void deleteContributorInTask(String contributor){
+        listOfContributors.remove(contributor);
     }
 
     /**
@@ -55,18 +83,9 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     void resultActivity() {
 
-        //prepare contributors
-        listOfContributors = new ArrayList<>();
-        String contributor;
 
-        try {
-            contributor = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        } catch (NullPointerException e) {
-            contributor = User.DEFAULT_EMAIL;
-        }
-
-        listOfContributors.add(contributor);
-        Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
+        //TODO : it is here that the creation of the suffix need to happen.
+        Task newTask = new Task(title[0], description, locationName, date, duration, energy.toString(), listOfContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){
