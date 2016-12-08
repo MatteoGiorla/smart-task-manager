@@ -43,6 +43,10 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 
+/**
+ * test the location modification or deletion and the update required for the task using this location
+ */
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(AndroidJUnit4.class)
 public class LocationTaskTest extends SuperTest {
