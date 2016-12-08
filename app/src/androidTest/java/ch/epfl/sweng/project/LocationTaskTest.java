@@ -51,7 +51,7 @@ public class LocationTaskTest extends SuperTest {
 
     @BeforeClass
     public static void setUserProvider() {
-        UserProvider.setProvider(UserProvider.TEST_PROVIDER);
+        UserProvider.setProvider(Utils.TEST_PROVIDER);
     }
     private UiDevice mUiDevice;
     private List<String> taskNames;
