@@ -78,6 +78,8 @@ public class TaskFragment extends Fragment {
         }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
+
+        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -252,9 +254,7 @@ public class TaskFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification
-            if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
-                new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
-            }
+            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
     }
 
@@ -271,9 +271,7 @@ public class TaskFragment extends Fragment {
         mDatabase.addNewTask(task, taskList.size());
 
         //Update notifications
-        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
-            new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
-        }
+        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -316,9 +314,7 @@ public class TaskFragment extends Fragment {
         mDatabase.deleteTask(taskToBeDeleted, position);
 
         //Update notifications
-        if(!currentUser.getEmail().equals(User.DEFAULT_EMAIL)) {
-            new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
-        }
+        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
     }
 
     /**

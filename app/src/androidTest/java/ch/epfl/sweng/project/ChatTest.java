@@ -7,6 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -41,12 +42,17 @@ public class ChatTest extends SuperTest {
         onView(withId(R.id.input)).perform(typeText(message));
         onView(withId(R.id.send_message_button)).perform(click());
         onView(withId(R.id.list_of_messages)).check(matches(hasDescendant(withText(message))));
+        pressBack();
+        pressBack();
+        onView(withId(R.id.trash_menu)).perform(click());
     }
 
     @Test
     public void buttonIsDisableByDefault() {
         openChat();
         onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
+        pressBack();
+        onView(withId(R.id.trash_menu)).perform(click());
     }
 
     @Test
@@ -55,6 +61,9 @@ public class ChatTest extends SuperTest {
         onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
         onView(withId(R.id.input)).perform(typeText(message));
         onView(withId(R.id.send_message_button)).check(matches(isEnabled()));
+        pressBack();
+        pressBack();
+        onView(withId(R.id.trash_menu)).perform(click());
     }
 
     @Test
@@ -65,5 +74,8 @@ public class ChatTest extends SuperTest {
         onView(withId(R.id.send_message_button)).check(matches(isEnabled()));
         onView(withId(R.id.input)).perform(clearText());
         onView(withId(R.id.send_message_button)).check(matches(not(isEnabled())));
+        pressBack();
+        pressBack();
+        onView(withId(R.id.trash_menu)).perform(click());
     }
 }
