@@ -114,7 +114,7 @@ public class LocationTaskTest extends SuperTest {
 
         // go to the location settings
         onView(withId(R.id.settings_text_locations)).perform(click());
-        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.iconLocation)).check(matches(isDisplayed()));
 
         addNewLocation();
         mUiDevice.pressBack();
@@ -130,7 +130,7 @@ public class LocationTaskTest extends SuperTest {
 
         // go to the location settings
         onView(withId(R.id.settings_text_locations)).perform(click());
-        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.iconLocation)).check(matches(isDisplayed()));
 
         // remove a location that is used by a task /!\ index for the custom location
         deleteALocation(0);
@@ -170,7 +170,7 @@ public class LocationTaskTest extends SuperTest {
 
         // go to the location settings
         onView(withId(R.id.settings_text_locations)).perform(click());
-        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.iconLocation)).check(matches(isDisplayed()));
 
         addNewLocation();
         mUiDevice.pressBack();
@@ -186,7 +186,7 @@ public class LocationTaskTest extends SuperTest {
 
         // go to the location settings
         onView(withId(R.id.settings_text_locations)).perform(click());
-        onView(withId(R.id.imageView)).check(matches(isDisplayed()));
+        onView(withId(R.id.iconLocation)).check(matches(isDisplayed()));
 
         // remove a location that is used by a task /!\ index for the custom location
         editALocation(0);

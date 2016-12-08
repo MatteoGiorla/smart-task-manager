@@ -115,7 +115,7 @@ public class LocationFragment extends Fragment {
                 defaultLocationList
         );
 
-        SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
+        SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
         firstConnection = prefs.contains(getString(R.string.new_user))
                 && prefs.getBoolean(getString(R.string.new_user), true);
 
@@ -241,9 +241,9 @@ public class LocationFragment extends Fragment {
                                 spinnerList[i] = getString(R.string.unfilled_param);
                             }
                         }
-                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getContext(),
                                 android.R.layout.simple_spinner_dropdown_item, spinnerList);
-                        locationSpinnerForReplacement = new Spinner(getApplicationContext());
+                        locationSpinnerForReplacement = new Spinner(getContext());
                         locationSpinnerForReplacement.setAdapter(adp);
                         locationSpinnerForReplacement.setPadding(50, 0 , 50, 0);
                         locationSpinnerForReplacement.setPopupBackgroundResource(R.color.white);
