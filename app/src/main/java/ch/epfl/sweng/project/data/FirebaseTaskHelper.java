@@ -12,6 +12,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -248,9 +249,11 @@ public class FirebaseTaskHelper implements TaskHelper {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    // TODO delete from firebase
+                    // Set IfNewContributor on Firebase to 0
                     for (Task t : taskToNotify) {
-                        updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
+                        if (mTaskList.indexOf(t) >= 0) {
+                            updateTask(t, t.setIfNewContributor(0L), mTaskList.indexOf(t));
+                        }
                     }
                 }
             });
