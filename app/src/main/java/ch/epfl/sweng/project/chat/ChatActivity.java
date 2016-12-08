@@ -8,6 +8,8 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,6 +31,7 @@ public class ChatActivity extends AppCompatActivity {
     private Task task;
     private ChatHelper chatHelper;
     private String currentUserName;
+    private FloatingActionButton sendMssgButton;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -39,7 +42,11 @@ public class ChatActivity extends AppCompatActivity {
         //Initialise the Task and check its validity
         getAndCheckIntent();
 
-        currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        try {
+            currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        }catch (NullPointerException e) {
+            currentUserName = User.DEFAULT_NAME;
+        }
 
         //Initialise the MessageAdapter
         MessageAdapter mAdapter = new MessageAdapter(this,
@@ -52,8 +59,14 @@ public class ChatActivity extends AppCompatActivity {
         //Bind the adapter to the listView
         mssgListView.setAdapter(mAdapter);
 
-        FloatingActionButton sendMssgButton = (FloatingActionButton) findViewById(R.id.send_message_button);
+        sendMssgButton = (FloatingActionButton) findViewById(R.id.send_message_button);
         sendMssgButton.setOnClickListener(new SendMessageOnClickListener());
+
+        //Default behavior of the send message button
+        sendMssgButton.setEnabled(false);
+
+        EditText editMssg = (EditText) findViewById(R.id.input);
+        editMssg.addTextChangedListener(new SendButtonWatcher());
 
         //Instantiation of the ChatHelper
         chatHelper = new ChatProvider(this, mAdapter).getChatProvider();
@@ -69,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
         String mail;
         try {
             mail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             mail = User.DEFAULT_EMAIL;
         }
         //Initiate the listener
@@ -84,7 +97,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getAndCheckIntent() {
         intent = getIntent();
-        if(intent == null) {
+        if (intent == null) {
             throw new IllegalArgumentException("Intent passed to ChatActivity is null");
         }
         getAndCheckIntentExtra();
@@ -92,7 +105,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getAndCheckIntentExtra() {
         task = intent.getParcelableExtra(TASK_CHAT_KEY);
-        if(task == null) {
+        if (task == null) {
             throw new IllegalArgumentException("Task passed with the intent to ChatActivity is null");
         }
     }
@@ -121,10 +134,10 @@ public class ChatActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             EditText editMssg = (EditText) findViewById(R.id.input);
-            if(editMssg.getText() != null) {
+            if (editMssg.getText() != null) {
                 String mssgText = editMssg.getText().toString();
 
-                if(!mssgText.isEmpty()) {
+                if (!mssgText.isEmpty()) {
                     long time = new Date().getTime();
                     Message newMessage = new Message(currentUserName, mssgText, time);
                     chatHelper.updateChat(task, newMessage);
@@ -149,5 +162,21 @@ public class ChatActivity extends AppCompatActivity {
         public void onClick(View v) {
             finish();
         }
+    }
+
+    private class SendButtonWatcher implements TextWatcher {
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            sendMssgButton.setEnabled(!s.toString().isEmpty());
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
     }
 }
