@@ -115,32 +115,6 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
-        this.listOfMessages = new ArrayList<>();
-    }
-
-    /**
-     * Constructor of the class
-     *
-     * @param name               Task's name
-     * @param description        Task's description
-     * @param locationName       Task's locationName
-     * @param dueDate            Task's due date
-     * @param durationInMinutes           Task's durationInMinutes in minutes
-     * @param energyNeeded       Task's energy needed
-     * @param listOfContributors Task's list of contributors
-     * @param listOfMessages     Task's list of messages
-     * @throws IllegalArgumentException if one parameter is invalid (null)
-     */
-    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull List<Message> listOfMessages) {
-        this.name = name;
-        this.description = description;
-        this.durationInMinutes = durationInMinutes;
-        this.listOfContributors = new ArrayList<>(listOfContributors);
-        this.dueDate = dueDate;
-        this.energyNeeded = Energy.valueOf(energyNeeded);
-        this.locationName = locationName;
-        dateFormat = DateFormat.getDateInstance();
         this.listOfMessages = new ArrayList<>(listOfMessages);
     }
 
@@ -155,7 +129,6 @@ public class Task implements Parcelable {
         this(in.readString(), in.readString(), in.readString(),
                 new Date(in.readLong()), in.readLong(), in.readString(),
                 in.createStringArrayList(), in.readLong());
-
         this.name = in.readString();
         this.description = in.readString();
         this.locationName = in.readString();

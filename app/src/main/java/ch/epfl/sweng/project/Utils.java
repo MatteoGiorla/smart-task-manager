@@ -17,7 +17,6 @@ public class Utils extends Application {
         super.onCreate();
         mContext = this;
     }
-
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
 

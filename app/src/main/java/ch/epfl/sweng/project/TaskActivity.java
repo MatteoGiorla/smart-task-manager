@@ -117,7 +117,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
         mLocation.setAdapter(spinnerLocationAdapter);
-
+        
         addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
         addContributorButton.setOnClickListener(new OnAddContributorButtonClickListener());
 
