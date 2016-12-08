@@ -37,7 +37,7 @@ public class SynchronizationActivity extends Activity {
         User currentUser = new User(mail);
 
         switch (UserProvider.mProvider) {
-            case UserProvider.FIREBASE_PROVIDER:
+            case Utils.FIREBASE_PROVIDER:
                 //Get reference of the database
                 DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                 //Get reference of the user
@@ -54,7 +54,7 @@ public class SynchronizationActivity extends Activity {
                         new UserAllOnCompleteListener(userRef, currentUser, synchronizedQueries, getApplicationContext()));
                 break;
 
-            case UserProvider.TEST_PROVIDER:
+            case Utils.TEST_PROVIDER:
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 break;
@@ -67,7 +67,7 @@ public class SynchronizationActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(UserProvider.mProvider.equals(UserProvider.FIREBASE_PROVIDER)) {
+        if(UserProvider.mProvider.equals(Utils.FIREBASE_PROVIDER)) {
             synchronizedQueries.stop();
         }
     }

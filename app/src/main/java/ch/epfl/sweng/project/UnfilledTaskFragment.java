@@ -138,6 +138,8 @@ public class UnfilledTaskFragment extends Fragment {
         mTaskAdapter.notifyDataSetChanged();
     }
 
+
+
     /**
      * Method called when we return from editing a task inside EditTaskActivity.
      *
