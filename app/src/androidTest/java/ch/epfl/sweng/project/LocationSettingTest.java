@@ -105,16 +105,7 @@ public final class LocationSettingTest extends SuperTest {
     }
 
 
-    private void scrollDown(){
-        UiDevice mUiDevice = getInstance(getInstrumentation());
-        //Check that the title has been updated
-        UiScrollable scrollDown = new UiScrollable(new UiSelector().scrollable(true));
-        try{
-            scrollDown.scrollForward();
-        }catch(UiObjectNotFoundException u){
-            fail("Could not scroll down on location settings view : "+u.getMessage());
-        }
-    }
+
 
     @Test
     public void testCanEditLocation() {

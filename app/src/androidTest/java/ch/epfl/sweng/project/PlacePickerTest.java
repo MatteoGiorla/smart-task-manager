@@ -69,7 +69,7 @@ public class PlacePickerTest {
             onView(withId(R.id.locationName)).perform(typeText(EPFL));
             pressBack();
             onView(withId(R.id.location_done_button_toolbar)).perform(click());
-
+            SuperTest.scrollDown();
             //Check that the title has been updated
             SuperTest.checkALocation(EPFL, 3);
 
@@ -96,6 +96,7 @@ public class PlacePickerTest {
             pressBack();
             onView(withId(R.id.location_done_button_toolbar)).perform(click());
 
+            SuperTest.scrollDown();
             //Check that the title has been updated
             SuperTest.checkALocation(EPFL, 3);
 
