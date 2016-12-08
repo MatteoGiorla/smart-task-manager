@@ -39,7 +39,8 @@
         android:layout_height="79dp"
         android:src="@drawable/task_location_36dp"
         android:layout_gravity="center"
-        android:contentDescription="@string/location_settings"/>
+        android:contentDescription="@string/location_settings"
+        android:id="@+id/imageView" />
 
     <Space
         android:layout_width="match_parent"
