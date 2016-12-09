@@ -1,5 +1,8 @@
 package ch.epfl.sweng.project;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
@@ -32,8 +35,19 @@ public class PlacePickerTest {
     private static final String SEL_LOCATION_TXT = "Select this location";
     private static final String EPFL = "EPFL";
     @Rule
-    public ActivityTestRule<LocationSettingActivity> mActivityRule =
-            new ActivityTestRule<>(LocationSettingActivity.class);
+    public ActivityTestRule<LocationSettingActivity> mActivityRule = new ActivityTestRule<LocationSettingActivity>(
+            LocationSettingActivity.class){
+        //Override to be able to change the SharedPreferences effectively
+        @Override
+        protected void beforeActivityLaunched(){
+            Context actualContext = InstrumentationRegistry.getTargetContext();
+            SharedPreferences prefs = actualContext.getSharedPreferences(
+                    actualContext.getString(R.string.application_prefs_name),
+                    Context.MODE_PRIVATE);
+            prefs.edit().putBoolean(actualContext.getString(R.string.new_user), true).apply();
+            super.beforeActivityLaunched();
+        }
+    };
 
     @Before
     public void setup() {
