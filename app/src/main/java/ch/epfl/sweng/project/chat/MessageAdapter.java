@@ -2,6 +2,7 @@ package ch.epfl.sweng.project.chat;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.Utils;
 
 
 public class MessageAdapter extends ArrayAdapter<Message> {
@@ -57,7 +59,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
             if(userName != null) {
                 userName.setText(messageToDisplay.getUserName());
-                //userName.setTextColor();
+                userName.setTextColor((Utils.generateRandomChatColorAsHex(messageToDisplay.getUserName())));
             }
 
             if(messageBody != null) {
