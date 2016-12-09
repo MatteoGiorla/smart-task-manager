@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -412,7 +413,7 @@ public abstract class TaskActivity extends AppCompatActivity {
             //EditText for new contributor
             editTextNewContributor = new EditText(getApplicationContext());
             editTextNewContributor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-            editTextNewContributor.setTextColor(getColor(R.color.black));
+            editTextNewContributor.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
             builder.setView(editTextNewContributor);
 
             //Show dialog
