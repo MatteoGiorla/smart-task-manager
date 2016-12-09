@@ -256,7 +256,7 @@ public class LocationFragment extends Fragment {
                                 R.layout.dialog_spinner_item, spinnerList);
                         adp.setDropDownViewResource(R.layout.dialog_spinner_dropdown_item);
                         locationSpinnerForReplacement = new Spinner(getApplicationContext());
-                        
+
                         locationSpinnerForReplacement.setAdapter(adp);
                         locationSpinnerForReplacement.setPadding(100, 50, 100, 50);
 
