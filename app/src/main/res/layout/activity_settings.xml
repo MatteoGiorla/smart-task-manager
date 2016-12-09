@@ -34,20 +34,6 @@
             android:background="@color/gray" />
 
         <TextView
-            android:text="@string/settings_tips"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
-
-        <TextView
             android:text="@string/settings_tutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,20 +73,6 @@
             android:layout_height="1dp"
             android:background="@color/gray" />
 
-        <TextView
-            android:text="@string/settings_notifications"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:background="@color/white"
-            android:textSize="@dimen/task_title_size" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp"
@@ -113,20 +85,6 @@
 
         <TextView
             android:text="@string/settings_suggest_a_feature"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:textSize="@dimen/task_title_size" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/gray" />
-
-        <TextView
-            android:text="@string/settings_tell_a_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
