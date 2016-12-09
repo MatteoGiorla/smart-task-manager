@@ -1,4 +1,4 @@
-package ch.epfl.sweng.project;
+package ch.epfl.sweng.project.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.epfl.sweng.project.IntroActivity;
+import ch.epfl.sweng.project.R;
+import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
@@ -34,6 +37,17 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+        TextView mAbout = (TextView) findViewById(R.id.settings_text_about);
+        mAbout.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SettingsActivity.this, SettingsAboutActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
 
         TextView mLocations = (TextView) findViewById(R.id.settings_text_locations);
         mLocations.setOnClickListener(
