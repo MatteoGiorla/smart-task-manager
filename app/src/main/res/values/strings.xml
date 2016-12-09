@@ -163,7 +163,7 @@
 
     <!-- splash screen text -->
     <string name="progress_bar_text">Retrieving data…</string>
-<!--
+    <!--
     <string name="tutorial_slide_6_title">Notifications</string>
     <string name="tutorial_slide_7_title">Be located automatically</string>
 -->
@@ -218,5 +218,15 @@
     <!--Chat-->
     <string name="input_message">Type a message</string>
     <string name="no_messages">There is no messages</string>
+
+    <!-- Settings/About -->
+    <string name="settings_about_mikael">" Mikael Morales"</string>
+    <string name="settings_about_charles">" Charles Parzy"</string>
+    <string name="settings_about_matteo">" Matteo Giorla"</string>
+    <string name="settings_about_cedric">" Cédric Viaccoz"</string>
+    <string name="settings_about_bastian">" Bastian Nanchen"</string>
+    <string name="settings_about_ilkan">" Ilkan Kilic"</string>
+    <string name="settings_about_team_members">Team Members</string>
+    <string name="settings_about_version_app">App Version</string>
 
 </resources>
