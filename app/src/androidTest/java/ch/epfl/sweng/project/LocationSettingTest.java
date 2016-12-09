@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.UiDevice;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiScrollable;
+import android.support.test.uiautomator.UiSelector;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,6 +32,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.uiautomator.UiDevice.getInstance;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.core.IsNot.not;
@@ -81,20 +88,6 @@ public final class LocationSettingTest extends SuperTest {
         //deleting the "optional" default locations and testing they are not there.
         deleteALocation(0);
         checkALocation("Office", 0);
-
-        //now checking long click and simple click doesn't get us to another activity
-        /*
-        for(int i = 0; i < 2; ++i){
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_locations))
-                    .atPosition(0).perform(longClick());
-            checkALocation(LocationFragment.defaultLocations[0].getName(), 0);
-            onData(anything())
-                    .inAdapterView(withId(R.id.list_view_locations))
-                    .atPosition(0).perform(click());
-            checkALocation(LocationFragment.defaultLocations[0].getName(), 0);
-        }
-        */
     }
 
     /**
@@ -105,43 +98,21 @@ public final class LocationSettingTest extends SuperTest {
     public void testCanAddLocation() {
         for (int i = 0; i < createdLocations; i++) {
             createALocation(mTitleToBeTyped + i);
+            scrollDown();
             //Check title name inside listView
             checkALocation(mTitleToBeTyped + i, i + 3);
         }
     }
 
 
-    /**
-     * Test that we can't add a location with an empty title.
-     */
-    /*@Test
-    public void testCannotAddLocationWithEmptyTitle() {
-        //Create a location  with empty titles
-        onView(withId(R.id.add_location_button)).perform(click());
-        onView(withId(R.id.locationName)).perform(typeText(""));
-        pressBack();
-        onView(withId(R.id.location_done_button_toolbar)).perform(click());
 
-        //Get the error message
-        String errorMessage = getInstrumentation()
-                .getTargetContext()
-                .getResources()
-                .getText(R.string.error_location_name_empty)
-                .toString();
-
-        //Check that the error message is displayed
-        onView(withId(R.id.location_name_layout))
-                .check(matches(TestErrorTextInputLayoutMatcher
-                        .withErrorText(containsString(errorMessage))));
-        pressBack();
-    }*/
 
     @Test
     public void testCanEditLocation() {
         final int locationPosition = 3;
         //Create a location
         createALocation(mOldTitle);
-
+        scrollDown();
         //Try to edit the first location to put the same title as the first location
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))
@@ -154,6 +125,7 @@ public final class LocationSettingTest extends SuperTest {
 
         onView(withId(R.id.location_done_button_toolbar)).perform(click());
 
+        scrollDown();
         //Check that the title has been updated
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))
@@ -171,7 +143,7 @@ public final class LocationSettingTest extends SuperTest {
         final int locationPosition = 3;
         //Create a location
         createALocation(mOldTitle);
-
+        scrollDown();
         //Try to edit the first location to put the same title as a default location
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))

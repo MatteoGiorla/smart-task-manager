@@ -30,23 +30,6 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
-
-    <ImageView
-        android:layout_width="91dp"
-        android:layout_height="79dp"
-        android:src="@drawable/task_location_36dp"
-        android:layout_gravity="center"
-        android:contentDescription="@string/location_settings"
-        android:id="@+id/iconLocation" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
-
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

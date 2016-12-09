@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -53,6 +54,11 @@ public class LocationFragment extends Fragment {
 
     private Spinner locationSpinnerForReplacement;
 
+    ListView listView;
+    ListView listViewDefault;
+    
+    private int ITEM_HEIGHT = 180;
+
 
     /**
      * Method that adds a location in the locationList and in the database.
@@ -66,6 +72,7 @@ public class LocationFragment extends Fragment {
         }
         locationList.add(location);
         mLocationAdapter.notifyDataSetChanged();
+
         if(!firstConnection){
             currentUser = new User(currentUser.getEmail(), getLocationList());
             FirebaseUserHelper.updateUser(currentUser);
@@ -76,6 +83,7 @@ public class LocationFragment extends Fragment {
         if (location == null) {
             throw new IllegalArgumentException();
         }
+
         defaultLocationList.add(location);
         mDefaultLocationAdapter.notifyDataSetChanged();
     }
@@ -159,10 +167,12 @@ public class LocationFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_location_list, container, false);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.list_view_locations);
+        listView = (ListView) rootView.findViewById(R.id.list_view_locations);
+        listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
         listView.setAdapter(mLocationAdapter);
 
-        ListView listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
+        listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
+        listViewDefault.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mDefaultLocationAdapter.getCount()));
         listViewDefault.setAdapter(mDefaultLocationAdapter);
 
         registerForContextMenu(listView);
@@ -241,24 +251,28 @@ public class LocationFragment extends Fragment {
                                 spinnerList[i] = getString(R.string.unfilled_param);
                             }
                         }
-                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getContext(),
-                                android.R.layout.simple_spinner_dropdown_item, spinnerList);
-                        locationSpinnerForReplacement = new Spinner(getContext());
-                        locationSpinnerForReplacement.setAdapter(adp);
-                        locationSpinnerForReplacement.setPadding(50, 0 , 50, 0);
-                        locationSpinnerForReplacement.setPopupBackgroundResource(R.color.white);
+
+                        final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
+                                R.layout.dialog_spinner_item, spinnerList);
+                        adp.setDropDownViewResource(R.layout.dialog_spinner_dropdown_item);
+                        locationSpinnerForReplacement = new Spinner(getApplicationContext());
                         
+                        locationSpinnerForReplacement.setAdapter(adp);
+                        locationSpinnerForReplacement.setPadding(100, 50, 100, 50);
+
                         builder.setView(locationSpinnerForReplacement);
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     } else {
                         removeLocation(itemInfo);
+                        listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
                         currentUser = new User(currentUser.getEmail(), getLocationList());
                         FirebaseUserHelper.updateUser(currentUser);
                         MainActivity.setUser(currentUser);
                     }
                 } else {
                     removeLocation(itemInfo);
+                    listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
                 }
                 return true;
             case R.id.floating_location_edit:
@@ -391,10 +405,16 @@ public class LocationFragment extends Fragment {
             TaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
 
             removeLocation(itemInfo);
-
+            listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
             currentUser = new User(currentUser.getEmail(), getLocationList());
             FirebaseUserHelper.updateUser(currentUser);
             MainActivity.setUser(currentUser);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount() + 1));
     }
 }
