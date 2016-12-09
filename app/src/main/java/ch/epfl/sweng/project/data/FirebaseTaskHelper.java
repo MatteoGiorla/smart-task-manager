@@ -90,6 +90,12 @@ public class FirebaseTaskHelper implements TaskHelper {
             //to give a title with the correct format (title@@email@@email
             for (String mail : task.getListOfContributors()) {
                 toAdd = Utils.sharedTaskPreProcessing(task, mail);
+                String[] suffix = Utils.getCreatorAndSharer(Utils.separateTitleAndSuffix(toAdd.getName())[1]);
+                if(suffix[0].equals(suffix[1])){
+                    toAdd.setIfNewContributor(0L);
+                }else{
+                    toAdd.setIfNewContributor(1L);
+                }
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(toAdd.getName()).getRef();
                 taskRef.setValue(toAdd);
             }
@@ -140,6 +146,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
                 }else{
                     Task updatedTask = Utils.sharedTaskPreProcessing(updated, mail);
+                    updatedTask.setIfNewContributor(1L);
                     DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updatedTask.getName()).getRef();
                     taskRef.setValue(updatedTask);
                 }
@@ -178,29 +185,12 @@ public class FirebaseTaskHelper implements TaskHelper {
 
         // search task that has been added by someone else:
         for (Task t : mTaskList) {
-            if (t.getIfNewContributor() == 1L) {
+            if (t.getIfNewContributor() == 1L ) {
                 taskAddedAsContributor.add(t);
             }
         }
 
         if (!taskAddedAsContributor.isEmpty()) {
-            // NOTIFICATION
-            //Notification builder
-            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
-            builder.setSmallIcon(R.drawable.ic_event_notification);
-            builder.setContentTitle(taskToNotify.get(0).getName() + mContext.getString(R.string.notification_content_task));
-            builder.setContentText("Tu es mon héros <3");
-            builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
-
-            //mAdapter.notifyDataSetChanged();
-            // Sets an ID for the notification
-            int mNotificationId = 001;
-            // Gets an instance of the NotificationManager service
-            NotificationManager mNotifyMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            // Builds the notification and issues it.
-            mNotifyMgr.notify(mNotificationId, builder.build());*/
-
-
             // DIALOG
             // Build the Dialog:
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

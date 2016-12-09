@@ -57,6 +57,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
             if(userName != null) {
                 userName.setText(messageToDisplay.getUserName());
+                //userName.setTextColor();
             }
 
             if(messageBody != null) {

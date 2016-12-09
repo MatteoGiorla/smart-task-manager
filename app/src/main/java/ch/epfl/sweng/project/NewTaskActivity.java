@@ -84,16 +84,13 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     void resultActivity() {
         String titleToType;
-        int newContributors;
         if(listOfContributors.size() > 1){
             String creatorEmail = listOfContributors.get(0);
             titleToType = Utils.constructSharedTitle(title[0], creatorEmail, creatorEmail);
-            newContributors = 1;
         }else{
             titleToType = title[0];
-            newContributors = 0;
         }
-        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, newContributors);
+        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, 0L);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){
