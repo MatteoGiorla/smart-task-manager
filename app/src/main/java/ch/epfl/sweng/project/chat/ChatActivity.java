@@ -21,6 +21,7 @@ import java.util.Date;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
+import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.FirebaseChatHelper;
 
 public class ChatActivity extends AppCompatActivity {
@@ -117,7 +118,7 @@ public class ChatActivity extends AppCompatActivity {
     private void initializeToolbar() {
         //Set toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.chat_toolbar);
-        mToolbar.setTitle(task.getName());
+        mToolbar.setTitle(Utils.separateTitleAndSuffix(task.getName())[0]);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

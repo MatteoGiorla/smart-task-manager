@@ -4,6 +4,8 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +34,33 @@ public class NewTaskActivity extends TaskActivity {
 
         energy = Task.Energy.NORMAL;
 
+        //prepare contributors
+        listOfContributors = new ArrayList<>();
+        String contributor;
+
+        try {
+            contributor = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        } catch (NullPointerException e) {
+            contributor = User.DEFAULT_EMAIL;
+        }
+
+        listOfContributors.add(contributor);
+        editContributorButton.setVisibility(View.GONE);
+
+        contributorsListTextView = (TextView) findViewById(R.id.text_contributors);
+        setContributorsTextView();
+
         getEditableView();
+    }
+
+    @Override
+    void addContributorInTask(String contributor){
+        listOfContributors.add(contributor);
+    }
+
+    @Override
+    void deleteContributorInTask(String contributor){
+        listOfContributors.remove(contributor);
     }
 
     /**
@@ -55,19 +83,17 @@ public class NewTaskActivity extends TaskActivity {
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
-
-        //prepare contributors
-        listOfContributors = new ArrayList<>();
-        String contributor;
-
-        try {
-            contributor = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        } catch (NullPointerException e) {
-            contributor = User.DEFAULT_EMAIL;
+        String titleToType;
+        int newContributors;
+        if(listOfContributors.size() > 1){
+            String creatorEmail = listOfContributors.get(0);
+            titleToType = Utils.constructSharedTitle(title[0], creatorEmail, creatorEmail);
+            newContributors = 1;
+        }else{
+            titleToType = title[0];
+            newContributors = 0;
         }
-
-        listOfContributors.add(contributor);
-        Task newTask = new Task(title, description, locationName, date, duration, energy.toString(), listOfContributors);
+        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, newContributors);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){

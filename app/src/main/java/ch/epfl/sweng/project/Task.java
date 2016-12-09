@@ -56,6 +56,7 @@ public class Task implements Parcelable {
     private Energy energyNeeded;
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
+    private long ifNewContributor;
     private List<Message> listOfMessages;
 
     /**
@@ -74,10 +75,11 @@ public class Task implements Parcelable {
      * @param durationInMinutes           Task's durationInMinutes in minutes
      * @param energyNeeded       Task's energy needed
      * @param listOfContributors Task's list of contributors
+     * @param ifNewContributor   signal if this task has been added onto the user from a different user.
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -85,6 +87,7 @@ public class Task implements Parcelable {
         this.dueDate = dueDate;
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
+        this.ifNewContributor = ifNewContributor;
         dateFormat = DateFormat.getDateInstance();
         this.listOfMessages = new ArrayList<>();
     }
@@ -102,7 +105,7 @@ public class Task implements Parcelable {
      * @param listOfMessages     Task's list of messages
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
-    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
+   /* public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
                 long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull List<Message> listOfMessages) {
         this.name = name;
         this.description = description;
@@ -112,6 +115,33 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
+        this.listOfMessages = new ArrayList<>();
+    }*/
+
+    /**
+     * Constructor of the class
+     *
+     * @param name               Task's name
+     * @param description        Task's description
+     * @param locationName       Task's locationName
+     * @param dueDate            Task's due date
+     * @param durationInMinutes           Task's durationInMinutes in minutes
+     * @param energyNeeded       Task's energy needed
+     * @param listOfContributors Task's list of contributors
+     * @param listOfMessages     Task's list of messages
+     * @throws IllegalArgumentException if one parameter is invalid (null)
+     */
+    public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull List<Message> listOfMessages) {
+        this.name = name;
+        this.description = description;
+        this.durationInMinutes = durationInMinutes;
+        this.listOfContributors = new ArrayList<>(listOfContributors);
+        this.dueDate = dueDate;
+        this.energyNeeded = Energy.valueOf(energyNeeded);
+        this.locationName = locationName;
+        dateFormat = DateFormat.getDateInstance();
+        this.ifNewContributor = ifNewContributor;
         this.listOfMessages = new ArrayList<>(listOfMessages);
     }
 
@@ -123,6 +153,10 @@ public class Task implements Parcelable {
      * @param in Container of a Task
      */
     private Task(@NonNull Parcel in) {
+        /*this(in.readString(), in.readString(), in.readString(),
+                new Date(in.readLong()), in.readLong(), in.readString(),
+                in.createStringArrayList(), in.readLong());*/
+
         this.name = in.readString();
         this.description = in.readString();
         this.locationName = in.readString();
@@ -131,6 +165,7 @@ public class Task implements Parcelable {
         this.durationInMinutes = in.readLong();
         this.energyNeeded = Energy.valueOf(in.readString());
         this.listOfContributors = in.createStringArrayList();
+        this.ifNewContributor = in.readLong();
         List<Message> listMessages = new ArrayList<>();
         in.readTypedList(listMessages, Message.CREATOR);
         this.listOfMessages = new ArrayList<>(listMessages);
@@ -355,6 +390,7 @@ public class Task implements Parcelable {
         dest.writeLong(durationInMinutes);
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
+        dest.writeLong(ifNewContributor);
         dest.writeTypedList(listOfMessages);
     }
 
@@ -375,7 +411,7 @@ public class Task implements Parcelable {
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                        int currentTimeDisposal, String everywhere_location, String select_one_location) {
+                                                 int currentTimeDisposal, String everywhere_location, String select_one_location) {
         return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location);
     }
 
@@ -408,10 +444,19 @@ public class Task implements Parcelable {
         return cal;
     }
 
+    public long getIfNewContributor(){
+        return ifNewContributor;
+    }
+
+    public Task setIfNewContributor(long newContributor){
+        ifNewContributor = newContributor;
+        return this;
+    }
+
     /**
      * Method returning the number of day between two days.
      *
-      * @param startDate the first day
+     * @param startDate the first day
      * @param endDate the last day
      * @return number of days between startDate and endDate
      */

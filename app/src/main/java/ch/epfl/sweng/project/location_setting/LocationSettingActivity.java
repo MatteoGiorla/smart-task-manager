@@ -135,15 +135,3 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

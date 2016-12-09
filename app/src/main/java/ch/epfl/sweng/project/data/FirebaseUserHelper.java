@@ -40,6 +40,7 @@ public class FirebaseUserHelper implements UserHelper{
         return currentUser;
     }
 
+
     /**
      * Deleter a user in the database
      *
