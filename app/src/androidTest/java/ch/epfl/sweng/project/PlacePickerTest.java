@@ -25,7 +25,7 @@ import static android.support.test.uiautomator.UiDevice.getInstance;
 import static junit.framework.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
-public class PlacePickerTest {
+public class PlacePickerTest extends SuperTest{
 
     private static UiDevice mUiDevice;
     private static final String SEARCH_BAR = "com.google.android.gms:id/search_bar";
