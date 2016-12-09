@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
@@ -309,9 +310,8 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
 
         mAdapter.notifyDataSetChanged();
-
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
-
+        MainActivity.triggerDynamicSort();
     }
 }
