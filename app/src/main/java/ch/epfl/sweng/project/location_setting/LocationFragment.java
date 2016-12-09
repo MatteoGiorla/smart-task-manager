@@ -234,7 +234,7 @@ public class LocationFragment extends Fragment {
                     if (TaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         // Add the buttons
-                        builder.setPositiveButton(R.string.replace_location, new MyOnClickListener(itemInfo));
+                        builder.setPositiveButton(R.string.ok, new MyOnClickListener(itemInfo));
                         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                             }
