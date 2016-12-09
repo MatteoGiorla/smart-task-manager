@@ -482,7 +482,9 @@ public abstract class TaskActivity extends AppCompatActivity {
             listOfContributorsForSpinner.remove(0);
             String[] spinnerList = listOfContributorsForSpinner.toArray(new String[listOfContributorsForSpinner.size()]);
             final ArrayAdapter<String> adp = new ArrayAdapter<>(getApplicationContext(),
-                    android.R.layout.simple_spinner_dropdown_item, spinnerList);
+                    R.layout.dialog_spinner_item, spinnerList);
+            adp.setDropDownViewResource(R.layout.dialog_spinner_dropdown_item);
+
             contributorsSpinner = new Spinner(getApplicationContext());
             contributorsSpinner.setAdapter(adp);
             contributorsSpinner.setPadding(50, 0 , 50, 0);
