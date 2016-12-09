@@ -281,9 +281,9 @@ public class TaskFragment extends Fragment {
         final Task mTask = taskList.get(position);
         String title;
         if(isDone) {
-            title = mTask.getName() + getString(R.string.has_been_done);
+            title = Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_done);
         }else{
-            title = mTask.getName() + getString(R.string.has_been_deleted);
+            title = Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_deleted);
         }
 
         Snackbar snackbar = Snackbar

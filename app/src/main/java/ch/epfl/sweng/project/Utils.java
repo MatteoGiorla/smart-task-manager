@@ -62,7 +62,7 @@ public class Utils extends Application {
         Calendar c = Calendar.getInstance();
         c.setTime(task.getDueDate());
         int year = c.get(Calendar.YEAR);
-        return year == 1899;
+        return year == 1970;
     }
 
     /**
