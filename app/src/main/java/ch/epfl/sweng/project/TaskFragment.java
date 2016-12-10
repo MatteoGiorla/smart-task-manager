@@ -243,6 +243,10 @@ public class TaskFragment extends Fragment {
         // Get result from the result intent.
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+        if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].equals("")){
+            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
+            editedTask.setName(sharedTaskName);
+        }
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
@@ -250,7 +254,7 @@ public class TaskFragment extends Fragment {
             //taskList.set(indexEditedTask, editedTask);
             mTaskAdapter.notifyDataSetChanged();
             Toast.makeText(getActivity().getApplicationContext(),
-                    editedTask.getName() + getString(R.string.info_updated),
+                    Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
             //Create a notification

@@ -4,8 +4,10 @@ package ch.epfl.sweng.project;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
+import android.util.Log;
 
 
 public class Utils extends Application {
@@ -135,6 +137,22 @@ public class Utils extends Application {
         return s.toString();
     }
 
+    /**
+     * Using hashcode will produce a unique color for the name
+     * of the user to display in the chat.
+     *
+     * @param userName the user Name (the real one, not the email)
+     *
+     * @return an int representing the ARGB value of the uer name to display with.
+     */
+    public static int generateRandomChatColorAsHex(String userName){
+        int hash = userName.hashCode();
+        int red = hash & 0x000000FF;
+        int green = (hash & 0x000FF000)>> 12;
+        int blue = (hash & 0xFF00000)>> 20;
+        return Color.argb(200,red, green, blue );
+    }
+
 
     /**
      * Takes care of preparing a shared task given the email of the shared user,
@@ -151,10 +169,10 @@ public class Utils extends Application {
         Task toAdd;
         if(suffix[0].equals(mail)){
             //in the case where we add the task to the creator, nothing to preprocess.
-            toAdd = task;
+            toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getListOfMessages());
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor());
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor(), task.getListOfMessages());
         }
         return toAdd;
     }

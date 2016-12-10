@@ -3,7 +3,6 @@ package ch.epfl.sweng.project.data;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -91,6 +90,12 @@ public class FirebaseTaskHelper implements TaskHelper {
             //to give a title with the correct format (title@@email@@email
             for (String mail : task.getListOfContributors()) {
                 toAdd = Utils.sharedTaskPreProcessing(task, mail);
+                String[] suffix = Utils.getCreatorAndSharer(Utils.separateTitleAndSuffix(toAdd.getName())[1]);
+                if(suffix[0].equals(suffix[1])){
+                    toAdd.setIfNewContributor(0L);
+                }else{
+                    toAdd.setIfNewContributor(1L);
+                }
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(toAdd.getName()).getRef();
                 taskRef.setValue(toAdd);
             }
@@ -99,29 +104,6 @@ public class FirebaseTaskHelper implements TaskHelper {
             taskRef.setValue(toAdd);
         }
         mAdapter.add(toAdd, position);
-    }
-
-    /**
-     * Takes care of preparing a shared task given the email of the shared user, its personal choosen
-     * location and the original task. Since we can't yet put locations on a shared task,
-     * it forces the location to be everywhere.
-     *
-     * @param task the task to process
-     * @param mail the mail of the person shared
-     * @return a newly created task having the correct name and location according to the name.
-     */
-    public Task sharedTaskPreProcessing(Task task, String mail){
-        String[] title = separateTitleAndSuffix(task.getName());
-        String[] suffix = Utils.getCreatorAndSharer(title[1]);
-        Task toAdd;
-        if(suffix[1].equals(mail)){
-            //in the case where we add the task to the creator, nothing to preprocess.
-            toAdd = task;
-        }else{
-            String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor());
-        }
-        return toAdd;
     }
 
     @Override
@@ -164,6 +146,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
                 }else{
                     Task updatedTask = Utils.sharedTaskPreProcessing(updated, mail);
+                    updatedTask.setIfNewContributor(1L);
                     DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updatedTask.getName()).getRef();
                     taskRef.setValue(updatedTask);
                 }
@@ -202,29 +185,12 @@ public class FirebaseTaskHelper implements TaskHelper {
 
         // search task that has been added by someone else:
         for (Task t : mTaskList) {
-            if (t.getIfNewContributor() == 1L) {
+            if (t.getIfNewContributor() == 1L ) {
                 taskAddedAsContributor.add(t);
             }
         }
 
         if (!taskAddedAsContributor.isEmpty()) {
-            // NOTIFICATION
-            //Notification builder
-            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
-            builder.setSmallIcon(R.drawable.ic_event_notification);
-            builder.setContentTitle(taskToNotify.get(0).getName() + mContext.getString(R.string.notification_content_task));
-            builder.setContentText("Tu es mon héros <3");
-            builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
-
-            //mAdapter.notifyDataSetChanged();
-            // Sets an ID for the notification
-            int mNotificationId = 001;
-            // Gets an instance of the NotificationManager service
-            NotificationManager mNotifyMgr = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            // Builds the notification and issues it.
-            mNotifyMgr.notify(mNotificationId, builder.build());*/
-
-
             // DIALOG
             // Build the Dialog:
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
