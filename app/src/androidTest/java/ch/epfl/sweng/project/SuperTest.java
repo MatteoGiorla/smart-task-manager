@@ -113,6 +113,13 @@ class SuperTest {
         onView(withText(R.string.flt_ctx_menu_delete)).perform(click());
     }
 
+    void editALocation(int position){
+        onData(anything())
+                .inAdapterView(withId(R.id.list_view_locations))
+                .atPosition(position).perform(longClick());
+        onView(withText(R.string.flt_ctx_menu_edit)).perform(click());
+    }
+
 
     /**
      * Utility method to wait until we can check which activity was launched.
