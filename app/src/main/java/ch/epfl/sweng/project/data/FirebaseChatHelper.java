@@ -35,7 +35,7 @@ public class FirebaseChatHelper {
     }
 
     public void retrieveMessages(String mail, final Task task) {
-        final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).getRef();
+        final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
         if(mChat != null) {
             mChat.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -57,7 +57,7 @@ public class FirebaseChatHelper {
             for (String mail : task.getListOfContributors()) {
                 Task updateTask = Utils.sharedTaskPreProcessing(task, mail);
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updateTask.getName()).getRef();
-                taskRef.setValue(task);
+                taskRef.setValue(updateTask);
             }
         }else{
             DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(task.getListOfContributors().get(0))).child(task.getName()).getRef();
@@ -76,15 +76,13 @@ public class FirebaseChatHelper {
         if(dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
         }else {
-            for (DataSnapshot t : dataSnapshot.getChildren()) {
-                mAdapter.clear();
-                GenericTypeIndicator<List<Message>> gen = new GenericTypeIndicator<List<Message>>() {};
-                List<Message> newListOfMessages = t.child("listOfMessages").getValue(gen);
-                if(newListOfMessages != null) {
-                    task.setListOfMessages(newListOfMessages);
-                    mAdapter.addAll(newListOfMessages);
-                    mAdapter.notifyDataSetChanged();
-                }
+            mAdapter.clear();
+            GenericTypeIndicator<List<Message>> gen = new GenericTypeIndicator<List<Message>>() {};
+            List<Message> newListOfMessages = dataSnapshot.child("listOfMessages").getValue(gen);
+            if(newListOfMessages != null) {
+                task.setListOfMessages(newListOfMessages);
+                mAdapter.addAll(newListOfMessages);
+                mAdapter.notifyDataSetChanged();
             }
         }
     }
