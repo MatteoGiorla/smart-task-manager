@@ -4,6 +4,7 @@
     android:id="@+id/activity_settings_suggest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/AppThemeNoActionBar"
     tools:context="ch.epfl.sweng.project.settings.SettingsSuggestActivity">
 
     <LinearLayout
