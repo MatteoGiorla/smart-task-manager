@@ -10,20 +10,15 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.project.data.UserProvider;
-import ch.epfl.sweng.project.settings.SettingsAboutActivity;
-import ch.epfl.sweng.project.settings.SettingsActivity;
 import ch.epfl.sweng.project.settings.SettingsSuggestActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static org.hamcrest.CoreMatchers.containsString;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
-import static junit.framework.Assert.assertEquals;
 
 public class SettingsSuggestTest {
 
@@ -50,7 +45,7 @@ public class SettingsSuggestTest {
 
     @Test
     public void CheckIfNotFilledNameErrorDisplayed() {
-      /*  SuperTest.waitForActivity();
+      SuperTest.waitForActivity();
         onView(withId(R.id.settings_suggest_button)).perform(click());
 
         String errorMessage = getInstrumentation()
@@ -60,8 +55,72 @@ public class SettingsSuggestTest {
                 .toString();
 
         //Check that the error message is displayed
-        onView(withId(R.id.location_name_layout))
-                .check(matches(TestErrorTextEdit
-                        .withErrorText(containsString(errorMessage)))); */
+        onView(withId(R.id.settings_suggest_textinputlayout_name))
+                .check(matches(TestErrorTextInputLayoutMatcher
+                        .withErrorText(containsString(errorMessage))));
     }
-}
+
+    @Test
+    public void CheckIfNotFilledEmailErrorDisplayed() {
+        SuperTest.waitForActivity();
+        String name = "Paco Lopez";
+
+        onView(withId(R.id.settings_suggest_name)).perform(typeText(name));
+        onView(withId(R.id.settings_suggest_button)).perform(click());
+
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.settings_suggest_field_mandatory)
+                .toString();
+
+        //Check that the error message is displayed
+        onView(withId(R.id.settings_suggest_textinputlayout_email))
+                .check(matches(TestErrorTextInputLayoutMatcher
+                        .withErrorText(containsString(errorMessage))));
+    }
+
+    @Test
+    public void CheckIfNotValidEmailErrorDisplay() {
+        SuperTest.waitForActivity();
+        String name = "Paco Lopez";
+        String falseEmail = "false";
+
+        onView(withId(R.id.settings_suggest_name)).perform(typeText(name));
+        onView(withId(R.id.settings_suggest_mail)).perform(typeText(falseEmail));
+        onView(withId(R.id.settings_suggest_button)).perform(click());
+
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.settings_suggest_not_valid_email)
+                .toString();
+
+        //Check that the error message is displayed
+        onView(withId(R.id.settings_suggest_textinputlayout_email))
+                .check(matches(TestErrorTextInputLayoutMatcher
+                        .withErrorText(containsString(errorMessage))));
+    }
+
+    @Test
+    public void CheckIfNotFilledMessageErrorDisplay() {
+        SuperTest.waitForActivity();
+        String name = "Paco Lopez";
+        String rightEmail = "bonjour@sion.ch";
+
+        onView(withId(R.id.settings_suggest_name)).perform(typeText(name));
+        onView(withId(R.id.settings_suggest_mail)).perform(typeText(rightEmail));
+        onView(withId(R.id.settings_suggest_button)).perform(click());
+
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.settings_suggest_field_mandatory)
+                .toString();
+
+        //Check that the error message is displayed
+        onView(withId(R.id.settings_suggest_textinputlayout_message))
+                .check(matches(TestErrorTextInputLayoutMatcher
+                        .withErrorText(containsString(errorMessage))));
+    }
+ }

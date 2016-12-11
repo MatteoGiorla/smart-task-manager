@@ -120,43 +120,4 @@ public class SettingsSuggestActivity extends AppCompatActivity {
         }
         return isValid;
     }
-
-    /**
-     * Private class that implement TextWatcher.
-     * This class is used to check on runtime if the inputs written by the user
-     * are valid or not.
-     */
-    class SettingsSuggestTextWatcher implements TextWatcher {
-
-        /**
-         * Check the input written by the user before it is changed.
-         */
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            textInputLayoutName.setErrorEnabled(false);
-            textInputLayoutEmail.setErrorEnabled(false);
-            textInputLayoutMessage.setErrorEnabled(false);
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        /**
-         * Check the input written by the user after it was changed.
-         */
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
-
-    /**
-     * Get the place longitude and latitude when the user chose a location
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    }
 }
