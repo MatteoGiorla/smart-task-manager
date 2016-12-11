@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_settings_suggest"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ch.epfl.sweng.project.settings.SettingsSuggestActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:layout_marginLeft="2dp">
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_title_text_view"
+                    android:text="@string/settings_suggest_name"
+                    android:layout_marginLeft="5dp" />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:id="@+id/settings_suggest_name"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="text"
+                    android:layout_marginRight="5dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_title_text_view"
+                    android:text="@string/settings_suggest_email_address"
+                    android:layout_marginLeft="5dp" />
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:id="@+id/settings_suggest_mail"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginRight="5dp" />
+            </TableRow>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_top_title_text_view"
+                android:layout_marginStart="5dp"
+                android:text="@string/settings_suggest_message"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_title_text_view"
+                android:textStyle="normal"
+                android:layout_marginLeft="5dp" />
+            <!--
+                            <TextView
+                                android:id="@+id/text_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:textColor="@color/black"
+                                android:textSize="20sp" /> -->
+
+            <EditText
+                android:id="@+id/settings_suggest_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:layout_marginRight="20dp"
+                android:gravity="top"
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                android:maxLength="@string/max_length_description" />
+
+        </TableLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="right"
+            android:text="@string/settings_suggest_button_send"
+            android:id="@+id/settings_suggest_button"
+            android:layout_marginRight="5dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

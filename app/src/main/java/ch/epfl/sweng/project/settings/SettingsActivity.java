@@ -38,6 +38,17 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
 
+        TextView mSuggest = (TextView) findViewById(R.id.settings_text_suggest);
+        mSuggest.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(SettingsActivity.this, SettingsSuggestActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
         TextView mAbout = (TextView) findViewById(R.id.settings_text_about);
         mAbout.setOnClickListener(
                 new View.OnClickListener() {

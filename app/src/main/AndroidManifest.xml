@@ -114,7 +114,8 @@
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".settings.SettingsAboutActivity"></activity>
+        <activity android:name=".settings.SettingsAboutActivity" />
+        <activity android:name=".settings.SettingsSuggestActivity"></activity>
     </application>
 
 </manifest>
