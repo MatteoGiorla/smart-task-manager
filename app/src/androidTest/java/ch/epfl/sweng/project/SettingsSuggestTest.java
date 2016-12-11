@@ -10,15 +10,22 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.settings.SettingsAboutActivity;
 import ch.epfl.sweng.project.settings.SettingsActivity;
+import ch.epfl.sweng.project.settings.SettingsSuggestActivity;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static org.hamcrest.CoreMatchers.containsString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class SettingsTest {
+import static junit.framework.Assert.assertEquals;
+
+public class SettingsSuggestTest {
 
     private SharedPreferences prefs;
 
@@ -28,11 +35,11 @@ public class SettingsTest {
     }
 
     @Rule
-    public ActivityTestRule<SettingsActivity> mActivityRule = new ActivityTestRule<SettingsActivity>(
-            SettingsActivity.class){
+    public ActivityTestRule<SettingsSuggestActivity> mActivityRule = new ActivityTestRule<SettingsSuggestActivity>(
+            SettingsSuggestActivity.class){
         //Override to be able to change the SharedPreferences effectively
         @Override
-        protected void beforeActivityLaunched(){
+        protected void beforeActivityLaunched() {
             Context actualContext = InstrumentationRegistry.getTargetContext();
             prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
             prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
@@ -42,34 +49,19 @@ public class SettingsTest {
     };
 
     @Test
-    public void CheckIfOpenTutorialFromSettings(){
-        SuperTest.waitForActivity();
-        onView(withId(R.id.settings_text_tutorial)).perform(click());
-        onView(withId(R.id.next)).check(matches(isDisplayed()));
+    public void CheckIfNotFilledNameErrorDisplayed() {
+      /*  SuperTest.waitForActivity();
+        onView(withId(R.id.settings_suggest_button)).perform(click());
 
+        String errorMessage = getInstrumentation()
+                .getTargetContext()
+                .getResources()
+                .getText(R.string.settings_suggest_field_mandatory)
+                .toString();
+
+        //Check that the error message is displayed
+        onView(withId(R.id.location_name_layout))
+                .check(matches(TestErrorTextEdit
+                        .withErrorText(containsString(errorMessage)))); */
     }
-
-    @Test
-    public void AfterOpenTutoFromSettingsGoBackToSettings(){
-        SuperTest.waitForActivity();
-        onView(withId(R.id.settings_text_tutorial)).perform(click());
-        onView(withId(R.id.next)).check(matches(isDisplayed()));
-        onView(withId(R.id.skip)).perform(click());
-        onView(withId(R.id.settings_text_tutorial)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void CheckIfOpenAboutFromSettings() {
-        SuperTest.waitForActivity();
-        onView(withId(R.id.settings_text_about)).perform(click());
-        onView(withId(R.id.settings_about_text_bastian)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void CheckIfOpenSuggestFromSettings() {
-        SuperTest.waitForActivity();
-        onView(withId(R.id.settings_text_suggest)).perform(click());
-        onView(withId(R.id.settings_suggest_message)).check(matches(isDisplayed()));
-    }
-
 }

@@ -235,5 +235,6 @@
     <string name="settings_suggest_message">Message</string>
     <string name="settings_suggest_button_send">Send</string>
     <string name="settings_suggest_field_mandatory">This field is mandatory</string>
+    <string name="settings_suggest_not_valid_email">This email address is not valid</string>
 
 </resources>
