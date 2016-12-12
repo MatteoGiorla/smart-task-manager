@@ -240,6 +240,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 String description = task.child("description").getValue(String.class);
                 Long durationInMinutes = task.child("durationInMinutes").getValue(Long.class);
                 String energy = task.child("energy").getValue(String.class);
+                Boolean hasNewMessage = task.child("hasNewMessages").getValue(Boolean.class);
 
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<String>> stringListTypeIndicator =
@@ -266,9 +267,9 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Task newTask;
 
                 if(listOfMessages == null) {
-                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage);
                 }else{
-                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, listOfMessages);
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage, listOfMessages);
                 }
 
                 mTaskList.add(newTask);

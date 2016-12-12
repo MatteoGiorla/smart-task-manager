@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -142,6 +144,18 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 holder.imageSharedTask.setVisibility(View.INVISIBLE);
             } else {
                 holder.imageSharedTask.setVisibility(View.VISIBLE);
+            }
+            if(taskInTheView.getHasNewMessages()) {
+                holder.imageHasNewMessages.setVisibility(View.VISIBLE);
+                final Animation animation = new AlphaAnimation(1, 0);
+                animation.setDuration(500);
+                animation.setInterpolator(new LinearInterpolator());
+                animation.setRepeatCount(Animation.INFINITE);
+                animation.setRepeatMode(Animation.REVERSE);
+                holder.imageHasNewMessages.startAnimation(animation);
+            } else {
+                holder.imageHasNewMessages.clearAnimation();
+                holder.imageHasNewMessages.setVisibility(View.INVISIBLE);
             }
         }
     }

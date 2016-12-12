@@ -22,6 +22,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public final TextView taskRemainingDays;
     public final TextView taskTitle;
     public final ImageView imageSharedTask;
+    public final ImageView imageHasNewMessages;
 
     public ViewHolder(View v, Context context, ArrayList<Task> tasksList) {
         super(v);
@@ -33,6 +34,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         taskRemainingDays = (TextView) v.findViewById(R.id.list_remaining_days);
         taskTitle = (TextView) v.findViewById(R.id.list_entry_title);
         imageSharedTask = (ImageView) v.findViewById(R.id.imageSharedTask);
+        imageHasNewMessages = (ImageView) v.findViewById(R.id.task_new_messages);
 
         v.setOnClickListener(this);
     }

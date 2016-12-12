@@ -81,6 +81,9 @@ public class ChatActivity extends AppCompatActivity {
             mail = User.DEFAULT_EMAIL;
         }
         //Initiate the listener
+        if(task.getHasNewMessages()) {
+            chatHelper.setNewMessagesHasRead(mail, task);
+        }
         chatHelper.retrieveMessages(mail, task);
     }
 
@@ -143,7 +146,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (!mssgText.isEmpty()) {
                     long time = new Date().getTime();
                     Message newMessage = new Message(currentUserName, mssgText, time);
-                    chatHelper.updateChat(task, newMessage);
+                    chatHelper.updateChat(task, newMessage, mail);
                     editMssg.getText().clear();
                 }
             }

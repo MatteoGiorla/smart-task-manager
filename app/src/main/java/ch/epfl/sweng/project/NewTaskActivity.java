@@ -90,7 +90,7 @@ public class NewTaskActivity extends TaskActivity {
         }else{
             titleToType = title[0];
         }
-        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, 0L);
+        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, 0L, false);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask, this.getApplicationContext())){

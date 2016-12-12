@@ -153,6 +153,7 @@
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="stop_watch_icon_content_description">stop watch icon</string>
+    <string name="task_has_new_messages_description">Task with new messages</string>
 
     <!-- Tutorial texts -->
     <string name="tutorial_slide_1_title">Welcome !</string>

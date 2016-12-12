@@ -211,6 +211,7 @@ public class TaskFragment extends Fragment {
      * @throws IllegalArgumentException if the returned extras from EditTaskActivity are
      *                                  invalid
      */
+    @RequiresApi(Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //Case when we returned from the EditTaskActivity
@@ -228,7 +229,7 @@ public class TaskFragment extends Fragment {
                     if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    removeTaskAction(taskIndex, false);
+                    createSnackBar(taskIndex, false);
                     break;
             }
         }
@@ -297,27 +298,14 @@ public class TaskFragment extends Fragment {
                     public void onClick(View view) {
                         mDatabase.addNewTask(mTask, position);
                         recyclerView.scrollToPosition(position);
+                        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
+
                     }
                 });
 
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
         mDatabase.deleteTask(mTask, position);
-    }
-
-    /**
-     * Private method executing the actions needed to remove the task.
-     * It removes the task from the database.
-     *
-     * @param position Position of the task to be removed.
-     * @param isDone   Boolean indicating if the task is done.
-     */
-    private void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = taskList.get(position);
-
-        mDatabase.deleteTask(taskToBeDeleted, position);
-
-        //Update notifications
         new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
     }
 
@@ -353,9 +341,9 @@ public class TaskFragment extends Fragment {
             Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
                 taskPosition.add(i);
