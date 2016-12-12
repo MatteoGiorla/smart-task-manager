@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import ch.epfl.sweng.project.chat.ChatActivity;
-
-import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
 
 import ch.epfl.sweng.project.chat.ChatActivity;
 
@@ -96,6 +91,8 @@ public class EditTaskActivity extends TaskActivity {
         } else {
             editContributorButton.setVisibility(View.GONE);
         }
+
+        setChatButtonListener();
     }
 
     @Override
@@ -115,14 +112,24 @@ public class EditTaskActivity extends TaskActivity {
                 finish();
                 return true;
 
-            case R.id.chat_menu :
-                Intent intentToChat = new Intent(this, ChatActivity.class);
-                intentToChat.putExtra(TASK_CHAT_KEY, mTaskToBeEdited);
-                startActivity(intentToChat);
-
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Set the listener for the chat button
+     */
+    public void setChatButtonListener() {
+        FloatingActionButton chatButton = (FloatingActionButton) findViewById(R.id.open_chat);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToChat = new Intent(getApplicationContext(), ChatActivity.class);
+                intentToChat.putExtra(TASK_CHAT_KEY, mTaskToBeEdited);
+                startActivity(intentToChat);
+            }
+        });
     }
 
     /**

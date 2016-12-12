@@ -4,6 +4,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -26,6 +27,10 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Remove chat button
+        FloatingActionButton chatButton = (FloatingActionButton) findViewById(R.id.open_chat);
+        chatButton.setVisibility(View.INVISIBLE);
 
         //Set default values
         Calendar cal = Calendar.getInstance();

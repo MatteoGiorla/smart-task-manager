@@ -45,10 +45,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.FirebaseUserHelper;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Class which represents an activity regarding a task
  */

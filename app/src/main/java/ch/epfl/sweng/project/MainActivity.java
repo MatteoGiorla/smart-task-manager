@@ -232,6 +232,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -437,10 +438,13 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
 
         durationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
+                R.layout.spinner_textview, getStartDurationTable());
+
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -464,8 +468,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
 
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
 
+        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocation.setAdapter(locationAdapter);
     }
 

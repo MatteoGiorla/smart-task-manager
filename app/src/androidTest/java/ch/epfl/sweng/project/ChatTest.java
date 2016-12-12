@@ -33,7 +33,7 @@ public class ChatTest extends SuperTest {
        //Open EditTaskActivity for the newly created task
        onView(withId(R.id.list_view_tasks))
                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-       onView(withId(R.id.chat_menu)).perform(click());
+       onView(withId(R.id.open_chat)).perform(click());
    }
 
     @Test
