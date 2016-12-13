@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -82,6 +83,16 @@ public class FilledTaskFragment extends TaskFragment {
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
         mDatabase.retrieveAllData(currentUser);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
+        if (direction == ItemTouchHelper.LEFT){
+            createSnackBar(position, false, recyclerView);
+        } else {
+            createSnackBar(position, true, recyclerView);
+        }
     }
 
     @Override

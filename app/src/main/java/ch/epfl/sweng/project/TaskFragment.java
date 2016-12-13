@@ -48,6 +48,8 @@ public abstract class TaskFragment extends Fragment {
 
     abstract void removeTaskAction(int position, Boolean isDone);
 
+    abstract void setOnSwipe(RecyclerView recyclerView, int position, int direction);
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,11 +121,7 @@ public abstract class TaskFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                if (direction == ItemTouchHelper.LEFT){
-                    createSnackBar(position, false, recyclerView);
-                } else {
-                    createSnackBar(position, true, recyclerView);
-                }
+                setOnSwipe(recyclerView, position, direction);
             }
 
             @RequiresApi(Build.VERSION_CODES.M)

@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -50,6 +51,16 @@ public class UnfilledTaskFragment extends TaskFragment {
     void setOnCreateView(RecyclerView recyclerView) {
         recyclerView.setAdapter(mTaskAdapter);
         initSwipe();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
+        if (direction == ItemTouchHelper.LEFT){
+            createSnackBar(position, false, recyclerView);
+        } else {
+            startEditTaskActivity(position);
+        }
     }
 
     @Override
@@ -150,5 +161,20 @@ public class UnfilledTaskFragment extends TaskFragment {
         }else{
             return null;
         }
+    }
+
+    /**
+     * Start the EditTaskActivity for result when the user press the edit button.
+     * The task index and the taskList are passed as extras to the intent.
+     *
+     * @param position Position of the task in the list.
+     */
+    private void startEditTaskActivity(int position) {
+        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
+
+        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
+        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
+
+        startActivityForResult(intent, EDIT_TASK_REQUEST_CODE);
     }
 }
