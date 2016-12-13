@@ -259,7 +259,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
 
-        } else if(requestCode == FilledTaskFragment.editTaskRequestCode){
+        } else if(requestCode == FilledTaskFragment.EDIT_TASK_REQUEST_CODE){
                 mainFragment.onActivityResult(requestCode, resultCode, data);
         }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());

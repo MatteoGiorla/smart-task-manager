@@ -43,7 +43,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         Intent intent = new Intent(mContext, EditTaskActivity.class);
         intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, itemPosition);
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, tasksList);
-        ((Activity)mContext).startActivityForResult(intent, FilledTaskFragment.editTaskRequestCode);
+        ((Activity)mContext).startActivityForResult(intent, FilledTaskFragment.EDIT_TASK_REQUEST_CODE);
     }
 
 }
