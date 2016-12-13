@@ -575,7 +575,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private void updateUnfilledTasksTableRow(boolean visible) {
         if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
             if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
@@ -589,7 +588,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         } else {
             unfilledTaskButton.setVisibility(View.GONE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
     }
 
