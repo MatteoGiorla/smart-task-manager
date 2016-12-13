@@ -82,7 +82,7 @@ public class SettingsSuggestActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/email");
 
-                intent.putExtra(Intent.EXTRA_EMAIL, "nanchenbastian@gmail.com");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"nanchenbastian@gmail.com"});
                 intent.putExtra(Intent.EXTRA_SUBJECT, "[Taskit] Suggest a Feedback");
                 intent.putExtra(Intent.EXTRA_TEXT, "Name: "+ name.getText()
                         +"\n" + "Email address: "+ mail.getText()
