@@ -42,9 +42,9 @@ import static ch.epfl.sweng.project.EditTaskActivity.TASK_TO_BE_DELETED_INDEX;
 /**
  * Class that represents the inflated fragment located in the activity_main
  */
-public class TaskFragment extends Fragment {
-    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.TaskFragment.INDEX_TASK_TO_BE_EDITED";
-    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.TaskFragment.TASKS_LIST";
+public class FilledTaskFragment extends Fragment {
+    public static final String INDEX_TASK_TO_BE_EDITED_KEY = "ch.epfl.sweng.FilledTaskFragment.INDEX_TASK_TO_BE_EDITED";
+    public static final String TASKS_LIST_KEY = "ch.epfl.sweng.FilledTaskFragment.TASKS_LIST";
     public static final int editTaskRequestCode = 3;
 
 
@@ -74,7 +74,7 @@ public class TaskFragment extends Fragment {
                 throw new IllegalArgumentException("User passed with the intend is null");
             }
         } else {
-            throw new NullPointerException("User was badly passed from MainActivity to TaskFragment !");
+            throw new NullPointerException("User was badly passed from MainActivity to FilledTaskFragment !");
         }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);

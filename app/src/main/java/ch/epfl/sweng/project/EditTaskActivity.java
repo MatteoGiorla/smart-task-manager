@@ -18,13 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import ch.epfl.sweng.project.chat.ChatActivity;
-
-import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
 
 import ch.epfl.sweng.project.chat.ChatActivity;
 
@@ -65,7 +59,7 @@ public class EditTaskActivity extends TaskActivity {
         super.onCreate(savedInstanceState);
 
         //Get the index and check its validity
-        mIndexTaskToBeEdited = intent.getIntExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
+        mIndexTaskToBeEdited = intent.getIntExtra(FilledTaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
         checkTaskToBeEditedIndex();
 
         //Get the task to be edited

@@ -45,10 +45,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.FirebaseUserHelper;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Class which represents an activity regarding a task
  */
@@ -89,7 +85,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Check the validity of the intent
         intent = getIntent();
         checkIntent();
-        taskList = intent.getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+        taskList = intent.getParcelableArrayListExtra(FilledTaskFragment.TASKS_LIST_KEY);
         checkTaskList();
 
         titleEditText = (EditText) findViewById(R.id.title_task);

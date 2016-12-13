@@ -29,8 +29,8 @@ import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_DELETED;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_MODIFIED;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_STATUS_KEY;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_TO_BE_DELETED_INDEX;
-import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
-import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
+import static ch.epfl.sweng.project.FilledTaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
+import static ch.epfl.sweng.project.FilledTaskFragment.TASKS_LIST_KEY;
 
 /**
  * Class that represents the inflated fragment located in the unfilled_task_activity
@@ -178,7 +178,7 @@ public class UnfilledTaskFragment extends Fragment {
         startActivityForResult(intent, editTaskRequestCode);
     }
 
-    private void initSwipe(){
+    private void initSwipe() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
