@@ -56,11 +56,11 @@ public class SettingsAboutActivity extends AppCompatActivity {
         TextView nameBastian = (TextView) findViewById(R.id.settings_about_text_bastian);
         TextView nameIlkan = (TextView) findViewById(R.id.settings_about_text_ilkan);
 
-        nameMikael.setText(String.format(getEmojiByUnicode(0x1F680) + getString(R.string.settings_about_mikael)));
-        nameCharles.setText(String.format(getEmojiByUnicode(0x1F682)+ getString(R.string.settings_about_charles)));
-        nameMatteo.setText(String.format(getEmojiByUnicode(0x1F34E)+ getString(R.string.settings_about_matteo)));
-        nameCedric.setText(String.format(getEmojiByUnicode(0x1F3B8)+ getString(R.string.settings_about_cedric)));
-        nameBastian.setText(String.format(getEmojiByUnicode(0x1F355)+ getString(R.string.settings_about_bastian)));
-        nameIlkan.setText(String.format(getEmojiByUnicode(0x1F6F0)+ getString(R.string.settings_about_ilkan)));
+        nameMikael.setText(getEmojiByUnicode(0x1F680) +""+ getString(R.string.settings_about_mikael));
+        nameCharles.setText(getEmojiByUnicode(0x1F682)+""+ getString(R.string.settings_about_charles));
+        nameMatteo.setText(getEmojiByUnicode(0x1F34E)+""+ getString(R.string.settings_about_matteo));
+        nameCedric.setText(getEmojiByUnicode(0x1F3B8) +""+ getString(R.string.settings_about_cedric));
+        nameBastian.setText(getEmojiByUnicode(0x1F355)+""+ getString(R.string.settings_about_bastian));
+        nameIlkan.setText(getEmojiByUnicode(0x1F6F0)+""+ getString(R.string.settings_about_ilkan));
     }
 }

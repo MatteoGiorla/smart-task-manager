@@ -211,12 +211,9 @@
     <string name="no_messages">There is no messages</string>
 
     <!-- Settings -->
-    <string name="settings_tips">Tips</string>
     <string name="settings_tutorial">Tutorial</string>
     <string name="settings_locations">Locations</string>
-    <string name="settings_notifications">Notifications</string>
     <string name="settings_suggest_contact_us">Contact Us</string>
-    <string name="settings_tell_a_friend">Tell a friend</string>
     <string name="settings_about">About</string>
 
     <!-- Settings/About -->
