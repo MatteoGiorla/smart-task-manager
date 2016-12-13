@@ -62,10 +62,10 @@ public class SettingsTest extends SuperTest{
 
     @Test
     public void logoutFromSettings(){
-
         SuperTest.waitForActivity();
         onView(withId(R.id.settings_text_logout)).perform(click());
         onView(withId(R.id.google_sign_in_button)).check(matches(isDisplayed()));
 
     }
+
 }

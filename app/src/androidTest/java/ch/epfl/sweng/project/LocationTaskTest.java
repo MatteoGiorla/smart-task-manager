@@ -34,6 +34,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.uiautomator.UiDevice.getInstance;
@@ -231,6 +232,21 @@ public class LocationTaskTest extends SuperTest {
         onData(allOf(is(instanceOf(String.class)))).atPosition(indexLocation).perform(click());
 
         onView(withId(R.id.edit_done_button_toolbar)).perform(click());
+    }
+
+
+    @Test
+    public void returnButtonShouldLeadToMainActivity(){
+        SuperTest.waitForActivity();
+
+        // go to the settings activity
+        Espresso.openContextualActionModeOverflowMenu();
+        onData(anything())
+                .atPosition(0)
+                .perform(click());
+
+        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withId(R.id.add_task_button)).check(matches(isDisplayed()));
     }
 
 }
