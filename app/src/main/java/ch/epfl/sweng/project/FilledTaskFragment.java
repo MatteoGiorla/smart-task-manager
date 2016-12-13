@@ -31,8 +31,6 @@ public class FilledTaskFragment extends TaskFragment {
     private static ArrayList<Task> taskList;
     private static TaskHelper mDatabase;
 
-    private User currentUser;
-
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *
@@ -43,10 +41,6 @@ public class FilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        currentUser = getBundle().getParcelable(MainActivity.USER_KEY);
-        if (currentUser == null) {
-            throw new IllegalArgumentException("User passed with the intend is null");
-        }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
 
@@ -62,7 +56,7 @@ public class FilledTaskFragment extends TaskFragment {
                         new Runnable() {
                             @Override
                             public void run() {
-                                mDatabase.refreshData(currentUser);
+                                mDatabase.refreshData(currentUser, false);
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         }, 2500);
@@ -81,7 +75,7 @@ public class FilledTaskFragment extends TaskFragment {
 
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);
+        mDatabase.retrieveAllData(currentUser, false);
     }
 
     @Override
@@ -107,7 +101,7 @@ public class FilledTaskFragment extends TaskFragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mDatabase.addNewTask(mTask, position);
+                        mDatabase.addNewTask(mTask, position, false);
                         recyclerView.scrollToPosition(position);
                     }
                 });
@@ -173,7 +167,7 @@ public class FilledTaskFragment extends TaskFragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        mDatabase.addNewTask(task, taskList.size());
+        mDatabase.addNewTask(task, taskList.size(), false);
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
@@ -223,6 +217,10 @@ public class FilledTaskFragment extends TaskFragment {
             mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
             mTaskAdapter.notifyDataSetChanged();
         }
+    }
+
+    public static void addUnfilled(Task task){
+        mDatabase.addNewTask(task, 0, true);
     }
 
     public static boolean locationIsUsedByTask(Location locationToCheck) {

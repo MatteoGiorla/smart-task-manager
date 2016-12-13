@@ -14,15 +14,17 @@ public interface TaskHelper {
      *
      * @param user The user we want to retrieve data from.
      */
-    void retrieveAllData(User user);
+    void retrieveAllData(User user, boolean requestUnfilled);
 
     /**
      * Add a tasks to the remote storage device
      *
      * @param task the task to add
      * @param position the position of the task in the list
+     * @param unfilled tells wether this task is unfilled, to assert only when wanting to give an unfilled task
+     *                 in the FilledTaskFragment, alway put it to false otherwise (even in UnfilledTaskFragment).
      */
-    void addNewTask(Task task, int position);
+    void addNewTask(Task task, int position, boolean unfilled);
 
     /**
      * Update the task that has seen some change locally
@@ -47,5 +49,5 @@ public interface TaskHelper {
      *
      * @param user The user we want to retrieve data from.
      */
-    void refreshData(User user);
+    void refreshData(User user, boolean requestUnfilled);
 }

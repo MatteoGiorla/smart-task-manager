@@ -243,6 +243,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
                 if (unfilled) {
                     unfilledTasks.add(newTask);
+                    mainFragment.addUnfilled(newTask);
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
@@ -532,6 +533,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                         v.performClick();
                         unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
                         Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
+                        intent.putExtra(USER_KEY, getUser());
                         intent.putParcelableArrayListExtra(UNFILLED_TASKS, unfilledTasks);
                         startActivityForResult(intent, unfilledTaskRequestCode);
                         return true;
