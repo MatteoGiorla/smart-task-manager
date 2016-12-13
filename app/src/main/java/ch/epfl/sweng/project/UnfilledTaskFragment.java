@@ -33,10 +33,11 @@ public class UnfilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = this.getArguments();
-
         filledTaskList = new ArrayList<>();
-        unfilledTaskList = bundle.getParcelableArrayList(MainActivity.UNFILLED_TASKS);
+        unfilledTaskList = getBundle().getParcelableArrayList(MainActivity.UNFILLED_TASKS);
+        if(unfilledTaskList == null) {
+            throw new IllegalArgumentException("unfilledTaskList passed with the intend is null");
+        }
         mTaskAdapter = new TaskListAdapter(getActivity(), unfilledTaskList);
     }
 
@@ -123,21 +124,6 @@ public class UnfilledTaskFragment extends TaskFragment {
     @Override
     void removeTaskAction(int position, Boolean isDone) {
         unfilledTaskList.remove(position);
-    }
-
-    /**
-     * Start the EditTaskActivity for result when the user press the edit button.
-     * The task index and the taskList are passed as extras to the intent.
-     *
-     * @param position Position of the task in the list.
-     */
-    private void startEditTaskActivity(int position) {
-        Intent intent = new Intent(getActivity(), EditTaskActivity.class);
-
-        intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, position);
-        intent.putParcelableArrayListExtra(TASKS_LIST_KEY, unfilledTaskList);
-
-        startActivityForResult(intent, EDIT_TASK_REQUEST_CODE);
     }
 
     /**

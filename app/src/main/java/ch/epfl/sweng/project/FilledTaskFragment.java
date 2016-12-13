@@ -43,15 +43,9 @@ public class FilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = this.getArguments();
-
-        if (bundle != null) {
-            currentUser = bundle.getParcelable(MainActivity.USER_KEY);
-            if (currentUser == null) {
-                throw new IllegalArgumentException("User passed with the intend is null");
-            }
-        } else {
-            throw new NullPointerException("User was badly passed from MainActivity to FilledTaskFragment !");
+        currentUser = getBundle().getParcelable(MainActivity.USER_KEY);
+        if (currentUser == null) {
+            throw new IllegalArgumentException("User passed with the intend is null");
         }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
@@ -133,7 +127,7 @@ public class FilledTaskFragment extends TaskFragment {
         // Get result from the result intent.
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
-        if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].equals("")){
+        if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].isEmpty()){
             String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
             editedTask.setName(sharedTaskName);
         }
