@@ -82,8 +82,8 @@ public class SettingsSuggestActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/email");
 
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"nanchenbastian@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, new String[] {"[Taskit] Suggest a Feedback"});
+                intent.putExtra(Intent.EXTRA_EMAIL, "nanchenbastian@gmail.com");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "[Taskit] Suggest a Feedback");
                 intent.putExtra(Intent.EXTRA_TEXT, "Name: "+ name.getText()
                         +"\n" + "Email address: "+ mail.getText()
                         +"\n\n"+ message.getText());
@@ -103,10 +103,9 @@ public class SettingsSuggestActivity extends AppCompatActivity {
         boolean isValid = false;
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence inputStr = email;
 
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
+        Matcher matcher = pattern.matcher(email);
         if (matcher.matches()) {
             isValid = true;
         }
