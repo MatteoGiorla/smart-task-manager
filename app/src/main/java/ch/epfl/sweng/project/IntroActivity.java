@@ -12,6 +12,8 @@ import android.view.WindowManager;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 
+import ch.epfl.sweng.project.settings.SettingsActivity;
+
 public class IntroActivity extends AppIntro {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

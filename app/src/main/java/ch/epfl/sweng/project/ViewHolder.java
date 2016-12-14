@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import static ch.epfl.sweng.project.TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
-import static ch.epfl.sweng.project.TaskFragment.TASKS_LIST_KEY;
+import static ch.epfl.sweng.project.FilledTaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
+import static ch.epfl.sweng.project.FilledTaskFragment.TASKS_LIST_KEY;
 
 public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final Context mContext;
@@ -43,7 +43,7 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         Intent intent = new Intent(mContext, EditTaskActivity.class);
         intent.putExtra(INDEX_TASK_TO_BE_EDITED_KEY, itemPosition);
         intent.putParcelableArrayListExtra(TASKS_LIST_KEY, tasksList);
-        ((Activity)mContext).startActivityForResult(intent, TaskFragment.editTaskRequestCode);
+        ((Activity)mContext).startActivityForResult(intent, FilledTaskFragment.EDIT_TASK_REQUEST_CODE);
     }
 
 }

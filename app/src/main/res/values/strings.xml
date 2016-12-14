@@ -163,7 +163,7 @@
 
     <!-- splash screen text -->
     <string name="progress_bar_text">Retrieving data…</string>
-<!--
+    <!--
     <string name="tutorial_slide_6_title">Notifications</string>
     <string name="tutorial_slide_7_title">Be located automatically</string>
 -->
@@ -178,15 +178,6 @@
 -->
     <string name="skip_button">Skip</string>
     <string name="done_button">Done</string>
-
-    <!-- Settings -->
-    <string name="settings_tips">Tips</string>
-    <string name="settings_tutorial">Tutorial</string>
-    <string name="settings_locations">Locations</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_suggest_a_feature">Suggest a feature</string>
-    <string name="settings_tell_a_friend">Tell a friend</string>
-    <string name="settings_about">About</string>
 
     <!--Snack bar-->
     <string name="undo_action">Undo</string>
@@ -218,5 +209,29 @@
     <!--Chat-->
     <string name="input_message">Type a message</string>
     <string name="no_messages">There is no messages</string>
+
+    <!-- Settings -->
+    <string name="settings_tutorial">Tutorial</string>
+    <string name="settings_locations">Locations</string>
+    <string name="settings_suggest_contact_us">Contact Us</string>
+    <string name="settings_about">About</string>
+
+    <!-- Settings/About -->
+    <string name="settings_about_mikael">" Mikael Morales"</string>
+    <string name="settings_about_charles">" Charles Parzy"</string>
+    <string name="settings_about_matteo">" Matteo Giorla"</string>
+    <string name="settings_about_cedric">" Cédric Viaccoz"</string>
+    <string name="settings_about_bastian">" Bastian Nanchen"</string>
+    <string name="settings_about_ilkan">" Ilkan Kilic"</string>
+    <string name="settings_about_team_members">Team Members</string>
+    <string name="settings_about_version_app">App Version</string>
+
+    <!-- Settings/Suggest -->
+    <string name="settings_suggest_name">Name</string>
+    <string name="settings_suggest_email_address">Email address</string>
+    <string name="settings_suggest_message">Message</string>
+    <string name="settings_suggest_button_send">Send</string>
+    <string name="settings_suggest_field_mandatory">This field is mandatory</string>
+    <string name="settings_suggest_not_valid_email">This email address is not valid</string>
 
 </resources>

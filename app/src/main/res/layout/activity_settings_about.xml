@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ch.epfl.sweng.project.settings.SettingsActivity"
-    android:theme="@style/AppTheme"
+    android:id="@+id/activity_settings_about"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ch.epfl.sweng.project.settings.SettingsAboutActivity"
+    android:background="@color/light_gray"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_gray">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <TextView
+        android:text="@string/settings_about_team_members"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/settings_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ActionBar" />
-    </FrameLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/light_gray"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/settings_about_team_members"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
@@ -30,14 +27,83 @@
         android:background="@color/gray" />
 
     <TextView
-        android:text="@string/settings_tutorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@color/white"
         android:textColor="@color/black"
         android:textSize="@dimen/task_title_size"
-        android:id="@+id/settings_text_tutorial" />
+        android:id="@+id/settings_about_text_mikael"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:id="@+id/settings_about_text_cedric"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:id="@+id/settings_about_text_charles"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:id="@+id/settings_about_text_ilkan"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:id="@+id/settings_about_text_matteo"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:textSize="@dimen/task_title_size"
+        android:id="@+id/settings_about_text_bastian"/>
 
     <View
         android:layout_width="match_parent"
@@ -49,30 +115,13 @@
         android:layout_height="10dp"
         android:background="@color/light_gray"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
-
     <TextView
-        android:text="@string/settings_locations"
+        android:text="@string/settings_about_version_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:background="@color/white"
-        android:textSize="@dimen/task_title_size"
-        android:id="@+id/settings_text_locations" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/light_gray"/>
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp"
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
@@ -80,58 +129,18 @@
         android:background="@color/gray" />
 
     <TextView
-        android:text="@string/settings_suggest_contact_us"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@color/white"
         android:textColor="@color/black"
         android:textSize="@dimen/task_title_size"
-        android:id="@+id/settings_text_suggest"/>
+        android:id="@+id/settings_about_text_version"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray" />
 
-    <TextView
-        android:text="@string/settings_about"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:textSize="@dimen/task_title_size"
-        android:id="@+id/settings_text_about"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/light_gray"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
-
-    <TextView
-        android:text="@string/logout_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="@color/red"
-        android:background="@color/white"
-        android:textSize="@dimen/task_title_size"
-        android:id="@+id/settings_text_logout" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray" />
 </LinearLayout>
 
