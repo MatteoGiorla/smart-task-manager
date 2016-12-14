@@ -45,6 +45,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.settings.SettingsActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
