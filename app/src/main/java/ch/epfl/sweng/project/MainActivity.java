@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -110,6 +112,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *                           recently supplied in onSaveInstanceState(Bundle).
      */
     @Override
+    @TargetApi(Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initialize Facebook SDK, in order to logout correctly
@@ -158,12 +161,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     .commit();
         }
 
-
-        //Handle the table row in case of unfinished tasks
-        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        initializeUnfilledTableRow();
-        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
-
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
@@ -172,6 +169,11 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         select_one_location = getApplicationContext().getString(R.string.select_one);
 
         initializeAdapters();
+        //Handle the table row in case of unfinished tasks
+        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+        //unfilledTasks = mainFragment.retrieveUnfilledTasks();
+        initializeUnfilledTableRow();
+        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }
 
     /**
@@ -573,6 +575,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
             findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
+            unfilledTasks = mainFragment.retrieveUnfilledTasks();
             if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();

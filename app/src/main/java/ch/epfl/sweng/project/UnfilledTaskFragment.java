@@ -56,7 +56,7 @@ public class UnfilledTaskFragment extends TaskFragment {
         initSwipe();
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, unfilledTaskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser, true);
+        mDatabase.retrieveAllData(currentUser, true, null);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class UnfilledTaskFragment extends TaskFragment {
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(position);
+        mDatabase.deleteTask(mTask, position);
     }
 
     /**

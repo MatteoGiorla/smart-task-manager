@@ -13,6 +13,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,13 +51,17 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user, final boolean requestUnfilled) {
+    public void retrieveAllData(User user, final boolean requestUnfilled, final ArrayList<Task> tasksToFill) {
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
 
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                retrieveTasks(dataSnapshot, requestUnfilled);
+                if(tasksToFill == null){
+                    retrieveTasks(dataSnapshot, requestUnfilled, mTaskList);
+                }else{
+                    retrieveTasks(dataSnapshot, requestUnfilled, tasksToFill);
+                }
             }
 
             @Override
@@ -67,12 +72,12 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     @Override
     public void refreshData(User user, final boolean requestUnfilled) {
-        Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        final Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
 
         myTasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                retrieveTasks(dataSnapshot, requestUnfilled);
+                    retrieveTasks(dataSnapshot, requestUnfilled, mTaskList);
             }
 
             @Override
@@ -235,10 +240,11 @@ public class FirebaseTaskHelper implements TaskHelper {
      *
      * @param dataSnapshot Data recovered from the database
      */
-    private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled) {
+    private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled, ArrayList<Task> taskList) {
         if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
         }
+        final boolean isRetrievingUnfilledFromMain = requestUnfilled && taskList.isEmpty();
         mTaskList.clear();
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             if (task != null) {
@@ -277,28 +283,18 @@ public class FirebaseTaskHelper implements TaskHelper {
                     newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, listOfMessages);
                 }
                 if(requestUnfilled && Utils.isUnfilled(newTask, mContext)){
-                    mTaskList.add(newTask);
+                    taskList.add(newTask);
                 }else if(!requestUnfilled && !Utils.isUnfilled(newTask, mContext)){
-                    mTaskList.add(newTask);
+                    taskList.add(newTask);
                 }
             }
         }
-
-        mAdapter.notifyDataSetChanged();
+        if(!isRetrievingUnfilledFromMain){
+            mAdapter.notifyDataSetChanged();
+        }
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
         MainActivity.triggerDynamicSort();
-    }
-
-    public ArrayList<Task> retrieveUnfilledDataOnly(User user){
-        //need to swap the original list of task somewhere while we retrieve the unfilled tasks
-        ArrayList<Task> mListBackUp = mTaskList;
-        mTaskList = null;
-        retrieveAllData(user, true);
-        ArrayList<Task> temporaryList;
-        temporaryList = mTaskList;
-        mTaskList = mListBackUp;
-        return temporaryList;
     }
 
 }

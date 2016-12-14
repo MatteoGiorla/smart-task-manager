@@ -1,5 +1,7 @@
 package ch.epfl.sweng.project.data;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
@@ -14,7 +16,7 @@ public interface TaskHelper {
      *
      * @param user The user we want to retrieve data from.
      */
-    void retrieveAllData(User user, boolean requestUnfilled);
+    void retrieveAllData(User user, boolean requestUnfilled, ArrayList<Task> tasksToFill);
 
     /**
      * Add a tasks to the remote storage device
@@ -50,4 +52,5 @@ public interface TaskHelper {
      * @param user The user we want to retrieve data from.
      */
     void refreshData(User user, boolean requestUnfilled);
+
 }

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class FilledTaskFragment extends TaskFragment {
 
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser, false);
+        mDatabase.retrieveAllData(currentUser, false, null);
     }
 
     @Override
@@ -221,6 +222,17 @@ public class FilledTaskFragment extends TaskFragment {
 
     public static void addUnfilled(Task task){
         mDatabase.addNewTask(task, 0, true);
+    }
+
+    /**
+     * Retrieve unfilled tasks to set the unfinished tableRow from mainActivity
+     *
+     * @return the array of unfilled tasks.
+     */
+    public ArrayList<Task> retrieveUnfilledTasks(){
+        ArrayList<Task> toReturn = new ArrayList<>();
+        mDatabase.retrieveAllData(currentUser, true, toReturn);
+        return toReturn;
     }
 
     public static boolean locationIsUsedByTask(Location locationToCheck) {
