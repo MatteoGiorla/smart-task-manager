@@ -443,8 +443,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         durationAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_textview, getStartDurationTable());
 
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
+        durationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -469,8 +469,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         locationAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_textview, locationListForAdapter);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
-        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mLocation.setAdapter(locationAdapter);
     }
 
