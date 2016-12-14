@@ -55,7 +55,7 @@ public class SettingsSuggestTest {
         onView(withId(R.id.settings_suggest_button)).perform(click());
 
         UiDevice mUiDevice = getInstance(getInstrumentation());
-
+        
         UiObject settingsButton = mUiDevice.findObject(new UiSelector().text("SEND"));
         try{
             settingsButton.click();
@@ -84,11 +84,13 @@ public class SettingsSuggestTest {
         //onView(withId(R.id.settings_suggest_button)).perform(click());
         UiDevice mUiDevice = getInstance(getInstrumentation());
 
+        mUiDevice.pressBack();
+
         UiObject settingsButton = mUiDevice.findObject(new UiSelector().text("SEND"));
         try{
             settingsButton.click();
-        }catch( UiObjectNotFoundException u){
-            fail("something went wrong with UiAutomator action : "+u.getMessage());
+        }catch( UiObjectNotFoundException u) {
+            fail("something went wrong with UiAutomator action : " + u.getMessage());
         }
 
         String errorMessage = getInstrumentation()
@@ -113,6 +115,8 @@ public class SettingsSuggestTest {
         onView(withId(R.id.settings_suggest_mail)).perform(typeText(falseEmail));
         //onView(withId(R.id.settings_suggest_button)).perform(click());
         UiDevice mUiDevice = getInstance(getInstrumentation());
+
+        mUiDevice.pressBack();
 
         UiObject settingsButton = mUiDevice.findObject(new UiSelector().text("SEND"));
         try{
@@ -145,6 +149,8 @@ public class SettingsSuggestTest {
         //onView(withId(R.id.settings_suggest_button)).perform(click());
 
         UiDevice mUiDevice = getInstance(getInstrumentation());
+
+        mUiDevice.pressBack();
 
         UiObject settingsButton = mUiDevice.findObject(new UiSelector().text("SEND"));
         try{
