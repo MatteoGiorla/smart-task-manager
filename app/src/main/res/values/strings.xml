@@ -207,6 +207,7 @@
     <string name="contributor_dialog_message">Enter the email address of the new contributor :</string>
     <string name="contributor_dialog_title">Add a contributor</string>
     <string name="contributor_dialog_warning_message">This user does not exist or you do not have any internet connection!</string>
+    <string name="contributor_dialog_warning_message_duplicate">You already added this user!</string>
     <string name="contributor_dialog_duplicate_warning_message">This user has already been added !</string>
     <string name="delete_contributor_dialog_message">Choose the contributor to remove :</string>
     <string name="delete_contributor_dialog_title">Remove a contributor</string>
@@ -214,9 +215,11 @@
     <string name="added_as_contributor_on_one_task">You have been added as a contributor to task \"</string>
     <string name="ending_of_added_as_contributor_on_one_text">\".</string>
     <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
+    <string name="location_warning_if_multiple_contributors">Location has to be Everywhere if there are multiple contributors.</string>
+
 
     <!--Chat-->
     <string name="input_message">Type a message</string>
-    <string name="no_messages">There is no messages</string>
+    <string name="no_messages">There are no messages</string>
 
 </resources>

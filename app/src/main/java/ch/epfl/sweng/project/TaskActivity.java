@@ -33,6 +33,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,7 +60,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     Task.Energy energy;
     List<String> listOfContributors;
     private EditText titleEditText;
-    private Spinner mLocation;
+    Spinner mLocation;
     private Spinner mDuration;
     private ImageButton doneEditButton;
     static Date date;
@@ -114,6 +116,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, MainActivity.getLocationTable());
 
         mLocation.setAdapter(spinnerLocationAdapter);
+        locationName = Utils.getSelectOne();
 
         addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
         addContributorButton.setOnClickListener(new OnAddContributorButtonClickListener());
@@ -430,7 +433,9 @@ public abstract class TaskActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if(!dataSnapshot.exists()){
                                         dialog.setMessage(getString(R.string.contributor_dialog_warning_message));
-                                    }else{
+                                    } else if (listOfContributors.contains(enteredText)){
+                                        dialog.setMessage(getString(R.string.contributor_dialog_warning_message_duplicate));
+                                    } else{
                                         addContributorInTask(enteredText);
                                         if(MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
                                             editContributorButton.setVisibility(View.VISIBLE);

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.util.Arrays;
@@ -160,6 +161,15 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
+        String locationToTest = mLocation.getSelectedItem().toString();
+        if(!locationToTest.equals(Utils.getEverywhereLocation()) && listOfContributors.size() == 2) {
+            Toast.makeText(getApplicationContext(), R.string.location_warning_if_multiple_contributors, Toast.LENGTH_LONG).show();
+        }
+        locationName = Utils.getEverywhereLocation();
+        mLocation.setSelection(1);
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        locationTextView.setText(Utils.getEverywhereLocation());
+        setSwitchers();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -170,6 +180,7 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
+        setSwitchers();
     }
 
     /**
@@ -217,11 +228,19 @@ public class EditTaskActivity extends TaskActivity {
                 findViewById(R.id.durationSpinner));
 
         //Set switch on location
+        ViewSwitcher locationSwitch = (ViewSwitcher) findViewById(R.id.switcher_location);
         setSwitcherOnClick((LinearLayout) findViewById(R.id.locationLinearLayout),
-                (ViewSwitcher) findViewById(R.id.switcher_location),
+                locationSwitch,
                 findViewById(R.id.locationSpinner));
+        if(mTaskToBeEdited.getListOfContributors().size() != 1){
+            if(locationSwitch.getCurrentView() == findViewById(R.id.locationSpinner)){
+                locationSwitch.showNext();
+            }
+            locationSwitch.setEnabled(false);
+        }
 
-        //Set switch on energy
+
+            //Set switch on energy
         setSwitcherOnClick((LinearLayout) findViewById(R.id.energyLinearLayout),
                 (ViewSwitcher) findViewById(R.id.switcher_energy),
                 findViewById(R.id.radio_energy));
@@ -237,9 +256,11 @@ public class EditTaskActivity extends TaskActivity {
             @Override
             public void onClick(View v) {
                 if(switcher.getCurrentView() != secondView) {
-                    getDoneEditButton().setVisibility(View.VISIBLE);
-                    taskStatus = TASK_IS_MODIFIED;
-                    switcher.showNext();
+                    if(secondView != findViewById(R.id.locationSpinner) || mTaskToBeEdited.getListOfContributors().size() == 1) {
+                        getDoneEditButton().setVisibility(View.VISIBLE);
+                        taskStatus = TASK_IS_MODIFIED;
+                        switcher.showNext();
+                    }
                 }
             }
         });

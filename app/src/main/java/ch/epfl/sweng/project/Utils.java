@@ -180,4 +180,12 @@ public class Utils extends Application {
     public static String getEverywhereLocation(){
         return mContext.getResources().getString(R.string.everywhere_location);
     }
+
+    public static String getSelectOne(){
+        return mContext.getResources().getString(R.string.select_one);
+    }
+
+    public static String getDowntownLocation(){
+        return mContext.getResources().getString(R.string.downtown_location);
+    }
 }
