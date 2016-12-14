@@ -27,10 +27,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.project.FilledTaskFragment;
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.MainActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.TaskFragment;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.data.FirebaseUserHelper;
 
@@ -231,7 +231,7 @@ public class LocationFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
                 if (!firstConnection) {
-                    if (TaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
+                    if (FilledTaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         // Add the buttons
                         builder.setPositiveButton(R.string.ok, new MyOnClickListener(itemInfo));
@@ -312,9 +312,9 @@ public class LocationFragment extends Fragment {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
             if (!firstConnection) {
-                if (TaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
+                if (FilledTaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
                     //Replace location edited in all tasks using it
-                    TaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
+                    FilledTaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
                 }
             }
             locationList.set(indexEditedLocation, editedLocation);
@@ -402,7 +402,7 @@ public class LocationFragment extends Fragment {
 
             //Replace locations
             //Create a location from which coordinates don't matter because only the title is stored in the tasks
-            TaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
+            FilledTaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
 
             removeLocation(itemInfo);
             listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
