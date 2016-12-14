@@ -257,10 +257,10 @@ public class TaskFragment extends Fragment {
             Toast.makeText(getActivity().getApplicationContext(),
                     Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
-
-            //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
+
+        //Create a notification
+        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -276,7 +276,7 @@ public class TaskFragment extends Fragment {
         mDatabase.addNewTask(task, taskList.size());
 
         //Update notifications
-        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
+        new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size()-1);
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
