@@ -45,6 +45,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.settings.SettingsActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
@@ -59,7 +60,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private final int newTaskRequestCode = 1;
     private final int unfilledTaskRequestCode = 2;
-    private static TaskFragment mainFragment;
+    private static FilledTaskFragment mainFragment;
     private Context mContext;
 
     //stock unfilledTasks
@@ -103,7 +104,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private final String TAG = "Location API";
 
     /**
-     * Override the onCreate method to create a TaskFragment
+     * Override the onCreate method to create a FilledTaskFragment
      *
      * @param savedInstanceState If the activity is being re-initialized after previously
      *                           being shut down then this Bundle contains the data it most
@@ -147,7 +148,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         unfilledTasks = new ArrayList<>();
 
         //Add the user to TaskFragments
-        mainFragment = new TaskFragment();
+        mainFragment = new FilledTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(USER_KEY, currentUser);
         mainFragment.setArguments(bundle);
@@ -218,7 +219,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
-        intent.putParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) mainFragment.getTaskList());
+        intent.putParcelableArrayListExtra(FilledTaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) mainFragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 
@@ -260,7 +261,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
 
-        } else if(requestCode == TaskFragment.editTaskRequestCode){
+        } else if(requestCode == FilledTaskFragment.EDIT_TASK_REQUEST_CODE){
                 mainFragment.onActivityResult(requestCode, resultCode, data);
         }
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());

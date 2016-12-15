@@ -60,7 +60,7 @@ public class EditTaskActivity extends TaskActivity {
         super.onCreate(savedInstanceState);
 
         //Get the index and check its validity
-        mIndexTaskToBeEdited = intent.getIntExtra(TaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
+        mIndexTaskToBeEdited = intent.getIntExtra(FilledTaskFragment.INDEX_TASK_TO_BE_EDITED_KEY, -1);
         checkTaskToBeEditedIndex();
 
         //Get the task to be edited

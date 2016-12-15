@@ -85,7 +85,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         //Check the validity of the intent
         intent = getIntent();
         checkIntent();
-        taskList = intent.getParcelableArrayListExtra(TaskFragment.TASKS_LIST_KEY);
+        taskList = intent.getParcelableArrayListExtra(FilledTaskFragment.TASKS_LIST_KEY);
         checkTaskList();
 
         titleEditText = (EditText) findViewById(R.id.title_task);
