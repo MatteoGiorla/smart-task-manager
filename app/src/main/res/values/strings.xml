@@ -158,19 +158,14 @@
 
     <!-- splash screen text -->
     <string name="progress_bar_text">Retrieving data…</string>
-    <!--
-    <string name="tutorial_slide_6_title">Notifications</string>
-    <string name="tutorial_slide_7_title">Be located automatically</string>
--->
+
+    <!-- Tutorial -->
     <string name="tutorial_slide_1_description">To get the best out of Taskit let us go through some key concepts.</string>
     <string name="tutorial_slide_2_description">Taskit automatically orders your tasks according to your current location and time at disposal so that you immediately know where you should start.</string>
     <string name="tutorial_slide_3_description">To sort your tasks, the app needs you to specify 3 essential parameters. Unfilled tasks will be placed in an inbox at the top of your tasks list. Always try to fill up all your tasks to avoid missing an important one.</string>
     <string name="tutorial_slide_4_description">Enter the date at which your task has to be completed and specify how long you estimate having to work on it. A task that takes too long is a bad sign. Always try to split it up into shorter ones. This will also keep you motivated.</string>
     <string name="tutorial_slide_5_description">Specify where your task can be completed. If you can complete it anywhere select "Everywhere". After Log In you will be asked to set your favorite locations for this purpose.</string>
-    <!--
-    <string name="tutorial_slide_6_description">Allow TaskIt to send you notifications whenever a task needs your attention.</string>
-    <string name="tutorial_slide_7_description">Allow TaskIt to get your current position when you open the app so that you don’t need to enter it manually.</string>
--->
+
     <string name="skip_button">Skip</string>
     <string name="done_button">Done</string>
 
