@@ -169,9 +169,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
 
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
-
         initializeAdapters();
     }
 
@@ -420,7 +417,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * Trigger the dynamic sort.
      */
     public static void triggerDynamicSort() {
-        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
     }
 
     /**
@@ -737,8 +734,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     {
         super.onResume();
         updateAdapters();
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
         mLocation.setSelection(locationAdapter.getPosition(userLocation));
         mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();

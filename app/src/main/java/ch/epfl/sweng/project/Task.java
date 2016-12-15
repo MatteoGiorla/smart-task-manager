@@ -405,8 +405,8 @@ public class Task implements Parcelable {
      * @return Dynamic Comparator
      */
     static Comparator<Task> getDynamicComparator(String currentLocation,
-                                                 int currentTimeDisposal, String everywhere_location, String select_one_location) {
-        return new DynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location);
+                                                 int currentTimeDisposal) {
+        return new DynamicComparator(currentLocation, currentTimeDisposal);
     }
 
     private double computeStaticSortValue() {
@@ -502,11 +502,9 @@ public class Task implements Parcelable {
          * @param currentLocation User's current location
          * @param currentTimeDisposal User's current disposal time
          */
-        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
+        private DynamicComparator(@NonNull String currentLocation, int currentTimeDisposal) {
             this.currentLocation = currentLocation;
             this.currentTimeDisposal = currentTimeDisposal;
-            this.everywhere_location = everywhere_location;
-            this.select_one_location = select_one_location;
         }
 
         /**
@@ -540,8 +538,8 @@ public class Task implements Parcelable {
                 dynamicSortValue += SHORT_DELAY_COEFFICIENT;
             }
             if(task.getLocationName().equals(currentLocation) ||
-                    task.getLocationName().equals(everywhere_location) ||
-                    currentLocation.equals(select_one_location)) {
+                    task.getLocationName().equals(Utils.getEverywhereLocation()) ||
+                    currentLocation.equals(Utils.getSelectOne())) {
                 dynamicSortValue += LOCATION_COEFFICIENT;
                 if(currentTimeDisposal != TIME_LIMIT && task.getDurationInMinutes() <= currentTimeDisposal) {
                     dynamicSortValue += TIME_COEFFICIENT;

@@ -13,7 +13,6 @@
     <string name="settings_menu">Settings</string>
     <string name="logout_menu">Log Out</string>
     <string name="trash">Trash</string>
-    <string name="chat_menu">Chat</string>
 
     <!-- Hint strings-->
     <string name="hint_title">Enter title</string>
@@ -55,7 +54,7 @@
 
     <!-- Fields titles of task information activity -->
     <string name="description_field">Description</string>
-    <string name="location_field">Task\'s location</string>
+    <string name="location_field">Location</string>
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>
@@ -110,7 +109,6 @@
     <string name="new_user">FIRST_USER_LOGIN</string>
     <string name="first_launch">FIRST_LAUNCH</string>
 
-    <string name="unfilled_due_date">Not decided yet</string>
     <string name="unfilled_duration">Not decided yet</string>
     <string name="unfilled_location">Not decided yet</string>
 
@@ -144,15 +142,11 @@
     <string name="day_left">" day left"</string>
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
-    <string name="current_location_main_activity_text">Current location</string>
-    <string name="time_at_disposal_main_activity_text">Time at disposal</string>
     <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
     <string name="custom_location_subtitle">These are your favorite locations. Feel free to add, rename or remove locations. They will be useful to sort the tasks according to your current location.</string>
     <string name="padlock_image_description">padlock</string>
-    <string name="location_logo_content_description">location logo</string>
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
-    <string name="stop_watch_icon_content_description">stop watch icon</string>
     <string name="task_has_new_messages_description">Task with new messages</string>
 
     <!-- Tutorial texts -->
@@ -206,10 +200,12 @@
     <string name="added_as_contributor_on_one_task">You have been added as a contributor to task \"</string>
     <string name="ending_of_added_as_contributor_on_one_text">\".</string>
     <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
+    <string name="location_warning_if_multiple_contributors">Location has to be Everywhere if there are multiple contributors.</string>
+
 
     <!--Chat-->
     <string name="input_message">Type a message</string>
-    <string name="no_messages">There is no messages</string>
+    <string name="no_messages">There are no messages</string>
 
     <!-- Settings -->
     <string name="settings_tutorial">Tutorial</string>
