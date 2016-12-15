@@ -114,6 +114,7 @@ public final class LocationSettingTest extends SuperTest {
         //Create a location
         createALocation(mOldTitle);
         scrollDown();
+        scrollDown();
         //Try to edit the first location to put the same title as the first location
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))
