@@ -34,7 +34,7 @@ public class FirebaseChatHelper {
         mContext = context;
     }
 
-    public void retrieveMessages(String mail, final Task task) {
+    public void retrieveMessages(final String mail, final Task task) {
         final Query mChat = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
         if(mChat != null) {
             mChat.addValueEventListener(new ValueEventListener() {
@@ -42,7 +42,7 @@ public class FirebaseChatHelper {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mQuery = mChat;
                     mListener = this;
-                    retrieveListOfMessages(dataSnapshot, task);
+                    retrieveListOfMessages(dataSnapshot, mail, task);
                 }
 
                 @Override
@@ -51,11 +51,18 @@ public class FirebaseChatHelper {
         }
     }
 
-    public void updateChat(Task task, Message newMessage) {
+    public void setNewMessagesHasRead(String mail, Task task) {
+        task.setHasNewMessages(false);
+        DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(task.getName()).getRef();
+        taskRef.setValue(task);
+    }
+
+    public void updateChat(Task task, Message newMessage, String myEmail) {
         task.addMessage(newMessage);
         if(Utils.hasContributors(task)){
             for (String mail : task.getListOfContributors()) {
                 Task updateTask = Utils.sharedTaskPreProcessing(task, mail);
+                updateTask.setHasNewMessages(!myEmail.equals(mail));
                 DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(mail)).child(updateTask.getName()).getRef();
                 taskRef.setValue(updateTask);
             }
@@ -72,7 +79,7 @@ public class FirebaseChatHelper {
         }
     }
 
-    private void retrieveListOfMessages(DataSnapshot dataSnapshot, Task task) {
+    private void retrieveListOfMessages(DataSnapshot dataSnapshot, String mail, Task task) {
         if(dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getString(R.string.no_messages), Toast.LENGTH_SHORT).show();
         }else {
@@ -81,9 +88,11 @@ public class FirebaseChatHelper {
             List<Message> newListOfMessages = dataSnapshot.child("listOfMessages").getValue(gen);
             if(newListOfMessages != null) {
                 task.setListOfMessages(newListOfMessages);
+                setNewMessagesHasRead(mail, task);
                 mAdapter.addAll(newListOfMessages);
                 mAdapter.notifyDataSetChanged();
             }
+            task.setHasNewMessages(false);
         }
     }
 }

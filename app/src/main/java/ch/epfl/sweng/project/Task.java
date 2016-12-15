@@ -57,6 +57,7 @@ public class Task implements Parcelable {
     private final List<String> listOfContributors;
     private final DateFormat dateFormat;
     private long ifNewContributor;
+    private Boolean hasNewMessages;
     private List<Message> listOfMessages;
 
     /**
@@ -76,10 +77,11 @@ public class Task implements Parcelable {
      * @param energyNeeded       Task's energy needed
      * @param listOfContributors Task's list of contributors
      * @param ifNewContributor   signal if this task has been added onto the user from a different user.
+     * @param hasNewMessages     true if the task has new message, otherwise false
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull Boolean hasNewMessages) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -88,6 +90,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(energyNeeded);
         this.locationName = locationName;
         this.ifNewContributor = ifNewContributor;
+        this.hasNewMessages = hasNewMessages;
         dateFormat = DateFormat.getDateInstance();
         this.listOfMessages = new ArrayList<>();
     }
@@ -103,10 +106,12 @@ public class Task implements Parcelable {
      * @param energyNeeded       Task's energy needed
      * @param listOfContributors Task's list of contributors
      * @param listOfMessages     Task's list of messages
+     * @param ifNewContributor   signal if this task has been added onto the user from a different user.
+     * @param hasNewMessages     true if the task has new message, otherwise false
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull List<Message> listOfMessages) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull Boolean hasNewMessages, @NonNull List<Message> listOfMessages) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -116,6 +121,7 @@ public class Task implements Parcelable {
         this.locationName = locationName;
         dateFormat = DateFormat.getDateInstance();
         this.ifNewContributor = ifNewContributor;
+        this.hasNewMessages = hasNewMessages;
         this.listOfMessages = new ArrayList<>(listOfMessages);
     }
 
@@ -136,6 +142,7 @@ public class Task implements Parcelable {
         this.energyNeeded = Energy.valueOf(in.readString());
         this.listOfContributors = in.createStringArrayList();
         this.ifNewContributor = in.readLong();
+        this.hasNewMessages = in.readInt() == 1;
         List<Message> listMessages = new ArrayList<>();
         in.readTypedList(listMessages, Message.CREATOR);
         this.listOfMessages = new ArrayList<>(listMessages);
@@ -174,6 +181,22 @@ public class Task implements Parcelable {
      */
     public List<Message> getListOfMessages() {
         return listOfMessages;
+    }
+
+    /**
+     * Getter returning the value to know if a task has a new message
+     */
+    public Boolean getHasNewMessages() {
+        return hasNewMessages;
+    }
+
+    /**
+     * Setter to modify if the task has a new message
+     *
+     * @param newMessages The new task messages value
+     */
+    public void setHasNewMessages(Boolean newMessages) {
+        hasNewMessages = newMessages;
     }
 
     /**
@@ -361,6 +384,7 @@ public class Task implements Parcelable {
         dest.writeString(energyNeeded.toString());
         dest.writeStringList(listOfContributors);
         dest.writeLong(ifNewContributor);
+        dest.writeInt(hasNewMessages ? 1 : 0);
         dest.writeTypedList(listOfMessages);
     }
 

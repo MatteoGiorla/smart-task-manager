@@ -233,6 +233,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -438,10 +439,13 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
 
         durationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
+                R.layout.spinner_textview, getStartDurationTable());
+
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
+        durationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -465,7 +469,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
 
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
     }
@@ -571,7 +576,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private void updateUnfilledTasksTableRow(boolean visible) {
         if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
             if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
@@ -585,7 +589,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         } else {
             unfilledTaskButton.setVisibility(View.GONE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
     }
 

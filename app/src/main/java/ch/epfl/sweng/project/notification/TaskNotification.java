@@ -17,6 +17,7 @@ import java.util.List;
 import ch.epfl.sweng.project.EntryActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
+import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.receiver.NotificationReceiver;
 
 /**
@@ -149,7 +150,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
      * @param id The id of the notification
      */
     private void scheduleNotification(Notification notification, long delay, int id) {
-        if (delay > 0) {
+        if (delay >= 0) {
             Intent notificationIntent = new Intent(mContext, NotificationReceiver.class);
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, 1);
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_KEY, notification);
@@ -157,6 +158,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
 
             long futureInMillis = SystemClock.elapsedRealtime() + delay;
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+            Log.d("TEST", "DELAY : " + delay + " ID : " + id);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
         }
     }
@@ -182,7 +184,7 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.drawable.ic_event_notification);
-        builder.setContentTitle(task.getName() + mContext.getString(R.string.notification_content_task));
+        builder.setContentTitle(Utils.separateTitleAndSuffix(task.getName())[0] + mContext.getString(R.string.notification_content_task));
         builder.setContentIntent(resultPendingIntent);
         builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
 
