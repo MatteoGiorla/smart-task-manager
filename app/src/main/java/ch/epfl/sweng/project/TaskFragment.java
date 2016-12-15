@@ -46,8 +46,6 @@ public abstract class TaskFragment extends Fragment {
 
     abstract void onEditTaskActivityResult(Intent data);
 
-    abstract void removeTaskAction(int position, Boolean isDone);
-
     abstract void setOnSwipe(RecyclerView recyclerView, int position, int direction);
 
     @Override
@@ -102,7 +100,7 @@ public abstract class TaskFragment extends Fragment {
                     if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    removeTaskAction(taskIndex, false);
+                    createSnackBar(taskIndex, false, recyclerView);
                     break;
             }
         }
