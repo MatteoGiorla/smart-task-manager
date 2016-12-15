@@ -55,7 +55,7 @@
 
     <!-- Fields titles of task information activity -->
     <string name="description_field">Description</string>
-    <string name="location_field">Task\'s location</string>
+    <string name="location_field">Location</string>
     <string name="due_date_field">Deadline</string>
     <string name="duration_field">Duration</string>
     <string name="energy_field">Energy needed</string>

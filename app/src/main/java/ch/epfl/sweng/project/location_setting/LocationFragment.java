@@ -57,7 +57,7 @@ public class LocationFragment extends Fragment {
     ListView listView;
     ListView listViewDefault;
     
-    private int ITEM_HEIGHT = 230;
+    private int ITEM_HEIGHT = 180;
 
 
     /**

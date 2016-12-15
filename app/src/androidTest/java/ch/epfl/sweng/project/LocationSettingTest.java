@@ -99,7 +99,6 @@ public final class LocationSettingTest extends SuperTest {
         for (int i = 0; i < createdLocations; i++) {
             createALocation(mTitleToBeTyped + i);
             scrollDown();
-            scrollDown();
             //Check title name inside listView
             checkALocation(mTitleToBeTyped + i, i + 3);
         }
@@ -114,7 +113,6 @@ public final class LocationSettingTest extends SuperTest {
         //Create a location
         createALocation(mOldTitle);
         scrollDown();
-        scrollDown();
         //Try to edit the first location to put the same title as the first location
         onData(anything())
                 .inAdapterView(withId(R.id.list_view_locations))
@@ -127,7 +125,6 @@ public final class LocationSettingTest extends SuperTest {
 
         onView(withId(R.id.location_done_button_toolbar)).perform(click());
 
-        scrollDown();
         scrollDown();
         //Check that the title has been updated
         onData(anything())
@@ -146,7 +143,6 @@ public final class LocationSettingTest extends SuperTest {
         final int locationPosition = 3;
         //Create a location
         createALocation(mOldTitle);
-        scrollDown();
         scrollDown();
         //Try to edit the first location to put the same title as a default location
         onData(anything())
