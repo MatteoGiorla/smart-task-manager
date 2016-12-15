@@ -434,7 +434,7 @@ public abstract class TaskActivity extends AppCompatActivity {
                                     if(!dataSnapshot.exists()){
                                         dialog.setMessage(getString(R.string.contributor_dialog_warning_message));
                                     } else if (listOfContributors.contains(enteredText)){
-                                        dialog.setMessage(getString(R.string.contributor_dialog_warning_message_duplicate));
+                                        dialog.setMessage(getString(R.string.contributor_dialog_duplicate_warning_message));
                                     } else{
                                         addContributorInTask(enteredText);
                                         if(MainActivity.getUser().getEmail().equals(listOfContributors.get(0))) {
