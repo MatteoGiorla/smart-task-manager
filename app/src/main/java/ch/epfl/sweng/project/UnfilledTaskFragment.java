@@ -132,11 +132,6 @@ public class UnfilledTaskFragment extends TaskFragment {
         }
     }
 
-    @Override
-    void removeTaskAction(int position, Boolean isDone) {
-        unfilledTaskList.remove(position);
-    }
-
     /**
      * Getter for the taskList of unfilled tasks
      *

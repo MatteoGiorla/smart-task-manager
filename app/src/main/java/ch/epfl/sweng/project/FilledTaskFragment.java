@@ -120,6 +120,7 @@ public class FilledTaskFragment extends TaskFragment {
                     public void onClick(View view) {
                         mDatabase.addNewTask(mTask, position);
                         recyclerView.scrollToPosition(position);
+                        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
                     }
                 });
 
@@ -152,26 +153,9 @@ public class FilledTaskFragment extends TaskFragment {
                     Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
-            //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
-    }
-
-    /**
-     * Private method executing the actions needed to remove the task.
-     * It removes the task from the database.
-     *
-     * @param position Position of the task to be removed.
-     * @param isDone   Boolean indicating if the task is done.
-     */
-    @Override
-    void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = taskList.get(position);
-
-        mDatabase.deleteTask(taskToBeDeleted, position);
-
-        //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        //Create a notification
+        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -222,9 +206,9 @@ public class FilledTaskFragment extends TaskFragment {
             Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
                 taskPosition.add(i);

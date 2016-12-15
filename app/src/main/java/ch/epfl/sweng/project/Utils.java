@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
-import android.util.Log;
 
 
 public class Utils extends Application {
@@ -169,10 +168,10 @@ public class Utils extends Application {
         Task toAdd;
         if(suffix[0].equals(mail)){
             //in the case where we add the task to the creator, nothing to preprocess.
-            toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getListOfMessages());
+            toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getHasNewMessages(), task.getListOfMessages());
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor(), task.getListOfMessages());
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages(), task.getListOfMessages());
         }
         return toAdd;
     }

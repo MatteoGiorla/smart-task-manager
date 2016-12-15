@@ -7,6 +7,7 @@
     android:focusableInTouchMode="true">
 
     <LinearLayout
+        android:id="@+id/LL"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -564,10 +565,22 @@
 
                 </LinearLayout>
 
-
             </LinearLayout>
 
         </ScrollView>
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/open_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/chat_36dp"
+        app:backgroundTint="@color/blue"
+        app:fabSize="normal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="150dp" />
 
 </RelativeLayout>
