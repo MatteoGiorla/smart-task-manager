@@ -1,9 +1,10 @@
 package ch.epfl.sweng.project.data;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.widget.Toast;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -230,9 +231,13 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param dataSnapshot Data recovered from the database
      */
     private void retrieveTasks(DataSnapshot dataSnapshot) {
-        if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-            Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
+        RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);
+        if(mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
+            recyclerView.setBackgroundResource(R.drawable.db8);
+        } else {
+            recyclerView.setBackgroundResource(0);
         }
+
         mTaskList.clear();
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             if (task != null) {
@@ -244,7 +249,8 @@ public class FirebaseTaskHelper implements TaskHelper {
 
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<String>> stringListTypeIndicator =
-                        new GenericTypeIndicator<List<String>>() {};
+                        new GenericTypeIndicator<List<String>>() {
+                        };
                 List<String> contributors = task.child("listOfContributors").getValue(stringListTypeIndicator);
 
                 //Construct Location object
@@ -253,29 +259,29 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Long date = task.child("dueDate").child("time").getValue(Long.class);
                 Date dueDate = new Date(date);
                 long newContributor;
-                if(task.child("ifNewContributor").getValue() != null){
-                     newContributor  = (long) task.child("ifNewContributor").getValue();
+                if (task.child("ifNewContributor").getValue() != null) {
+                    newContributor = (long) task.child("ifNewContributor").getValue();
                 } else {
                     newContributor = 0;
                 }
                 //Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
 
                 //Define a GenericTypeIndicator to get back properly typed collection
-                GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
+                GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {
+                };
                 //Construct list of message
                 List<Message> listOfMessages = task.child("listOfMessages").getValue(messageListTypeIndicator);
                 Task newTask;
 
-                if(listOfMessages == null) {
+                if (listOfMessages == null) {
                     newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage);
-                }else{
+                } else {
                     newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage, listOfMessages);
                 }
 
                 mTaskList.add(newTask);
             }
         }
-
         mAdapter.notifyDataSetChanged();
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
