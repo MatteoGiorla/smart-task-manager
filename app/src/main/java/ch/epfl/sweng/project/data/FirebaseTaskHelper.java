@@ -309,10 +309,12 @@ public class FirebaseTaskHelper implements TaskHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot){
                 dataSnapshotTaskParserRetriever(unfilledTask, true, dataSnapshot);
+                MainActivity.unfilledSyncFinished = true;
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                MainActivity.unfilledSyncFinished = true;
             }
         });
     }

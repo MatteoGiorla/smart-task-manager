@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -103,6 +105,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private static final int REQUEST_LOCATION = 2;
 
+    public static boolean unfilledSyncFinished;
+
     private final String TAG = "Location API";
 
     /**
@@ -137,6 +141,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 break;
 
             case Utils.TEST_PROVIDER:
+                unfilledSyncFinished = true;
                 currentUser = new User(User.DEFAULT_EMAIL);
                 break;
 
@@ -150,6 +155,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         //retrieving unfilled task to put them on the unfilled table row.
         unfilledTasks = new ArrayList<>();
+        unfilledSyncFinished = false;
         FirebaseTaskHelper.retrieveUnfilledFromMain(currentUser, unfilledTasks);
 
         //Add the user to TaskFragments
@@ -172,10 +178,21 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         select_one_location = getApplicationContext().getString(R.string.select_one);
 
         initializeAdapters();
-        //Handle the table row in case of unfinished tasks
-        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        initializeUnfilledTableRow();
-        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+        //to be able to synchronize the data retrieving from the unfilled tasks.
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while(!unfilledSyncFinished);
+                //Handle the table row in case of unfinished tasks
+                unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+                initializeUnfilledTableRow();
+                //busy waiting
+                updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+            }
+        };
+        uiHandler.post(runnable);
+
     }
 
     /**
