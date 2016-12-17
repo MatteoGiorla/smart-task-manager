@@ -174,7 +174,14 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
-        String locationToTest = mLocation.getSelectedItem().toString();
+        String locationToTest = Utils.getSelectOne();
+        if(mLocation != null){
+            try{
+                locationToTest = mLocation.getSelectedItem().toString();
+            }catch(NullPointerException n){
+                locationToTest = Utils.getSelectOne();
+            }
+        }
         if(!locationToTest.equals(Utils.getEverywhereLocation()) && listOfContributors.size() == 2) {
             Toast.makeText(getApplicationContext(), R.string.location_warning_if_multiple_contributors, Toast.LENGTH_LONG).show();
         }

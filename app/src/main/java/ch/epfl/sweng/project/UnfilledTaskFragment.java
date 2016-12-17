@@ -82,7 +82,7 @@ public class UnfilledTaskFragment extends TaskFragment {
         final Task mTask = unfilledTaskList.get(position);
 
         Snackbar snackbar = Snackbar
-                .make(layout, mTask.getName() + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
+                .make(layout, Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
