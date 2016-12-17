@@ -56,7 +56,7 @@ public class UnfilledTaskFragment extends TaskFragment {
         initSwipe();
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, unfilledTaskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser, true, null);
+        mDatabase.retrieveAllData(currentUser, true);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class UnfilledTaskFragment extends TaskFragment {
         } else {
             mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
             //if the task has been fulfilled, we can put it on the temporary list of good tasks.
-            if(Utils.isUnfilled(editedTask, this.getActivity().getApplicationContext())){
+            if(Utils.isUnfilled(editedTask)){
                 unfilledTaskList.set(indexEditedTask, editedTask);
             }else{
                 unfilledTaskList.remove(indexEditedTask);

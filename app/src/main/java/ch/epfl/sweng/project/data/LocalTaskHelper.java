@@ -21,7 +21,7 @@ public class LocalTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user, boolean isUnfilled, ArrayList<Task> tasksToFill) {
+    public void retrieveAllData(User user, boolean isUnfilled) {
         //Nothing to retrieve when doing tests
     }
 

@@ -76,7 +76,7 @@ public class FilledTaskFragment extends TaskFragment {
 
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser, false, null);
+        mDatabase.retrieveAllData(currentUser, false);
     }
 
     @Override
@@ -220,19 +220,14 @@ public class FilledTaskFragment extends TaskFragment {
         }
     }
 
-    public static void addUnfilled(Task task){
-        mDatabase.addNewTask(task, 0, true);
-    }
-
     /**
-     * Retrieve unfilled tasks to set the unfinished tableRow from mainActivity
+     * Take care of adding an unfilled task in the firebase when newTaskActivity returns
+     * an unfilled task.
      *
-     * @return the array of unfilled tasks.
+     * @param task the unfilled task to add in the database.
      */
-    public ArrayList<Task> retrieveUnfilledTasks(){
-        ArrayList<Task> toReturn = new ArrayList<>();
-        mDatabase.retrieveAllData(currentUser, true, toReturn);
-        return toReturn;
+    public void addUnfilled(Task task){
+        mDatabase.addNewTask(task, 0, true);
     }
 
     public static boolean locationIsUsedByTask(Location locationToCheck) {

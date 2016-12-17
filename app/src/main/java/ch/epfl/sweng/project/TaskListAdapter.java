@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +115,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
                 holder.taskDuration.setText(MainActivity.DURATION_MAP.get((int) taskInTheView.getDuration()));
             }
 
-            if (!Utils.isUnfilled(taskInTheView, mContext)) {
+            if (!Utils.isUnfilled(taskInTheView)) {
                 double static_sort_value = taskInTheView.getStaticSortValue();
                 double urgency_percentage;
                 if(days <= 2 || static_sort_value > 100){
@@ -135,7 +136,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
                 holder.colorIndicator.setBackgroundColor(ColorUtils.HSLToColor(hsl));
             }
-            if(Utils.isUnfilled(taskInTheView, mContext)){
+            if(Utils.isUnfilled(taskInTheView)){
                 holder.colorIndicator.setVisibility(View.INVISIBLE);
             }
             if(!Utils.hasContributors(taskInTheView)) {

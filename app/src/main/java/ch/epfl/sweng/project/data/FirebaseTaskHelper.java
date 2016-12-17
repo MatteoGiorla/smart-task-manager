@@ -38,7 +38,7 @@ import static ch.epfl.sweng.project.Utils.separateTitleAndSuffix;
  */
 public class FirebaseTaskHelper implements TaskHelper {
 
-    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private static final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private final TaskListAdapter mAdapter;
     private ArrayList<Task> mTaskList;
     private final Context mContext;
@@ -51,17 +51,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user, final boolean requestUnfilled, final ArrayList<Task> tasksToFill) {
+    public void retrieveAllData(User user, final boolean requestUnfilled) {
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
 
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(tasksToFill == null){
-                    retrieveTasks(dataSnapshot, requestUnfilled, mTaskList);
-                }else{
-                    retrieveTasks(dataSnapshot, requestUnfilled, tasksToFill);
-                }
+            public void onDataChange(DataSnapshot dataSnapshot){
+                retrieveTasks(dataSnapshot, requestUnfilled);
             }
 
             @Override
@@ -77,9 +73,8 @@ public class FirebaseTaskHelper implements TaskHelper {
         myTasks.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    retrieveTasks(dataSnapshot, requestUnfilled, mTaskList);
+                retrieveTasks(dataSnapshot, requestUnfilled);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -174,7 +169,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
             mAdapter.remove(position);
             //we don't want to update the adapter in the case of the updated task has been completed.
-            if(!(Utils.isUnfilled(original, mContext) && !Utils.isUnfilled(updated, mContext))){
+            if(!(Utils.isUnfilled(original) && !Utils.isUnfilled(updated))){
                 mAdapter.add(updated, position);
             }
 
@@ -192,7 +187,7 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param mTaskList
      */
     private void warnContributor(List<Task> mTaskList) {
-        List<Task> taskAddedAsContributor = new ArrayList<Task>();
+        List<Task> taskAddedAsContributor = new ArrayList<>();
 
         // search task that has been added by someone else:
         for (Task t : mTaskList) {
@@ -240,12 +235,31 @@ public class FirebaseTaskHelper implements TaskHelper {
      *
      * @param dataSnapshot Data recovered from the database
      */
-    private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled, ArrayList<Task> taskList) {
+    private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled) {
         if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
             Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
         }
-        final boolean isRetrievingUnfilledFromMain = requestUnfilled && taskList.isEmpty();
+
         mTaskList.clear();
+        dataSnapshotTaskParserRetriever(mTaskList, requestUnfilled, dataSnapshot);
+
+        mAdapter.notifyDataSetChanged();
+        // Manage the dialog that warn the user that he has been added to a task:
+        warnContributor(mTaskList);
+        if(!requestUnfilled){
+            MainActivity.triggerDynamicSort();
+        }
+    }
+
+    /**
+     * Take care of extracting and "parsing" the data from a database snapshot
+     * in order to construct a list of task.
+     *
+     * @param mTaskList the taskList to fill
+     * @param requestUnfilled whether we want unfilled tasks or filled task from the database.
+     * @param dataSnapshot the snapshot from the firebase database containing the tasks to extract.
+     */
+     private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             if (task != null) {
                 String title = task.child("name").getValue(String.class);
@@ -265,12 +279,10 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Date dueDate = new Date(date);
                 long newContributor;
                 if(task.child("ifNewContributor").getValue() != null){
-                     newContributor  = (long) task.child("ifNewContributor").getValue();
+                    newContributor  = (long) task.child("ifNewContributor").getValue();
                 } else {
                     newContributor = 0;
                 }
-                //Task newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
-
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
                 //Construct list of message
@@ -282,19 +294,28 @@ public class FirebaseTaskHelper implements TaskHelper {
                 }else{
                     newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, listOfMessages);
                 }
-                if(requestUnfilled && Utils.isUnfilled(newTask, mContext)){
-                    taskList.add(newTask);
-                }else if(!requestUnfilled && !Utils.isUnfilled(newTask, mContext)){
-                    taskList.add(newTask);
+                //will add a new task to the current list only in the case where the task will stay in its current adapter
+                // (i.e. will not add it if and unfilled task has been filled, thus leaving current adapter).
+                if(requestUnfilled == Utils.isUnfilled(newTask)){
+                    mTaskList.add(newTask);
                 }
             }
         }
-        if(!isRetrievingUnfilledFromMain){
-            mAdapter.notifyDataSetChanged();
-        }
-        // Manage the dialog that warn the user that he has been added to a task:
-        warnContributor(mTaskList);
-        MainActivity.triggerDynamicSort();
     }
 
+    public static ArrayList<Task> retrieveUnfilledFromMain(User user){
+        Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
+        final ArrayList<Task> unfilledTasks = new ArrayList<>();
+        myTasks.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot){
+                dataSnapshotTaskParserRetriever(unfilledTasks, true, dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+        return unfilledTasks;
+    }
 }

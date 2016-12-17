@@ -42,12 +42,11 @@ public class Utils extends Application {
      * and thus need to finish in the inbox of unfinished tasks
      *
      * @param task    the task to Test
-     * @param context the context which serves as getting the good String values.
      * @return a boolean whether the task in unfilled or not
      */
-    public static boolean isUnfilled(Task task, Context context) {
+    public static boolean isUnfilled(Task task) {
 
-        return isLocationUnfilled(task, context)
+        return isLocationUnfilled(task, getContext())
                 || isDurationUnfilled(task) || isDueDateUnfilled(task);
     }
 

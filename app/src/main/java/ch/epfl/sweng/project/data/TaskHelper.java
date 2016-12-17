@@ -15,8 +15,9 @@ public interface TaskHelper {
      * data locally stored on the app.
      *
      * @param user The user we want to retrieve data from.
+     * @param requestUnfilled whether we want to retrieve unfilled or filled task.
      */
-    void retrieveAllData(User user, boolean requestUnfilled, ArrayList<Task> tasksToFill);
+    void retrieveAllData(User user, boolean requestUnfilled);
 
     /**
      * Add a tasks to the remote storage device
