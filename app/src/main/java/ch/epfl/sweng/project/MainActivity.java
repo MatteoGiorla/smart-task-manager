@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -549,13 +551,14 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                GradientDrawable unfilledShape = (GradientDrawable) unfilledTaskButton.getBackground();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
+                        unfilledShape.setColor(Color.argb(255, 255, 255, 255)); // White Tint
                         return true; // if you want to handle the touch event
                     case MotionEvent.ACTION_UP:
                         v.performClick();
-                        unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
+                        unfilledShape.setColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
                         Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
                         intent.putExtra(USER_KEY, getUser());
                         intent.putParcelableArrayListExtra(UNFILLED_TASKS, unfilledTasks);
