@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.FirebaseTaskHelper;
 import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
@@ -147,7 +148,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         createUtilityMaps();
 
+        //retrieving unfilled task to put them on the unfilled table row.
         unfilledTasks = new ArrayList<>();
+        FirebaseTaskHelper.retrieveUnfilledFromMain(currentUser, unfilledTasks);
 
         //Add the user to TaskFragments
         mainFragment = new FilledTaskFragment();
@@ -171,7 +174,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         initializeAdapters();
         //Handle the table row in case of unfinished tasks
         unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        //unfilledTasks = mainFragment.retrieveUnfilledTasks();
         initializeUnfilledTableRow();
         updateUnfilledTasksTableRow(areThereUnfinishedTasks());
     }

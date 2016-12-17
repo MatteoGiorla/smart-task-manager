@@ -303,19 +303,17 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
     }
 
-    public static ArrayList<Task> retrieveUnfilledFromMain(User user){
+    public static void retrieveUnfilledFromMain(User user, final ArrayList<Task> unfilledTask){
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
-        final ArrayList<Task> unfilledTasks = new ArrayList<>();
         myTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot){
-                dataSnapshotTaskParserRetriever(unfilledTasks, true, dataSnapshot);
+                dataSnapshotTaskParserRetriever(unfilledTask, true, dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-        return unfilledTasks;
     }
 }
