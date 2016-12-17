@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -79,6 +80,16 @@ public class FilledTaskFragment extends TaskFragment {
         mDatabase.retrieveAllData(currentUser, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
+        if (direction == ItemTouchHelper.LEFT){
+            createSnackBar(position, false, recyclerView);
+        } else {
+            createSnackBar(position, true, recyclerView);
+        }
+    }
+
     @Override
     int getIconSwipe() {
         return R.drawable.ic_done_white_36dp;
@@ -104,6 +115,7 @@ public class FilledTaskFragment extends TaskFragment {
                     public void onClick(View view) {
                         mDatabase.addNewTask(mTask, position, false);
                         recyclerView.scrollToPosition(position);
+                        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
                     }
                 });
 
@@ -136,26 +148,9 @@ public class FilledTaskFragment extends TaskFragment {
                     Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
-            //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
-    }
-
-    /**
-     * Private method executing the actions needed to remove the task.
-     * It removes the task from the database.
-     *
-     * @param position Position of the task to be removed.
-     * @param isDone   Boolean indicating if the task is done.
-     */
-    @Override
-    void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = taskList.get(position);
-
-        mDatabase.deleteTask(taskToBeDeleted, position);
-
-        //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        //Create a notification
+        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -180,8 +175,8 @@ public class FilledTaskFragment extends TaskFragment {
      * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
      */
-    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
-        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal));
     }
 
     /**
@@ -206,9 +201,9 @@ public class FilledTaskFragment extends TaskFragment {
             Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
                 taskPosition.add(i);

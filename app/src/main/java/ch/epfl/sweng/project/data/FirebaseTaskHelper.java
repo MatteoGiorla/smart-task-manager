@@ -266,6 +266,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 String description = task.child("description").getValue(String.class);
                 Long durationInMinutes = task.child("durationInMinutes").getValue(Long.class);
                 String energy = task.child("energy").getValue(String.class);
+                Boolean hasNewMessage = task.child("hasNewMessages").getValue(Boolean.class);
 
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<String>> stringListTypeIndicator =
@@ -290,9 +291,9 @@ public class FirebaseTaskHelper implements TaskHelper {
                 Task newTask;
 
                 if(listOfMessages == null) {
-                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor);
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage);
                 }else{
-                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, listOfMessages);
+                    newTask = new Task(title, description, locationName, dueDate, durationInMinutes, energy, contributors, newContributor, hasNewMessage, listOfMessages);
                 }
                 //will add a new task to the current list only in the case where the task will stay in its current adapter
                 // (i.e. will not add it if and unfilled task has been filled, thus leaving current adapter).

@@ -4,8 +4,10 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +28,10 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Remove chat button
+        FloatingActionButton chatButton = (FloatingActionButton) findViewById(R.id.open_chat);
+        chatButton.setVisibility(View.INVISIBLE);
 
         //Set default values
         Calendar cal = Calendar.getInstance();
@@ -56,11 +62,26 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     void addContributorInTask(String contributor){
         listOfContributors.add(contributor);
+        if(!locationName.equals(Utils.getEverywhereLocation()) && listOfContributors.size() == 2) {
+            Toast.makeText(getApplicationContext(), R.string.location_warning_if_multiple_contributors, Toast.LENGTH_LONG).show();
+        }
+        locationName = Utils.getEverywhereLocation();
+        mLocation.setSelection(1);
+        ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.switcher_location);
+        switcher.showNext();
+        switcher.setEnabled(false);
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        locationTextView.setText(Utils.getEverywhereLocation());
     }
 
     @Override
-    void deleteContributorInTask(String contributor){
+    void deleteContributorInTask(String contributor) {
         listOfContributors.remove(contributor);
+        if (listOfContributors.size() == 1) {
+            ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.switcher_location);
+            switcher.showNext();
+            switcher.setEnabled(true);
+        }
     }
 
     /**
@@ -90,7 +111,7 @@ public class NewTaskActivity extends TaskActivity {
         }else{
             titleToType = title[0];
         }
-        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, 0L);
+        Task newTask = new Task(titleToType, description, locationName, date, duration, energy.toString(), listOfContributors, 0L, false);
         intent.putExtra(RETURNED_NEW_TASK, newTask);
 
         if(Utils.isUnfilled(newTask)){

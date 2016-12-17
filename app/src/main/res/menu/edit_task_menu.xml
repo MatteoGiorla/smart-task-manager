@@ -6,11 +6,4 @@
         android:icon="@drawable/trash_36dp"
         android:title="@string/trash"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/chat_menu"
-        android:icon="@drawable/chat_36dp"
-        android:title="@string/chat_menu"
-        app:showAsAction="ifRoom"/>
-
 </menu>

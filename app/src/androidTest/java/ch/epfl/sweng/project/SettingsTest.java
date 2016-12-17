@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.settings.SettingsActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -56,4 +57,19 @@ public class SettingsTest {
         onView(withId(R.id.skip)).perform(click());
         onView(withId(R.id.settings_text_tutorial)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void CheckIfOpenAboutFromSettings() {
+        SuperTest.waitForActivity();
+        onView(withId(R.id.settings_text_about)).perform(click());
+        onView(withId(R.id.settings_about_text_bastian)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void CheckIfOpenSuggestFromSettings() {
+        SuperTest.waitForActivity();
+        onView(withId(R.id.settings_text_suggest)).perform(click());
+        onView(withId(R.id.settings_suggest_message)).check(matches(isDisplayed()));
+    }
+
 }

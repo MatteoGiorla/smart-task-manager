@@ -50,6 +50,7 @@ import java.util.Map;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.FirebaseTaskHelper;
 import ch.epfl.sweng.project.data.UserProvider;
+import ch.epfl.sweng.project.settings.SettingsActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
 
 
@@ -174,9 +175,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
 
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
-
         initializeAdapters();
         //to be able to synchronize the data retrieving from the unfilled tasks.
         Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -253,6 +251,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -440,7 +439,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * Trigger the dynamic sort.
      */
     public static void triggerDynamicSort() {
-        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
     }
 
     /**
@@ -459,10 +458,13 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
 
         durationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
+                R.layout.spinner_textview, getStartDurationTable());
+
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
+        durationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -486,7 +488,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
 
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
     }
@@ -593,7 +596,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private void updateUnfilledTasksTableRow(boolean visible) {
         if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
             if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
@@ -607,7 +609,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         } else {
             unfilledTaskButton.setVisibility(View.GONE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
     }
 
@@ -756,8 +757,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     {
         super.onResume();
         updateAdapters();
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
         mLocation.setSelection(locationAdapter.getPosition(userLocation));
         mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
