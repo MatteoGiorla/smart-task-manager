@@ -182,9 +182,9 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     * Will warn current user of any new changes made by another contributor on his shared tasks.
      *
-     *
-     * @param mTaskList
+     * @param mTaskList the list of task to check if changes have been made to.
      */
     private void warnContributor(List<Task> mTaskList) {
         List<Task> taskAddedAsContributor = new ArrayList<>();
@@ -305,11 +305,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     *Used to update a single unfilled task, in the case where its location need
+     * to be changed by an action on location settings activity. Should only be used in this case,
+     * for general purpose, use updateTask instead.
      *
-     *
-     * @param user
-     * @param original
-     * @param updated
+     * @param user information relative to the user to get his data on firebase
+     * @param original the task before the location modification
+     * @param updated the task with the location modified
      */
     public static void updateUnfilledFromMain(User user, Task original, Task updated){
         DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child(original.getName()).getRef();
@@ -320,9 +322,14 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     * Take care of retrieving only the unfilled task from the database. This function exists
+     * for the mainActivity to be able to have the unfilled tasks in order to show the digest and
+     * display the button to access unfilled inbox. To retrieve the task in a broader way,
+     * use "retrieveAllData" with the corresponding boolean argument.
      *
-     * @param user
-     * @param unfilledTask
+     *
+     * @param user information relative to the user to get his data on firebase
+     * @param unfilledTask the list to be filled by the unfilled tasks fetched from firebase
      */
     public static void retrieveUnfilledFromMain(User user, final ArrayList<Task> unfilledTask){
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
