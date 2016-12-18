@@ -304,6 +304,26 @@ public class FirebaseTaskHelper implements TaskHelper {
         }
     }
 
+    /**
+     *
+     *
+     * @param user
+     * @param original
+     * @param updated
+     */
+    public static void updateUnfilledFromMain(User user, Task original, Task updated){
+        DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child(original.getName()).getRef();
+        taskRef.removeValue();
+
+        DatabaseReference taskReference = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child(updated.getName()).getRef();
+        taskReference.setValue(updated);
+    }
+
+    /**
+     *
+     * @param user
+     * @param unfilledTask
+     */
     public static void retrieveUnfilledFromMain(User user, final ArrayList<Task> unfilledTask){
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
         myTasks.addValueEventListener(new ValueEventListener() {

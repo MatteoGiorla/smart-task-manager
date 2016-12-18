@@ -183,7 +183,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                while(!unfilledSyncFinished);
                 //Handle the table row in case of unfinished tasks
                 unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
                 initializeUnfilledTableRow();
