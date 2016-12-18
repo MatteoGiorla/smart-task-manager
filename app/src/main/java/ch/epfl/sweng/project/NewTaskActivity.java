@@ -93,7 +93,10 @@ public class NewTaskActivity extends TaskActivity {
     @Override
     boolean titleIsNotUnique(String title) {
         boolean result = false;
-        for (Task task : taskList) {
+        ArrayList<Task> allTasks = new ArrayList<>();
+        allTasks.addAll(MainActivity.getUnfilledTaskList());
+        allTasks.addAll(taskList);
+        for (Task task : allTasks) {
             if (task.getName().equals(title)) {
                 result = true;
             }

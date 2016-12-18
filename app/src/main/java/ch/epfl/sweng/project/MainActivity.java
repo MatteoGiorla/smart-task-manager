@@ -47,6 +47,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
@@ -782,11 +783,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
 
-        //TODO : update database
-        /*for(int i = 0; i < newTaskList.size(); ++i) {
-            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
-            mTaskAdapter.notifyDataSetChanged();
-        }*/
+        for(int i = 0; i < newTaskList.size(); ++i) {
+            FirebaseTaskHelper.updateUnfilledFromMain(currentUser, previousTaskList.get(i), newTaskList.get(i));
+        }
     }
 
 
@@ -797,5 +796,18 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
         return false;
+    }
+
+    /**
+     * Getter for the list of unfilled tasks.
+     *
+     * @return an immutable copy of the unfilledTaskList
+     */
+    public static List<Task> getUnfilledTaskList() {
+        if(unfilledTasks != null){
+            return new ArrayList<>(unfilledTasks);
+        }else{
+            return null;
+        }
     }
 }

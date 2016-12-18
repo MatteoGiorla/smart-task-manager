@@ -184,7 +184,7 @@ public class FilledTaskFragment extends TaskFragment {
      *
      * @return an immutable copy of taskList
      */
-    public List<Task> getTaskList() {
+    public static List<Task> getTaskList() {
         if(taskList != null){
             return new ArrayList<>(taskList);
         }else{
