@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import static android.app.Activity.RESULT_OK;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_DELETED;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_MODIFIED;
@@ -34,6 +35,7 @@ public abstract class TaskFragment extends Fragment {
     private Bundle bundle;
     private final Paint p = new Paint();
 
+    protected User currentUser;
 
     abstract int getIconSwipe();
 
@@ -56,6 +58,12 @@ public abstract class TaskFragment extends Fragment {
         if(bundle == null) {
             throw new NullPointerException("Bundle passed to the fragment is null");
         }
+
+        currentUser = getBundle().getParcelable(MainActivity.USER_KEY);
+        if (currentUser == null) {
+            throw new IllegalArgumentException("User passed with the intend is null");
+        }
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project.data;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.project.Task;
@@ -20,24 +21,25 @@ public class LocalTaskHelper implements TaskHelper {
     }
 
     @Override
-    public void retrieveAllData(User user) {
+    public void retrieveAllData(User user, boolean isUnfilled) {
         //Nothing to retrieve when doing tests
     }
 
     @Override
-    public void refreshData(User user) {
+    public void refreshData(User user, boolean isUnfilled) {
         //Nothing to refresh when doing tests
     }
 
+
     @Override
-    public void addNewTask(Task task, int position) {
+    public void addNewTask(Task task, int position, boolean unfilled) {
         mAdapter.add(task, position);
     }
 
     @Override
     public void updateTask(Task original, Task updated, int position) {
         deleteTask(original, position);
-        addNewTask(updated, position);
+        addNewTask(updated, position, false);
     }
 
     @Override
