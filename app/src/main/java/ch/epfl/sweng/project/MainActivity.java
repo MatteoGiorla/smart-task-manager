@@ -71,7 +71,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private Context mContext;
 
     //stock unfilledTasks
-    private ArrayList<Task> unfilledTasks;
+    private static ArrayList<Task> unfilledTasks;
 
     private Intent intent;
     private static User currentUser;
@@ -183,7 +183,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                while(!unfilledSyncFinished);
+                //while(!unfilledSyncFinished);
                 //Handle the table row in case of unfinished tasks
                 unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
                 initializeUnfilledTableRow();
@@ -763,5 +763,40 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         mLocation.setSelection(locationAdapter.getPosition(userLocation));
         mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
+    }
+
+    public static void modifyLocationInTaskList(ch.epfl.sweng.project.Location editedLocation, ch.epfl.sweng.project.Location newLocation) {
+        //To avoid concurrent modification
+        ArrayList<Task> newTaskList = new ArrayList<>();
+        ArrayList<Task> previousTaskList = new ArrayList<>();
+        ArrayList<Integer> taskPosition = new ArrayList<>();
+        for(int i = 0; i < unfilledTasks.size(); ++i) {
+            Task task = unfilledTasks.get(i);
+            if (task.getLocationName().equals(editedLocation.getName())) {
+                Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
+                Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
+                newTaskList.add(newTask);
+                previousTaskList.add(previousTask);
+                taskPosition.add(i);
+            }
+        }
+
+        //TODO : update database
+        /*for(int i = 0; i < newTaskList.size(); ++i) {
+            mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
+            mTaskAdapter.notifyDataSetChanged();
+        }*/
+    }
+
+
+    public static boolean locationIsUsedByTask(ch.epfl.sweng.project.Location locationToCheck) {
+        for(Task task : unfilledTasks) {
+            if (task.getLocationName().equals(locationToCheck.getName())){
+                return true;
+            }
+        }
+        return false;
     }
 }
