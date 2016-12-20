@@ -25,13 +25,11 @@ public class IntroActivity extends AppIntro {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_1_title), getString(R.string.tutorial_slide_1_description), R.drawable.logo_white_middle_det, getColor(R.color.tutorial_background)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_2_title), getString(R.string.tutorial_slide_2_description), R.drawable.automatic_sort_illustration, getColor(R.color.tutorial_background)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_3_title), getString(R.string.tutorial_slide_3_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_4_title), getString(R.string.tutorial_slide_4_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
-        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_5_title), getString(R.string.tutorial_slide_5_description), R.drawable.nexus5_black_top_high, getColor(R.color.tutorial_background)));
-        //addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_6_title), getString(R.string.tutorial_slide_6_description), R.drawable.description_36dp, getColor(R.color.tutorial_background)));
-        //addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_7_title), getString(R.string.tutorial_slide_7_description), R.drawable.description_36dp, getColor(R.color.tutorial_background)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_1_title), getString(R.string.tutorial_slide_1_description), R.drawable.logo_white_middle_det, getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_2_title), getString(R.string.tutorial_slide_2_description), R.drawable.automatic_sort_illustration, getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_3_title), getString(R.string.tutorial_slide_3_description), R.drawable.params_illustration, getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_4_title), getString(R.string.tutorial_slide_4_description), R.drawable.date_illustration, getColor(R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.tutorial_slide_5_title), getString(R.string.tutorial_slide_5_description), R.drawable.location_illustration, getColor(R.color.colorPrimary)));
 
         setDoneText(getString(R.string.done_button));
         setSkipText(getString(R.string.skip_button));

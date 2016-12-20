@@ -1,16 +1,22 @@
 package ch.epfl.sweng.project;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -41,9 +47,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.project.authentication.LoginActivity;
+import ch.epfl.sweng.project.data.FirebaseTaskHelper;
 import ch.epfl.sweng.project.data.UserProvider;
 import ch.epfl.sweng.project.settings.SettingsActivity;
 import ch.epfl.sweng.project.synchronization.UserAllOnCompleteListener;
@@ -64,7 +72,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private Context mContext;
 
     //stock unfilledTasks
-    private ArrayList<Task> unfilledTasks;
+    private static ArrayList<Task> unfilledTasks;
 
     private Intent intent;
     private static User currentUser;
@@ -101,6 +109,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     private static final int REQUEST_LOCATION = 2;
 
+    public static boolean unfilledSyncFinished;
+
     private final String TAG = "Location API";
 
     /**
@@ -111,6 +121,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      *                           recently supplied in onSaveInstanceState(Bundle).
      */
     @Override
+    @TargetApi(Build.VERSION_CODES.N)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initialize Facebook SDK, in order to logout correctly
@@ -134,6 +145,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 break;
 
             case Utils.TEST_PROVIDER:
+                unfilledSyncFinished = true;
                 currentUser = new User(User.DEFAULT_EMAIL);
                 break;
 
@@ -145,7 +157,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         createUtilityMaps();
 
+        //retrieving unfilled task to put them on the unfilled table row.
         unfilledTasks = new ArrayList<>();
+        unfilledSyncFinished = false;
+        FirebaseTaskHelper.retrieveUnfilledFromMain(currentUser, unfilledTasks);
 
         //Add the user to TaskFragments
         mainFragment = new FilledTaskFragment();
@@ -159,20 +174,25 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     .commit();
         }
 
-
-        //Handle the table row in case of unfinished tasks
-        unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
-        initializeUnfilledTableRow();
-        updateUnfilledTasksTableRow(areThereUnfinishedTasks());
-
         //Default values
         userLocation = getResources().getString(R.string.select_one);
         userTimeAtDisposal = 120; //2 hours
 
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
-
         initializeAdapters();
+        //to be able to synchronize the data retrieving from the unfilled tasks.
+        Handler uiHandler = new Handler(Looper.getMainLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Handle the table row in case of unfinished tasks
+                unfilledTaskButton = (TableRow) findViewById(R.id.unfilled_task_button);
+                initializeUnfilledTableRow();
+                //busy waiting
+                updateUnfilledTasksTableRow(areThereUnfinishedTasks());
+            }
+        };
+        uiHandler.post(runnable);
+
     }
 
     /**
@@ -233,6 +253,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An intent which can return result data to the caller.
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (newTaskRequestCode == requestCode) {
@@ -244,6 +265,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 boolean unfilled = data.getBooleanExtra(TaskActivity.IS_UNFILLED, false);
                 if (unfilled) {
                     unfilledTasks.add(newTask);
+                    mainFragment.addUnfilled(newTask);
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
@@ -419,7 +441,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      * Trigger the dynamic sort.
      */
     public static void triggerDynamicSort() {
-        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal, everywhere_location, select_one_location);
+        mainFragment.sortTasksDynamically(userLocation, userTimeAtDisposal);
     }
 
     /**
@@ -438,10 +460,13 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         }
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
 
         durationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, getStartDurationTable());
+                R.layout.spinner_textview, getStartDurationTable());
+
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
+        durationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
         mDuration.setAdapter(durationAdapter);
@@ -465,7 +490,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
 
         locationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, locationListForAdapter);
+                R.layout.spinner_textview, locationListForAdapter);
+        locationAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_main);
 
         mLocation.setAdapter(locationAdapter);
     }
@@ -525,14 +551,16 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                GradientDrawable unfilledShape = (GradientDrawable) unfilledTaskButton.getBackground();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        unfilledTaskButton.setBackgroundColor(Color.argb(255, 255, 255, 255)); // White Tint
+                        unfilledShape.setColor(Color.argb(255, 255, 255, 255)); // White Tint
                         return true; // if you want to handle the touch event
                     case MotionEvent.ACTION_UP:
                         v.performClick();
-                        unfilledTaskButton.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
+                        unfilledShape.setColor(ResourcesCompat.getColor(getResources(), R.color.light_gray, null));
                         Intent intent = new Intent(MainActivity.this, UnfilledTasksActivity.class);
+                        intent.putExtra(USER_KEY, getUser());
                         intent.putParcelableArrayListExtra(UNFILLED_TASKS, unfilledTasks);
                         startActivityForResult(intent, unfilledTaskRequestCode);
                         return true;
@@ -571,7 +599,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private void updateUnfilledTasksTableRow(boolean visible) {
         if (visible) {
             unfilledTaskButton.setVisibility(View.VISIBLE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.VISIBLE);
             if (unfilledTasks != null) {
 
                 int taskNum = unfilledTasks.size();
@@ -585,7 +612,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
         } else {
             unfilledTaskButton.setVisibility(View.GONE);
-            findViewById(R.id.spinner_unfilled_separation).setVisibility(View.GONE);
         }
     }
 
@@ -734,10 +760,54 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     {
         super.onResume();
         updateAdapters();
-        everywhere_location = getApplicationContext().getString(R.string.everywhere_location);
-        select_one_location = getApplicationContext().getString(R.string.select_one);
         mLocation.setSelection(locationAdapter.getPosition(userLocation));
         mDuration.setSelection(durationAdapter.getPosition(START_DURATION_MAP.get(userTimeAtDisposal)));
         triggerDynamicSort();
+    }
+
+    public static void modifyLocationInTaskList(ch.epfl.sweng.project.Location editedLocation, ch.epfl.sweng.project.Location newLocation) {
+        //To avoid concurrent modification
+        ArrayList<Task> newTaskList = new ArrayList<>();
+        ArrayList<Task> previousTaskList = new ArrayList<>();
+        ArrayList<Integer> taskPosition = new ArrayList<>();
+        for(int i = 0; i < unfilledTasks.size(); ++i) {
+            Task task = unfilledTasks.get(i);
+            if (task.getLocationName().equals(editedLocation.getName())) {
+                Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
+                Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
+                newTaskList.add(newTask);
+                previousTaskList.add(previousTask);
+                taskPosition.add(i);
+            }
+        }
+
+        for(int i = 0; i < newTaskList.size(); ++i) {
+            FirebaseTaskHelper.updateUnfilledFromMain(currentUser, previousTaskList.get(i), newTaskList.get(i));
+        }
+    }
+
+
+    public static boolean locationIsUsedByTask(ch.epfl.sweng.project.Location locationToCheck) {
+        for(Task task : unfilledTasks) {
+            if (task.getLocationName().equals(locationToCheck.getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Getter for the list of unfilled tasks.
+     *
+     * @return an immutable copy of the unfilledTaskList
+     */
+    public static List<Task> getUnfilledTaskList() {
+        if(unfilledTasks != null){
+            return new ArrayList<>(unfilledTasks);
+        }else{
+            return null;
+        }
     }
 }

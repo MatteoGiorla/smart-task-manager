@@ -5,6 +5,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.project.chat.ChatActivity;
@@ -90,6 +93,8 @@ public class EditTaskActivity extends TaskActivity {
         } else {
             editContributorButton.setVisibility(View.GONE);
         }
+
+        setChatButtonListener();
     }
 
     @Override
@@ -109,14 +114,24 @@ public class EditTaskActivity extends TaskActivity {
                 finish();
                 return true;
 
-            case R.id.chat_menu :
-                Intent intentToChat = new Intent(this, ChatActivity.class);
-                intentToChat.putExtra(TASK_CHAT_KEY, mTaskToBeEdited);
-                startActivity(intentToChat);
-
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Set the listener for the chat button
+     */
+    public void setChatButtonListener() {
+        FloatingActionButton chatButton = (FloatingActionButton) findViewById(R.id.open_chat);
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentToChat = new Intent(getApplicationContext(), ChatActivity.class);
+                intentToChat.putExtra(TASK_CHAT_KEY, mTaskToBeEdited);
+                startActivity(intentToChat);
+            }
+        });
     }
 
     /**
@@ -127,8 +142,16 @@ public class EditTaskActivity extends TaskActivity {
      */
     @Override
     boolean titleIsNotUnique(String title) {
+        ArrayList<Task> allTask = new ArrayList<>();
+        allTask.addAll(taskList);
+        if(Utils.isUnfilled(mTaskToBeEdited)){
+            //if the current edited task is unfilled, we are in the UnfilledTaskFragment
+            allTask.addAll(FilledTaskFragment.getTaskList());
+        }else{
+            allTask.addAll(MainActivity.getUnfilledTaskList());
+        }
         boolean result = false;
-        for (Task task : taskList) {
+        for (Task task : allTask) {
             if (task.getName().equals(title) && !task.getName().equals(mTaskToBeEdited.getName())) {
                 result = true;
             }
@@ -160,6 +183,22 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
+        String locationToTest = Utils.getSelectOne();
+        if(mLocation != null){
+            try{
+                locationToTest = mLocation.getSelectedItem().toString();
+            }catch(NullPointerException n){
+                locationToTest = Utils.getSelectOne();
+            }
+        }
+        if(!locationToTest.equals(Utils.getEverywhereLocation()) && listOfContributors.size() == 2) {
+            Toast.makeText(getApplicationContext(), R.string.location_warning_if_multiple_contributors, Toast.LENGTH_LONG).show();
+        }
+        locationName = Utils.getEverywhereLocation();
+        mLocation.setSelection(1);
+        TextView locationTextView = (TextView) findViewById(R.id.text_location);
+        locationTextView.setText(Utils.getEverywhereLocation());
+        setSwitchers();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -170,6 +209,7 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
+        setSwitchers();
     }
 
     /**
@@ -217,11 +257,19 @@ public class EditTaskActivity extends TaskActivity {
                 findViewById(R.id.durationSpinner));
 
         //Set switch on location
+        ViewSwitcher locationSwitch = (ViewSwitcher) findViewById(R.id.switcher_location);
         setSwitcherOnClick((LinearLayout) findViewById(R.id.locationLinearLayout),
-                (ViewSwitcher) findViewById(R.id.switcher_location),
+                locationSwitch,
                 findViewById(R.id.locationSpinner));
+        if(mTaskToBeEdited.getListOfContributors().size() != 1){
+            if(locationSwitch.getCurrentView() == findViewById(R.id.locationSpinner)){
+                locationSwitch.showNext();
+            }
+            locationSwitch.setEnabled(false);
+        }
 
-        //Set switch on energy
+
+            //Set switch on energy
         setSwitcherOnClick((LinearLayout) findViewById(R.id.energyLinearLayout),
                 (ViewSwitcher) findViewById(R.id.switcher_energy),
                 findViewById(R.id.radio_energy));
@@ -237,9 +285,11 @@ public class EditTaskActivity extends TaskActivity {
             @Override
             public void onClick(View v) {
                 if(switcher.getCurrentView() != secondView) {
-                    getDoneEditButton().setVisibility(View.VISIBLE);
-                    taskStatus = TASK_IS_MODIFIED;
-                    switcher.showNext();
+                    if(secondView != findViewById(R.id.locationSpinner) || mTaskToBeEdited.getListOfContributors().size() == 1) {
+                        getDoneEditButton().setVisibility(View.VISIBLE);
+                        taskStatus = TASK_IS_MODIFIED;
+                        switcher.showNext();
+                    }
                 }
             }
         });

@@ -30,7 +30,8 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/location_name_layout">
+        android:id="@+id/location_name_layout"
+        android:paddingTop="12dp">
 
         <EditText
             android:layout_width="match_parent"
@@ -42,7 +43,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/darker_gray"/>
+            android:background="@android:color/darker_gray"
+            android:layout_marginBottom="7dp"/>
 
     </android.support.design.widget.TextInputLayout>
 

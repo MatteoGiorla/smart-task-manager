@@ -81,7 +81,7 @@ public class SuffixTest {
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
 
-        Task newTaskTest = new Task(taskTitle, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L);
+        Task newTaskTest = new Task(taskTitle, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
         assertTrue(Utils.sharedTaskPreProcessing(newTaskTest, otherSharer).getName().equals(alternateTaskTitle));
     }
 }

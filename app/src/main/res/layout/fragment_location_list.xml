@@ -12,11 +12,12 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp">
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="20dp" />
 
             <ImageView
                 android:layout_width="91dp"
@@ -61,11 +62,8 @@
             <ListView
                 android:id="@+id/default_list_view_locations"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -104,8 +102,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
-
+                android:layout_height="30dp" />
         </LinearLayout>
     </ScrollView>
 

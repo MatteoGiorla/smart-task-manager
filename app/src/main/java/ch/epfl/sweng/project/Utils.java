@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
-import android.util.Log;
 
 
 public class Utils extends Application {
@@ -42,12 +41,11 @@ public class Utils extends Application {
      * and thus need to finish in the inbox of unfinished tasks
      *
      * @param task    the task to Test
-     * @param context the context which serves as getting the good String values.
      * @return a boolean whether the task in unfilled or not
      */
-    public static boolean isUnfilled(Task task, Context context) {
+    public static boolean isUnfilled(Task task) {
 
-        return isLocationUnfilled(task, context)
+        return isLocationUnfilled(task, getContext())
                 || isDurationUnfilled(task) || isDueDateUnfilled(task);
     }
 
@@ -169,15 +167,23 @@ public class Utils extends Application {
         Task toAdd;
         if(suffix[0].equals(mail)){
             //in the case where we add the task to the creator, nothing to preprocess.
-            toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getListOfMessages());
+            toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getHasNewMessages(), task.getListOfMessages());
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);
-            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor(), task.getListOfMessages());
+            toAdd = new Task(newTitle,task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages(), task.getListOfMessages());
         }
         return toAdd;
     }
 
     public static String getEverywhereLocation(){
         return mContext.getResources().getString(R.string.everywhere_location);
+    }
+
+    public static String getSelectOne(){
+        return mContext.getResources().getString(R.string.select_one);
+    }
+
+    public static String getDowntownLocation(){
+        return mContext.getResources().getString(R.string.downtown_location);
     }
 }

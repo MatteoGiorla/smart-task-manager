@@ -15,6 +15,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,6 @@ public class FilledTaskFragment extends TaskFragment {
     private static ArrayList<Task> taskList;
     private static TaskHelper mDatabase;
 
-    private User currentUser;
-
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *
@@ -44,10 +43,6 @@ public class FilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        currentUser = getBundle().getParcelable(MainActivity.USER_KEY);
-        if (currentUser == null) {
-            throw new IllegalArgumentException("User passed with the intend is null");
-        }
         taskList = new ArrayList<>();
         mTaskAdapter = new TaskListAdapter(getActivity(), taskList);
 
@@ -63,7 +58,7 @@ public class FilledTaskFragment extends TaskFragment {
                         new Runnable() {
                             @Override
                             public void run() {
-                                mDatabase.refreshData(currentUser);
+                                mDatabase.refreshData(currentUser, false);
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         }, 2500);
@@ -82,7 +77,7 @@ public class FilledTaskFragment extends TaskFragment {
 
         TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, taskList);
         mDatabase = provider.getTaskProvider();
-        mDatabase.retrieveAllData(currentUser);
+        mDatabase.retrieveAllData(currentUser, false);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -118,8 +113,9 @@ public class FilledTaskFragment extends TaskFragment {
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mDatabase.addNewTask(mTask, position);
+                        mDatabase.addNewTask(mTask, position, false);
                         recyclerView.scrollToPosition(position);
+                        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
                     }
                 });
 
@@ -152,26 +148,9 @@ public class FilledTaskFragment extends TaskFragment {
                     Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
                     Toast.LENGTH_SHORT).show();
 
-            //Create a notification
-            new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
         }
-    }
-
-    /**
-     * Private method executing the actions needed to remove the task.
-     * It removes the task from the database.
-     *
-     * @param position Position of the task to be removed.
-     * @param isDone   Boolean indicating if the task is done.
-     */
-    @Override
-    void removeTaskAction(int position, Boolean isDone) {
-        Task taskToBeDeleted = taskList.get(position);
-
-        mDatabase.deleteTask(taskToBeDeleted, position);
-
-        //Update notifications
-        new TaskNotification(taskList, getActivity()).execute(taskList.size() + 1, taskList.size());
+        //Create a notification
+        new TaskNotification(taskList, getActivity()).execute(taskList.size(), taskList.size());
     }
 
     /**
@@ -184,7 +163,7 @@ public class FilledTaskFragment extends TaskFragment {
         if (task == null) {
             throw new IllegalArgumentException();
         }
-        mDatabase.addNewTask(task, taskList.size());
+        mDatabase.addNewTask(task, taskList.size(), false);
 
         //Update notifications
         new TaskNotification(taskList, getActivity()).createUniqueNotification(taskList.size() - 1);
@@ -196,8 +175,8 @@ public class FilledTaskFragment extends TaskFragment {
      * @param currentLocation     User's current location
      * @param currentTimeDisposal User's current disposal time
      */
-    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal, String everywhere_location, String select_one_location) {
-        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal, everywhere_location, select_one_location));
+    public void sortTasksDynamically(String currentLocation, int currentTimeDisposal) {
+        mTaskAdapter.sort(Task.getDynamicComparator(currentLocation, currentTimeDisposal));
     }
 
     /**
@@ -205,7 +184,7 @@ public class FilledTaskFragment extends TaskFragment {
      *
      * @return an immutable copy of taskList
      */
-    public List<Task> getTaskList() {
+    public static List<Task> getTaskList() {
         if(taskList != null){
             return new ArrayList<>(taskList);
         }else{
@@ -222,9 +201,9 @@ public class FilledTaskFragment extends TaskFragment {
             Task task = taskList.get(i);
             if (task.getLocationName().equals(editedLocation.getName())) {
                 Task previousTask = new Task(task.getName(), task.getDescription(), task.getLocationName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 Task newTask = new Task(task.getName(), task.getDescription(), newLocation.getName(), task.getDueDate(),
-                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor());
+                        task.getDurationInMinutes(), task.getEnergy().toString(), task.getListOfContributors(), task.getIfNewContributor(), task.getHasNewMessages());
                 newTaskList.add(newTask);
                 previousTaskList.add(previousTask);
                 taskPosition.add(i);
@@ -234,6 +213,16 @@ public class FilledTaskFragment extends TaskFragment {
             mDatabase.updateTask(previousTaskList.get(i), newTaskList.get(i), taskPosition.get(i));
             mTaskAdapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Take care of adding an unfilled task in the firebase when newTaskActivity returns
+     * an unfilled task.
+     *
+     * @param task the unfilled task to add in the database.
+     */
+    public void addUnfilled(Task task){
+        mDatabase.addNewTask(task, 0, true);
     }
 
     public static boolean locationIsUsedByTask(Location locationToCheck) {

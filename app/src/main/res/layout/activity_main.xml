@@ -14,115 +14,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/light_gray">
+        android:layout_weight="1">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <Spinner
+            android:id="@+id/time_user"
+            android:layout_width="160dp"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="200dp"
+            android:layout_height="50dp"
+            android:background="@drawable/time_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:text="@string/current_location_main_activity_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
-                    android:paddingRight="1dp"
-                    android:paddingEnd="1dp"
-                    android:textColor="@color/black" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:paddingStart="5dp"
-                        android:paddingRight="0dp"
-                        android:paddingEnd="0dp"
-                        app:srcCompat="@drawable/task_location_36dp"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/location_logo_content_description"/>
-
-                    <Spinner
-                        android:id="@+id/location_user"
-                        android:layout_width="match_parent"
-                        android:gravity="start"
-                        android:spinnerMode="dropdown"
-                        android:dropDownWidth="200dp"
-                        android:layout_weight="1"
-                        android:layout_height="35dp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="@color/white" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:text="@string/time_at_disposal_main_activity_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="3dp"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
-                    android:paddingRight="1dp"
-                    android:paddingEnd="1dp"
-                    android:textColor="@color/black" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="3dp"
-                        android:paddingStart="3dp"
-                        android:paddingRight="0dp"
-                        android:paddingEnd="0dp"
-                        app:srcCompat="@drawable/minutes_needed_36dp"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/stop_watch_icon_content_description"/>
-
-                    <Spinner
-                        android:id="@+id/time_user"
-                        android:layout_width="match_parent"
-                        android:spinnerMode="dropdown"
-                        android:dropDownWidth="200dp"
-                        android:layout_weight="1"
-                        android:layout_height="35dp" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/location_user"
+            android:layout_width="160dp"
+            android:spinnerMode="dropdown"
+            android:dropDownWidth="200dp"
+            android:layout_height="50dp"
+            android:background="@drawable/location_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp" />
 
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        android:id="@+id/spinner_unfilled_separation" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -204,14 +124,14 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray" />
+        android:background="@color/light_gray" />
 
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/tasks_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8">
+            android:layout_weight="20">
 
             <!--MarginRight to support older versions than API 17-->
             <android.support.design.widget.FloatingActionButton

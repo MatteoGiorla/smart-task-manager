@@ -15,15 +15,18 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.project.data.TaskHelper;
+import ch.epfl.sweng.project.data.TaskProvider;
+
 /**
  * Class that represents the inflated fragment located in the unfilled_task_activity
  */
 public class UnfilledTaskFragment extends TaskFragment {
 
-    private TaskListAdapter mTaskAdapter;
     private ArrayList<Task> unfilledTaskList;
     private ArrayList<Task> filledTaskList;
-
+    private TaskListAdapter mTaskAdapter;
+    private static TaskHelper mDatabase;
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *
@@ -47,10 +50,14 @@ public class UnfilledTaskFragment extends TaskFragment {
         swipeRefreshLayout.setEnabled(false);
     }
 
+
     @Override
-    void setOnCreateView(RecyclerView recyclerView) {
+    void setOnCreateView(RecyclerView recyclerView){
         recyclerView.setAdapter(mTaskAdapter);
         initSwipe();
+        TaskProvider provider = new TaskProvider(getActivity(), mTaskAdapter, unfilledTaskList);
+        mDatabase = provider.getTaskProvider();
+        mDatabase.retrieveAllData(currentUser, true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -75,7 +82,7 @@ public class UnfilledTaskFragment extends TaskFragment {
         final Task mTask = unfilledTaskList.get(position);
 
         Snackbar snackbar = Snackbar
-                .make(layout, mTask.getName() + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
+                .make(layout, Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -85,7 +92,7 @@ public class UnfilledTaskFragment extends TaskFragment {
                 });
         snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
         snackbar.show();
-        mTaskAdapter.remove(position);
+        mDatabase.deleteTask(mTask, position);
     }
 
     /**
@@ -107,8 +114,6 @@ public class UnfilledTaskFragment extends TaskFragment {
         mTaskAdapter.notifyDataSetChanged();
     }
 
-
-
     /**
      * Method called when we return from editing a task inside EditTaskActivity.
      *
@@ -118,11 +123,16 @@ public class UnfilledTaskFragment extends TaskFragment {
         // Get result from the result intent.
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
+        if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].isEmpty()){
+            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
+            editedTask.setName(sharedTaskName);
+        }
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
+            mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
             //if the task has been fulfilled, we can put it on the temporary list of good tasks.
-            if(Utils.isUnfilled(editedTask, this.getActivity().getApplicationContext())){
+            if(Utils.isUnfilled(editedTask)){
                 unfilledTaskList.set(indexEditedTask, editedTask);
             }else{
                 unfilledTaskList.remove(indexEditedTask);
@@ -130,11 +140,6 @@ public class UnfilledTaskFragment extends TaskFragment {
             }
             mTaskAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    void removeTaskAction(int position, Boolean isDone) {
-        unfilledTaskList.remove(position);
     }
 
     /**
