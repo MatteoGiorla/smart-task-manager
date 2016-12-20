@@ -119,5 +119,64 @@ public class DatabaseTest extends SuperTest{
     }
 
 
+    @Test
+    public void deleteTaskFromFirebase() {
+        ArrayList<Task> taskList = new ArrayList<>(10);
+
+        // TASK
+        String nameTest = "new name Test";
+        String descriptionTest = "new description test";
+        String locationNameTest = "locationName test workplace";
+        Date dueDateTest = new Date(0);
+        long durationTest = 55;
+        Task.Energy energyTest = Task.Energy.LOW;
+        String authorTest = "A test author";
+        List<String> listContributorsTest = new ArrayList<>();
+        listContributorsTest.add(authorTest);
+
+        Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
+        taskList.add(0, newTaskTest);
+
+        initFirebaseDb();
+        mDatabase.addNewTask(newTaskTest, 0, false);
+        mDatabase.deleteTask(newTaskTest, 0);
+    }
+
+    @Test
+    public void updateTaskFromFirebase() {
+        ArrayList<Task> taskList = new ArrayList<>(10);
+
+        // TASK
+        String nameTest = "old name Test";
+        String descriptionTest = "old description test";
+        String locationNameTest = "locationName test workplace";
+        Date dueDateTest = new Date(0);
+        long durationTest = 55;
+        Task.Energy energyTest = Task.Energy.LOW;
+        String authorTest = "A test author";
+        List<String> listContributorsTest = new ArrayList<>();
+        listContributorsTest.add(authorTest);
+
+        String nameTest2 = "new name Test";
+        String descriptionTest2 = "new description test";
+        String locationNameTest2 = "locationName test workplace";
+        Date dueDateTest2 = new Date(0);
+        long durationTest2 = 55;
+        Task.Energy energyTest2 = Task.Energy.LOW;
+        String authorTest2 = "A test author";
+        List<String> listContributorsTest2 = new ArrayList<>();
+        listContributorsTest2.add(authorTest2);
+
+        Task oldTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
+        Task newTaskTest = new Task(nameTest2, descriptionTest2, locationNameTest2, dueDateTest2, durationTest2, energyTest2.toString(), listContributorsTest2, 0L, false);
+        taskList.add(0, oldTaskTest);
+
+        initFirebaseDb();
+        mDatabase.addNewTask(oldTaskTest, 0, false);
+        mDatabase.updateTask(oldTaskTest, newTaskTest, 0);
+    }
+
+
+
 }
 
