@@ -6,9 +6,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.project.Utils;
 
-import static ch.epfl.sweng.project.Utils.FIREBASE_PROVIDER;
-import static ch.epfl.sweng.project.Utils.TEST_PROVIDER;
-
 /**
  * Class that decide which provider the app use in
  * order to manipulate users in the database
