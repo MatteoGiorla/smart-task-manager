@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import ch.epfl.sweng.project.chat.ChatActivity;
@@ -141,8 +142,16 @@ public class EditTaskActivity extends TaskActivity {
      */
     @Override
     boolean titleIsNotUnique(String title) {
+        ArrayList<Task> allTask = new ArrayList<>();
+        allTask.addAll(taskList);
+        if(Utils.isUnfilled(mTaskToBeEdited)){
+            //if the current edited task is unfilled, we are in the UnfilledTaskFragment
+            allTask.addAll(FilledTaskFragment.getTaskList());
+        }else{
+            allTask.addAll(MainActivity.getUnfilledTaskList());
+        }
         boolean result = false;
-        for (Task task : taskList) {
+        for (Task task : allTask) {
             if (task.getName().equals(title) && !task.getName().equals(mTaskToBeEdited.getName())) {
                 result = true;
             }
@@ -174,7 +183,14 @@ public class EditTaskActivity extends TaskActivity {
         taskStatus = CONTRIBUTOR_MODIFIED;
         setResultIntent();
         taskStatus = TASK_IS_MODIFIED;
-        String locationToTest = mLocation.getSelectedItem().toString();
+        String locationToTest = Utils.getSelectOne();
+        if(mLocation != null){
+            try{
+                locationToTest = mLocation.getSelectedItem().toString();
+            }catch(NullPointerException n){
+                locationToTest = Utils.getSelectOne();
+            }
+        }
         if(!locationToTest.equals(Utils.getEverywhereLocation()) && listOfContributors.size() == 2) {
             Toast.makeText(getApplicationContext(), R.string.location_warning_if_multiple_contributors, Toast.LENGTH_LONG).show();
         }

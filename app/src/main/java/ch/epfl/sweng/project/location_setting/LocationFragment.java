@@ -231,7 +231,8 @@ public class LocationFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.floating_location_delete:
                 if (!firstConnection) {
-                    if (FilledTaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))) {
+                    if (FilledTaskFragment.locationIsUsedByTask(locationList.get(itemInfo.position))
+                            || MainActivity.locationIsUsedByTask(locationList.get(itemInfo.position))) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         // Add the buttons
                         builder.setPositiveButton(R.string.ok, new MyOnClickListener(itemInfo));
@@ -312,9 +313,11 @@ public class LocationFragment extends Fragment {
             throw new IllegalArgumentException("Invalid extras returned from EditLocationActivity !");
         } else {
             if (!firstConnection) {
-                if (FilledTaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
+                if (FilledTaskFragment.locationIsUsedByTask(locationList.get(indexEditedLocation))
+                        || MainActivity.locationIsUsedByTask(locationList.get(indexEditedLocation))) {
                     //Replace location edited in all tasks using it
                     FilledTaskFragment.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
+                    MainActivity.modifyLocationInTaskList(locationList.get(indexEditedLocation), editedLocation);
                 }
             }
             locationList.set(indexEditedLocation, editedLocation);
@@ -403,6 +406,7 @@ public class LocationFragment extends Fragment {
             //Replace locations
             //Create a location from which coordinates don't matter because only the title is stored in the tasks
             FilledTaskFragment.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
+            MainActivity.modifyLocationInTaskList(locationList.get(itemInfo.position), new Location(newLocationName, 0, 0));
 
             removeLocation(itemInfo);
             listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));

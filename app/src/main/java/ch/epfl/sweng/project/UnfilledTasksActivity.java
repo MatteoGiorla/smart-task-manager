@@ -26,10 +26,13 @@ public class UnfilledTasksActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new OnReturnArrowClickListener());
 
         ArrayList<Task> unfilledTasks = getIntent().getParcelableArrayListExtra(MainActivity.UNFILLED_TASKS);
+        User currUser = getIntent().getParcelableExtra(MainActivity.USER_KEY);
+
         //Add the user to TaskFragments
         unfilledFragment = new UnfilledTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(MainActivity.UNFILLED_TASKS, unfilledTasks);
+        bundle.putParcelable(MainActivity.USER_KEY, currUser);
         unfilledFragment.setArguments(bundle);
 
         if (savedInstanceState == null) {
