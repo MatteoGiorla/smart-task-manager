@@ -59,7 +59,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public void add(Task task, int position) {
-        tasksList.add(position, task);
+        if(position == 0 || position >= tasksList.size()) {
+            tasksList.add(task);
+        } else {
+            tasksList.add(position, task);
+        }
         notifyItemInserted(position);
     }
 
