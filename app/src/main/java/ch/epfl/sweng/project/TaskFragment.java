@@ -86,7 +86,6 @@ public abstract class TaskFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-
         setOnCreateView(recyclerView);
         return rootView;
     }

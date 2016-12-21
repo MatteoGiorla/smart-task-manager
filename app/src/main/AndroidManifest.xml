@@ -115,7 +115,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".settings.SettingsAboutActivity" />
-        <activity android:name=".settings.SettingsSuggestActivity"></activity>
+        <activity android:name=".settings.SettingsSuggestActivity"/>
     </application>
 
 </manifest>
