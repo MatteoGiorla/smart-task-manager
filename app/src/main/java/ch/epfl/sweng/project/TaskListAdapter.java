@@ -1,11 +1,11 @@
 package ch.epfl.sweng.project;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,18 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         this.tasksList = taskList;
         mContext = context;
     }
+
+    public void setBackground(boolean isUnfilled) {
+        RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);
+        if(recyclerView != null) {
+            if(!isUnfilled && getItemCount() == 0) {
+                recyclerView.setBackgroundResource(R.drawable.db8);
+            }else{
+                recyclerView.setBackgroundColor(0x00000000);
+            }
+        }
+    }
+
 
     public void sort(Comparator<Task> comparator) {
         Collections.sort(tasksList, comparator);

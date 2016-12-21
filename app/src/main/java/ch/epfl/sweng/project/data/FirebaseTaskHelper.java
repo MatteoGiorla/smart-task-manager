@@ -1,10 +1,8 @@
 package ch.epfl.sweng.project.data;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -236,16 +234,10 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param dataSnapshot Data recovered from the database
      */
     private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled) {
-        RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);
-        if(mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-            recyclerView.setBackgroundResource(R.drawable.db8);
-        } else {
-            recyclerView.setBackgroundResource(0);
-        }
-
         mTaskList.clear();
         dataSnapshotTaskParserRetriever(mTaskList, requestUnfilled, dataSnapshot);
 
+        mAdapter.setBackground(requestUnfilled);
         mAdapter.notifyDataSetChanged();
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
