@@ -60,7 +60,7 @@
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:paddingTop="@dimen/activity_vertical_margin"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
+                    android:textSize="23sp"
                     android:textStyle="normal"
                     android:theme="@style/ActionBar" />
 
@@ -78,7 +78,7 @@
                     android:paddingTop="@dimen/activity_vertical_margin"
                     android:textColor="@color/white"
                     android:textColorHint="@drawable/selector"
-                    android:textSize="30sp"
+                    android:textSize="23sp"
                     android:textStyle="normal"
                     android:theme="@style/ActionBar" />
 

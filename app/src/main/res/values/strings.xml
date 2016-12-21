@@ -30,7 +30,7 @@
     <string name="flt_ctx_menu_edit">Edit</string>
 
     <!-- Maximum lengths -->
-    <string name="max_length_title">20</string>
+    <string name="max_length_title">35</string>
     <string name="max_length_description">1000</string>
 
     <!-- Error messages -->
