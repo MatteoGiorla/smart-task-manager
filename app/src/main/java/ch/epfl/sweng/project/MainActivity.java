@@ -266,6 +266,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 if (unfilled) {
                     unfilledTasks.add(newTask);
                     mainFragment.addUnfilled(newTask);
+
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
@@ -273,11 +274,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
          } else if(requestCode == unfilledTaskRequestCode) {
                 if(resultCode == RESULT_OK){
-                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                    for(Task t : newFinishedTasks){
-                        mainFragment.addTask(t);
-                    }
-                    
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }

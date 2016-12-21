@@ -261,6 +261,11 @@ public class FirebaseTaskHelper implements TaskHelper {
      */
      private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
         for (DataSnapshot task : dataSnapshot.getChildren()) {
+            List<String> taskNames = new ArrayList<>();
+            //to avoid snychronisation duplicate.
+            for(Task t: mTaskList){
+                taskNames.add(t.getName());
+            }
             if (task != null) {
                 String title = task.child("name").getValue(String.class);
                 String description = task.child("description").getValue(String.class);
@@ -297,7 +302,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 }
                 //will add a new task to the current list only in the case where the task will stay in its current adapter
                 // (i.e. will not add it if and unfilled task has been filled, thus leaving current adapter).
-                if(requestUnfilled == Utils.isUnfilled(newTask)){
+                if((requestUnfilled == Utils.isUnfilled(newTask)) && !taskNames.contains(newTask.getName())){
                     mTaskList.add(newTask);
                 }
             }

@@ -24,7 +24,6 @@ import ch.epfl.sweng.project.data.TaskProvider;
 public class UnfilledTaskFragment extends TaskFragment {
 
     private ArrayList<Task> unfilledTaskList;
-    private ArrayList<Task> filledTaskList;
     private TaskListAdapter mTaskAdapter;
     private static TaskHelper mDatabase;
     /**
@@ -37,7 +36,6 @@ public class UnfilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        filledTaskList = new ArrayList<>();
         unfilledTaskList = getBundle().getParcelableArrayList(MainActivity.UNFILLED_TASKS);
         if(unfilledTaskList == null) {
             throw new IllegalArgumentException("unfilledTaskList passed with the intend is null");
@@ -136,7 +134,6 @@ public class UnfilledTaskFragment extends TaskFragment {
                 unfilledTaskList.set(indexEditedTask, editedTask);
             }else{
                 unfilledTaskList.remove(indexEditedTask);
-                filledTaskList.add(editedTask);
             }
             mTaskAdapter.notifyDataSetChanged();
         }
@@ -155,18 +152,6 @@ public class UnfilledTaskFragment extends TaskFragment {
         }
     }
 
-    /**
-     * Getter for the taskList of task that have been filled
-     *
-     * @return an immutable copy of taskList
-     */
-    public List<Task> getFilledTaskList() {
-        if(unfilledTaskList != null){
-            return new ArrayList<>(filledTaskList);
-        }else{
-            return null;
-        }
-    }
 
     /**
      * Start the EditTaskActivity for result when the user press the edit button.
