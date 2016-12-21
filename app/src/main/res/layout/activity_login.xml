@@ -35,7 +35,7 @@
         android:text="@string/get_started_login"
         android:textStyle="bold"
         android:textColor="@color/black_transparent"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="110dp"
         android:layout_gravity="center_horizontal" />
 
     <TextView
