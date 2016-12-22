@@ -96,16 +96,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     public static Map<Integer, String> ENERGY_MAP;
     private static Map<String, Integer> REVERSE_ENERGY;
 
-    private static String everywhere_location;
-    private static String select_one_location;
-
-
     private TableRow unfilledTaskButton;
-
 
     // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
 
     private static final int REQUEST_LOCATION = 2;
 
@@ -300,7 +294,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             // Get last known recent location:
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
                 onLocationChanged(mCurrentLocation);
             }
