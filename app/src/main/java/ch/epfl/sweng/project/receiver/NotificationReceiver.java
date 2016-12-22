@@ -6,6 +6,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Class that extends BroadcastReceiver
+ *
+ * Receiver that is called when a notification rises.
+ * It notifies the user.
+ */
 public class NotificationReceiver extends BroadcastReceiver{
     public static final String NOTIFICATION_ID = "notification-id";
     public static final String NOTIFICATION_KEY = "notification";

@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class User implements Parcelable {
     public static final String DEFAULT_EMAIL = "trixyfinger@gmail.com";
-    public static final String CONTRIBUTOR_EMAIL = "cirdec3961@gmail.com";
     public static final String DEFAULT_NAME = "Trixy";
 
     private String email;
@@ -124,17 +123,6 @@ public class User implements Parcelable {
                 listLocations.set(i,location);
             }
         }
-    }
-
-    /**
-     * Allow the user to add a new location
-     * @param location The new Location
-     */
-    public void addLocation(Location location) {
-        if(location == null) {
-            throw new IllegalArgumentException("Bad locationName update !");
-        }
-        listLocations.add(location);
     }
 
     /**

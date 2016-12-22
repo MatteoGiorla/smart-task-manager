@@ -3,13 +3,9 @@ package ch.epfl.sweng.project;
 import android.support.design.widget.TextInputLayout;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.view.View;
-import android.widget.EditText;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-
-import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkNotNull;
 
 final class TestErrorTextEdit {
     /**

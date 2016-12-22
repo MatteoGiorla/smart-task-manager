@@ -55,8 +55,10 @@ public class TaskNotification extends AsyncTask<Integer, Void, Void> {
      * @param id The index of the task in the list.
      */
     public void createUniqueNotification(int id) {
-        Task task = taskList.get(id);
-        scheduleNotification(buildNotification(task), setDelayToNotify(task), id);
+        if(id < taskList.size() && id >= 0) {
+            Task task = taskList.get(id);
+            scheduleNotification(buildNotification(task), setDelayToNotify(task), id);
+        }
     }
 
     /**

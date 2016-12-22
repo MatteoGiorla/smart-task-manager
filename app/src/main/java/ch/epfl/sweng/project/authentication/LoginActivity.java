@@ -383,30 +383,4 @@ public class LoginActivity
             public void onCancelled(DatabaseError databaseError) {}
         });
     }
-
-                /**
-                 * Not used method for the moment but maybe useful in the future.
-                 */
-    /*private void signOut() {
-        // Firebase sign out
-        //mAuth.signOut();
-        
-        if(mGoogleClient.isConnected()) {
-            // Google sign out
-        Auth.GoogleSignInApi.signOut(mGoogleClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(@NonNull Status status) {
-                        //updateUI(null);
-                    }
-                });
-        } else {
-            // Facebook log out
-            LoginManager.getInstance().logOut();
-        }
-
-
-        FirebaseAuth.getInstance().signOut();
-
-    }*/
-    }
+}

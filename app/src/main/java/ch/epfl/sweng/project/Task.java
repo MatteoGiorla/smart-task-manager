@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -123,6 +124,13 @@ public class Task implements Parcelable {
         this.ifNewContributor = ifNewContributor;
         this.hasNewMessages = hasNewMessages;
         this.listOfMessages = new ArrayList<>(listOfMessages);
+    }
+
+    public Task(Task task) {
+        this(task.getName(), task.getDescription(), task.getLocationName(), new Date(task.getDueDate().getTime())
+                , task.getDurationInMinutes(), task.getEnergy().toString()
+                , Collections.unmodifiableList(task.getListOfContributors()), task.getIfNewContributor(),
+                task.getHasNewMessages(), Collections.unmodifiableList(task.getListOfMessages()));
     }
 
 
@@ -389,15 +397,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Method returning a static comparator on Task.
-     *
-     * @return Static Comparator
-     */
-    public static Comparator<Task> getStaticComparator() {
-        return new StaticComparator();
-    }
-
-    /**
      * Method returning a dynamic comparator on Task.
      *
      * @param currentLocation The user's current location
@@ -464,27 +463,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Private static inner class representing the static comparator.
-     */
-    private static class StaticComparator implements Comparator<Task> {
-
-        /**
-         * compare method of the Comparator.
-         *
-         * @param o1 the first task to compare
-         * @param o2 the second task to compare
-         * @return 0 if o1 == o2,
-         *           a value less than 0 if o1 < o2
-         *           a value greater than 0 if o1 > o2
-         */
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        public int compare(Task o1, Task o2) {
-            return Double.compare(o2.computeStaticSortValue(), o1.computeStaticSortValue());
-        }
-    }
-
-    /**
      * Private static inner class representing the dynamic comparator.
      */
     private static class DynamicComparator implements Comparator<Task> {
@@ -494,8 +472,6 @@ public class Task implements Parcelable {
         private static final int TIME_LIMIT = 120;
         private final String currentLocation;
         private final int currentTimeDisposal;
-        private String everywhere_location = "";
-        private String select_one_location = "";
 
         /**
          * Private constructor of the class.

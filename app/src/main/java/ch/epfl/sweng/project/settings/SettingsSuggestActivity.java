@@ -1,9 +1,9 @@
 package ch.epfl.sweng.project.settings;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,12 +13,25 @@ import java.util.regex.Pattern;
 
 import ch.epfl.sweng.project.R;
 
+/**
+ * Activity where users can suggest improvements for the app by
+ * sending an email to a developer.
+ *
+ */
 public class SettingsSuggestActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayoutName;
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutMessage;
 
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +107,10 @@ public class SettingsSuggestActivity extends AppCompatActivity {
     }
 
     /**
-     * method is used for checking valid email id format.
+     * Method is used for checking valid email id format.
      *
-     * @param email text typed by the user
-     * @return boolean true for valid false for invalid
+     * @param email Text typed by the user
+     * @return boolean True for valid false for invalid
      */
     protected boolean isEmailValid(String email) {
         boolean isValid = false;

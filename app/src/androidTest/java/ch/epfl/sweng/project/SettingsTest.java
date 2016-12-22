@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
+import com.facebook.FacebookSdk;
+
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +20,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class SettingsTest {
+public class SettingsTest extends SuperTest{
 
     private SharedPreferences prefs;
 
@@ -37,6 +39,7 @@ public class SettingsTest {
             prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
             prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
             prefs.edit().putBoolean(actualContext.getString(R.string.new_user), false).apply();
+            FacebookSdk.sdkInitialize(actualContext);
             super.beforeActivityLaunched();
         }
     };
@@ -56,6 +59,13 @@ public class SettingsTest {
         onView(withId(R.id.next)).check(matches(isDisplayed()));
         onView(withId(R.id.skip)).perform(click());
         onView(withId(R.id.settings_text_tutorial)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void logoutFromSettings() {
+        SuperTest.waitForActivity();
+        onView(withId(R.id.settings_text_logout)).perform(click());
+        onView(withId(R.id.google_sign_in_button)).check(matches(isDisplayed()));
     }
 
     @Test

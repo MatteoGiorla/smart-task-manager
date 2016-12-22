@@ -18,14 +18,20 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
 
+import ch.epfl.sweng.project.EditTaskActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.FirebaseChatHelper;
 
+/**
+ * Class assuring that user can chat between each others when
+ * clicking on the chat button in the details of the task.
+ */
 public class ChatActivity extends AppCompatActivity {
     public static final String TASK_CHAT_KEY = "ch.epfl.sweng.project.chat.TASK_CHAT_KEY";
+
 
     private Intent intent;
     private Task task;
@@ -34,6 +40,14 @@ public class ChatActivity extends AppCompatActivity {
     private FloatingActionButton sendMssgButton;
     private String mail;
 
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,6 +180,9 @@ public class ChatActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), EditTaskActivity.class);
+            intent.putExtra(TASK_CHAT_KEY, task);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

@@ -42,7 +42,7 @@ public class TaskProvider {
             case Utils.FIREBASE_PROVIDER:
                 return new FirebaseTaskHelper(mContext, mAdapter, mTaskList);
             case Utils.TEST_PROVIDER:
-                return new LocalTaskHelper(mAdapter, mTaskList);
+                return new LocalTaskHelper(mAdapter);
             default:
                 throw new IllegalArgumentException("This provider does not exists !");
         }

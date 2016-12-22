@@ -15,11 +15,9 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
@@ -31,7 +29,6 @@ public class FilledTaskFragment extends TaskFragment {
 
     private static TaskListAdapter mTaskAdapter;
     private static ArrayList<Task> taskList;
-    private static TaskHelper mDatabase;
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -50,7 +47,7 @@ public class FilledTaskFragment extends TaskFragment {
     }
 
     @Override
-    void setOnActivityCreated(final SwipeRefreshLayout swipeRefreshLayout) {
+    void setSwipeToRefresh(final SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,9 +81,9 @@ public class FilledTaskFragment extends TaskFragment {
     @Override
     void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
         if (direction == ItemTouchHelper.LEFT){
-            createSnackBar(position, false, recyclerView);
+            deletion(position, false, recyclerView);
         } else {
-            createSnackBar(position, true, recyclerView);
+            deletion(position, true, recyclerView);
         }
     }
 
@@ -97,7 +94,7 @@ public class FilledTaskFragment extends TaskFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    void createSnackBar(final int position, Boolean isDone, final RecyclerView recyclerView) {
+    void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FloatingActionButton add_button = (FloatingActionButton) getActivity().findViewById(R.id.add_task_button);
 
         final Task mTask = taskList.get(position);
@@ -135,18 +132,22 @@ public class FilledTaskFragment extends TaskFragment {
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
         if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].isEmpty()){
-            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
+            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName()
+                    , editedTask.getListOfContributors().get(0)
+                    , editedTask.getListOfContributors().get(0));
+
             editedTask.setName(sharedTaskName);
         }
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
-            //taskList.set(indexEditedTask, editedTask);
-            mTaskAdapter.notifyDataSetChanged();
-            Toast.makeText(getActivity().getApplicationContext(),
-                    Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
-                    Toast.LENGTH_SHORT).show();
+            if(indexEditedTask <= (taskList.size() -1) && indexEditedTask >= 0) {
+                mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
+                mTaskAdapter.notifyDataSetChanged();
+                Toast.makeText(getActivity().getApplicationContext(),
+                        Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
+                        Toast.LENGTH_SHORT).show();
+            }
 
         }
         //Create a notification
@@ -192,6 +193,12 @@ public class FilledTaskFragment extends TaskFragment {
         }
     }
 
+    /**
+     * Modifies the locations in all the task by replacing the given existing location with the new one
+     *
+     * @param editedLocation the given existing location
+     * @param newLocation the new location
+     */
     public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
@@ -225,6 +232,12 @@ public class FilledTaskFragment extends TaskFragment {
         mDatabase.addNewTask(task, 0, true);
     }
 
+    /**
+     * Tests whether a location is used by an existing task or not
+     *
+     * @param locationToCheck the location to check
+     * @return true if the location is used, false otherwise
+     */
     public static boolean locationIsUsedByTask(Location locationToCheck) {
         for(Task task : taskList) {
             if (task.getLocationName().equals(locationToCheck.getName())){

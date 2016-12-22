@@ -3,7 +3,6 @@ package ch.epfl.sweng.project.data;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,7 +12,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +41,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     private ArrayList<Task> mTaskList;
     private final Context mContext;
 
-
+    /**
+     * Constructor of the class
+     *
+     * @param context The context of the class
+     * @param adapter The adapter of the list that need to be edited
+     * @param taskList The list of tasks
+     */
     public FirebaseTaskHelper(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;
@@ -126,7 +130,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     @Override
     public void updateTask(final Task original, final Task updated, int position) {
-        if(Utils.hasContributors(original)){
+        if(Utils.hasContributors(updated) || Utils.hasContributors(original)){
             /**
              * This for loop takes care of updating the tasks according to the new
              * contributor list of the updated task.
@@ -135,8 +139,12 @@ public class FirebaseTaskHelper implements TaskHelper {
              */
             for(final String mail : updated.getListOfContributors()){
                 if(original.getListOfContributors().contains(mail)){
-
-                    String oldName =  Utils.sharedTaskPreProcessing(original, mail).getName();
+                    String oldName;
+                    if(Utils.hasContributors(original)) {
+                        oldName =  Utils.sharedTaskPreProcessing(original, mail).getName();
+                    }else{
+                        oldName = original.getName();
+                    }
 
                     Task updatedTask = Utils.sharedTaskPreProcessing(updated, mail);
                     //removing the old task
@@ -182,9 +190,9 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     * Will warn current user of any new changes made by another contributor on his shared tasks.
      *
-     *
-     * @param mTaskList
+     * @param mTaskList the list of task to check if changes have been made to.
      */
     private void warnContributor(List<Task> mTaskList) {
         List<Task> taskAddedAsContributor = new ArrayList<>();
@@ -236,13 +244,10 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param dataSnapshot Data recovered from the database
      */
     private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled) {
-        if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-            Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
-        }
-
         mTaskList.clear();
         dataSnapshotTaskParserRetriever(mTaskList, requestUnfilled, dataSnapshot);
 
+        mAdapter.setBackground(requestUnfilled);
         mAdapter.notifyDataSetChanged();
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
@@ -259,8 +264,13 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param requestUnfilled whether we want unfilled tasks or filled task from the database.
      * @param dataSnapshot the snapshot from the firebase database containing the tasks to extract.
      */
-     private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
+    private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
         for (DataSnapshot task : dataSnapshot.getChildren()) {
+            List<String> taskNames = new ArrayList<>();
+            //to avoid snychronisation duplicate.
+            for(Task t: mTaskList){
+                taskNames.add(t.getName());
+            }
             if (task != null) {
                 String title = task.child("name").getValue(String.class);
                 String description = task.child("description").getValue(String.class);
@@ -282,7 +292,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 if(task.child("ifNewContributor").getValue() != null){
                     newContributor  = (long) task.child("ifNewContributor").getValue();
                 } else {
-                    newContributor = 0;
+                    newContributor = 0L;
                 }
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};
@@ -297,7 +307,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 }
                 //will add a new task to the current list only in the case where the task will stay in its current adapter
                 // (i.e. will not add it if and unfilled task has been filled, thus leaving current adapter).
-                if(requestUnfilled == Utils.isUnfilled(newTask)){
+                if((requestUnfilled == Utils.isUnfilled(newTask)) && !taskNames.contains(newTask.getName())){
                     mTaskList.add(newTask);
                 }
             }
@@ -305,11 +315,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     *Used to update a single unfilled task, in the case where its location need
+     * to be changed by an action on location settings activity. Should only be used in this case,
+     * for general purpose, use updateTask instead.
      *
-     *
-     * @param user
-     * @param original
-     * @param updated
+     * @param user information relative to the user to get his data on firebase
+     * @param original the task before the location modification
+     * @param updated the task with the location modified
      */
     public static void updateUnfilledFromMain(User user, Task original, Task updated){
         DatabaseReference taskRef = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).child(original.getName()).getRef();
@@ -320,9 +332,14 @@ public class FirebaseTaskHelper implements TaskHelper {
     }
 
     /**
+     * Take care of retrieving only the unfilled task from the database. This function exists
+     * for the mainActivity to be able to have the unfilled tasks in order to show the digest and
+     * display the button to access unfilled inbox. To retrieve the task in a broader way,
+     * use "retrieveAllData" with the corresponding boolean argument.
      *
-     * @param user
-     * @param unfilledTask
+     *
+     * @param user information relative to the user to get his data on firebase
+     * @param unfilledTask the list to be filled by the unfilled tasks fetched from firebase
      */
     public static void retrieveUnfilledFromMain(User user, final ArrayList<Task> unfilledTask){
         Query myTasks = mDatabase.child("tasks").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();

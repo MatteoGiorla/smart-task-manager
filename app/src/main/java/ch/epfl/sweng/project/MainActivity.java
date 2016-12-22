@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -88,7 +86,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> durationAdapter;
 
-
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
     private static Map<Integer, String> START_DURATION_MAP;
@@ -96,16 +93,10 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     public static Map<Integer, String> ENERGY_MAP;
     private static Map<String, Integer> REVERSE_ENERGY;
 
-    private static String everywhere_location;
-    private static String select_one_location;
-
-
     private TableRow unfilledTaskButton;
-
 
     // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
 
     private static final int REQUEST_LOCATION = 2;
 
@@ -129,6 +120,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         // Initialize googleApiClient that will trigger the geolocation part
         createGoogleApiClient();
+
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().setIcon(R.mipmap.new_logo);
@@ -266,6 +258,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 if (unfilled) {
                     unfilledTasks.add(newTask);
                     mainFragment.addUnfilled(newTask);
+
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
@@ -273,11 +266,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
          } else if(requestCode == unfilledTaskRequestCode) {
                 if(resultCode == RESULT_OK){
-                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                    for(Task t : newFinishedTasks){
-                        mainFragment.addTask(t);
-                    }
-                    
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
@@ -304,7 +292,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             // Get last known recent location:
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
                 onLocationChanged(mCurrentLocation);
             }
@@ -391,7 +379,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     private void startLocationUpdates() {
         // Create the location request
-        long UPDATE_INTERVAL = 30 * 1000;
+        long UPDATE_INTERVAL = 300 * 1000;
         LocationRequest mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL);
@@ -545,7 +533,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * initialize the functionality of the TableRow
+     * Initialize the functionality of the TableRow
      */
     private void initializeUnfilledTableRow() {
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
@@ -571,9 +559,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * take care of displaying the 4 most recent unfilled task
+     * Take care of displaying the 4 most recent unfilled task
      * on the tableRow
-     *
      */
     private void initializeUnfilledPreview(){
         final int unfilledNbr = unfilledTasks.size();
@@ -615,6 +602,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
+    /**
+     * Create the maps used by the spinners in MainActivity
+     */
     private void createUtilityMaps() {
         DURATION_MAP = new LinkedHashMap<>();
         DURATION_MAP.put(0, mContext.getResources().getString(R.string.select_one));
@@ -688,18 +678,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * Construct the table from which the user can set the energy
-     * AVAILABLE to do a task.
-     * It is also used to know the energy of the user
-     * in order to sort the list accordingly.
-     *
-     * @return String[] The array containing the energies.
-     */
-    public static String[] getEnergyTable() {
-        return ENERGY_MAP.values().toArray(new String[ENERGY_MAP.values().size()]);
-    }
-
-    /**
      * Construct the table from which the user can set the time
      * REQUIRED to do a task.
      *
@@ -765,6 +743,12 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         triggerDynamicSort();
     }
 
+    /**
+     * Modifies the locations in all the task by replacing the given existing location with the new one
+     *
+     * @param editedLocation the given existing location
+     * @param newLocation the new location
+     */
     public static void modifyLocationInTaskList(ch.epfl.sweng.project.Location editedLocation, ch.epfl.sweng.project.Location newLocation) {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
@@ -788,7 +772,12 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
-
+    /**
+     * Tests whether a location is used by an existing task or not
+     *
+     * @param locationToCheck the location to check
+     * @return true if the location is used, false otherwise
+     */
     public static boolean locationIsUsedByTask(ch.epfl.sweng.project.Location locationToCheck) {
         for(Task task : unfilledTasks) {
             if (task.getLocationName().equals(locationToCheck.getName())){

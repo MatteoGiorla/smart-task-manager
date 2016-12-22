@@ -4,8 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.maps.model.LatLng;
-
 /**
  * Class representing a locationName
  */
@@ -39,6 +37,7 @@ public class Location implements Parcelable{
     private String name;
     private double latitude;
     private double longitude;
+
     /**
      * Constructor of the class
      *
@@ -135,15 +134,6 @@ public class Location implements Parcelable{
         if (newLatitude < -90 || newLatitude > 90)
             throw new IllegalArgumentException("New latitude passed to Location's setter invalid");
         latitude = newLatitude;
-    }
-
-    /**
-     * Getter returning the gps coordinates of the location
-     *
-     * @return GPSCoordinates of the location
-     */
-    public LatLng getGPSCoordinates() {
-        return new LatLng(latitude, longitude);
     }
 
     /**

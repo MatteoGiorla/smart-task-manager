@@ -2,14 +2,26 @@ package ch.epfl.sweng.project.settings;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import ch.epfl.sweng.project.R;
 
+/**
+ * Class that provides the information about
+ * the developers that participated in the creation of the app.
+ */
 public class SettingsAboutActivity extends AppCompatActivity {
 
+    /**
+     * Override the onCreate method
+     * Initializes the fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +34,7 @@ public class SettingsAboutActivity extends AppCompatActivity {
     }
 
     /**
-     * get the emoji corresponding to the unicode
+     * Get the emoji corresponding to the unicode
      *
      * @param unicode hexadecimal representing an emoji
      * @return the emoji as a String
@@ -32,7 +44,7 @@ public class SettingsAboutActivity extends AppCompatActivity {
     }
 
     /**
-     * get the App version and write it in the corresponding TextView
+     * Get the App version and write it in the corresponding TextView
      */
     private void setAppVersion(){
         TextView version = (TextView) findViewById(R.id.settings_about_text_version);
@@ -46,7 +58,7 @@ public class SettingsAboutActivity extends AppCompatActivity {
     }
 
     /**
-     * set the team name for each corresponding TextView
+     * Set the team name for each corresponding TextView
      */
     private void setTeamNames() {
         TextView nameMikael = (TextView) findViewById(R.id.settings_about_text_mikael);
