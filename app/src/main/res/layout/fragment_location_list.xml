@@ -7,7 +7,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:orientation="vertical"
@@ -63,7 +64,8 @@
                 android:id="@+id/default_list_view_locations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="2dp"/>
+                android:paddingBottom="2dp"
+                tools:ignore="NestedScrolling" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -98,7 +100,8 @@
             <ListView
                 android:id="@+id/list_view_locations"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                tools:ignore="NestedScrolling" />
 
             <Space
                 android:layout_width="match_parent"

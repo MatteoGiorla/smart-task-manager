@@ -87,10 +87,10 @@ public class User implements Parcelable {
     /**
      * Getter returning the name of the locations
      *
-     * @return List of the names of the locations
+     * @return ArrayList of the names of the locations
      */
-    public List<String> getListNamesLocations() {
-        List<String> names = new ArrayList<>();
+    public ArrayList<String> getListNamesLocations() {
+        ArrayList<String> names = new ArrayList<>();
         for (Location loc : getListLocations()) {
             names.add(loc.getName());
         }

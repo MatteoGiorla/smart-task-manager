@@ -13,13 +13,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.epfl.sweng.project.IntroActivity;
 import ch.epfl.sweng.project.R;
-import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.location_setting.LocationSettingActivity;
 
 public class SettingsActivity extends AppCompatActivity {
-
-    private static User currentUser;
 
     /**
      * Override the onCreate method

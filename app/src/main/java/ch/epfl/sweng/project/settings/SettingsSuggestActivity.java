@@ -112,7 +112,7 @@ public class SettingsSuggestActivity extends AppCompatActivity {
      * @param email Text typed by the user
      * @return boolean True for valid false for invalid
      */
-    protected boolean isEmailValid(String email) {
+    private boolean isEmailValid(String email) {
         boolean isValid = false;
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";

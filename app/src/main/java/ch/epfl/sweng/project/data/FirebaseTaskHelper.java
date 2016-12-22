@@ -38,7 +38,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     private static final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private final TaskListAdapter mAdapter;
-    private ArrayList<Task> mTaskList;
+    private final ArrayList<Task> mTaskList;
     private final Context mContext;
 
     /**
@@ -267,7 +267,7 @@ public class FirebaseTaskHelper implements TaskHelper {
     private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             List<String> taskNames = new ArrayList<>();
-            //to avoid snychronisation duplicate.
+            //to avoid synchronization duplicate.
             for(Task t: mTaskList){
                 taskNames.add(t.getName());
             }

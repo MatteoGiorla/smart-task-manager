@@ -20,9 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
-import java.util.Arrays;
-import java.util.List;
-
 import ch.epfl.sweng.project.data.UserProvider;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -52,16 +49,11 @@ import static org.hamcrest.Matchers.instanceOf;
 @RunWith(AndroidJUnit4.class)
 public class LocationTaskTest extends SuperTest {
 
-    private SharedPreferences prefs;
-
     @BeforeClass
     public static void setUserProvider() {
         UserProvider.setProvider(Utils.TEST_PROVIDER);
     }
     private UiDevice mUiDevice;
-    private List<String> taskNames;
-    private String LOCATION_EVEREST = "Everest";
-    private String LOCATION_MARS = "Mars";
 
     @Before
     public void setup() {
@@ -75,7 +67,7 @@ public class LocationTaskTest extends SuperTest {
         @Override
         protected void beforeActivityLaunched(){
             Context actualContext = InstrumentationRegistry.getTargetContext();
-            prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
+            SharedPreferences prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
             prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
             prefs.edit().putBoolean(actualContext.getString(R.string.new_user), false).apply();
             super.beforeActivityLaunched();
@@ -83,16 +75,15 @@ public class LocationTaskTest extends SuperTest {
     };
 
     public void addNewLocation() {
+        String LOCATION_MARS = "Mars";
         createALocation(LOCATION_MARS);
+        String LOCATION_EVEREST = "Everest";
         createALocation(LOCATION_EVEREST);
     }
 
     public void addNewTask() {
         String marsTask = "search for water";
         String everestTask = "climb the everest";
-
-        taskNames = Arrays.asList(marsTask, everestTask);
-
         addTask(marsTask, R.id.energy_low, 1, 3);
         addTask(everestTask, R.id.energy_normal, 2, 4);
     }

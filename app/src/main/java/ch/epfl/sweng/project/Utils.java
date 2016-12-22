@@ -24,7 +24,7 @@ public class Utils extends Application {
     public static final String FIREBASE_PROVIDER = "Firebase";
     public static final String TEST_PROVIDER = "Tests";
 
-    public static Context getContext(){
+    private static Context getContext(){
         return mContext;
     }
     /**
@@ -103,7 +103,7 @@ public class Utils extends Application {
      * for a task shared with contributors, take care of separating
      * the suffix (@@{creator}@@{sharer}) from the title.
      *
-     * @param title the title whom we want to separe the suffix
+     * @param title the title whom we want to separate the suffix
      * @return an array which element at zero is the title,
      *          and at index 1 is the suffix if it exists,
      *          or the empty string otherwise.
@@ -145,7 +145,7 @@ public class Utils extends Application {
     }
 
     /**
-     * Create a shared task title in the forme of :
+     * Create a shared task title in the form of :
      * title--separatorSequence--creatorEmail--separatorSequence--sharerEmail
      *
      * @param title the visible to the user title of the task
@@ -155,12 +155,10 @@ public class Utils extends Application {
      * @return the database ready constructed shared task's title.
      */
     public static String constructSharedTitle(String title, String creatorEmail, String sharerEmail){
-        StringBuilder s = new StringBuilder(title);
-        s.append(mContext.getResources().getString(R.string.contributors_separator));
-        s.append(encodeMailAsFirebaseKey(creatorEmail));
-        s.append(mContext.getResources().getString(R.string.contributors_separator));
-        s.append(encodeMailAsFirebaseKey(sharerEmail));
-        return s.toString();
+        return title + mContext.getResources().getString(R.string.contributors_separator) +
+                encodeMailAsFirebaseKey(creatorEmail) +
+                mContext.getResources().getString(R.string.contributors_separator) +
+                encodeMailAsFirebaseKey(sharerEmail);
     }
 
     /**
@@ -194,7 +192,7 @@ public class Utils extends Application {
         String[] suffix = Utils.getCreatorAndSharer(title[1]);
         Task toAdd;
         if(suffix[0].equals(mail)){
-            //in the case where we add the task to the creator, nothing to preprocess.
+            //in the case where we add the task to the creator, nothing to pre-process.
             toAdd = new Task(task.getName(),task.getDescription(),Utils.getEverywhereLocation(),task.getDueDate(),task.getDuration(),task.getEnergy().toString(),task.getListOfContributors(), 0L, task.getHasNewMessages(), task.getListOfMessages());
         }else{
             String newTitle = Utils.constructSharedTitle(title[0],suffix[0],mail);

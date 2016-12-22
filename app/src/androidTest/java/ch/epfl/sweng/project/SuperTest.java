@@ -33,7 +33,6 @@ import static org.hamcrest.Matchers.is;
 
 class SuperTest {
     final int createdTask = 2;
-    final int createdLocations = 2;
 
     @BeforeClass
     public static void setTaskProvider() {
@@ -52,8 +51,7 @@ class SuperTest {
                 .check(matches(hasDescendant(withText(locationTitle))));
     }
 
-    public static void scrollDown(){
-        UiDevice mUiDevice = getInstance(getInstrumentation());
+    static void scrollDown(){
         //Check that the title has been updated
         UiScrollable scrollDown = new UiScrollable(new UiSelector().scrollable(true));
         try{

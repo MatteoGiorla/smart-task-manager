@@ -13,7 +13,6 @@ import java.util.ArrayList;
  */
 public class UnfilledTasksActivity extends AppCompatActivity {
 
-    public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
     private UnfilledTaskFragment unfilledFragment;
 
     /**

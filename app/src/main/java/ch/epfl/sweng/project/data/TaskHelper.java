@@ -1,7 +1,5 @@
 package ch.epfl.sweng.project.data;
 
-import java.util.ArrayList;
-
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
 
@@ -24,8 +22,8 @@ public interface TaskHelper {
      *
      * @param task the task to add
      * @param position the position of the task in the list
-     * @param unfilled tells wether this task is unfilled, to assert only when wanting to give an unfilled task
-     *                 in the FilledTaskFragment, alway put it to false otherwise (even in UnfilledTaskFragment).
+     * @param unfilled tells whether this task is unfilled, to assert only when wanting to give an unfilled task
+     *                 in the FilledTaskFragment, always put it to false otherwise (even in UnfilledTaskFragment).
      */
     void addNewTask(Task task, int position, boolean unfilled);
 
