@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -88,7 +86,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     private ArrayAdapter<String> locationAdapter;
     private ArrayAdapter<String> durationAdapter;
 
-
     public static Map<Integer, String> DURATION_MAP;
     public static Map<String, Integer> REVERSE_DURATION;
     private static Map<Integer, String> START_DURATION_MAP;
@@ -96,12 +93,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     public static Map<Integer, String> ENERGY_MAP;
     private static Map<String, Integer> REVERSE_ENERGY;
 
-    private static String everywhere_location;
-    private static String select_one_location;
-
-
     private TableRow unfilledTaskButton;
-
 
     // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
@@ -545,7 +537,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * initialize the functionality of the TableRow
+     * Initialize the functionality of the TableRow
      */
     private void initializeUnfilledTableRow() {
         unfilledTaskButton.setOnTouchListener(new View.OnTouchListener() {
@@ -571,9 +563,8 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
     }
 
     /**
-     * take care of displaying the 4 most recent unfilled task
+     * Take care of displaying the 4 most recent unfilled task
      * on the tableRow
-     *
      */
     private void initializeUnfilledPreview(){
         final int unfilledNbr = unfilledTasks.size();
@@ -615,6 +606,9 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
+    /**
+     * Create the maps used by the spinners in MainActivity
+     */
     private void createUtilityMaps() {
         DURATION_MAP = new LinkedHashMap<>();
         DURATION_MAP.put(0, mContext.getResources().getString(R.string.select_one));
@@ -685,18 +679,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     public static String[] getLocationTable() {
         return currentUser.getListNamesLocations().toArray(new String[currentUser.getListLocations().size()]);
-    }
-
-    /**
-     * Construct the table from which the user can set the energy
-     * AVAILABLE to do a task.
-     * It is also used to know the energy of the user
-     * in order to sort the list accordingly.
-     *
-     * @return String[] The array containing the energies.
-     */
-    public static String[] getEnergyTable() {
-        return ENERGY_MAP.values().toArray(new String[ENERGY_MAP.values().size()]);
     }
 
     /**

@@ -14,6 +14,10 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import ch.epfl.sweng.project.settings.SettingsActivity;
 
+/**
+ * Tutorial activity that explains basic concepts of the app
+ * to the users.
+ */
 public class IntroActivity extends AppIntro {
 
     /**

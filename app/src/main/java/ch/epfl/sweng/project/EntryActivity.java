@@ -66,7 +66,7 @@ public class EntryActivity extends Activity {
     }
 
     /**
-     * return Class name of Activity to show
+     * Return Class name of Activity to show
      **/
     private String getScreenClassName() {
         String activity;
