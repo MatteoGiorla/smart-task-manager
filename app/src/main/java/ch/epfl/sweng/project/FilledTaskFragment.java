@@ -141,12 +141,13 @@ public class FilledTaskFragment extends TaskFragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
-            //taskList.set(indexEditedTask, editedTask);
-            mTaskAdapter.notifyDataSetChanged();
-            Toast.makeText(getActivity().getApplicationContext(),
-                    Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
-                    Toast.LENGTH_SHORT).show();
+            if(indexEditedTask <= (taskList.size() -1) && indexEditedTask >= 0) {
+                mDatabase.updateTask(taskList.get(indexEditedTask), editedTask, indexEditedTask);
+                mTaskAdapter.notifyDataSetChanged();
+                Toast.makeText(getActivity().getApplicationContext(),
+                        Utils.separateTitleAndSuffix(editedTask.getName())[0] + getString(R.string.info_updated),
+                        Toast.LENGTH_SHORT).show();
+            }
 
         }
         //Create a notification

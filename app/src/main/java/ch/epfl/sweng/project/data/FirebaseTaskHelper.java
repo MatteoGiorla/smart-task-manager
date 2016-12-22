@@ -130,7 +130,7 @@ public class FirebaseTaskHelper implements TaskHelper {
 
     @Override
     public void updateTask(final Task original, final Task updated, int position) {
-        if(Utils.hasContributors(original)){
+        if(Utils.hasContributors(updated) || Utils.hasContributors(original)){
             /**
              * This for loop takes care of updating the tasks according to the new
              * contributor list of the updated task.
@@ -139,8 +139,12 @@ public class FirebaseTaskHelper implements TaskHelper {
              */
             for(final String mail : updated.getListOfContributors()){
                 if(original.getListOfContributors().contains(mail)){
-
-                    String oldName =  Utils.sharedTaskPreProcessing(original, mail).getName();
+                    String oldName;
+                    if(Utils.hasContributors(original)) {
+                        oldName =  Utils.sharedTaskPreProcessing(original, mail).getName();
+                    }else{
+                        oldName = original.getName();
+                    }
 
                     Task updatedTask = Utils.sharedTaskPreProcessing(updated, mail);
                     //removing the old task
@@ -288,7 +292,7 @@ public class FirebaseTaskHelper implements TaskHelper {
                 if(task.child("ifNewContributor").getValue() != null){
                     newContributor  = (long) task.child("ifNewContributor").getValue();
                 } else {
-                    newContributor = 0;
+                    newContributor = 0L;
                 }
                 //Define a GenericTypeIndicator to get back properly typed collection
                 GenericTypeIndicator<List<Message>> messageListTypeIndicator = new GenericTypeIndicator<List<Message>>() {};

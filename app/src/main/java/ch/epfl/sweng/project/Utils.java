@@ -132,12 +132,16 @@ public class Utils extends Application {
      * @return and Array containing the creator and the sharer
      */
     public static String[] getCreatorAndSharer(String suffix){
-        String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
-        String[] creatorAndSharer = new String[2];
-        String removedFirstSeparator = suffix.substring(separatorSequence.length());
-        creatorAndSharer[0] = removedFirstSeparator.substring(0, removedFirstSeparator.indexOf(separatorSequence));
-        creatorAndSharer[1] = removedFirstSeparator.substring(removedFirstSeparator.indexOf(separatorSequence) + separatorSequence.length());
-        return creatorAndSharer;
+        if(!suffix.isEmpty()) {
+            String separatorSequence = mContext.getResources().getString(R.string.contributors_separator);
+            String[] creatorAndSharer = new String[2];
+            String removedFirstSeparator = suffix.substring(separatorSequence.length());
+            creatorAndSharer[0] = removedFirstSeparator.substring(0, removedFirstSeparator.indexOf(separatorSequence));
+            creatorAndSharer[1] = removedFirstSeparator.substring(removedFirstSeparator.indexOf(separatorSequence) + separatorSequence.length());
+            return creatorAndSharer;
+        }else{
+            return new String[]{suffix};
+        }
     }
 
     /**
