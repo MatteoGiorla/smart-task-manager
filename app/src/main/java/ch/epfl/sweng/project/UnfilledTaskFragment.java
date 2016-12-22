@@ -74,8 +74,10 @@ public class UnfilledTaskFragment extends TaskFragment {
     @Override
     void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.unfilled_tasks_container);
-        final Task mTask = unfilledTaskList.get(position);
-        mDatabase.deleteTask(mTask, position);
+        if(position < unfilledTaskList.size() && position >= 0) {
+            final Task mTask = unfilledTaskList.get(position);
+            mDatabase.deleteTask(mTask, position);
+        }
     }
 
     /**
