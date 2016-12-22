@@ -25,7 +25,8 @@
         android:layout_height="130dp"
         android:src="@drawable/logo_white_middle_det"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/app_logo_content_description" />
 
     <TextView
         android:id="@+id/get_started"

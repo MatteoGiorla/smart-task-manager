@@ -46,9 +46,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
             }
         }
     }
-
-
-    public void sort(Comparator<Task> comparator) {
+    
+    void sort(Comparator<Task> comparator) {
         Collections.sort(tasksList, comparator);
         notifyDataSetChanged();
     }

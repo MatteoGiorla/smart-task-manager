@@ -169,7 +169,7 @@
     <string name="has_been_deleted">" has been deleted"</string>
     <string name="has_been_done">" has been marked as done"</string>
 
-    <!--Content description Task Activity-->
+    <!--Content description-->
     <string name="date_image_content_description">Date icon</string>
     <string name="location_image_content_description">Location icon</string>
     <string name="duration_image_content_description">Duration icon</string>
@@ -178,6 +178,7 @@
     <string name="contributors_image_content_description">Contributors icon</string>
     <string name="edit_contributors_image_content_description">Edit contributors icon</string>
     <string name="add_contributor_image_content_description">Add contributor icon</string>
+    <string name="app_logo_content_description">App logo</string>
 
     <!-- Contributors in TaskActivity -->
     <string name="contributor_dialog_message">Enter the email address of the new contributor :</string>
@@ -191,7 +192,6 @@
     <string name="ending_of_added_as_contributor_on_one_text">\".</string>
     <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
     <string name="location_warning_if_multiple_contributors">Location has to be Everywhere if there are multiple contributors.</string>
-
 
     <!--Chat-->
     <string name="input_message">Type a message</string>
