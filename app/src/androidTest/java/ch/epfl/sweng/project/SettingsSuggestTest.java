@@ -21,10 +21,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static junit.framework.Assert.fail;
-import static org.hamcrest.CoreMatchers.containsString;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.uiautomator.UiDevice.getInstance;
+import static junit.framework.Assert.fail;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class SettingsSuggestTest {
 

@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -123,6 +124,13 @@ public class Task implements Parcelable {
         this.ifNewContributor = ifNewContributor;
         this.hasNewMessages = hasNewMessages;
         this.listOfMessages = new ArrayList<>(listOfMessages);
+    }
+
+    public Task(Task task) {
+        this(task.getName(), task.getDescription(), task.getLocationName(), new Date(task.getDueDate().getTime())
+                , task.getDurationInMinutes(), task.getEnergy().toString()
+                , Collections.unmodifiableList(task.getListOfContributors()), task.getIfNewContributor(),
+                task.getHasNewMessages(), Collections.unmodifiableList(task.getListOfMessages()));
     }
 
 

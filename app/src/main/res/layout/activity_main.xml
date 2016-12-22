@@ -127,26 +127,26 @@
         android:background="@color/light_gray" />
 
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/tasks_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="20">
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/tasks_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20">
 
-            <!--MarginRight to support older versions than API 17-->
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/add_task_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
-                android:onClick="openNewTaskActivity"
-                android:src="@drawable/ic_add_white_48dp"
-                app:backgroundTint="@color/colorPrimary"
-                app:fabSize="normal" />
+        <!--MarginRight to support older versions than API 17-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_task_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:onClick="openNewTaskActivity"
+            android:src="@drawable/ic_add_white_48dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="normal" />
 
-        </android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
 
