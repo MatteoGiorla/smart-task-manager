@@ -45,8 +45,8 @@ public abstract class TaskFragment extends Fragment {
 
     abstract int getIconSwipe();
 
-    abstract void createSnackBar(final int position, final Boolean isDone,
-                                 final RecyclerView recyclerView);
+    abstract void deletion(final int position, final Boolean isDone,
+                           final RecyclerView recyclerView);
 
     abstract void setOnActivityCreated(SwipeRefreshLayout swipeRefreshLayout);
 
@@ -113,7 +113,7 @@ public abstract class TaskFragment extends Fragment {
                     if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    createSnackBar(taskIndex, false, recyclerView);
+                    deletion(taskIndex, false, recyclerView);
                     break;
             }
         }

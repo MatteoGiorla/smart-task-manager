@@ -5,12 +5,9 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +57,7 @@ public class UnfilledTaskFragment extends TaskFragment {
     @Override
     void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
         if (direction == ItemTouchHelper.LEFT){
-            createSnackBar(position, false, recyclerView);
+            deletion(position, false, recyclerView);
         } else {
             startEditTaskActivity(position);
         }
@@ -73,21 +70,8 @@ public class UnfilledTaskFragment extends TaskFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    void createSnackBar(final int position, Boolean isDone, final RecyclerView recyclerView) {
-        FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.unfilled_tasks_container);
+    void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         final Task mTask = unfilledTaskList.get(position);
-
-        Snackbar snackbar = Snackbar
-                .make(layout, Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo_action, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mTaskAdapter.add(mTask, position);
-                        recyclerView.scrollToPosition(position);
-                    }
-                });
-        snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
-        snackbar.show();
         mDatabase.deleteTask(mTask, position);
     }
 
