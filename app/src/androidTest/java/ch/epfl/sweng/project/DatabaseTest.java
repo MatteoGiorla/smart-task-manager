@@ -22,6 +22,9 @@ import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.data.UserProvider;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
@@ -94,6 +97,7 @@ public class DatabaseTest extends SuperTest{
 
         initFirebaseDb();
         mDatabase.retrieveAllData(testUser1, false);
+        assertEquals(testUser1.getEmail(), "trixyfinger@gmail.com");
     }
 
     @Test
@@ -118,6 +122,7 @@ public class DatabaseTest extends SuperTest{
 
         initFirebaseDb();
         mDatabase.addNewTask(newTaskTest, 0, false);
+        assertEquals(nameTest, taskList.get(0).getName());
     }
 
 
@@ -144,6 +149,7 @@ public class DatabaseTest extends SuperTest{
         initFirebaseDb();
         mDatabase.addNewTask(newTaskTest, 0, false);
         mDatabase.deleteTask(newTaskTest, 0);
+        assertFalse(taskList.isEmpty());
     }
 
     @Test
@@ -182,6 +188,7 @@ public class DatabaseTest extends SuperTest{
         initFirebaseDb();
         mDatabase.addNewTask(oldTaskTest, 0, false);
         mDatabase.updateTask(oldTaskTest, newTaskTest, 0);
+        assertEquals(oldTaskTest.getName(), taskList.get(0).getName());
     }
 
 
