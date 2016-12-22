@@ -139,7 +139,7 @@
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
     <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
-    <string name="custom_location_subtitle">Your favorite locations, used to sort the tasks according to your current location. You can add, rename or remove locations. \nDo a long click to delete a location.</string>
+    <string name="custom_location_subtitle">Feel free to add, rename or remove (long click) locations. They will be useful to sort the tasks according to your current location.</string>
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="task_has_new_messages_description">Task with new messages</string>
