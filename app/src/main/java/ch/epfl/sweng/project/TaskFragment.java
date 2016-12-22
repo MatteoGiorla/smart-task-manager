@@ -37,17 +37,50 @@ public abstract class TaskFragment extends Fragment {
 
     protected User currentUser;
 
+    /**
+     * Getter that returns the icon which appears
+     * when we swipe on an item of the recycler view.
+     */
     abstract int getIconSwipe();
 
-    abstract void createSnackBar(final int position, final Boolean isDone,
-                                 final RecyclerView recyclerView);
+    /**
+     * Method that specifies what to do when deleting task from the recycler view
+     *
+     * @param position position of the item to be deleted
+     * @param isDone true when the task is done (completed), false otherwise
+     * @param recyclerView the recycler view
+     */
+    abstract void deletion(final int position, final Boolean isDone,
+                           final RecyclerView recyclerView);
+    /**
+     * Method that sets the refresh, triggered when swiping vertically
+     *
+     * @param swipeRefreshLayout The layout that appears when refreshing
+     */
+    abstract void setSwipeToRefresh(SwipeRefreshLayout swipeRefreshLayout);
 
-    abstract void setOnActivityCreated(SwipeRefreshLayout swipeRefreshLayout);
-
+    /**
+     * Method that sets the adapter to the recycler view,
+     * init the task provider and retrieve the tasks
+     *
+     * @param recyclerView the recycler view whom we set the adapter
+     */
     abstract void setOnCreateView(RecyclerView recyclerView);
 
+    /**
+     * Method that specifies what to do after editing a task
+     *
+     * @param data The resulting intent for EditTaskActivity
+     */
     abstract void onEditTaskActivityResult(Intent data);
 
+    /**
+     * Method that specifies what to do when swipe an item of the recycler view
+     *
+     * @param recyclerView The recycler view
+     * @param position The position of the item in the recycler view
+     * @param direction The swipe direction
+     */
     abstract void setOnSwipe(RecyclerView recyclerView, int position, int direction);
 
     /**
@@ -78,7 +111,7 @@ public abstract class TaskFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) getActivity()
                 .findViewById(R.id.swipe_refresh);
-        setOnActivityCreated(swipeLayout);
+        setSwipeToRefresh(swipeLayout);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -115,12 +148,15 @@ public abstract class TaskFragment extends Fragment {
                     if (taskIndex == -1) {
                         throw new IllegalArgumentException("Error with the task to be deleted index");
                     }
-                    createSnackBar(taskIndex, false, recyclerView);
+                    deletion(taskIndex, false, recyclerView);
                     break;
             }
         }
     }
 
+    /**
+     * Method that set the recycler view item horizontal swipe 
+     */
     void initSwipe() {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -191,6 +227,9 @@ public abstract class TaskFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    /**
+     * Getter that returns a copy of the Bundle
+     */
     Bundle getBundle() {
         return new Bundle(bundle);
     }

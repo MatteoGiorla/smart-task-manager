@@ -15,7 +15,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class FilledTaskFragment extends TaskFragment {
     }
 
     @Override
-    void setOnActivityCreated(final SwipeRefreshLayout swipeRefreshLayout) {
+    void setSwipeToRefresh(final SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,9 +83,9 @@ public class FilledTaskFragment extends TaskFragment {
     @Override
     void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
         if (direction == ItemTouchHelper.LEFT){
-            createSnackBar(position, false, recyclerView);
+            deletion(position, false, recyclerView);
         } else {
-            createSnackBar(position, true, recyclerView);
+            deletion(position, true, recyclerView);
         }
     }
 
@@ -97,7 +96,7 @@ public class FilledTaskFragment extends TaskFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    void createSnackBar(final int position, Boolean isDone, final RecyclerView recyclerView) {
+    void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FloatingActionButton add_button = (FloatingActionButton) getActivity().findViewById(R.id.add_task_button);
 
         final Task mTask = taskList.get(position);
