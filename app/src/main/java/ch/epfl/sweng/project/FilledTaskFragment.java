@@ -18,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.notification.TaskNotification;
 
@@ -30,7 +29,6 @@ public class FilledTaskFragment extends TaskFragment {
 
     private static TaskListAdapter mTaskAdapter;
     private static ArrayList<Task> taskList;
-    private static TaskHelper mDatabase;
 
     /**
      * Override the onCreate method. It retrieves all the task of the user
@@ -134,7 +132,10 @@ public class FilledTaskFragment extends TaskFragment {
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
         if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].isEmpty()){
-            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
+            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName()
+                    , editedTask.getListOfContributors().get(0)
+                    , editedTask.getListOfContributors().get(0));
+
             editedTask.setName(sharedTaskName);
         }
         if (indexEditedTask == -1 || editedTask == null) {

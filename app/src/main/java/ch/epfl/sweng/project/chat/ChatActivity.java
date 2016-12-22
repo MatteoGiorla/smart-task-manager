@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
 
+import ch.epfl.sweng.project.EditTaskActivity;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.User;
@@ -30,6 +31,7 @@ import ch.epfl.sweng.project.data.FirebaseChatHelper;
  */
 public class ChatActivity extends AppCompatActivity {
     public static final String TASK_CHAT_KEY = "ch.epfl.sweng.project.chat.TASK_CHAT_KEY";
+
 
     private Intent intent;
     private Task task;
@@ -178,6 +180,9 @@ public class ChatActivity extends AppCompatActivity {
          */
         @Override
         public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), EditTaskActivity.class);
+            intent.putExtra(TASK_CHAT_KEY, task);
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

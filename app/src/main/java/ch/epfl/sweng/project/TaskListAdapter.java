@@ -1,5 +1,6 @@
 package ch.epfl.sweng.project;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +37,23 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     /**
+     * Set the background for the filled tasks.
+     * If there is no filled tasks, bb8 is displayed.
+     * @param isUnfilled
+     */
+    public void setBackground(boolean isUnfilled) {
+        RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);
+        if(recyclerView != null) {
+            if(!isUnfilled && getItemCount() == 0) {
+                recyclerView.setBackgroundResource(R.drawable.db8);
+            }else{
+                recyclerView.setBackgroundColor(0x00000000);
+            }
+        }
+    }
+
+
+    /**
      * Sort the list with the given comparator
      * @param comparator A comparator used to sort the list
      */
@@ -61,7 +79,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param position the position at which the task has to be added
      */
     public void add(Task task, int position) {
-        tasksList.add(position, task);
+        if(position == 0 || position >= tasksList.size()) {
+            tasksList.add(task);
+        } else {
+            tasksList.add(position, task);
+        }
         notifyItemInserted(position);
     }
 

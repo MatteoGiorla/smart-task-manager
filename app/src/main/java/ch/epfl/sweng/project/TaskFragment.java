@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import ch.epfl.sweng.project.data.TaskHelper;
+
 import static android.app.Activity.RESULT_OK;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_DELETED;
 import static ch.epfl.sweng.project.EditTaskActivity.TASK_IS_MODIFIED;
@@ -34,6 +36,10 @@ public abstract class TaskFragment extends Fragment {
     private RecyclerView recyclerView;
     private Bundle bundle;
     private final Paint p = new Paint();
+
+    static TaskHelper mDatabase;
+
+
 
     protected User currentUser;
 
@@ -126,7 +132,6 @@ public abstract class TaskFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-
         setOnCreateView(recyclerView);
         return rootView;
     }
