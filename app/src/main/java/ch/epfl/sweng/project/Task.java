@@ -397,15 +397,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Method returning a static comparator on Task.
-     *
-     * @return Static Comparator
-     */
-    public static Comparator<Task> getStaticComparator() {
-        return new StaticComparator();
-    }
-
-    /**
      * Method returning a dynamic comparator on Task.
      *
      * @param currentLocation The user's current location
@@ -472,27 +463,6 @@ public class Task implements Parcelable {
     }
 
     /**
-     * Private static inner class representing the static comparator.
-     */
-    private static class StaticComparator implements Comparator<Task> {
-
-        /**
-         * compare method of the Comparator.
-         *
-         * @param o1 the first task to compare
-         * @param o2 the second task to compare
-         * @return 0 if o1 == o2,
-         *           a value less than 0 if o1 < o2
-         *           a value greater than 0 if o1 > o2
-         */
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        public int compare(Task o1, Task o2) {
-            return Double.compare(o2.computeStaticSortValue(), o1.computeStaticSortValue());
-        }
-    }
-
-    /**
      * Private static inner class representing the dynamic comparator.
      */
     private static class DynamicComparator implements Comparator<Task> {
@@ -502,8 +472,6 @@ public class Task implements Parcelable {
         private static final int TIME_LIMIT = 120;
         private final String currentLocation;
         private final int currentTimeDisposal;
-        private String everywhere_location = "";
-        private String select_one_location = "";
 
         /**
          * Private constructor of the class.

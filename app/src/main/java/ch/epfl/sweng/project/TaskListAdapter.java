@@ -36,6 +36,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         mContext = context;
     }
 
+    /**
+     * Set the background for the filled tasks.
+     * If there is no filled tasks, bb8 is displayed.
+     * @param isUnfilled
+     */
     public void setBackground(boolean isUnfilled) {
         RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);
         if(recyclerView != null) {
@@ -48,16 +53,31 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
 
+    /**
+     * Sort the list with the given comparator
+     * @param comparator A comparator used to sort the list
+     */
     public void sort(Comparator<Task> comparator) {
         Collections.sort(tasksList, comparator);
         notifyDataSetChanged();
     }
 
+    /**
+     * Remove a task from the ListAdapter
+     *
+     * @param position the position of the task to be removed
+     */
     public void remove(int position) {
         tasksList.remove(position);
         notifyItemRemoved(position);
     }
 
+    /**
+     * Add a task to the ListAdapter
+     *
+     * @param task the task to add
+     * @param position the position at which the task has to be added
+     */
     public void add(Task task, int position) {
         if(position == 0 || position >= tasksList.size()) {
             tasksList.add(task);
@@ -67,6 +87,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         notifyItemInserted(position);
     }
 
+    /**
+     * Get the size of the tasks list
+     *
+     * @return the size of the list
+     */
     @Override
     public int getItemCount() {
         return tasksList.size();

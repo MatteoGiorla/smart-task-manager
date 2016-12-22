@@ -19,7 +19,9 @@ import ch.epfl.sweng.project.User;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
-
+/**
+ * OnCompleteListener that operates when the the data are retrieve from Firebase.
+ */
 public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, DataSnapshot>> {
     public static final String CURRENT_USER_KEY =
             "ch.epfl.sweng.project.complete_listener.UserAllOnCompleteListener.CURRENT_USER_KEY";
@@ -28,7 +30,14 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
     private final User currentUser;
     private final Context synchronizationActivityContext;
 
-    public UserAllOnCompleteListener(@NonNull Query userRef, @NonNull User currentUser, @NonNull SynchronizedQueries synchronizedQueries,
+    /**
+     * Constructor of the class
+     *
+     * @param userRef The reference of the user in Firebase
+     * @param currentUser The current user
+     * @param synchronizationActivityContext The context of SynchronizationActivity
+     */
+    public UserAllOnCompleteListener(@NonNull Query userRef, @NonNull User currentUser,
                                      @NonNull Context synchronizationActivityContext) {
         super();
         this.userRef = userRef;
@@ -51,6 +60,11 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         }
     }
 
+    /**
+     * Method that constructs the user's locations from the DataSnapshot.
+     *
+     * @param snapshots The DataSnapshot
+     */
     private void retrieveUserInformation(Iterable<DataSnapshot> snapshots) {
         List<Location> listLocations = new ArrayList<>();
         //Construct each user's location
@@ -67,6 +81,9 @@ public class UserAllOnCompleteListener implements OnCompleteListener<Map<Query, 
         currentUser.setListLocations(listLocations);
     }
 
+    /**
+     * Method that set the intent used to launch the next activity (MainActivity)
+     */
     private void launchNextActivity() {
         Intent intent = new Intent(synchronizationActivityContext, MainActivity.class);
         intent.putExtra(UserAllOnCompleteListener.CURRENT_USER_KEY, currentUser);

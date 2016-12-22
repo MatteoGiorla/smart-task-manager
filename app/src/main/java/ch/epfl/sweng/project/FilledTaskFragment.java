@@ -47,7 +47,7 @@ public class FilledTaskFragment extends TaskFragment {
     }
 
     @Override
-    void setOnActivityCreated(final SwipeRefreshLayout swipeRefreshLayout) {
+    void setSwipeToRefresh(final SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,9 +81,9 @@ public class FilledTaskFragment extends TaskFragment {
     @Override
     void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
         if (direction == ItemTouchHelper.LEFT){
-            createSnackBar(position, false, recyclerView);
+            deletion(position, false, recyclerView);
         } else {
-            createSnackBar(position, true, recyclerView);
+            deletion(position, true, recyclerView);
         }
     }
 
@@ -94,7 +94,7 @@ public class FilledTaskFragment extends TaskFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    void createSnackBar(final int position, Boolean isDone, final RecyclerView recyclerView) {
+    void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FloatingActionButton add_button = (FloatingActionButton) getActivity().findViewById(R.id.add_task_button);
 
         final Task mTask = taskList.get(position);
@@ -192,6 +192,12 @@ public class FilledTaskFragment extends TaskFragment {
         }
     }
 
+    /**
+     * Modifies the locations in all the task by replacing the given existing location with the new one
+     *
+     * @param editedLocation the given existing location
+     * @param newLocation the new location
+     */
     public static void modifyLocationInTaskList(Location editedLocation, Location newLocation) {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
@@ -225,6 +231,12 @@ public class FilledTaskFragment extends TaskFragment {
         mDatabase.addNewTask(task, 0, true);
     }
 
+    /**
+     * Tests whether a location is used by an existing task or not
+     *
+     * @param locationToCheck the location to check
+     * @return true if the location is used, false otherwise
+     */
     public static boolean locationIsUsedByTask(Location locationToCheck) {
         for(Task task : taskList) {
             if (task.getLocationName().equals(locationToCheck.getName())){

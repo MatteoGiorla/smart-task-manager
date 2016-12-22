@@ -59,44 +59,6 @@ public class LocationFragment extends Fragment {
     
     private int ITEM_HEIGHT = 180;
 
-
-    /**
-     * Method that adds a location in the locationList and in the database.
-     *
-     * @param location The location to be added
-     * @throws IllegalArgumentException If the location to be added is null
-     */
-    public void addLocation(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
-        locationList.add(location);
-        mLocationAdapter.notifyDataSetChanged();
-
-        if(!firstConnection){
-            currentUser = new User(currentUser.getEmail(), getLocationList());
-            FirebaseUserHelper.updateUser(currentUser);
-        }
-    }
-
-    public void addDefaultLocation(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
-
-        defaultLocationList.add(location);
-        mDefaultLocationAdapter.notifyDataSetChanged();
-    }
-
-    private void addDefaultLocations() {
-        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
-        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
-
-        addLocation(new Location(getString(R.string.home_location), 0, 0));
-        addLocation(new Location(getString(R.string.office_location), 0, 0));
-        addLocation(new Location(getString(R.string.school_location), 0, 0));
-    }
-
     /**
      * Override the onCreate method. It initialize the database, the list of location
      * and the custom made adapter.
@@ -305,6 +267,11 @@ public class LocationFragment extends Fragment {
         }
     }
 
+    /**
+     * Private method called by onActivityResult to change a location of the task.
+     *
+     * @param data The intent returned to onActivityResult
+     */
     private void actionOnActivityResult(Intent data) {
         // Get result from the result intent.
         Location editedLocation = data.getParcelableExtra(EditLocationActivity.RETURNED_EDITED_LOCATION);
@@ -350,6 +317,51 @@ public class LocationFragment extends Fragment {
     }
 
     /**
+     * Method that adds a location in the locationList and in the database.
+     *
+     * @param location The location to be added
+     * @throws IllegalArgumentException If the location to be added is null
+     */
+    public void addLocation(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+        locationList.add(location);
+        mLocationAdapter.notifyDataSetChanged();
+
+        if(!firstConnection){
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+        }
+    }
+
+    /**
+     * Add a default location to the list of locations
+     *
+     * @param location The location
+     */
+    public void addDefaultLocation(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+
+        defaultLocationList.add(location);
+        mDefaultLocationAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Add several default locations to the list
+     */
+    private void addDefaultLocations() {
+        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
+
+        addLocation(new Location(getString(R.string.home_location), 0, 0));
+        addLocation(new Location(getString(R.string.office_location), 0, 0));
+        addLocation(new Location(getString(R.string.school_location), 0, 0));
+    }
+
+    /**
      * Remove a location and the locationList.
      *
      * @param itemInfo Extra information about the item
@@ -362,6 +374,10 @@ public class LocationFragment extends Fragment {
 
     }
 
+    /**
+     * Remove the location from the user
+     * @param position
+     */
     private void removeLocationAction(int position) {
         Location locationToBeDeleted = locationList.get(position);
         String locationName = locationToBeDeleted.getName();
@@ -387,7 +403,9 @@ public class LocationFragment extends Fragment {
         return tmp;
     }
 
-
+    /**
+     * Listener of the button that select a location
+     */
     public class MyOnClickListener implements DialogInterface.OnClickListener {
 
         final AdapterView.AdapterContextMenuInfo itemInfo;

@@ -18,9 +18,7 @@ import ch.epfl.sweng.project.Utils;
  *
  * Note: The queries are done asynchronously
  */
-public class FirebaseUserHelper implements UserHelper{
-
-    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+public class FirebaseUserHelper implements UserHelper {
 
     @Override
     public User retrieveUserInformation(User currentUser, Iterable<DataSnapshot> snapshots) {
@@ -42,7 +40,7 @@ public class FirebaseUserHelper implements UserHelper{
 
 
     /**
-     * Deleter a user in the database
+     * Deleter a user on the database
      *
      * @param user The user to be deleted
      */
@@ -52,12 +50,22 @@ public class FirebaseUserHelper implements UserHelper{
         userRef.removeValue();
     }
 
+    /**
+     * Add a user on the database
+     *
+     * @param user The user to be added
+     */
     public static void addUser(User user) {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference userRef = mDatabase.child("users").child(Utils.encodeMailAsFirebaseKey(user.getEmail())).getRef();
         userRef.setValue(user);
     }
 
+    /**
+     * Edit a user on the database
+     *
+     * @param user The user that need to be updated
+     */
     public static void updateUser(User user) {
         deleteUser(user);
         addUser(user);

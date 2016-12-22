@@ -25,6 +25,7 @@ public class UnfilledTaskFragment extends TaskFragment {
     private ArrayList<Task> unfilledTaskList;
     private ArrayList<Task> filledTaskList;
     private TaskListAdapter mTaskAdapter;
+
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *
@@ -44,7 +45,7 @@ public class UnfilledTaskFragment extends TaskFragment {
     }
 
     @Override
-    void setOnActivityCreated(SwipeRefreshLayout swipeRefreshLayout) {
+    void setSwipeToRefresh(SwipeRefreshLayout swipeRefreshLayout) {
         swipeRefreshLayout.setEnabled(false);
     }
 
@@ -62,7 +63,7 @@ public class UnfilledTaskFragment extends TaskFragment {
     @Override
     void setOnSwipe(RecyclerView recyclerView, int position, int direction) {
         if (direction == ItemTouchHelper.LEFT){
-            createSnackBar(position, false, recyclerView);
+            deletion(position, false, recyclerView);
         } else {
             startEditTaskActivity(position);
         }
@@ -75,7 +76,7 @@ public class UnfilledTaskFragment extends TaskFragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    void createSnackBar(final int position, Boolean isDone, final RecyclerView recyclerView) {
+    void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.unfilled_tasks_container);
         final Task mTask = unfilledTaskList.get(position);
 

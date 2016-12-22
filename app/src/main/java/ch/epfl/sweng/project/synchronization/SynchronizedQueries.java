@@ -23,10 +23,19 @@ class SynchronizedQueries {
     private final HashMap<Query, DataSnapshot> refsToSnaps = new HashMap<>();
     private ValueEventListener listener;
 
+    /**
+     * Constructor of the Query class$
+     *
+     * @param reference The reference from which we retrieve the data
+     */
     public SynchronizedQueries(final Query reference) {
         this.reference = reference;
     }
 
+    /**
+     * Method that retrieve the data from Firebase
+     * @return
+     */
     public Task<Map<Query, DataSnapshot>> start() {
         // Create a Task<DataSnapshot> to trigger in response to each database listener.
         final Task<DataSnapshot> task;

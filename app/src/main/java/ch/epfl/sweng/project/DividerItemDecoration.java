@@ -8,6 +8,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+/**
+ * Class that represent the divider used in the recycler view.
+ * It draws a line between each item of the list.
+ */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private final Drawable mDivider;
 

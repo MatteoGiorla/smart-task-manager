@@ -25,6 +25,15 @@ public class EntryActivity extends Activity {
     private static boolean isAlreadyPersistent = false;
     private static SharedPreferences prefs;
 
+    /**
+     * Override the onCreate method
+     * Decides whether the log in activity (if the user isn't logged in)
+     * or the tasks list (if he is) should be displayed.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +66,7 @@ public class EntryActivity extends Activity {
     }
 
     /**
-     * return Class name of Activity to show
+     * Return Class name of Activity to show
      **/
     private String getScreenClassName() {
         String activity;
