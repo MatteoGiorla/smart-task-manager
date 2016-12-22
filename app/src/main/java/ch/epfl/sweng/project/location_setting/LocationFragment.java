@@ -267,6 +267,11 @@ public class LocationFragment extends Fragment {
         }
     }
 
+    /**
+     * Private method called by onActivityResult to change a location of the task.
+     *
+     * @param data The intent returned to onActivityResult
+     */
     private void actionOnActivityResult(Intent data) {
         // Get result from the result intent.
         Location editedLocation = data.getParcelableExtra(EditLocationActivity.RETURNED_EDITED_LOCATION);
@@ -330,6 +335,11 @@ public class LocationFragment extends Fragment {
         }
     }
 
+    /**
+     * Add a default location to the list of locations
+     *
+     * @param location The location
+     */
     public void addDefaultLocation(Location location) {
         if (location == null) {
             throw new IllegalArgumentException();
@@ -339,6 +349,9 @@ public class LocationFragment extends Fragment {
         mDefaultLocationAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Add several default locations to the list
+     */
     private void addDefaultLocations() {
         addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
         addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
@@ -361,6 +374,10 @@ public class LocationFragment extends Fragment {
 
     }
 
+    /**
+     * Remove the location from the user
+     * @param position
+     */
     private void removeLocationAction(int position) {
         Location locationToBeDeleted = locationList.get(position);
         String locationName = locationToBeDeleted.getName();

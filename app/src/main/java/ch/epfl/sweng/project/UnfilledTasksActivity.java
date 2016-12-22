@@ -8,7 +8,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-
+/**
+ * Activity with the task that are unfilled
+ */
 public class UnfilledTasksActivity extends AppCompatActivity {
 
     public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
@@ -98,7 +100,7 @@ public class UnfilledTasksActivity extends AppCompatActivity {
     }
 
     /**
-     *  Private method that set the resulting intent
+     * Private method that set the resulting intent
      */
     private void setResultIntent() {
         Intent intent = getIntent();
