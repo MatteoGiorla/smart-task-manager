@@ -27,6 +27,7 @@ public class UnfilledTaskFragment extends TaskFragment {
     private ArrayList<Task> filledTaskList;
     private TaskListAdapter mTaskAdapter;
     private static TaskHelper mDatabase;
+
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *

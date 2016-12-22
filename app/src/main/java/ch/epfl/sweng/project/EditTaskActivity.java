@@ -159,9 +159,6 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
-    /**
-     *
-     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
@@ -175,6 +172,11 @@ public class EditTaskActivity extends TaskActivity {
         setResultIntent();
     }
 
+    /**
+     * Add a new contributor to the task
+     *
+     * @param contributor the new contributor to add
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void addContributorInTask(String contributor){
@@ -201,6 +203,11 @@ public class EditTaskActivity extends TaskActivity {
         setSwitchers();
     }
 
+    /**
+     * Removes a given contributor from the task
+     *
+     * @param contributor the contributor to remove
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void deleteContributorInTask(String contributor){
@@ -237,9 +244,6 @@ public class EditTaskActivity extends TaskActivity {
         }
     }
 
-    /**
-     *
-     */
     private void setSwitchers() {
         //Set switch on name
         setSwitcherOnClick((LinearLayout) findViewById(R.id.nameLinearLayout),

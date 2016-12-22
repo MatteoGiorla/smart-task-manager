@@ -41,16 +41,32 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         notifyDataSetChanged();
     }
 
+    /**
+     * Remove a task from the ListAdapter
+     *
+     * @param position the position of the task to be removed
+     */
     public void remove(int position) {
         tasksList.remove(position);
         notifyItemRemoved(position);
     }
 
+    /**
+     * Add a task to the ListAdapter
+     *
+     * @param task the task to add
+     * @param position the position at which the task has to be added
+     */
     public void add(Task task, int position) {
         tasksList.add(position, task);
         notifyItemInserted(position);
     }
 
+    /**
+     * Get the size of the tasks list
+     *
+     * @return the size of the list
+     */
     @Override
     public int getItemCount() {
         return tasksList.size();

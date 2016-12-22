@@ -765,6 +765,12 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         triggerDynamicSort();
     }
 
+    /**
+     * Modifies the locations in all the task by replacing the given existing location with the new one
+     *
+     * @param editedLocation the given existing location
+     * @param newLocation the new location
+     */
     public static void modifyLocationInTaskList(ch.epfl.sweng.project.Location editedLocation, ch.epfl.sweng.project.Location newLocation) {
         //To avoid concurrent modification
         ArrayList<Task> newTaskList = new ArrayList<>();
@@ -788,7 +794,12 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         }
     }
 
-
+    /**
+     * Tests whether a location is used by an existing task or not
+     *
+     * @param locationToCheck the location to check
+     * @return true if the location is used, false otherwise
+     */
     public static boolean locationIsUsedByTask(ch.epfl.sweng.project.Location locationToCheck) {
         for(Task task : unfilledTasks) {
             if (task.getLocationName().equals(locationToCheck.getName())){

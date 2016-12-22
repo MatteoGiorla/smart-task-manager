@@ -22,8 +22,14 @@ public class NewTaskActivity extends TaskActivity {
     public static final String RETURNED_NEW_TASK = "ch.epfl.sweng.NewTaskActivity.NEW_TASK";
     public static final long UNFILLED_TASK_TIME = 0;
 
-
-
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,11 @@ public class NewTaskActivity extends TaskActivity {
         getEditableView();
     }
 
+    /**
+     * Add a new contributor to the task
+     *
+     * @param contributor the new contributor to add
+     */
     @Override
     void addContributorInTask(String contributor){
         listOfContributors.add(contributor);
@@ -74,6 +85,11 @@ public class NewTaskActivity extends TaskActivity {
         locationTextView.setText(Utils.getEverywhereLocation());
     }
 
+    /**
+     * Removes a given contributor from the task
+     *
+     * @param contributor the contributor to remove
+     */
     @Override
     void deleteContributorInTask(String contributor) {
         listOfContributors.remove(contributor);

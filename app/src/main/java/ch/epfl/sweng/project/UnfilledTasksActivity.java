@@ -14,6 +14,13 @@ public class UnfilledTasksActivity extends AppCompatActivity {
     public final static String FILLED_TASKS = "ch.epfl.sweng.Sweng.UnfilledTasksActivity.FILLED_TASKS";
     private UnfilledTaskFragment unfilledFragment;
 
+    /**
+     * Override the onCreate method
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState){
 

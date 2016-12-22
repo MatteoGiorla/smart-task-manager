@@ -34,6 +34,14 @@ public class ChatActivity extends AppCompatActivity {
     private FloatingActionButton sendMssgButton;
     private String mail;
 
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

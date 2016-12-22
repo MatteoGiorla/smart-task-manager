@@ -39,6 +39,7 @@ public class Location implements Parcelable{
     private String name;
     private double latitude;
     private double longitude;
+
     /**
      * Constructor of the class
      *

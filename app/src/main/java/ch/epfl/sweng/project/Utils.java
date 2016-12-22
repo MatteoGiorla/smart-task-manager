@@ -175,14 +175,29 @@ public class Utils extends Application {
         return toAdd;
     }
 
+    /**
+     * Getter for the string resource of the everywhere location
+     *
+     * @return the string of the everywhere location
+     */
     public static String getEverywhereLocation(){
         return mContext.getResources().getString(R.string.everywhere_location);
     }
 
+    /**
+     * Getter for the string resource of the select one location
+     *
+     * @return the string of the select one location
+     */
     public static String getSelectOne(){
         return mContext.getResources().getString(R.string.select_one);
     }
 
+    /**
+     * Getter for the string resource of the downtown location
+     *
+     * @return the string of the downtown location
+     */
     public static String getDowntownLocation(){
         return mContext.getResources().getString(R.string.downtown_location);
     }

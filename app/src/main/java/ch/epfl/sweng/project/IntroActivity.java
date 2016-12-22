@@ -15,6 +15,15 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
 import ch.epfl.sweng.project.settings.SettingsActivity;
 
 public class IntroActivity extends AppIntro {
+
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,24 +44,33 @@ public class IntroActivity extends AppIntro {
         setSkipText(getString(R.string.skip_button));
     }
 
+    /**
+     * Got to the next activity (selected in goToNextActivity())
+     *
+     * @param currentFragment the current fragment created in on create
+     */
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
         goToNextActivity();
     }
 
+    /**
+     * Got to the next activity (selected in goToNextActivity())
+     *
+     * @param currentFragment the current fragment created in on create
+     */
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         goToNextActivity();
     }
 
-    @Override
-    public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
-        super.onSlideChanged(oldFragment, newFragment);
-        // Do something when the slide changes.
-    }
-
+    /**
+     * Select the next activity :
+     * - LoginActivity if the user opens the app for the first time
+     * - SettingsActivity if the user accessed the tutorial from the settings
+     */
     private void goToNextActivity() {
         SharedPreferences prefs = getApplicationContext().getSharedPreferences(getString(R.string.application_prefs_name), MODE_PRIVATE);
 

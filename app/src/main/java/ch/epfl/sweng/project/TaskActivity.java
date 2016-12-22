@@ -74,7 +74,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     ImageView editContributorButton;
     private Spinner contributorsSpinner;
 
-
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -335,6 +342,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Class representing the dialog to pick the date of a task
+     */
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         Button mButton;
 
@@ -388,9 +398,18 @@ public abstract class TaskActivity extends AppCompatActivity {
         contributorsListTextView.setVisibility(View.VISIBLE);
     }
 
-
+    /**
+     * Add a new contributor to the task
+     *
+     * @param contributor the new contributor to add
+     */
     abstract void addContributorInTask(String contributor);
 
+    /**
+     * Removes a given contributor from the task
+     *
+     * @param contributor the contributor to remove
+     */
     abstract void deleteContributorInTask(String contributor);
 
     private class OnAddContributorButtonClickListener implements View.OnClickListener {

@@ -59,44 +59,6 @@ public class LocationFragment extends Fragment {
     
     private int ITEM_HEIGHT = 180;
 
-
-    /**
-     * Method that adds a location in the locationList and in the database.
-     *
-     * @param location The location to be added
-     * @throws IllegalArgumentException If the location to be added is null
-     */
-    public void addLocation(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
-        locationList.add(location);
-        mLocationAdapter.notifyDataSetChanged();
-
-        if(!firstConnection){
-            currentUser = new User(currentUser.getEmail(), getLocationList());
-            FirebaseUserHelper.updateUser(currentUser);
-        }
-    }
-
-    public void addDefaultLocation(Location location) {
-        if (location == null) {
-            throw new IllegalArgumentException();
-        }
-
-        defaultLocationList.add(location);
-        mDefaultLocationAdapter.notifyDataSetChanged();
-    }
-
-    private void addDefaultLocations() {
-        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
-        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
-
-        addLocation(new Location(getString(R.string.home_location), 0, 0));
-        addLocation(new Location(getString(R.string.office_location), 0, 0));
-        addLocation(new Location(getString(R.string.school_location), 0, 0));
-    }
-
     /**
      * Override the onCreate method. It initialize the database, the list of location
      * and the custom made adapter.
@@ -347,6 +309,43 @@ public class LocationFragment extends Fragment {
         intent.putParcelableArrayListExtra(LOCATIONS_LIST_KEY, locationList);
 
         startActivityForResult(intent, editLocationRequestCode);
+    }
+
+    /**
+     * Method that adds a location in the locationList and in the database.
+     *
+     * @param location The location to be added
+     * @throws IllegalArgumentException If the location to be added is null
+     */
+    public void addLocation(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+        locationList.add(location);
+        mLocationAdapter.notifyDataSetChanged();
+
+        if(!firstConnection){
+            currentUser = new User(currentUser.getEmail(), getLocationList());
+            FirebaseUserHelper.updateUser(currentUser);
+        }
+    }
+
+    public void addDefaultLocation(Location location) {
+        if (location == null) {
+            throw new IllegalArgumentException();
+        }
+
+        defaultLocationList.add(location);
+        mDefaultLocationAdapter.notifyDataSetChanged();
+    }
+
+    private void addDefaultLocations() {
+        addDefaultLocation(new Location(getString(R.string.everywhere_location), 0, 0));
+        addDefaultLocation(new Location(getString(R.string.downtown_location), 0, 0));
+
+        addLocation(new Location(getString(R.string.home_location), 0, 0));
+        addLocation(new Location(getString(R.string.office_location), 0, 0));
+        addLocation(new Location(getString(R.string.school_location), 0, 0));
     }
 
     /**
