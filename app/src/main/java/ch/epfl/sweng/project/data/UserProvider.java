@@ -6,9 +6,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ch.epfl.sweng.project.Utils;
 
-import static ch.epfl.sweng.project.Utils.FIREBASE_PROVIDER;
-import static ch.epfl.sweng.project.Utils.TEST_PROVIDER;
-
 /**
  * Class that decide which provider the app use in
  * order to manipulate users in the database
@@ -32,6 +29,12 @@ public class UserProvider {
         }
     }
 
+    /**
+     * Getter that return the user of firebase if not in
+     * test mode.
+     *
+     * @return FirebaseUser, the firebase user
+     */
     public FirebaseUser getFirebaseAuthUser(){
         switch (mProvider){
             case Utils.FIREBASE_PROVIDER:

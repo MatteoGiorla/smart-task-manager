@@ -13,6 +13,11 @@ import java.util.regex.Pattern;
 
 import ch.epfl.sweng.project.R;
 
+/**
+ * Activity where users can suggest improvements for the app by
+ * sending an email to a developer.
+ *
+ */
 public class SettingsSuggestActivity extends AppCompatActivity {
 
     private TextInputLayout textInputLayoutName;
@@ -102,10 +107,10 @@ public class SettingsSuggestActivity extends AppCompatActivity {
     }
 
     /**
-     * method is used for checking valid email id format.
+     * Method is used for checking valid email id format.
      *
-     * @param email text typed by the user
-     * @return boolean true for valid false for invalid
+     * @param email Text typed by the user
+     * @return boolean True for valid false for invalid
      */
     protected boolean isEmailValid(String email) {
         boolean isValid = false;

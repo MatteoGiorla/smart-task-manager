@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
  */
 public class Message implements Parcelable {
 
+    /**
+     * Needed variable to allow Message class to be parcelable.
+     */
     public static final Creator<Message> CREATOR = new Creator<Message>() {
         @Override
         public Message createFromParcel(Parcel in) {
@@ -23,7 +26,6 @@ public class Message implements Parcelable {
 
     private final String userName;
     private final String body;
-
     private final long time;
 
     /**
@@ -39,10 +41,19 @@ public class Message implements Parcelable {
         this.time = time;
     }
 
+    /**
+     * Constructor of the class with default values
+     */
     public Message() {
         this("","",0);
     }
 
+    /**
+     * Private constructor used to recreate a Message when
+     * it was put inside an Intent.
+     *
+     * @param in Container of a Task
+     */
     private Message(@NonNull Parcel in) {
         this(in.readString(), in.readString(), in.readLong());
     }

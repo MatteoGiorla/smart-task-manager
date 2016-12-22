@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         mContext = context;
     }
 
+    /**
+     * Sort the list with the given comparator
+     * @param comparator A comparator used to sort the list
+     */
     public void sort(Comparator<Task> comparator) {
         Collections.sort(tasksList, comparator);
         notifyDataSetChanged();

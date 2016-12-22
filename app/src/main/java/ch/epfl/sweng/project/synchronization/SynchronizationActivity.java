@@ -19,6 +19,10 @@ import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.UserProvider;
 
+/**
+ * Activity that synchronize the user location before
+ * reaching MainActivity.
+ */
 public class SynchronizationActivity extends Activity {
 
     private SynchronizedQueries synchronizedQueries;

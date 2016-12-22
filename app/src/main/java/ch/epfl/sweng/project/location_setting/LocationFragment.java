@@ -386,7 +386,9 @@ public class LocationFragment extends Fragment {
         return tmp;
     }
 
-
+    /**
+     * Listener of the button that select a location
+     */
     public class MyOnClickListener implements DialogInterface.OnClickListener {
 
         final AdapterView.AdapterContextMenuInfo itemInfo;

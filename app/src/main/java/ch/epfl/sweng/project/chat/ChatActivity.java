@@ -24,6 +24,10 @@ import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.FirebaseChatHelper;
 
+/**
+ * Class assuring that user can chat between each others when
+ * clicking on the chat button in the details of the task.
+ */
 public class ChatActivity extends AppCompatActivity {
     public static final String TASK_CHAT_KEY = "ch.epfl.sweng.project.chat.TASK_CHAT_KEY";
 
