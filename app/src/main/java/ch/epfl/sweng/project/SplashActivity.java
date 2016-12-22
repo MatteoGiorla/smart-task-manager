@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 
+/**
+ * Activity shown at the launch of the app to avoid
+ * having a white screen.
+ */
 public class SplashActivity extends AppCompatActivity {
 
     /**

@@ -126,17 +126,6 @@ public class User implements Parcelable {
     }
 
     /**
-     * Allow the user to add a new location
-     * @param location The new Location
-     */
-    public void addLocation(Location location) {
-        if(location == null) {
-            throw new IllegalArgumentException("Bad locationName update !");
-        }
-        listLocations.add(location);
-    }
-
-    /**
      * Used to regenerate an User, all parcelables must have a creator
      */
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

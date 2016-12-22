@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
 
-
+/**
+ * Utility class with methods used throughout the app.
+ */
 public class Utils extends Application {
 
     private static Context mContext;
