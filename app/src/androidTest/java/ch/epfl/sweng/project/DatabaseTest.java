@@ -101,15 +101,17 @@ public class DatabaseTest extends SuperTest{
         ArrayList<Task> taskList = new ArrayList<>(10);
 
         // TASK
-        String nameTest = "new name Test";
+        String nameTest = "(title@@cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         String descriptionTest = "new description test";
         String locationNameTest = "locationName test workplace";
         Date dueDateTest = new Date(0);
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
-        String authorTest = "A test author";
+        String authorTest = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
+        String authorTest2 = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
+        listContributorsTest.add(authorTest2);
 
         Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
         taskList.add(0, newTaskTest);
@@ -124,15 +126,17 @@ public class DatabaseTest extends SuperTest{
         ArrayList<Task> taskList = new ArrayList<>(10);
 
         // TASK
-        String nameTest = "new name Test";
+        String nameTest = "(title@@cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         String descriptionTest = "new description test";
         String locationNameTest = "locationName test workplace";
         Date dueDateTest = new Date(0);
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
-        String authorTest = "A test author";
+        String authorTest = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
+        String authorTest2 = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
+        listContributorsTest.add(authorTest2);
 
         Task newTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
         taskList.add(0, newTaskTest);
@@ -147,15 +151,17 @@ public class DatabaseTest extends SuperTest{
         ArrayList<Task> taskList = new ArrayList<>(10);
 
         // TASK
-        String nameTest = "old name Test";
+        String nameTest = "(title@@cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         String descriptionTest = "old description test";
         String locationNameTest = "locationName test workplace";
         Date dueDateTest = new Date(0);
         long durationTest = 55;
         Task.Energy energyTest = Task.Energy.LOW;
-        String authorTest = "A test author";
+        String authorTest = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
+        String authorTest2 = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         List<String> listContributorsTest = new ArrayList<>();
         listContributorsTest.add(authorTest);
+        listContributorsTest.add(authorTest2);
 
         String nameTest2 = "new name Test";
         String descriptionTest2 = "new description test";
@@ -163,9 +169,11 @@ public class DatabaseTest extends SuperTest{
         Date dueDateTest2 = new Date(0);
         long durationTest2 = 55;
         Task.Energy energyTest2 = Task.Energy.LOW;
-        String authorTest2 = "A test author";
+        String authorTest21 = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
+        String authorTest22 = "cedric.viaccoz@gmail.com@@cirdec3961@gmail.com";
         List<String> listContributorsTest2 = new ArrayList<>();
-        listContributorsTest2.add(authorTest2);
+        listContributorsTest.add(authorTest21);
+        listContributorsTest.add(authorTest22);
 
         Task oldTaskTest = new Task(nameTest, descriptionTest, locationNameTest, dueDateTest, durationTest, energyTest.toString(), listContributorsTest, 0L, false);
         Task newTaskTest = new Task(nameTest2, descriptionTest2, locationNameTest2, dueDateTest2, durationTest2, energyTest2.toString(), listContributorsTest2, 0L, false);
