@@ -39,7 +39,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
     /**
      * Set the background for the filled tasks.
      * If there is no filled tasks, bb8 is displayed.
-     * @param isUnfilled
      */
     public void setBackground(boolean isUnfilled) {
         RecyclerView recyclerView = (RecyclerView) ((Activity) mContext).findViewById(R.id.list_view_tasks);

@@ -11,7 +11,6 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +29,7 @@ import static junit.framework.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class PlacePickerTest extends SuperTest{
 
-    private static UiDevice mUiDevice;
+    private final static UiDevice mUiDevice = getInstance(getInstrumentation());
     private static final String SEARCH_BAR = "com.google.android.gms:id/search_bar";
     private static final String SEL_LOCATION_TXT = "Select this location";
     private static final String EPFL = "EPFL";
@@ -48,11 +47,6 @@ public class PlacePickerTest extends SuperTest{
             super.beforeActivityLaunched();
         }
     };
-
-    @Before
-    public void setup() {
-        mUiDevice = getInstance(getInstrumentation());
-    }
 
     @After
     public void tearDown(){

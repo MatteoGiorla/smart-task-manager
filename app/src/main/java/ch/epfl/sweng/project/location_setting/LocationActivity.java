@@ -183,7 +183,7 @@ public abstract class LocationActivity extends AppCompatActivity {
      * This class is used to check on runtime if the inputs written by the user
      * are valid or not.
      */
-    class LocationTextWatcher implements TextWatcher {
+    private class LocationTextWatcher implements TextWatcher {
 
         /**
          * Check the input written by the user before it is changed.
@@ -224,11 +224,9 @@ public abstract class LocationActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+                Place place = PlacePicker.getPlace(this, data);
                 longitude = place.getLatLng().longitude;
                 latitude = place.getLatLng().latitude;
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
     }

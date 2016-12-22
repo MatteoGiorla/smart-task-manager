@@ -65,8 +65,7 @@ public abstract class TaskActivity extends AppCompatActivity {
     static final DateFormat dateFormat = DateFormat.getDateInstance();
     public static final String IS_UNFILLED = "ch.epfl.sweng.TaskActivity.UNFILLED_TASK";
 
-    ImageView addContributorButton;
-    EditText editTextNewContributor;
+    private EditText editTextNewContributor;
     TextView contributorsListTextView;
 
     ImageView editContributorButton;
@@ -123,7 +122,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         mLocation.setAdapter(spinnerLocationAdapter);
         locationName = Utils.getSelectOne();
 
-        addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
+        ImageView addContributorButton = (ImageView) findViewById(R.id.addContributorButton);
         addContributorButton.setOnClickListener(new OnAddContributorButtonClickListener());
 
         editContributorButton = (ImageView) findViewById(R.id.editContributorButton);

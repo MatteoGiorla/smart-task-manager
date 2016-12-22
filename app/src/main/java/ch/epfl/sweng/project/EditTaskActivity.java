@@ -31,10 +31,10 @@ import static ch.epfl.sweng.project.chat.ChatActivity.TASK_CHAT_KEY;
  * Class that represents the inflated activity_task under the edit case
  */
 public class EditTaskActivity extends TaskActivity {
-    public static final int chatRequestCode = 10;
+    private static final int chatRequestCode = 10;
     public static final int TASK_IS_DELETED = 1;
     public static final int TASK_IS_MODIFIED = 2;
-    public static final int CONTRIBUTOR_MODIFIED = 6;
+    private static final int CONTRIBUTOR_MODIFIED = 6;
     public static final String RETURNED_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.EDITED_TASK";
     public static final String RETURNED_INDEX_EDITED_TASK = "ch.epfl.sweng.EditTaskActivity.RETURNED_INDEX_EDITED_TASK";
     public static final String TASK_STATUS_KEY = "ch.epfl.sweng.EditTaskActivity.TASK_STATUS_KEY";
@@ -129,7 +129,7 @@ public class EditTaskActivity extends TaskActivity {
     /**
      * Set the listener for the chat button
      */
-    public void setChatButtonListener() {
+    private void setChatButtonListener() {
         FloatingActionButton chatButton = (FloatingActionButton) findViewById(R.id.open_chat);
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,10 +143,6 @@ public class EditTaskActivity extends TaskActivity {
 
     /**
      * Dispatch incoming result to the correct fragment.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

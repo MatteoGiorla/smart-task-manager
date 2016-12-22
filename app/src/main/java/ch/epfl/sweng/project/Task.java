@@ -82,7 +82,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull Boolean hasNewMessages) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long ifNewContributor, Boolean hasNewMessages) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;
@@ -112,7 +112,7 @@ public class Task implements Parcelable {
      * @throws IllegalArgumentException if one parameter is invalid (null)
      */
     public Task(@NonNull String name, @NonNull String description, @NonNull String locationName, @NonNull Date dueDate,
-                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, @NonNull long ifNewContributor, @NonNull Boolean hasNewMessages, @NonNull List<Message> listOfMessages) {
+                long durationInMinutes, String energyNeeded, @NonNull List<String> listOfContributors, long ifNewContributor, Boolean hasNewMessages, @NonNull List<Message> listOfMessages) {
         this.name = name;
         this.description = description;
         this.durationInMinutes = durationInMinutes;

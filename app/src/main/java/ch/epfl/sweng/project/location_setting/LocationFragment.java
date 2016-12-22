@@ -54,10 +54,9 @@ public class LocationFragment extends Fragment {
 
     private Spinner locationSpinnerForReplacement;
 
-    ListView listView;
-    ListView listViewDefault;
-    
-    private int ITEM_HEIGHT = 180;
+    private ListView listView;
+
+    private final int ITEM_HEIGHT = 180;
 
     /**
      * Override the onCreate method. It initialize the database, the list of location
@@ -133,7 +132,7 @@ public class LocationFragment extends Fragment {
         listView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mLocationAdapter.getCount()));
         listView.setAdapter(mLocationAdapter);
 
-        listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
+        ListView listViewDefault = (ListView) rootView.findViewById(R.id.default_list_view_locations);
         listViewDefault.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ITEM_HEIGHT * mDefaultLocationAdapter.getCount()));
         listViewDefault.setAdapter(mDefaultLocationAdapter);
 
@@ -204,7 +203,7 @@ public class LocationFragment extends Fragment {
                         });
                         builder.setMessage(R.string.location_delete_dialog_message).setTitle(R.string.location_delete_dialog_title);
                         //Create spinner
-                        ArrayList<String> listOfLocationForSpinner = (ArrayList) currentUser.getListNamesLocations();
+                        ArrayList<String> listOfLocationForSpinner = currentUser.getListNamesLocations();
                         if(listOfLocationForSpinner.contains(locationList.get(itemInfo.position).getName())) {
                             listOfLocationForSpinner.remove(itemInfo.position + 3);
                         }
@@ -340,7 +339,7 @@ public class LocationFragment extends Fragment {
      *
      * @param location The location
      */
-    public void addDefaultLocation(Location location) {
+    private void addDefaultLocation(Location location) {
         if (location == null) {
             throw new IllegalArgumentException();
         }
@@ -376,7 +375,6 @@ public class LocationFragment extends Fragment {
 
     /**
      * Remove the location from the user
-     * @param position
      */
     private void removeLocationAction(int position) {
         Location locationToBeDeleted = locationList.get(position);

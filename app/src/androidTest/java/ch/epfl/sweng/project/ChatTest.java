@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.not;
 
 public class ChatTest extends SuperTest {
 
-    private String message = "Hello";
+    private final String message = "Hello";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(

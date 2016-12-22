@@ -8,7 +8,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,6 @@ public class UnfilledTaskFragment extends TaskFragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
-        FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.unfilled_tasks_container);
         if(position < unfilledTaskList.size() && position >= 0) {
             final Task mTask = unfilledTaskList.get(position);
             mDatabase.deleteTask(mTask, position);

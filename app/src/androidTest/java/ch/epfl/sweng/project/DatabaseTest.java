@@ -13,7 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.project.data.FirebaseTaskHelper;
@@ -23,14 +22,11 @@ import ch.epfl.sweng.project.data.TaskProvider;
 import ch.epfl.sweng.project.data.UserProvider;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
 
 public class DatabaseTest extends SuperTest{
-    private SharedPreferences prefs;
 
     @BeforeClass
     public static void setUserProvider() {
@@ -38,13 +34,13 @@ public class DatabaseTest extends SuperTest{
     }
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<MainActivity>(
+    public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<MainActivity>(
             MainActivity.class){
         //Override to be able to change the SharedPreferences effectively
         @Override
         protected void beforeActivityLaunched(){
             Context actualContext = InstrumentationRegistry.getTargetContext();
-            prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
+            SharedPreferences prefs = actualContext.getSharedPreferences(actualContext.getString(R.string.application_prefs_name), Context.MODE_PRIVATE);
             prefs.edit().putBoolean(actualContext.getString(R.string.first_launch), false).apply();
             prefs.edit().putBoolean(actualContext.getString(R.string.new_user), false).apply();
             FacebookSdk.sdkInitialize(actualContext);

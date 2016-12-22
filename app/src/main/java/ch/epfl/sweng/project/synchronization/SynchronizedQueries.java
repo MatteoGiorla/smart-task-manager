@@ -34,7 +34,6 @@ class SynchronizedQueries {
 
     /**
      * Method that retrieve the data from Firebase
-     * @return
      */
     public Task<Map<Query, DataSnapshot>> start() {
         // Create a Task<DataSnapshot> to trigger in response to each database listener.

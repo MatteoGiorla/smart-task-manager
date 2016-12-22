@@ -231,7 +231,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     public void openNewTaskActivity(View v) {
         Intent intent = new Intent(this, NewTaskActivity.class);
-        intent.putParcelableArrayListExtra(FilledTaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) mainFragment.getTaskList());
+        intent.putParcelableArrayListExtra(FilledTaskFragment.TASKS_LIST_KEY, (ArrayList<Task>) FilledTaskFragment.getTaskList());
         startActivityForResult(intent, newTaskRequestCode);
     }
 

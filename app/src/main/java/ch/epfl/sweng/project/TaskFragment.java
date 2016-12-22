@@ -41,7 +41,7 @@ public abstract class TaskFragment extends Fragment {
 
 
 
-    protected User currentUser;
+    User currentUser;
 
     /**
      * Getter that returns the icon which appears
