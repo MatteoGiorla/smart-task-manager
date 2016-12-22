@@ -97,7 +97,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
     // Geolocation variables:
     private GoogleApiClient mGoogleApiClient;
-    private Location mCurrentLocation;
 
     private static final int REQUEST_LOCATION = 2;
 
@@ -121,6 +120,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
 
         // Initialize googleApiClient that will trigger the geolocation part
         createGoogleApiClient();
+
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().setIcon(R.mipmap.new_logo);
@@ -258,6 +258,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                 if (unfilled) {
                     unfilledTasks.add(newTask);
                     mainFragment.addUnfilled(newTask);
+
                 } else {
                     // Add element to the listTask
                     mainFragment.addTask(newTask);
@@ -265,11 +266,6 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
             }
          } else if(requestCode == unfilledTaskRequestCode) {
                 if(resultCode == RESULT_OK){
-                    ArrayList<Task> newFinishedTasks = data.getParcelableArrayListExtra(UnfilledTasksActivity.FILLED_TASKS);
-                    for(Task t : newFinishedTasks){
-                        mainFragment.addTask(t);
-                    }
-                    
                     //update the list of unfilledTasks
                     unfilledTasks = data.getParcelableArrayListExtra(UNFILLED_TASKS);
                 }
@@ -296,7 +292,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             // Get last known recent location:
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mCurrentLocation != null) {
                 onLocationChanged(mCurrentLocation);
             }
@@ -383,7 +379,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     private void startLocationUpdates() {
         // Create the location request
-        long UPDATE_INTERVAL = 30 * 1000;
+        long UPDATE_INTERVAL = 300 * 1000;
         LocationRequest mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL);

@@ -5,11 +5,9 @@ import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import ch.epfl.sweng.project.data.TaskProvider;
 public class UnfilledTaskFragment extends TaskFragment {
 
     private ArrayList<Task> unfilledTaskList;
-    private ArrayList<Task> filledTaskList;
     private TaskListAdapter mTaskAdapter;
 
     /**
@@ -36,7 +33,6 @@ public class UnfilledTaskFragment extends TaskFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        filledTaskList = new ArrayList<>();
         unfilledTaskList = getBundle().getParcelableArrayList(MainActivity.UNFILLED_TASKS);
         if(unfilledTaskList == null) {
             throw new IllegalArgumentException("unfilledTaskList passed with the intend is null");
@@ -78,20 +74,10 @@ public class UnfilledTaskFragment extends TaskFragment {
     @Override
     void deletion(final int position, Boolean isDone, final RecyclerView recyclerView) {
         FrameLayout layout = (FrameLayout) getActivity().findViewById(R.id.unfilled_tasks_container);
-        final Task mTask = unfilledTaskList.get(position);
-
-        Snackbar snackbar = Snackbar
-                .make(layout, Utils.separateTitleAndSuffix(mTask.getName())[0] + getString(R.string.has_been_deleted), Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo_action, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mTaskAdapter.add(mTask, position);
-                        recyclerView.scrollToPosition(position);
-                    }
-                });
-        snackbar.setActionTextColor(getResources().getColor(R.color.orange_yellow, null));
-        snackbar.show();
-        mDatabase.deleteTask(mTask, position);
+        if(position < unfilledTaskList.size() && position >= 0) {
+            final Task mTask = unfilledTaskList.get(position);
+            mDatabase.deleteTask(mTask, position);
+        }
     }
 
     /**
@@ -123,21 +109,24 @@ public class UnfilledTaskFragment extends TaskFragment {
         Task editedTask = data.getParcelableExtra(EditTaskActivity.RETURNED_EDITED_TASK);
         int indexEditedTask = data.getIntExtra(EditTaskActivity.RETURNED_INDEX_EDITED_TASK, -1);
         if(Utils.hasContributors(editedTask) && Utils.separateTitleAndSuffix(editedTask.getName())[1].isEmpty()){
-            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(), editedTask.getListOfContributors().get(0), editedTask.getListOfContributors().get(0));
+            String sharedTaskName = Utils.constructSharedTitle(editedTask.getName(),
+                    editedTask.getListOfContributors().get(0),
+                    editedTask.getListOfContributors().get(0));
             editedTask.setName(sharedTaskName);
         }
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
-            //if the task has been fulfilled, we can put it on the temporary list of good tasks.
-            if(Utils.isUnfilled(editedTask)){
-                unfilledTaskList.set(indexEditedTask, editedTask);
-            }else{
-                unfilledTaskList.remove(indexEditedTask);
-                filledTaskList.add(editedTask);
+            if(indexEditedTask <= (unfilledTaskList.size() -1) && indexEditedTask >= 0) {
+                mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
+                //if the task has been fulfilled, we can put it on the temporary list of good tasks.
+                if (Utils.isUnfilled(editedTask)) {
+                    unfilledTaskList.set(indexEditedTask, editedTask);
+                } else {
+                    unfilledTaskList.remove(indexEditedTask);
+                }
+                mTaskAdapter.notifyDataSetChanged();
             }
-            mTaskAdapter.notifyDataSetChanged();
         }
     }
 
@@ -154,18 +143,6 @@ public class UnfilledTaskFragment extends TaskFragment {
         }
     }
 
-    /**
-     * Getter for the taskList of task that have been filled
-     *
-     * @return an immutable copy of taskList
-     */
-    public List<Task> getFilledTaskList() {
-        if(unfilledTaskList != null){
-            return new ArrayList<>(filledTaskList);
-        }else{
-            return null;
-        }
-    }
 
     /**
      * Start the EditTaskActivity for result when the user press the edit button.

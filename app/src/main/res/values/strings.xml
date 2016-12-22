@@ -27,7 +27,7 @@
     <string name="flt_ctx_menu_edit">Edit</string>
 
     <!-- Maximum lengths -->
-    <string name="max_length_title">20</string>
+    <string name="max_length_title">35</string>
     <string name="max_length_description">1000</string>
 
     <!-- Error messages -->
@@ -38,6 +38,7 @@
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_authentication_canceled">Authentication canceled.</string>
+    <string name="error_valid_title_firebase">Title cannot contain . # $ [ ]</string>
 
 
     <!-- Buttons description-->
@@ -139,7 +140,7 @@
     <string name="days_late">" days late"</string>
     <string name="day_late">" day late"</string>
     <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
-    <string name="custom_location_subtitle">These are your favorite locations. Feel free to add, rename or remove locations. They will be useful to sort the tasks according to your current location.</string>
+    <string name="custom_location_subtitle">Feel free to add, rename or remove (long click) locations. They will be useful to sort the tasks according to your current location.</string>
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="task_has_new_messages_description">Task with new messages</string>
@@ -169,7 +170,7 @@
     <string name="has_been_deleted">" has been deleted"</string>
     <string name="has_been_done">" has been marked as done"</string>
 
-    <!--Content description Task Activity-->
+    <!--Content description-->
     <string name="date_image_content_description">Date icon</string>
     <string name="location_image_content_description">Location icon</string>
     <string name="duration_image_content_description">Duration icon</string>
@@ -178,6 +179,7 @@
     <string name="contributors_image_content_description">Contributors icon</string>
     <string name="edit_contributors_image_content_description">Edit contributors icon</string>
     <string name="add_contributor_image_content_description">Add contributor icon</string>
+    <string name="app_logo_content_description">App logo</string>
 
     <!-- Contributors in TaskActivity -->
     <string name="contributor_dialog_message">Enter the email address of the new contributor :</string>
@@ -191,7 +193,6 @@
     <string name="ending_of_added_as_contributor_on_one_text">\".</string>
     <string name="ending_of_added_as_contributor_on_multiple_tasks">" new tasks."</string>
     <string name="location_warning_if_multiple_contributors">Location has to be Everywhere if there are multiple contributors.</string>
-
 
     <!--Chat-->
     <string name="input_message">Type a message</string>

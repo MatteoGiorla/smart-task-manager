@@ -160,6 +160,19 @@ public abstract class TaskActivity extends AppCompatActivity {
     }
 
     /**
+     * Check that the title does not contain '.', '#', '$', '[', or ']'
+     */
+    private boolean titleIsCompatibleWithFirebase(String title) {
+        String[] invalidChars = new String[]{".", "#", "$", "[", "]"};
+        for(String s : invalidChars) {
+            if(title.contains(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Check that the intent is valid
      */
     private void checkIntent() {
@@ -189,6 +202,7 @@ public abstract class TaskActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
         }
     }
 
@@ -218,6 +232,9 @@ public abstract class TaskActivity extends AppCompatActivity {
             if (titleIsNotUnique(s.toString())) {
                 doneEditButton.setVisibility(View.INVISIBLE);
                 titleEditText.setError(getResources().getText(R.string.error_title_duplicated));
+            } else if(!titleIsCompatibleWithFirebase(s.toString())) {
+                doneEditButton.setVisibility(View.INVISIBLE);
+                titleEditText.setError(getResources().getText(R.string.error_valid_title_firebase));
             } else if (s.toString().isEmpty()) {
                 doneEditButton.setVisibility(View.INVISIBLE);
                 titleEditText.setError(getResources().getText(R.string.error_title_empty));

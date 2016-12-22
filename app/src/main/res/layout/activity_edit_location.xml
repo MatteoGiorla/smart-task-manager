@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/location_enter_name"
             android:id="@+id/locationName"
-            android:maxLength="@string/max_length_title"/>
+            android:maxLength="18"/>
 
         <View
             android:layout_width="match_parent"

@@ -105,7 +105,14 @@ public class UnfilledTasksActivity extends AppCompatActivity {
     private void setResultIntent() {
         Intent intent = getIntent();
         intent.putParcelableArrayListExtra(MainActivity.UNFILLED_TASKS,(ArrayList<Task>) unfilledFragment.getUnfilledTaskList());
-        intent.putParcelableArrayListExtra(FILLED_TASKS,(ArrayList<Task>) unfilledFragment.getFilledTaskList());
         setResult(RESULT_OK, intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (unfilledFragment.getUnfilledTaskList().size() == 0) {
+            onBackPressed();
+        }
     }
 }

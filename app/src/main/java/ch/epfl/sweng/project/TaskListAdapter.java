@@ -52,7 +52,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
     }
 
-
     /**
      * Sort the list with the given comparator
      * @param comparator A comparator used to sort the list
@@ -68,8 +67,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
      * @param position the position of the task to be removed
      */
     public void remove(int position) {
-        tasksList.remove(position);
-        notifyItemRemoved(position);
+        if(position <= tasksList.size() -1 && position >= 0) {
+            tasksList.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     /**
