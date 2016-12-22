@@ -214,13 +214,4 @@ public class Utils extends Application {
     public static String getSelectOne(){
         return mContext.getResources().getString(R.string.select_one);
     }
-
-    /**
-     * Getter for the string resource of the downtown location
-     *
-     * @return the string of the downtown location
-     */
-    public static String getDowntownLocation(){
-        return mContext.getResources().getString(R.string.downtown_location);
-    }
 }
