@@ -328,8 +328,6 @@ public abstract class TaskActivity extends AppCompatActivity {
                 if (checked)
                     energy = Task.Energy.HIGH;
                 break;
-            default:
-                energy = Task.Energy.NORMAL;
         }
     }
 
