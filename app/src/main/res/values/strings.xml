@@ -17,9 +17,6 @@
     <!-- Hint strings-->
     <string name="hint_title">Enter title</string>
 
-    <!-- Log in screen values -->
-    <string name="sign_in_text">Sign in with Google or Facebook</string>
-
     <!-- Facebook App ID -->
     <string name="facebook_app_id">104609210014543</string>
     <!-- Google Place Key -->
@@ -39,7 +36,6 @@
     <string name="error_title_contains_contributors_separator">"You cannot enter a title containing "</string>
     <string name="error_location_name_empty">The location name can not be empty !</string>
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
-    <string name="info_any_tasks">You have no task !</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_authentication_canceled">Authentication canceled.</string>
 
@@ -144,7 +140,6 @@
     <string name="day_late">" day late"</string>
     <string name="default_location_subtitle">These are default locations you can\'t modify.</string>
     <string name="custom_location_subtitle">These are your favorite locations. Feel free to add, rename or remove locations. They will be useful to sort the tasks according to your current location.</string>
-    <string name="padlock_image_description">padlock</string>
     <string name="google_sign_in_button_content_description">Google sign in button</string>
     <string name="facebook_sign_in_button_content_description">Facebook sign in button</string>
     <string name="task_has_new_messages_description">Task with new messages</string>
@@ -225,5 +220,9 @@
     <string name="settings_suggest_button_send">Send</string>
     <string name="settings_suggest_field_mandatory">This field is mandatory</string>
     <string name="settings_suggest_not_valid_email">This email address is not valid</string>
+
+    <!-- Login -->
+    <string name="get_started_login">Get Started</string>
+    <string name="connect_login">Connect with :</string>
 
 </resources>

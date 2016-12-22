@@ -25,7 +25,6 @@ import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNot.not;
 
 public class ContributorsTest extends SuperTest {
 

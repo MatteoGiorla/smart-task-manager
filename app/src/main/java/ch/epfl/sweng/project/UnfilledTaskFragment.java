@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.project.data.TaskHelper;
 import ch.epfl.sweng.project.data.TaskProvider;
 
 /**
@@ -25,7 +24,6 @@ public class UnfilledTaskFragment extends TaskFragment {
 
     private ArrayList<Task> unfilledTaskList;
     private TaskListAdapter mTaskAdapter;
-    private static TaskHelper mDatabase;
     /**
      * Override the onCreate method. It retrieves all the task of the user
      *

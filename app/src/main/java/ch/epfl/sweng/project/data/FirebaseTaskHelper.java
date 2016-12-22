@@ -3,7 +3,6 @@ package ch.epfl.sweng.project.data;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,7 +12,6 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -236,13 +234,10 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param dataSnapshot Data recovered from the database
      */
     private void retrieveTasks(DataSnapshot dataSnapshot, boolean requestUnfilled) {
-        if (mTaskList.isEmpty() && dataSnapshot.getChildrenCount() == 0) {
-            Toast.makeText(mContext, mContext.getText(R.string.info_any_tasks), Toast.LENGTH_SHORT).show();
-        }
-
         mTaskList.clear();
         dataSnapshotTaskParserRetriever(mTaskList, requestUnfilled, dataSnapshot);
 
+        mAdapter.setBackground(requestUnfilled);
         mAdapter.notifyDataSetChanged();
         // Manage the dialog that warn the user that he has been added to a task:
         warnContributor(mTaskList);
@@ -259,7 +254,7 @@ public class FirebaseTaskHelper implements TaskHelper {
      * @param requestUnfilled whether we want unfilled tasks or filled task from the database.
      * @param dataSnapshot the snapshot from the firebase database containing the tasks to extract.
      */
-     private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
+    private static void dataSnapshotTaskParserRetriever(ArrayList<Task> mTaskList, boolean requestUnfilled, DataSnapshot dataSnapshot){
         for (DataSnapshot task : dataSnapshot.getChildren()) {
             List<String> taskNames = new ArrayList<>();
             //to avoid snychronisation duplicate.
