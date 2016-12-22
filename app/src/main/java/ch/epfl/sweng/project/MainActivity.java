@@ -124,6 +124,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
         // Initialize googleApiClient that will trigger the geolocation part
         createGoogleApiClient();
 
+
         setContentView(R.layout.activity_main);
         getSupportActionBar().setIcon(R.mipmap.new_logo);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -381,7 +382,7 @@ public final class MainActivity extends AppCompatActivity implements GoogleApiCl
      */
     private void startLocationUpdates() {
         // Create the location request
-        long UPDATE_INTERVAL = 30 * 1000;
+        long UPDATE_INTERVAL = 300 * 1000;
         LocationRequest mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL);
