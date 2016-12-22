@@ -18,6 +18,9 @@ import ch.epfl.sweng.project.authentication.LoginActivity;
 import ch.epfl.sweng.project.data.FirebaseUserHelper;
 import ch.epfl.sweng.project.synchronization.SynchronizationActivity;
 
+/**
+ * Class where the user can see his favorite locations
+ */
 public class LocationSettingActivity extends AppCompatActivity {
     public static final String USER_KEY = "ch.epfl.sweng.MainActivity.CURRENT_USER";
     private final int newLocationRequestCode = 1;
@@ -121,6 +124,9 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create the intent that will be sent back.
+     */
     private void resultActivity() {
         if(prefs.getBoolean(getString(R.string.new_user), true)) {
             Bundle extras = getIntent().getExtras();
@@ -134,6 +140,9 @@ public class LocationSettingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Listener of the done edit button.
+     */
     private class OnDoneButtonClickListener implements View.OnClickListener {
 
         @Override

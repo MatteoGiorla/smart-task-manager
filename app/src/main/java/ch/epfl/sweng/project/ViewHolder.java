@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import static ch.epfl.sweng.project.FilledTaskFragment.INDEX_TASK_TO_BE_EDITED_KEY;
 import static ch.epfl.sweng.project.FilledTaskFragment.TASKS_LIST_KEY;
 
+/**
+ * View holder used by the recycler view. It defines how each line
+ * of the recycler view is represented.
+ */
 public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final Context mContext;
     private final ArrayList<Task> tasksList;
@@ -24,6 +28,12 @@ public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public final ImageView imageSharedTask;
     public final ImageView imageHasNewMessages;
 
+    /**
+     * Constructor of the class
+     * @param v The view
+     * @param context The context of the activity
+     * @param tasksList The list of tasks
+     */
     public ViewHolder(View v, Context context, ArrayList<Task> tasksList) {
         super(v);
         this.tasksList = tasksList;

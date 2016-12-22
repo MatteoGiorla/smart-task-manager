@@ -2,7 +2,6 @@ package ch.epfl.sweng.project.chat;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -23,12 +22,16 @@ import java.util.List;
 import ch.epfl.sweng.project.R;
 import ch.epfl.sweng.project.Utils;
 
-
+/**
+ * Adapter for the list of message, which make sure the
+ * list is correctly filled.
+ */
 public class MessageAdapter extends ArrayAdapter<Message> {
 
     private final String currentUserName;
+
     /**
-     * Constructor
+     * Constructor of the class
      *
      * @param context  The current context.
      * @param resource The resource ID for a layout file containing a TextView to use when

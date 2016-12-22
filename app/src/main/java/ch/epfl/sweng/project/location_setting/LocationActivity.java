@@ -24,8 +24,9 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
 
-//import com.google.android.gms.common.GoogleApiAvailability;
-
+/**
+ * Class where the user can edit his locations.
+ */
 public abstract class LocationActivity extends AppCompatActivity {
     private static final int PLACE_REQUEST_CODE = 1;
 
