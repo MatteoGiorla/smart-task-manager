@@ -38,6 +38,7 @@
     <string name="error_location_name_duplicated">You can\'t use the same name for 2 locations !</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_authentication_canceled">Authentication canceled.</string>
+    <string name="error_valid_title_firebase">Title cannot contain . # $ [ ]</string>
 
 
     <!-- Buttons description-->
