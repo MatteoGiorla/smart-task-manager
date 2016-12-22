@@ -89,12 +89,10 @@ public final class LocationSettingTest extends SuperTest {
      */
     @Test
     public void testCanAddLocation() {
-        for (int i = 0; i < createdLocations; i++) {
-            createALocation(mTitleToBeTyped + i);
+            createALocation(mTitleToBeTyped);
             scrollDown();
             //Check title name inside listView
-            checkALocation(mTitleToBeTyped + i, i + 3);
-        }
+            checkALocation(mTitleToBeTyped, 3);
     }
 
 
