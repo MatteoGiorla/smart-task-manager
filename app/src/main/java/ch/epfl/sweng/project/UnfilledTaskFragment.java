@@ -110,14 +110,16 @@ public class UnfilledTaskFragment extends TaskFragment {
         if (indexEditedTask == -1 || editedTask == null) {
             throw new IllegalArgumentException("Invalid extras returned from EditTaskActivity !");
         } else {
-            mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
-            //if the task has been fulfilled, we can put it on the temporary list of good tasks.
-            if(Utils.isUnfilled(editedTask)){
-                unfilledTaskList.set(indexEditedTask, editedTask);
-            }else{
-                unfilledTaskList.remove(indexEditedTask);
+            if(indexEditedTask <= (unfilledTaskList.size() -1) && indexEditedTask >= 0) {
+                mDatabase.updateTask(unfilledTaskList.get(indexEditedTask), editedTask, indexEditedTask);
+                //if the task has been fulfilled, we can put it on the temporary list of good tasks.
+                if (Utils.isUnfilled(editedTask)) {
+                    unfilledTaskList.set(indexEditedTask, editedTask);
+                } else {
+                    unfilledTaskList.remove(indexEditedTask);
+                }
+                mTaskAdapter.notifyDataSetChanged();
             }
-            mTaskAdapter.notifyDataSetChanged();
         }
     }
 

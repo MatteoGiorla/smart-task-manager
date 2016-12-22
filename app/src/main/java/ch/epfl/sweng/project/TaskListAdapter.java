@@ -53,8 +53,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<ViewHolder> {
     }
 
     public void remove(int position) {
-        tasksList.remove(position);
-        notifyItemRemoved(position);
+        if(position <= tasksList.size() -1 && position >= 0) {
+            tasksList.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     public void add(Task task, int position) {
