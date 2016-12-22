@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.icu.util.Calendar;
 import android.os.Build;
 
-
+/**
+ * Utility class with methods used throughout the app.
+ */
 public class Utils extends Application {
 
     private static Context mContext;
@@ -40,7 +42,7 @@ public class Utils extends Application {
      * Look at the fields of the task and determines if the task is not completely filled,
      * and thus need to finish in the inbox of unfinished tasks
      *
-     * @param task    the task to Test
+     * @param task The task to test
      * @return a boolean whether the task in unfilled or not
      */
     public static boolean isUnfilled(Task task) {
@@ -49,14 +51,36 @@ public class Utils extends Application {
                 || isDurationUnfilled(task) || isDueDateUnfilled(task);
     }
 
+    /**
+     * Method that returns true when task's location is the unfilled task's location.
+     * The unfilled task's location is "Select one".
+     *
+     * @param task The task to test
+     * @param context The context, needed to retrieve string in string.xml
+     * @return true if the location is the unfilled task's location.
+     */
     public static boolean isLocationUnfilled(Task task, Context context) {
         return task.getLocationName().equals(context.getString(R.string.select_one));
     }
 
+    /**
+     * Method that returns true when task's duration is the unfilled task's duration.
+     * The unfilled task's duration is 0.
+     *
+     * @param task The task to test
+     * @return true if the duration is the unfilled task's duration, false otherwise.
+     */
     public static boolean isDurationUnfilled(Task task) {
         return task.getDuration() == 0;
     }
 
+    /**
+     * Method that returns true when task's due date is the unfilled task's due date.
+     * The unfilled task's due date year is 1970.
+     *
+     * @param task The task to test
+     * @return true if the due date is the unfilled task's due date, false otherwise.
+     */
     @TargetApi(Build.VERSION_CODES.N)
     public static boolean isDueDateUnfilled(Task task) {
         Calendar c = Calendar.getInstance();
@@ -175,15 +199,21 @@ public class Utils extends Application {
         return toAdd;
     }
 
+    /**
+     * Getter for the string resource of the everywhere location
+     *
+     * @return the string of the everywhere location
+     */
     public static String getEverywhereLocation(){
         return mContext.getResources().getString(R.string.everywhere_location);
     }
 
+    /**
+     * Getter for the string resource of the select one location
+     *
+     * @return the string of the select one location
+     */
     public static String getSelectOne(){
         return mContext.getResources().getString(R.string.select_one);
-    }
-
-    public static String getDowntownLocation(){
-        return mContext.getResources().getString(R.string.downtown_location);
     }
 }

@@ -72,7 +72,14 @@ public abstract class TaskActivity extends AppCompatActivity {
     ImageView editContributorButton;
     private Spinner contributorsSpinner;
 
-
+    /**
+     * Override the onCreate method.
+     * Initializes the buttons and fields.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,6 +169,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method that checks that the task's list is not null
+     */
     private void checkTaskList() {
         if (taskList == null) {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
@@ -224,6 +234,9 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Listener of the done button
+     */
     private class OnDoneButtonClickListener implements View.OnClickListener {
 
         @Override
@@ -308,11 +321,19 @@ public abstract class TaskActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
+    /**
+     * Method displaying the date picker dialog
+     */
     public void showDatePickerDialog(View  v) {
         DialogFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    /**
+     * Method that assign value to energy when user checks an energy radio button
+     *
+     * @param view The selected radio button
+     */
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -329,11 +350,12 @@ public abstract class TaskActivity extends AppCompatActivity {
                 if (checked)
                     energy = Task.Energy.HIGH;
                 break;
-            default:
-                energy = Task.Energy.NORMAL;
         }
     }
 
+    /**
+     * Class representing the dialog to pick the date of a task
+     */
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         Button mButton;
 
@@ -377,21 +399,35 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the contributors
+     */
     void setContributorsTextView(){
         String listOfContributorsString = "";
         for(String ct : listOfContributors) {
             listOfContributorsString += (ct + "\n");
         }
         contributorsListTextView.setText(listOfContributorsString);
-        contributorsListTextView.setVisibility(View.GONE);
         contributorsListTextView.setVisibility(View.VISIBLE);
     }
 
-
+    /**
+     * Add a new contributor to the task
+     *
+     * @param contributor the new contributor to add
+     */
     abstract void addContributorInTask(String contributor);
 
+    /**
+     * Removes a given contributor from the task
+     *
+     * @param contributor the contributor to remove
+     */
     abstract void deleteContributorInTask(String contributor);
 
+    /**
+     * Listener that trigger the contributors addition when clicking on the button
+     */
     private class OnAddContributorButtonClickListener implements View.OnClickListener {
 
         @Override
@@ -455,6 +491,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Listener that triggers the contributor editor when clicking on the button
+     */
     private class OnEditContributorButtonClickListener implements View.OnClickListener {
 
         @Override

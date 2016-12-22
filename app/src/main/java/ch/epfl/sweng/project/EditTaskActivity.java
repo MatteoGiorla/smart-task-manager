@@ -186,9 +186,6 @@ public class EditTaskActivity extends TaskActivity {
         return result;
     }
 
-    /**
-     *
-     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void resultActivity() {
@@ -204,6 +201,11 @@ public class EditTaskActivity extends TaskActivity {
         setResultIntent();
     }
 
+    /**
+     * Add a new contributor to the task
+     *
+     * @param contributor the new contributor to add
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void addContributorInTask(String contributor){
@@ -232,6 +234,11 @@ public class EditTaskActivity extends TaskActivity {
         oldTask = new Task(mTaskToBeEdited);
     }
 
+    /**
+     * Removes a given contributor from the task
+     *
+     * @param contributor the contributor to remove
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     void deleteContributorInTask(String contributor){
@@ -271,7 +278,7 @@ public class EditTaskActivity extends TaskActivity {
     }
 
     /**
-     *
+     * When clicking on a textView, it switches to an editable View
      */
     private void setSwitchers() {
         //Set switch on name
@@ -313,6 +320,13 @@ public class EditTaskActivity extends TaskActivity {
                 findViewById(R.id.description_task));
     }
 
+    /**
+     * switch between TextView and editable View
+     *
+     * @param container The container of the ViewSwitcher
+     * @param switcher The ViewSwitcher
+     * @param secondView The View to whom we switch
+     */
     private void setSwitcherOnClick(LinearLayout container, final ViewSwitcher switcher, final View secondView) {
         container.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,6 +342,9 @@ public class EditTaskActivity extends TaskActivity {
         });
     }
 
+    /**
+     * Switch all the editable View to TextView
+     */
     private void allEditViewToReadView() {
         switchToReadView((ViewSwitcher) findViewById(R.id.switcher_name), findViewById(R.id.text_name));
         switchToReadView((ViewSwitcher) findViewById(R.id.switcher_date), findViewById(R.id.text_date));
@@ -337,6 +354,12 @@ public class EditTaskActivity extends TaskActivity {
         switchToReadView((ViewSwitcher) findViewById(R.id.switcher_description), findViewById(R.id.text_description));
     }
 
+    /**
+     * Switch the specified view to TextView
+     *
+     * @param switcher The view Switcher
+     * @param firstView The view to whom we switch
+     */
     private void switchToReadView(final ViewSwitcher switcher, final View firstView) {
         if(switcher.getCurrentView() != firstView) {
             switcher.showPrevious();
@@ -355,6 +378,13 @@ public class EditTaskActivity extends TaskActivity {
         }
     }
 
+    /**
+     * Method that initializes the text displayed in TextView.
+     * The TextView display the task's parameters.
+     * So it initializes the TextView with the task parameters.
+     * This method is called when opening EditTaskActivity.
+     *
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialisationFields() {
         title = Utils.separateTitleAndSuffix(mTaskToBeEdited.getName());
@@ -365,6 +395,9 @@ public class EditTaskActivity extends TaskActivity {
         duration  = mTaskToBeEdited.getDurationInMinutes();
     }
 
+    /**
+     * Fill the TextView with the task's parameters.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void populateTextViewInformation() {
         TextView nameTextView = (TextView) findViewById(R.id.text_name);
@@ -427,6 +460,13 @@ public class EditTaskActivity extends TaskActivity {
         }
     }
 
+    /**
+     * Method that populates the specified spinner.
+     *
+     * @param spinner The spinner to populate
+     * @param nameList The list containing the item displayed in the spinner
+     * @param defaultItemName The position of the item to be displayed by default
+     */
     private void populateSpinner(Spinner spinner, String[] nameList, String defaultItemName) {
         int position = Arrays.asList(nameList).indexOf(defaultItemName);
         spinner.setSelection(position);

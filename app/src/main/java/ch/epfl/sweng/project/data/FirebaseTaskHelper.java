@@ -41,7 +41,13 @@ public class FirebaseTaskHelper implements TaskHelper {
     private ArrayList<Task> mTaskList;
     private final Context mContext;
 
-
+    /**
+     * Constructor of the class
+     *
+     * @param context The context of the class
+     * @param adapter The adapter of the list that need to be edited
+     * @param taskList The list of tasks
+     */
     public FirebaseTaskHelper(Context context, TaskListAdapter adapter, ArrayList<Task> taskList) {
         mAdapter = adapter;
         mTaskList = taskList;

@@ -24,8 +24,9 @@ import java.util.ArrayList;
 import ch.epfl.sweng.project.Location;
 import ch.epfl.sweng.project.R;
 
-//import com.google.android.gms.common.GoogleApiAvailability;
-
+/**
+ * Class where the user can edit his locations.
+ */
 public abstract class LocationActivity extends AppCompatActivity {
     private static final int PLACE_REQUEST_CODE = 1;
 
@@ -38,7 +39,14 @@ public abstract class LocationActivity extends AppCompatActivity {
     double longitude = 0;
     double latitude = 0;
 
-
+    /**
+     * Override the onCreate method
+     * Initializes the buttons and fields
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -24,11 +24,21 @@ import ch.epfl.sweng.project.User;
 import ch.epfl.sweng.project.Utils;
 import ch.epfl.sweng.project.data.UserProvider;
 
+/**
+ * Activity that synchronize the user location before
+ * reaching MainActivity.
+ */
 public class SynchronizationActivity extends Activity {
 
     private SynchronizedQueries synchronizedQueries;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    /**
+     * Override the onCreate method
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied in onSaveInstanceState(Bundle).
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +67,7 @@ public class SynchronizationActivity extends Activity {
                         .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
                 //Listener that listen when communications with firebase end
                 readFirebaseTask.addOnCompleteListener(this,
-                        new UserAllOnCompleteListener(userRef, currentUser, synchronizedQueries, getApplicationContext()));
+                        new UserAllOnCompleteListener(userRef, currentUser, getApplicationContext()));
                 break;
 
             case Utils.TEST_PROVIDER:

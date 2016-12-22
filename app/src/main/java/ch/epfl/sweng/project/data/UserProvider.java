@@ -29,6 +29,12 @@ public class UserProvider {
         }
     }
 
+    /**
+     * Getter that return the user of firebase if not in
+     * test mode.
+     *
+     * @return FirebaseUser, the firebase user
+     */
     public FirebaseUser getFirebaseAuthUser(){
         switch (mProvider){
             case Utils.FIREBASE_PROVIDER:

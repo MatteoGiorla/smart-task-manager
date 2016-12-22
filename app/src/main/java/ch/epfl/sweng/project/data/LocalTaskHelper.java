@@ -1,8 +1,5 @@
 package ch.epfl.sweng.project.data;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 import ch.epfl.sweng.project.Task;
 import ch.epfl.sweng.project.TaskListAdapter;
 import ch.epfl.sweng.project.User;
@@ -16,7 +13,12 @@ public class LocalTaskHelper implements TaskHelper {
 
     private final TaskListAdapter mAdapter;
 
-    public LocalTaskHelper(TaskListAdapter adapter, ArrayList<Task> taskList) {
+    /**
+     * Constructor of the class.
+     *
+     * @param adapter The adapter of the list that need to be edited
+     */
+    public LocalTaskHelper(TaskListAdapter adapter) {
         mAdapter = adapter;
     }
 
