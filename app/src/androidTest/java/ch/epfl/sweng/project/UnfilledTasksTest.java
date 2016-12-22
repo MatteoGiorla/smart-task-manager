@@ -205,65 +205,6 @@ public class UnfilledTasksTest {
     }
 
     @Test
-    public void previouslyUnfilledTasksEndUpOnMainActivity(){
-
-        onView(withId(R.id.add_task_button)).perform(click());
-
-        //add title
-        String titleToCheck = "unfTaskTEST";
-        onView(withId(R.id.title_task)).perform(typeText(titleToCheck));
-        pressBack();
-
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
-
-        onView(withId(R.id.unfilled_task_button)).perform(click());
-
-        //editing the unfilled task
-        onView(withId(R.id.list_view_tasks))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, swipeRight()));
-
-        //add a due date (today due date)
-        onView(withId(R.id.dateLinearLayout)).perform(click());
-        onView(withId(R.id.pick_date)).perform(click());
-        UiObject okButton = mUiDevice.findObject(new UiSelector().text("OK"));
-        try{
-            okButton.click();
-        }catch(UiObjectNotFoundException u){
-            fail("Could not confirm date selection "+u.getMessage());
-        }
-
-        //add a duration
-        onView(withId(R.id.durationLinearLayout)).perform(click());
-        onView(withId(R.id.durationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("1 hour"))).perform(click());
-
-        //TODO: When the issue of the location spinner during the test is solved, uncomment this.
-        //add a location
-        /*onView(withId(R.id.locationSpinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Everywhere"))).perform(click());
-        */
-
-        onView(withId(R.id.edit_done_button_toolbar)).perform(click());
-
-        pressBack();
-
-        //Going back to MainActivity
-       /* UiObject returnButton = mUiDevice.findObject(new UiSelector().className(LEFT_ARROW_CLASSN).index(0));
-        try{
-            returnButton.clickAndWaitForNewWindow();
-        }catch(UiObjectNotFoundException u){
-            fail("Could not find the return arrow with UiAutomator actions");
-        }*/
-        pressBack();
-
-        //checking the title of the task appears.
-        onView(new TestRecyclerViewMatcher(R.id.list_view_tasks)
-                .atPosition(0))
-                .check(matches(hasDescendant(withText(titleToCheck))));
-
-    }
-
-    @Test
     public void unfilledTasksHaveNotDecidedInformation(){
 
         onView(withId(R.id.add_task_button)).perform(click());
