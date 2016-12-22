@@ -245,7 +245,7 @@ public class EditTaskActivity extends TaskActivity {
     }
 
     /**
-     * When clicking on a textView, it switches to an edit view
+     * When clicking on a textView, it switches to an editable View
      */
     private void setSwitchers() {
         //Set switch on name
@@ -288,7 +288,7 @@ public class EditTaskActivity extends TaskActivity {
     }
 
     /**
-     * switch between TextView and edit View
+     * switch between TextView and editable View
      *
      * @param container The container of the ViewSwitcher
      * @param switcher The ViewSwitcher
@@ -310,7 +310,7 @@ public class EditTaskActivity extends TaskActivity {
     }
 
     /**
-     * Switch the edit View to TextView
+     * Switch all the editable View to TextView
      */
     private void allEditViewToReadView() {
         switchToReadView((ViewSwitcher) findViewById(R.id.switcher_name), findViewById(R.id.text_name));

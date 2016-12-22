@@ -62,7 +62,7 @@ public class SynchronizationActivity extends Activity {
                         .Task<Map<Query, DataSnapshot>> readFirebaseTask = synchronizedQueries.start();
                 //Listener that listen when communications with firebase end
                 readFirebaseTask.addOnCompleteListener(this,
-                        new UserAllOnCompleteListener(userRef, currentUser, synchronizedQueries, getApplicationContext()));
+                        new UserAllOnCompleteListener(userRef, currentUser, getApplicationContext()));
                 break;
 
             case Utils.TEST_PROVIDER:

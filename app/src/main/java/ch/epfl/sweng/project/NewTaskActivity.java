@@ -142,6 +142,10 @@ public class NewTaskActivity extends TaskActivity {
         finish();
     }
 
+    /**
+     * Switch the TextView to editable View
+     * (when we create a new task it's useless to displayed the task's parameters because there are unfilled)
+     */
     private void getEditableView() {
         ((ViewSwitcher) findViewById(R.id.switcher_name)).showNext();
         ((ViewSwitcher) findViewById(R.id.switcher_description)).showNext();
