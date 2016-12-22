@@ -33,8 +33,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewSwitcher;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,8 +73,8 @@ public abstract class TaskActivity extends AppCompatActivity {
     private Spinner contributorsSpinner;
 
     /**
-     * Override the onCreate method
-     * Initializes the buttons and fields
+     * Override the onCreate method.
+     * Initializes the buttons and fields.
      *
      * @param savedInstanceState If the activity is being re-initialized after previously
      *                           being shut down then this Bundle contains the data it most
@@ -171,6 +169,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method that checks that the task's list is not null
+     */
     private void checkTaskList() {
         if (taskList == null) {
             throw new IllegalArgumentException("Error on taskList passed with the intent");
@@ -232,6 +233,9 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Listener of the done button
+     */
     private class OnDoneButtonClickListener implements View.OnClickListener {
 
         @Override
@@ -316,11 +320,19 @@ public abstract class TaskActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
+    /**
+     * Method displaying the date picker dialog
+     */
     public void showDatePickerDialog(View  v) {
         DialogFragment datePickerFragment = new DatePickerFragment();
         datePickerFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
+    /**
+     * Method that assign value to energy when user checks an energy radio button
+     *
+     * @param view The selected radio button
+     */
     public void onRadioButtonClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -388,13 +400,15 @@ public abstract class TaskActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Display the contributors
+     */
     void setContributorsTextView(){
         String listOfContributorsString = "";
         for(String ct : listOfContributors) {
             listOfContributorsString += (ct + "\n");
         }
         contributorsListTextView.setText(listOfContributorsString);
-        contributorsListTextView.setVisibility(View.GONE);
         contributorsListTextView.setVisibility(View.VISIBLE);
     }
 
@@ -412,6 +426,9 @@ public abstract class TaskActivity extends AppCompatActivity {
      */
     abstract void deleteContributorInTask(String contributor);
 
+    /**
+     * Listener that trigger the contributors addition when clicking on the button
+     */
     private class OnAddContributorButtonClickListener implements View.OnClickListener {
 
         @Override
@@ -475,6 +492,9 @@ public abstract class TaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Listener that triggers the contributor editor when clicking on the button
+     */
     private class OnEditContributorButtonClickListener implements View.OnClickListener {
 
         @Override
